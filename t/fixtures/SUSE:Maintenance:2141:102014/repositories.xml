@@ -1,0 +1,100 @@
+<resultlist state="5fb55c06660ceb47f40c0dd506a0e82e">
+  <result project="SUSE:Maintenance:2141" repository="SUSE_Updates_SLE-Module-Containers_12_x86_64" arch="x86_64" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_Updates_SLE-Module-Containers_12_x86_64" arch="i586" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_Updates_SLE-Module-Containers_12_s390x" arch="s390x" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_Updates_SLE-Module-Containers_12_s390x" arch="s390" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_Updates_SLE-Module-Containers_12_ppc64le" arch="ppc64le" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_SLE-12-SP1_Docker_Update_images-containment" arch="ppc64le" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_SLE-12-SP1_Docker_Update_images-containment" arch="s390x" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_SLE-12-SP1_Docker_Update_images-containment" arch="x86_64" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_SLE-12-SP1_Docker_Update_images" arch="ppc64le" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_SLE-12-SP1_Docker_Update_images" arch="s390x" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_SLE-12-SP1_Docker_Update_images" arch="x86_64" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_SLE-12-SP1_Docker_Update" arch="ppc64le" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_SLE-12-SP1_Docker_Update" arch="s390x" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2141" repository="SUSE_SLE-12-SP1_Docker_Update" arch="x86_64" code="published" state="published">
+    <status package="SLE-Module-Containers_12_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update" code="locked" />
+  </result>
+</resultlist>

@@ -1,0 +1,10 @@
+incident=43085
+summary=With multiple threads, a Java program calling the glib2 library crashes.
+probability=medium
+impact=medium
+patch=correct
+reproducer=It can be reproduced with the file ProbeContentTypeCrashes.java supplied by the customer:
+reproducer=
+reproducer=1) /usr/lib64/jvm/java-1.7.0-ibm-1.7.0/bin/javac ProbeContentTypeCrashes.java 
+reproducer=2) /usr/lib64/jvm/jre-1.7.0-ibm/bin/java -classpath /tmp ProbeContentTypeCrashes 2
+requires_3dparty=no

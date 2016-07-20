@@ -1,0 +1,31 @@
+# Maintainer: Roman Neuhauser <neuhauser+smrt@sigpipe.cz>
+pkgname=smrt
+pkgver=__VERSION__
+pkgrel=1
+pkgdesc="SUSE Maintenance Reject Tool"
+arch=(any)
+url="https://gitlab.suse.de/rneuhauser/$pkgname"
+license=(MIT)
+depends=(curl haveopt openssh osc repose svn xmlstarlet zsh)
+checkdepends=(cram make haveopt repose svn xmlstarlet zsh)
+source=($pkgname-$pkgver.tar.gz)
+sha1sums=(SKIP)
+
+build() {
+  ./configure --prefix=/usr
+  _make
+}
+
+check() {
+  _make check
+}
+
+package() {
+  _make install DESTDIR="$pkgdir/"
+}
+
+_make() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make "$@"
+}
+

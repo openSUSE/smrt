@@ -1,0 +1,62 @@
+<resultlist state="0dedc525ef12a58b3dc659b476a0ecc7">
+  <result project="SUSE:Maintenance:1753" repository="SUSE_Updates_SLE-SAP-AIO_11-SP4_x86_64" arch="x86_64" code="published" state="published">
+    <status package="SLE-SAP-AIO_11-SP4_ppc64.SUSE_Channels" code="locked" />
+    <status package="SLE-SAP-AIO_11-SP4_x86_64.SUSE_Channels" code="locked" />
+    <status package="clamsap.SUSE_SLE-11-SP4_Update" code="locked" />
+    <status package="patchinfo" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:1753" repository="SUSE_Updates_SLE-SAP-AIO_11-SP4_x86_64" arch="i586" code="published" state="published">
+    <status package="SLE-SAP-AIO_11-SP4_ppc64.SUSE_Channels" code="locked" />
+    <status package="SLE-SAP-AIO_11-SP4_x86_64.SUSE_Channels" code="locked" />
+    <status package="clamsap.SUSE_SLE-11-SP4_Update" code="locked" />
+    <status package="patchinfo" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:1753" repository="SUSE_Updates_SLE-SAP-AIO_11-SP4_ppc64" arch="ppc64" code="published" state="published">
+    <status package="SLE-SAP-AIO_11-SP4_ppc64.SUSE_Channels" code="locked" />
+    <status package="SLE-SAP-AIO_11-SP4_x86_64.SUSE_Channels" code="locked" />
+    <status package="clamsap.SUSE_SLE-11-SP4_Update" code="locked" />
+    <status package="patchinfo" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:1753" repository="SUSE_SLE-11-SP4_Update" arch="i586" code="published" state="published">
+    <status package="SLE-SAP-AIO_11-SP4_ppc64.SUSE_Channels" code="locked" />
+    <status package="SLE-SAP-AIO_11-SP4_x86_64.SUSE_Channels" code="locked" />
+    <status package="clamsap.SUSE_SLE-11-SP4_Update" code="locked" />
+    <status package="patchinfo" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:1753" repository="SUSE_SLE-11-SP4_Update" arch="ia64" code="published" state="published">
+    <status package="SLE-SAP-AIO_11-SP4_ppc64.SUSE_Channels" code="locked" />
+    <status package="SLE-SAP-AIO_11-SP4_x86_64.SUSE_Channels" code="locked" />
+    <status package="clamsap.SUSE_SLE-11-SP4_Update" code="locked" />
+    <status package="patchinfo" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:1753" repository="SUSE_SLE-11-SP4_Update" arch="ppc" code="published" state="published">
+    <status package="SLE-SAP-AIO_11-SP4_ppc64.SUSE_Channels" code="locked" />
+    <status package="SLE-SAP-AIO_11-SP4_x86_64.SUSE_Channels" code="locked" />
+    <status package="clamsap.SUSE_SLE-11-SP4_Update" code="locked" />
+    <status package="patchinfo" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:1753" repository="SUSE_SLE-11-SP4_Update" arch="ppc64" code="published" state="published">
+    <status package="SLE-SAP-AIO_11-SP4_ppc64.SUSE_Channels" code="locked" />
+    <status package="SLE-SAP-AIO_11-SP4_x86_64.SUSE_Channels" code="locked" />
+    <status package="clamsap.SUSE_SLE-11-SP4_Update" code="locked" />
+    <status package="patchinfo" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:1753" repository="SUSE_SLE-11-SP4_Update" arch="s390" code="published" state="published">
+    <status package="SLE-SAP-AIO_11-SP4_ppc64.SUSE_Channels" code="locked" />
+    <status package="SLE-SAP-AIO_11-SP4_x86_64.SUSE_Channels" code="locked" />
+    <status package="clamsap.SUSE_SLE-11-SP4_Update" code="locked" />
+    <status package="patchinfo" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:1753" repository="SUSE_SLE-11-SP4_Update" arch="s390x" code="published" state="published">
+    <status package="SLE-SAP-AIO_11-SP4_ppc64.SUSE_Channels" code="locked" />
+    <status package="SLE-SAP-AIO_11-SP4_x86_64.SUSE_Channels" code="locked" />
+    <status package="clamsap.SUSE_SLE-11-SP4_Update" code="locked" />
+    <status package="patchinfo" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:1753" repository="SUSE_SLE-11-SP4_Update" arch="x86_64" code="published" state="published">
+    <status package="SLE-SAP-AIO_11-SP4_ppc64.SUSE_Channels" code="locked" />
+    <status package="SLE-SAP-AIO_11-SP4_x86_64.SUSE_Channels" code="locked" />
+    <status package="clamsap.SUSE_SLE-11-SP4_Update" code="locked" />
+    <status package="patchinfo" code="locked" />
+  </result>
+</resultlist>

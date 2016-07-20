@@ -1,0 +1,5 @@
+<collection>
+  <owner rootproject="SUSE" project="SUSE:SLE-12-SP2:GA" package="kernel-source">
+    <person name="aviator" role="bugowner"/>
+  </owner>
+</collection>

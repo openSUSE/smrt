@@ -1,0 +1,7 @@
+SUSE_SLE-11-SP2_Update kernel-default 3.0.101 0.7.40.1
+SUSE_SLE-11-SP2_Update kernel-ec2 3.0.101 0.7.40.1
+SUSE_SLE-11-SP2_Update kernel-pae 3.0.101 0.7.40.1
+SUSE_SLE-11-SP2_Update kernel-source 3.0.101 0.7.40.1
+SUSE_SLE-11-SP2_Update kernel-syms 3.0.101 0.7.40.1
+SUSE_SLE-11-SP2_Update kernel-trace 3.0.101 0.7.40.1
+SUSE_SLE-11-SP2_Update kernel-xen 3.0.101 0.7.40.1

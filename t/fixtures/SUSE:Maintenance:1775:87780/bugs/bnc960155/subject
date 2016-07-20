@@ -1,0 +1,1 @@
+gdk-pixbuf - Avoid a possible divide-by-zero in the pixbuf loader - and others -  not included in gdk-pixbuf SLES code

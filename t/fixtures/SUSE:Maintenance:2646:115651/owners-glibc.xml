@@ -1,0 +1,5 @@
+<collection>
+  <owner rootproject="SUSE" project="SUSE:SLE-12:GA" package="glibc">
+    <person name="nosy" role="bugowner"/>
+  </owner>
+</collection>

@@ -1,0 +1,45 @@
+diff --bs sles12sp1-docker-image.1770/sles12sp1-docker-image.changes sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update/sles12sp1-docker-image.changes
+--- sles12sp1-docker-image.1770/sles12sp1-docker-image.changes
++++ sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update/sles12sp1-docker-image.changes
+@@ -1,4 +1,10 @@
+ -------------------------------------------------------------------
++Thu Mar  3 11:15:44 UTC 2016 - jmassaguerpla@suse.com
++
++- Rebuild image to get patches for cve-2015-7547 (glibc) and
++  CVE-2016-0800 (openssl) 
++
++-------------------------------------------------------------------
+ Mon Jan  4 16:55:54 UTC 2016 - jmassaguerpla@suse.com
+ 
+ - add sles12sp1-docker-image into the containers module bsc#960605
+diff --bs sles12sp1-docker-image.1770/sles12sp1-docker-image.kiwi sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update/sles12sp1-docker-image.kiwi
+--- sles12sp1-docker-image.1770/sles12sp1-docker-image.kiwi
++++ sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update/sles12sp1-docker-image.kiwi
+@@ -15,7 +15,7 @@
+         &lt;vmnic interface="eth0" mode="veth"/&gt;
+       &lt;/machine&gt;
+     &lt;/type&gt;
+-    &lt;version&gt;1.0.3&lt;/version&gt;
++    &lt;version&gt;1.0.4&lt;/version&gt;
+     &lt;packagemanager&gt;zypper&lt;/packagemanager&gt;
+     &lt;rpm-check-signatures&gt;false&lt;/rpm-check-signatures&gt;
+     &lt;rpm-force&gt;true&lt;/rpm-force&gt;
+@@ -41,7 +41,7 @@
+     &lt;source path="obs://SUSE:SLE-12:GA/standard"/&gt;
+   &lt;/repository&gt;
+   &lt;!-- Development repo --&gt;
+-  &lt;!-- 
++  &lt;!--
+    &lt;repository type="rpm-md" alias="Devel:Docker" &gt;
+     &lt;source path="obs://Devel:Docker/SLE_12_SP1_Docker"/&gt;
+   &lt;/repository&gt;
+@@ -53,6 +53,9 @@
+   &lt;/repository&gt; --&gt;
+   &lt;!-- end --&gt;
+   &lt;!-- Production repo --&gt;
++  &lt;repository type="rpm-md" alias="SUSE:SLE-12-SP1:Docker:Update" &gt;
++    &lt;source path="obs://SUSE:SLE-12-SP1:Docker:Update/standard"/&gt;
++  &lt;/repository&gt;
+   &lt;repository type="rpm-md" alias="SUSE:SLE-12-SP1:Docker" &gt;
+     &lt;source path="obs://SUSE:SLE-12-SP1:Docker/standard"/&gt;
+   &lt;/repository&gt;

@@ -1,0 +1,47 @@
+<patchinfo incident="1263">
+  <packager>grandpa</packager>
+  <issue tracker="bnc" id="948686">Cluster fenced node and started 2 instances of VirtualDomain resources</issue>
+  <issue tracker="bnc" id="903757">Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported</issue>
+  <issue tracker="bnc" id="938228">SLES11 SP4:  "virsh dumpxml domain" and "virsh migrate" fail when configuration contains DRBD block device</issue>
+  <issue tracker="bnc" id="911737">Starting a libvirt container depending on a stopped network problem</issue>
+  <issue tracker="bnc" id="914693">VUL-0: CVE-2015-0236: libvirt:  access control bypass</issue>
+  <issue tracker="bnc" id="921586">default /etc/libvirt/qemu.conf settings prohibit Apparmor confinement of domains</issue>
+  <issue tracker="bnc" id="948516">virsh dominfo - error "failed to get security label"</issue>
+  <issue tracker="bnc" id="899334">libvirt claiming Machine already exists</issue>
+  <issue tracker="bnc" id="936524">libvirt-lxc crashes when interface type='direct' is used in domain</issue>
+  <issue tracker="bnc" id="904432">SLE12: Cannot get networking to work in LXC containers</issue>
+  <issue tracker="bnc" id="921355">libvirt-tck qemu apparmor problems</issue>
+  <issue tracker="bnc" id="914297">virt-create-rootfs can't connect to SMT server</issue>
+  <issue tracker="bnc" id="921555">libvirt qemu domain with hostdev can't start apparmor-enforced</issue>
+  <issue tracker="cve" id="CVE-2015-0236"></issue>
+  <issue tracker="bnc" id="953110">VUL-1: CVE-2015-5313: libvirtd: Directory traversal</issue>
+  <issue tracker="cve" id="CVE-2015-5313"></issue>
+  <category>security</category>
+  <rating>moderate</rating>
+  <summary>Security update for libvirt</summary>
+  <description>libvirt was updated to fix one security issue and several non-security issues.
+
+This security issue was fixed:
+
+- CVE-2015-0236: libvirt allowed remote authenticated users to obtain the VNC
+  password by using the VIR_DOMAIN_XML_SECURE flag with a crafted (1) snapshot
+  to the virDomainSnapshotGetXMLDesc interface or (2) image to the
+  virDomainSaveImageGetXMLDesc interface. (bsc#914693)
+- CVE-2015-5313: path traversal vulnerability allowed libvirtd process to write arbitrary files into file system using root permissions (bsc#953110)
+
+Theses non-security issues were fixed:
+
+- bsc#948686: Use PAUSED state for domains that are starting up.
+- bsc#903757: Provide nodeGetSecurityModel implementation in libxl.
+- bsc#938228: Set disk type to BLOCK when driver is not tap or file.
+- bsc#948516: Fix profile_status to distinguish between errors and unconfined domains.
+- bsc#936524: Fix error starting lxc containers with direct interfaces.
+- bsc#921555: Fixed apparmor generated profile for PCI hostdevs.
+- bsc#899334: Include additional upstream fixes for systemd TerminateMachine.
+- bsc#921586: Fix security driver default settings in /etc/libvirt/qemu.conf.
+- bsc#921355: Fixed a number of QEMU apparmor abstraction problems.
+- bsc#911737: Additional fix for the case where security labels aren't automatically set.
+- bsc#914297: Allow setting the URL of an SMT server to use in place of SCC.
+- bsc#904432: Backported route definition changes.
+</description>
+</patchinfo>

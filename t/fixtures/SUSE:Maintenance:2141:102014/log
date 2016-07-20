@@ -1,0 +1,62 @@
+SUMMARY: PASSED/FAILED
+
+comment: (none)
+
+$Author: svn $
+
+Products: SLE-Module-Containers 12 (ppc64le, s390x, x86_64)
+Category: security
+Rating: important
+Packager: timid@suse.com
+Bugs: 969591
+ReviewRequestID: SUSE:Maintenance:2141:102014
+Repository: http://download.suse.de/ibs/SUSE:/Maintenance:/2141/
+Packages: sles12sp1-docker-image = 1.0.4-20160308170633, sles12sp1-docker-image = 1.0.4-20160308170749, sles12sp1-docker-image = 1.0.4-20160308171022
+SRCRPMs: 
+Suggested Test Plan Reviewers: 
+Testplatform: base=sles(major=12,minor=);arch=[x86_64]
+
+#############################
+Test results by product-arch:
+#############################
+
+
+########################
+notes for/by the tester:
+########################
+
+Bug #969591 ("tracker bug for march sle docker image updates"):
+---------------------------------------------------------------
+
+https://bugzilla.suse.com/show_bug.cgi?id=969591
+
+REPRODUCER_PRESENT:     YES/NO
+REPRODUCER_COVERAGE:    YES/NO
+REPRODUCER_APPLICABLE:  YES/NO
+REPRODUCER_WORKING:     YES/NO
+REPRODUCER_AUTOMATABLE: YES/NO
+
+...
+
+regression tests:
+-----------------
+List of testcases in Testopia:
+
+https://bugzilla.suse.com/tr_list_cases.cgi?tags_type=anyexact&tags=packagename_sles12sp1-docker-image
+
+(put your details here)
+
+source code change review:
+--------------------------
+(put here the assessment of the spec + source changes when compared to the latest release)
+
+zypper update log:
+------------------
+put here the output of the following commands:
+
+export LANG=
+zypper lr -puU
+zypper refresh
+zypper patches | grep TESTING-2141
+for p in $(zypper patches | grep TESTING-2141 | awk 'BEGIN { FS="|"; } { print $2; }'); do zypper -n install -l -y -t patch $p; done
+zypper patches | grep TESTING-2141

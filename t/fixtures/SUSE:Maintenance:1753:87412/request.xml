@@ -1,0 +1,32 @@
+<request id="87412">
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1753" package="clamsap.SUSE_SLE-11-SP4_Update"/>
+    <target project="SUSE:SLE-11-SP4:Update" package="clamsap.1753"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1753" package="patchinfo"/>
+    <target project="SUSE:SLE-11-SP4:Update" package="patchinfo.1753"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1753" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SAP-AIO:11-SP4:ppc64" package="patchinfo.1753"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1753" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SAP-AIO:11-SP4:x86_64" package="patchinfo.1753"/>
+  </action>
+  <state name="review" who="leonardocf" when="2016-01-04T17:08:09">
+    <comment/>
+  </state>
+  <review state="accepted" when="2016-01-04T16:59:14" who="leonardocf" by_group="qam-auto">
+    <comment>reviewers added: qam-sle</comment>
+    <history who="leonardocf" when="2016-01-04T17:08:10">
+      <description>Review got accepted</description>
+      <comment>reviewers added: qam-sle</comment>
+    </history>
+  </review>
+  <review state="new" by_group="qam-sle">
+    <comment/>
+  </review>
+  <description>requesting release</description>
+</request>

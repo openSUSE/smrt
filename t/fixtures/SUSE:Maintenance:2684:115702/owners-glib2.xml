@@ -1,0 +1,5 @@
+<collection>
+  <owner rootproject="SUSE" project="SUSE:SLE-12:GA" package="glib2">
+    <group name="gnome-maintainers" role="bugowner"/>
+  </owner>
+</collection>

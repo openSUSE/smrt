@@ -1,0 +1,1 @@
+VUL-0: CVE-2015-7799: kernel: Using the PPP character device driver caused the system to restart

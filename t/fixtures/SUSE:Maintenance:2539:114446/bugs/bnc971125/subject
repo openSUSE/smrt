@@ -1,0 +1,1 @@
+VUL-1: CVE-2016-2184: kernel: Kernel panic on invalid USB device descriptor (snd_usb_audio driver)

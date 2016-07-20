@@ -1,0 +1,1 @@
+gtk/glib bug w/ g_thread_init()

@@ -1,0 +1,11 @@
+<patchinfo incident="2569">
+  <issue id="956273" tracker="bnc">[TRACKERBUG] FATE#318989 Add Portus to containers module</issue>
+  <issue id="318989" tracker="fate"/>
+  <category>recommended</category>
+  <rating>low</rating>
+  <packager>king</packager>
+  <summary>Recommended udpate for rubygem-rake</summary>
+  <description>
+This update for rubygem-rake is just a rebuild of the already released sources to fix a dependency-issue.
+</description>
+</patchinfo>

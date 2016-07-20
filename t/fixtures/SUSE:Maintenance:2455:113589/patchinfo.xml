@@ -1,0 +1,18 @@
+<patchinfo incident="2455">
+  <issue id="977409" tracker="bnc">L3: curl-openssl1 does not allow enforcement of tls 1.2</issue>
+  <category>recommended</category>
+  <name>curl</name>
+  <rating>moderate</rating>
+  <packager>doctor</packager>
+  <description>
+This update for curl fixes the following issues:
+
+- Report the correct TLS version in use when using verbose
+  mode (-v). (bsc#977409)
+
+For the TLS 1.2 enabled version to be found in curl-openssl1 (in the SECURITY Module):
+- Allow enforcing TLS 1.1 or 1.2 on the curl commandline,
+  using --tlsv1.1 or --tlsv1.2. (bsc#977409)
+</description>
+  <summary>Recommended update for curl, curl-openssl1</summary>
+</patchinfo>

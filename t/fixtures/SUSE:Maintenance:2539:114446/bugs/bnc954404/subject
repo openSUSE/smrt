@@ -1,0 +1,1 @@
+VUL-0: CVE-2015-8104: kernel: kvm: virt: guest to host DoS by triggering an infinite loop in microcode via #DB exception

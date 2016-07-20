@@ -1,0 +1,20 @@
+<patchinfo incident="1091">
+  <name>glib2</name>
+  <issue id="846912" tracker="bnc">gtk/glib bug w/ g_thread_init()</issue>
+  <issue id="929542" tracker="bnc">glib-2 packages do not build</issue>
+  <issue id="931445" tracker="bnc">java crashes Files.probeContentType</issue>
+  <issue id="956599" tracker="bnc">File descriptors "leak" with Gnome panel</issue>
+  <issue id="970694" tracker="bnc">include glibconfig.h into the -devel-32bit package</issue>
+  <category>recommended</category>
+  <rating>moderate</rating>
+  <packager>harmony</packager>
+  <description>
+This update for glib2 provides the following fixes:
+
+- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
+- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
+- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
+- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
+</description>
+  <summary>Recommended update for glib2</summary>
+</patchinfo>

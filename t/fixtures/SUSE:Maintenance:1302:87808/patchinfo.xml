@@ -1,0 +1,25 @@
+<patchinfo incident="1302">
+  <issue id="922710" tracker="bnc">rsyncd keeps on spamming my log for trying to register SLP</issue>
+  <issue id="898513" tracker="bnc">Rsync: slp support breaks rsync usage</issue>
+  <issue id="915410" tracker="bnc">VUL-0: CVE-2014-9512: rsync: path spoofing attack vulnerability</issue>
+  <issue id="900914" tracker="bnc">VUL-1: CVE-2014-8242: librsync, rsync: checksum collisions leading to a denial of service</issue>
+  <issue id="CVE-2014-9512" tracker="cve" />
+  <issue id="CVE-2014-8242" tracker="cve" />
+  <category>security</category>
+  <rating>moderate</rating>
+  <packager>farmer</packager>
+  <description>
+This update for rsync fixes two security issues and two non-security bugs.
+
+The following vulnerabilities were fixed:
+
+- CVE-2014-8242: Checksum collisions leading to a denial of service (bsc#900914)
+- CVE-2014-9512: Malicious servers could send files outside of the transferred directory (bsc#915410)
+
+The following non-security bugs were fixed:
+
+- bsc#922710: Prevent rsyncd from spamming the log when trying to register SLP.
+- bsc#898513: slp support broke rsync usage.
+</description>
+  <summary>Security update for rsync</summary>
+</patchinfo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<response>
+  <meta type="hash">
+    <limit type="integer">20</limit>
+    <next type="null"/>
+    <offset type="integer">0</offset>
+    <previous type="null"/>
+    <total_count type="integer">0</total_count>
+  </meta>
+  <objects type="list"/>
+</response>

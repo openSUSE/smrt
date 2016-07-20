@@ -1,0 +1,236 @@
+diff --bs yast2-cluster.1609/yast2-cluster-3.1.22.tar.bz2/package/yast2-cluster.changes yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster-3.1.23.tar.bz2/package/yast2-cluster.changes
+--- yast2-cluster.1609/yast2-cluster-3.1.22.tar.bz2/package/yast2-cluster.changes
++++ yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster-3.1.23.tar.bz2/package/yast2-cluster.changes
+@@ -1,4 +1,11 @@
+ -------------------------------------------------------------------
++Fri Mar 25 08:25:25 UTC 2016 - nwang@suse.com
++
++- bsc#971961, fix error when using ipv6.
++- Add totem.ip_version for ipv6 support.
++- Version 3.1.23
++
++-------------------------------------------------------------------
+ Tue Dec  1 09:21:16 UTC 2015 - nwang@suse.com
+ 
+ - BSC#957305. Change required package from hawk to hawk2.
+diff --bs yast2-cluster.1609/yast2-cluster-3.1.22.tar.bz2/package/yast2-cluster.spec yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster-3.1.23.tar.bz2/package/yast2-cluster.spec
+--- yast2-cluster.1609/yast2-cluster-3.1.22.tar.bz2/package/yast2-cluster.spec
++++ yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster-3.1.23.tar.bz2/package/yast2-cluster.spec
+@@ -18,7 +18,7 @@
+ 
+ Name:           yast2-cluster
+ %define _fwdefdir /etc/sysconfig/SuSEfirewall2.d/services
+-Version:        3.1.22
++Version:        3.1.23
+ Release:        0
+ 
+ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+diff --bs yast2-cluster.1609/yast2-cluster-3.1.22.tar.bz2/src/include/cluster/dialogs.rb yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster-3.1.23.tar.bz2/src/include/cluster/dialogs.rb
+--- yast2-cluster.1609/yast2-cluster-3.1.22.tar.bz2/src/include/cluster/dialogs.rb
++++ yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster-3.1.23.tar.bz2/src/include/cluster/dialogs.rb
+@@ -592,9 +592,11 @@
+           netaddr = Convert.to_string(UI.QueryWidget(Id(ret), :Value))
+           ip6 = IP.Check6(netaddr)
+           if ip6
++            Cluster.ip_version = "ipv6"
+             UI.ChangeWidget(Id(:autoid), :Value, false)
+             UI.ChangeWidget(Id(:autoid), :Enabled, false)
+           else
++            Cluster.ip_version = "ipv4"
+             UI.ChangeWidget(Id(:autoid), :Enabled, true)
+           end
+           next
+diff --bs yast2-cluster.1609/yast2-cluster-3.1.22.tar.bz2/src/modules/Cluster.rb yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster-3.1.23.tar.bz2/src/modules/Cluster.rb
+--- yast2-cluster.1609/yast2-cluster-3.1.22.tar.bz2/src/modules/Cluster.rb
++++ yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster-3.1.23.tar.bz2/src/modules/Cluster.rb
+@@ -67,6 +67,7 @@
+       # Settings: Define all variables needed for configuration of cluster
+       @secauth = false
+       @cluster_name = ""
++      @ip_version = ""
+       @expected_votes = ""
+       @two_node = "0"
+       @config_format = ""
+@@ -162,6 +163,8 @@
+ 
+       @cluster_name = SCR.Read(path(".openais.totem.cluster_name"))
+ 
++      @ip_version = SCR.Read(path(".openais.totem.ip_version"))
++
+       @expected_votes = SCR.Read(path(".openais.quorum.expected_votes")).to_s
+ 
+       @config_format = SCR.Read(path(".openais.totem.interface.member.memberaddr")).to_s
+@@ -179,7 +182,7 @@
+             # 123.3.21.44;156.32.123.9"
+             address = SCR.Read(path(".openais.nodelist.node")).split(" ")
+             address.each do |addr|
+-              p = addr.split(":")
++              p = addr.split("-")
+               if p[1] != nil
+                 q = p[0].split(";")
+                 if q[1] != nil
+@@ -253,9 +256,9 @@
+         address_string &lt;&lt; i[:addr1]
+         if i[:addr2]
+           address_string &lt;&lt; ";#{i[:addr2]}"
+-          address_string &lt;&lt; ":#{i[:nodeid]}" if i [:nodeid]
++          address_string &lt;&lt; "-#{i[:nodeid]}" if i [:nodeid]
+         else 
+-          address_string &lt;&lt; ":#{i[:nodeid]}" if i[:nodeid]
++          address_string &lt;&lt; "-#{i[:nodeid]}" if i[:nodeid]
+         end
+         address_string &lt;&lt; " "
+       end
+@@ -273,6 +276,7 @@
+ 
+       SCR.Write(path(".openais.totem.transport"), @transport)
+       SCR.Write(path(".openais.totem.cluster_name"), @cluster_name)
++      SCR.Write(path(".openais.totem.ip_version"), @ip_version)
+       SCR.Write(path(".openais.quorum.expected_votes"), @expected_votes)
+   
+       # BNC#871970, only write member address when interface0  
+@@ -617,6 +621,7 @@
+       @memberaddr = Ops.get_list(settings, "memberaddr", [])
+       @mcastaddr1 = Ops.get_string(settings, "mcastaddr1", "")
+       @cluster_name  = settings["cluster_name"] || ""
++      @ip_version  = settings["ip_version"] || "ipv4"
+       @expected_votes = settings["expected_votes"] || ""
+       @two_node = settings["two_node"] || ""
+       @mcastport2 = Ops.get_string(settings, "mcastport1", "")
+@@ -649,6 +654,7 @@
+       Ops.set(result, "memberaddr", @memberaddr)
+       Ops.set(result, "mcastaddr1", @mcastaddr1)
+       result["cluster_name"] = @cluster_name
++      result["ip_version"] = @ip_version
+       result["expected_votes"] = @expected_votes
+       result["two_node"] = @two_node
+       Ops.set(result, "mcastport1", @mcastport1)
+@@ -740,6 +746,7 @@
+     publish :variable =&gt; :bindnetaddr1, :type =&gt; "string"
+     publish :variable =&gt; :mcastaddr1, :type =&gt; "string"
+     publish :variable =&gt; :cluster_name, :type =&gt; "string"
++    publish :variable =&gt; :ip_version, :type =&gt; "string"
+     publish :variable =&gt; :expected_votes, :type =&gt; "string"
+     publish :variable =&gt; :two_node, :type =&gt; "string"
+     publish :variable =&gt; :config_format, :type =&gt; "string"
+diff --bs yast2-cluster.1609/yast2-cluster-3.1.22.tar.bz2/src/servers_non_y2/ag_openais yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster-3.1.23.tar.bz2/src/servers_non_y2/ag_openais
+--- yast2-cluster.1609/yast2-cluster-3.1.22.tar.bz2/src/servers_non_y2/ag_openais
++++ yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster-3.1.23.tar.bz2/src/servers_non_y2/ag_openais
+@@ -107,6 +107,7 @@
+ 					"type":"int", "default_value":10},
+ 	"rrp_token_expired_timeout":{"doc":"This specifies the time in milliseconds to increment the problem counter for the redundant ring protocol after not having received a token from all rings for a particular processor.", "type":"int", "default_value":47},
+ 	"transport":{"doc":"Transport protocol", "type":"select[udp,udpu]","default_value":"udp"},
++	"ip_version":{"doc":"Specifies version of IP to use for communication. Value can be one of ipv4 or ipv6.", "type":"select[ipv4,ipv6]","default_value":"ipv4"},
+ }
+ 
+ 
+@@ -352,7 +353,11 @@
+ 				i = get_next_line(file)
+ 			continue
+ 		
+-		opt = i.split(":")
++		tmp_opt = i.split(":")
++		# In case string like IPv6 have ":" in value
++		opt = [tmp_opt[0], ":".join(tmp_opt[1:])]
++		#opt = i.split(":")
++
+ 		try:
+ 			doc = options[opt[0].strip()]["doc"]
+ 		except KeyError:
+@@ -420,7 +425,7 @@
+ 				member_str = member_str + ";" + address2
+ 			nodeid = item.get("nodeid", None)
+ 			if nodeid:
+-				member_str = member_str + ":" + nodeid
++				member_str = member_str + "-" + nodeid
+ 			member_str = member_str + " "
+ 	return '"%s"' % member_str.strip()
+ 
+@@ -468,7 +473,7 @@
+ 			return '["quorum", "totem", "nodelist"]'
+ 		elif path_arr[0] == 'totem':
+ 			if len(path_arr) == 1:
+-				return '["crypto_cipher","crypto_hash","secauth", "autoid", "rrpmode", "transport", "interface", "cluster_name"]'
++				return '["crypto_cipher","crypto_hash","secauth", "autoid", "rrpmode", "transport", "interface", "cluster_name", "ip_version"]'
+ 			else:
+ 				if path_arr[1] == 'interface':
+ 					if len(path_arr) == 2:
+@@ -525,6 +530,8 @@
+ 					return '"%s"' % totem_options.get("transport", "udp")
+ 				elif path[1] == "cluster_name":
+ 					return '"%s"' % totem_options.get("cluster_name", "cluster")
++				elif path[1] == "ip_version":
++					return '"%s"' % totem_options.get("ip_version", "ipv4")
+ 				else:
+ 					return "nil"
+ 			elif len(path) == 4:
+@@ -635,6 +642,9 @@
+ 				elif path[1] == "cluster_name":
+ 					totem_options["cluster_name"] = args
+ 					return "true"
++				elif path[1] == "ip_version":
++					totem_options["ip_version"] = args
++					return "true"
+ 				else:
+ 					return "false"
+ 			elif len(path) == 3:
+@@ -705,16 +715,16 @@
+ 						nodelist_options["node"] = member_addr_set
+ 						return "nil"
+ 					for member_address in args.strip().split(" "):
+-						colon_pos = member_address.find(":")
+-						if (colon_pos &gt; -1):
+-							tmpid = member_address[colon_pos+1:]
+-							semicolon_pos = member_address[:colon_pos].find(";")
++						dash_pos = member_address.find("-")
++						if (dash_pos &gt; -1):
++							tmpid = member_address[dash_pos+1:]
++							semicolon_pos = member_address[:dash_pos].find(";")
+ 							if (semicolon_pos &gt; -1):
+-								member_addr_set.append({"ring0_addr":member_address[:semicolon_pos],"ring1_addr":member_address[semicolon_pos+1:colon_pos],"nodeid":member_address[colon_pos+1:]})
++								member_addr_set.append({"ring0_addr":member_address[:semicolon_pos],"ring1_addr":member_address[semicolon_pos+1:dash_pos],"nodeid":member_address[dash_pos+1:]})
+ 							else:
+-								member_addr_set.append({"ring0_addr":member_address[:colon_pos],"nodeid":member_address[colon_pos+1:]})
++								member_addr_set.append({"ring0_addr":member_address[:dash_pos],"nodeid":member_address[dash_pos+1:]})
+ 						else:
+-							semicolon_pos = member_address[:colon_pos].find(";")
++							semicolon_pos = member_address[:dash_pos].find(";")
+ 							if (semicolon_pos &gt; -1):
+ 								member_addr_set.append({"ring0_addr":member_address[:semicolon_pos],"ring1_addr":member_address[semicolon_pos+1:]})
+ 							else:
+diff --bs yast2-cluster.1609/yast2-cluster.changes yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster.changes
+--- yast2-cluster.1609/yast2-cluster.changes
++++ yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster.changes
+@@ -1,4 +1,11 @@
+ -------------------------------------------------------------------
++Fri Mar 25 08:25:25 UTC 2016 - nwang@suse.com
++
++- bsc#971961, fix error when using ipv6.
++- Add totem.ip_version for ipv6 support.
++- Version 3.1.23
++
++-------------------------------------------------------------------
+ Tue Dec  1 09:21:16 UTC 2015 - nwang@suse.com
+ 
+ - BSC#957305. Change required package from hawk to hawk2.
+diff --bs yast2-cluster.1609/yast2-cluster.spec yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster.spec
+--- yast2-cluster.1609/yast2-cluster.spec
++++ yast2-cluster.SUSE_SLE-12-SP1_Update/yast2-cluster.spec
+@@ -1,7 +1,7 @@
+ #
+ # spec file for package yast2-cluster
+ #
+-# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
++# Copyright (c) 2016 SUSE LINUX GmbH, Nuernberg, Germany.
+ #
+ # All modifications and additions to the file contributed by third parties
+ # remain the property of their copyright owners, unless otherwise agreed
+@@ -18,7 +18,7 @@
+ 
+ Name:           yast2-cluster
+ %define _fwdefdir /etc/sysconfig/SuSEfirewall2.d/services
+-Version:        3.1.22
++Version:        3.1.23
+ Release:        0
+ 
+ BuildRoot:      %{_tmppath}/%{name}-%{version}-build

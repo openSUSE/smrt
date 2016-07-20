@@ -1,0 +1,1 @@
+VUL-1: CVE-2015-8543: kernel-source: connect IPv6/SOCK_RAW connect causes a denial of service

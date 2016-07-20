@@ -1,0 +1,7 @@
+/.bs-update
+/GNUmakefile
+/smrt
+/smrt-*
+/smrt.*.pl
+/smrt.*.zsh
+*.html

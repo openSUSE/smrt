@@ -1,0 +1,1 @@
+VUL-0: CVE-2015-8812: kernel: CXGB3: Logic bug in return code handling prematurely frees key structures causing Use after free or kernel panic.

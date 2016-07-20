@@ -1,0 +1,5 @@
+<collection>
+  <owner rootproject="SUSE" project="SUSE:SLE-12:GA" package="yast2-cluster">
+    <person name="tuffy" role="bugowner"/>
+  </owner>
+</collection>

@@ -1,0 +1,60 @@
+<request id="114638" actions="0">
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2569" package="rubygem-rake.SUSE_SLE-12_Update"/>
+  <target project="SUSE:SLE-12:Update" package="rubygem-rake"/>
+<sourcediff key="49f2c63c5c98c2f331455bce7f86818b">
+  <old project="SUSE:SLE-12:Update" package="rubygem-rake.1537" rev="1" srcmd5="04b82b0aa7d035a99faa27d0c551b3c3"/>
+  <new project="SUSE:Maintenance:2569" package="rubygem-rake.SUSE_SLE-12_Update" rev="1" srcmd5="c04b0f30b97a1e8b21a8f4a1732e617b"/>
+  <files/>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2569" package="patchinfo"/>
+  <target project="SUSE:SLE-12:Update" package="patchinfo"/>
+<sourcediff key="fe26c471c131fe7984dc297420f9e2f4">
+  <old project="SUSE:Maintenance:2569" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2569" package="patchinfo" rev="2" srcmd5="cb2efcd5887e5899bb561dcb3b09076e"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="8bca5616c0f36794f1dcfb617e75f4c6" size="467"/>
+      <diff lines="12">@@ -0,0 +1,11 @@
++&lt;patchinfo incident="2569"&gt;
++  &lt;issue id="956273" tracker="bnc"&gt;[TRACKERBUG] FATE#318989 Add Portus to containers module&lt;/issue&gt;
++  &lt;issue id="318989" tracker="fate"/&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;BenniBrunner&lt;/packager&gt;
++  &lt;summary&gt;Recommended udpate for rubygem-rake&lt;/summary&gt;
++  &lt;description&gt;
++This update for rubygem-rake is just a rebuild of the already released sources to fix a dependency-issue.
++&lt;/description&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2569" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-Module-Containers:12:x86_64" package="patchinfo.2569"/>
+<sourcediff key="fe26c471c131fe7984dc297420f9e2f4">
+  <old project="SUSE:Maintenance:2569" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2569" package="patchinfo" rev="2" srcmd5="cb2efcd5887e5899bb561dcb3b09076e"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="8bca5616c0f36794f1dcfb617e75f4c6" size="467"/>
+      <diff lines="12">@@ -0,0 +1,11 @@
++&lt;patchinfo incident="2569"&gt;
++  &lt;issue id="956273" tracker="bnc"&gt;[TRACKERBUG] FATE#318989 Add Portus to containers module&lt;/issue&gt;
++  &lt;issue id="318989" tracker="fate"/&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;BenniBrunner&lt;/packager&gt;
++  &lt;summary&gt;Recommended udpate for rubygem-rake&lt;/summary&gt;
++  &lt;description&gt;
++This update for rubygem-rake is just a rebuild of the already released sources to fix a dependency-issue.
++&lt;/description&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+</request>

@@ -1,0 +1,76 @@
+SUMMARY: PASSED/FAILED
+
+comment: (none)
+
+$Author: roman $
+
+Products: SLE-HA 12-SP1 (s390x, x86_64)
+Category: recommended
+Rating: moderate
+Packager: tuffy@suse.com
+Bugs: 971961
+ReviewRequestID: SUSE:Maintenance:2452:115035
+Repository: http://download.suse.de/ibs/SUSE:/Maintenance:/2452/
+Packages: yast2-cluster = 3.1.23-9.1
+SRCRPMs: yast2-cluster
+Suggested Test Plan Reviewers: tuffy@suse.com
+Testplatform: base=sles(major=12,minor=sp1);arch=[s390x,x86_64];addon=hae(major=12,minor=sp1)
+
+#############################
+Test results by product-arch:
+#############################
+
+
+########################
+notes for/by the tester:
+########################
+
+Bug #971961 ("Apparently no IPv6 support in yast cluster for corosync"):
+------------------------------------------------------------------------
+
+https://bugzilla.suse.com/show_bug.cgi?id=971961
+
+REPRODUCER_PRESENT:     YES/NO
+REPRODUCER_COVERAGE:    YES/NO
+REPRODUCER_APPLICABLE:  YES/NO
+REPRODUCER_WORKING:     YES/NO
+REPRODUCER_AUTOMATABLE: YES/NO
+
+additional info from L3:
+
+	Incident ID:        45098
+	Summary:
+		yast2-cluster module wasn't able to generate proper corosync.conf since it couldn't process IPv6 addresses correctly.
+	Probability:        n/a
+	Impact:             low
+	Patch:              correct
+	Reproducer:
+		The steps are in [1], there up to the last case (Unicast (2/2)) the fix should work for this.
+		
+		[1] https://bugzilla.suse.com/show_bug.cgi?id=971961#c0
+	Requires 3rd-party: no
+
+...
+
+regression tests:
+-----------------
+List of testcases in Testopia:
+
+https://bugzilla.suse.com/tr_list_cases.cgi?tags_type=anyexact&tags=packagename_yast2-cluster
+
+(put your details here)
+
+source code change review:
+--------------------------
+(put here the assessment of the spec + source changes when compared to the latest release)
+
+zypper update log:
+------------------
+put here the output of the following commands:
+
+export LANG=
+zypper lr -puU
+zypper refresh
+zypper patches | grep :p=2452
+zypper patches | awk -F "|" '/:p=2452>/ { print $2; }' | while read p; do zypper -n install -l -y -t patch $p; done
+zypper patches | grep :p=2452

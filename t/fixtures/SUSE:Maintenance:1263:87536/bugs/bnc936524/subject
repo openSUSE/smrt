@@ -1,0 +1,1 @@
+libvirt-lxc crashes when interface type='direct' is used in domain

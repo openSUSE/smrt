@@ -1,0 +1,1 @@
+VUL-0: CVE-2013-7446: kernel: Unix sockets use after free - peer_wait_queue prematurely freed

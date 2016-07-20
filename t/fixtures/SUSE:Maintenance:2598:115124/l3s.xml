@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<response>
+  <meta type="hash">
+    <limit type="integer">20</limit>
+    <next type="null"/>
+    <offset type="integer">0</offset>
+    <previous type="null"/>
+    <total_count type="integer">1</total_count>
+  </meta>
+  <objects type="list">
+    <object>
+      <bug_id type="integer">977669</bug_id>
+      <incident>/api/1/incident/45371/</incident>
+      <outcome>medium</outcome>
+      <patch>correct</patch>
+      <probability>medium</probability>
+      <reproducer>smbclient "//&lt;NETAPP DFS SHARE" -W ADB -U "ADB\\&lt;username&gt;%&lt;password&gt;"&#13;
+smb: \&gt; cd &lt;\allowed directory\&gt;&#13;
+&#13;
+It now fails with errors, see bug #description.</reproducer>
+      <requires_thirdparty type="boolean">True</requires_thirdparty>
+      <resource_uri>/api/1/raederwerk/45371/</resource_uri>
+      <summary>After patching to samba-client-4.2.4-16.1.x86_64.rpm it is not possible to connect to a NetApp Filer (NetApp's  network attached storage using CIFS).</summary>
+    </object>
+  </objects>
+</response>

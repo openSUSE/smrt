@@ -1,0 +1,9 @@
+incident=45323
+summary=Memory leak in glibc-2.11.3-17.95.2 when resolving a non-existing DNSBL entry using getaddrinfo()
+probability=medium
+impact=medium
+patch=correct
+reproducer=Please see Description.
+reproducer=
+reproducer=This is a bug fixed in upstream (https://sourceware.org/git/?p=glibc.git;a=commit;h=ab7ac0f)
+requires_3dparty=no

@@ -1,0 +1,5 @@
+<collection>
+  <owner rootproject="SUSE" project="SUSE:SLE-12:GA" package="systemd-mini">
+    <group name="systemd-maintainers" role="bugowner"/>
+  </owner>
+</collection>

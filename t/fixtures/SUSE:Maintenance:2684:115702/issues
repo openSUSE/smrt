@@ -1,0 +1,2 @@
+bnc978972 [build1492] Installation of libpango-1_0-0-32bit failed
+bnc981957 glib2-devel missed a dependency pcre-devel

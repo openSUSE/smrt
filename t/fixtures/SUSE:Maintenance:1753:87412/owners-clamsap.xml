@@ -1,0 +1,5 @@
+<collection>
+  <owner rootproject="SUSE" project="SUSE:SLE-12:GA:Products" package="clamsap">
+    <person name="alchemist" role="bugowner"/>
+  </owner>
+</collection>

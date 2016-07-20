@@ -1,0 +1,4 @@
+Install this update on a minimal system without any other maintenance updates applied and check that:
+- the system can successfully reboot without (new) errors
+- you can install all released maintenance updates
+

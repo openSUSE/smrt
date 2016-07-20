@@ -1,0 +1,1 @@
+'dmsetup remove' always fails when the --force option is used

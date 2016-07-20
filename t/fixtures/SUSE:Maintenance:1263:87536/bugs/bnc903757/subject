@@ -1,0 +1,1 @@
+Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported

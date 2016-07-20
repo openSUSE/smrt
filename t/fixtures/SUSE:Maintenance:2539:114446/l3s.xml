@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<response>
+  <meta type="hash">
+    <limit type="integer">20</limit>
+    <next type="null"/>
+    <offset type="integer">0</offset>
+    <previous type="null"/>
+    <total_count type="integer">3</total_count>
+  </meta>
+  <objects type="list">
+    <object>
+      <bug_id type="integer">816446</bug_id>
+      <incident>/api/1/incident/38957/</incident>
+      <outcome>high</outcome>
+      <patch>correct</patch>
+      <probability>high</probability>
+      <reproducer>Setup several domUs on multiple dom0s and watch the times on them all.</reproducer>
+      <requires_thirdparty type="boolean">False</requires_thirdparty>
+      <resource_uri>/api/1/raederwerk/38957/</resource_uri>
+      <summary>Customer is using several DomUs on multiple Xen servers, and they are seeing time differences between the host and guest after some guest uptime regardless of guest clock source setting.</summary>
+    </object>
+    <object>
+      <bug_id type="integer">946117</bug_id>
+      <incident>/api/1/incident/43855/</incident>
+      <outcome>medium</outcome>
+      <patch>correct</patch>
+      <probability>low</probability>
+      <reproducer>See comment #18</reproducer>
+      <requires_thirdparty type="boolean">False</requires_thirdparty>
+      <resource_uri>/api/1/raederwerk/43855/</resource_uri>
+      <summary>On certain load failures, nf_contrack can fail to properly clean up (properly remove) one of it's pernet_subsys list entries.  This leaves the list corrupt as the memory for the entry is released.</summary>
+    </object>
+    <object>
+      <bug_id type="integer">966662</bug_id>
+      <incident>/api/1/incident/44821/</incident>
+      <outcome>high</outcome>
+      <patch>correct</patch>
+      <probability>high</probability>
+      <reproducer>lschp shows stale information in the "Cmg" and "Shared" column.</reproducer>
+      <requires_thirdparty type="boolean">False</requires_thirdparty>
+      <resource_uri>/api/1/raederwerk/44821/</resource_uri>
+      <summary>Four s390x patches to be added to kernel-default-3.0.101-0.7.37.1 of SLES12SP1LTSS</summary>
+    </object>
+  </objects>
+</response>

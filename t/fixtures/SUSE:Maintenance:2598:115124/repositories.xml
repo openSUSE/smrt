@@ -1,0 +1,354 @@
+<resultlist state="b67170696b979de4a5bd7b393a885181">
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-SERVER_12-SP1_x86_64" arch="x86_64" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-SERVER_12-SP1_x86_64" arch="i586" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-SERVER_12-SP1_s390x" arch="s390x" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-SERVER_12-SP1_s390x" arch="s390" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-SERVER_12-SP1_ppc64le" arch="ppc64le" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-SDK_12-SP1_x86_64" arch="x86_64" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-SDK_12-SP1_x86_64" arch="i586" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-SDK_12-SP1_s390x" arch="s390x" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-SDK_12-SP1_s390x" arch="s390" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-SDK_12-SP1_ppc64le" arch="ppc64le" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-HA_12-SP1_x86_64" arch="x86_64" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-HA_12-SP1_x86_64" arch="i586" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-HA_12-SP1_s390x" arch="s390x" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-HA_12-SP1_s390x" arch="s390" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-DESKTOP_12-SP1_x86_64" arch="x86_64" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_Updates_SLE-DESKTOP_12-SP1_x86_64" arch="i586" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_SLE-12-SP1_Update" arch="i586" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_SLE-12-SP1_Update" arch="x86_64" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_SLE-12-SP1_Update" arch="s390" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_SLE-12-SP1_Update" arch="s390x" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_SLE-12-SP1_Update" arch="ppc64le" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2598" repository="SUSE_SLE-12-SP1_Update" arch="aarch64" code="published" state="published">
+    <status package="SLE-DESKTOP_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-DESKTOP_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SDK_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="SLE-SERVER_12-SP2_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="samba.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+</resultlist>

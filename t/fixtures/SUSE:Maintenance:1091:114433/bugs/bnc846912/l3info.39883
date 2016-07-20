@@ -1,0 +1,11 @@
+incident=39883
+summary=Customer reported that while running a java app, it fails with error:
+summary='GThread-ERROR **: GThread system may only be initialized once.
+summary=aborting...'
+summary=
+summary=It looks like glib2 doesn't allow calling multiple times g_thread_init().
+probability=medium
+impact=medium
+patch=obvious
+reproducer=Please check bug.
+requires_3dparty=no

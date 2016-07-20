@@ -1,0 +1,39 @@
+<patchinfo incident="2646">
+  <issue id="975930" tracker="bnc">L3: Bad performance in malloc/free after upgrading to SLES 12</issue>
+  <issue id="980854" tracker="bnc">VUL-0: CVE-2016-4429: glibc: A stack frame overflow flaw was found in the glibc's clntudp_call</issue>
+  <issue id="980483" tracker="bnc">VUL-0: CVE-2016-3706: glibc: stack overflow in hostent translation</issue>
+  <issue id="973010" tracker="bnc">SLES 11 SP4 - Memory leak in glibc-2.11.3-17.95.2 when resolving a non-existing DNSBL entry using getaddrinfo().</issue>
+  <issue id="968787" tracker="bnc">DTV_SURPLUS limits loading of Static TLS-requiring modules in multi-threaded programs (SAP HANA on Power)</issue>
+  <issue id="973164" tracker="bnc">VUL-0: CVE-2016-3075: glibc: Stack overflow in nss_dns_getnetbyname_r</issue>
+  <issue id="969727" tracker="bnc">VUL-1: CVE-2016-1234: glibc: buffer overflow in glob with GLOB_ALTDIRFUNC and crafted directory</issue>
+  <issue id="CVE-2016-3706" tracker="cve" />
+  <issue id="CVE-2016-4429" tracker="cve" />
+  <issue id="CVE-2016-1234" tracker="cve" />
+  <issue id="CVE-2016-3075" tracker="cve" />
+  <category>security</category>
+  <rating>moderate</rating>
+  <packager>nosy</packager>
+  <description>
+This update for glibc fixes the following issues: 
+
+- bandaid-dtv-surplus.diff: Increase DTV_SURPLUS limit (bsc#968787)
+- glob-altdirfunc.patch: Do not copy d_name field of struct dirent
+  (CVE-2016-1234, bsc#969727, BZ #19779)
+- nss-dns-memleak-2.patch: fix memory leak in _nss_dns_gethostbyname4_r
+  (bsc#973010)
+- nss-dns-getnetbyname.patch: fix stack overflow in
+  _nss_dns_getnetbyname_r (CVE-2016-3075, bsc#973164, BZ #19879)
+- Fix malloc performance regression from SLE 11 (bsc#975930)
+  Consolidate-arena_lookup-and-arena_lock-into-a-singl.patch
+  Avoid-deadlock-in-malloc-on-backtrace-BZ-16159.patch
+  malloc-Consistently-apply-trim_threshold-to-all-heap.patch
+  malloc-Prevent-arena-free_list-from-turning-cyclic-B.patch
+  malloc-Fix-attached-thread-reference-count-handling-.patch
+  malloc-Fix-list_lock-arena-lock-deadlock-BZ-19182.patch
+- getaddrinfo-hostent-conv-stack-overflow.patch: getaddrinfo stack
+  overflow in hostent conversion (CVE-2016-3706, bsc#980483, BZ #20010)
+- clntudp-call-alloca.patch: do not use alloca in clntudp_call
+  (CVE-2016-4429, bsc#980854, BZ #20112)
+</description>
+  <summary>Security update for glibc</summary>
+</patchinfo>

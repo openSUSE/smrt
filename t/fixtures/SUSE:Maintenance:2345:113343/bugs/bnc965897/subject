@@ -1,0 +1,1 @@
+hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest

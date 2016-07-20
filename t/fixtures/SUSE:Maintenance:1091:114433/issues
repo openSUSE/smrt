@@ -1,0 +1,5 @@
+bnc846912 gtk/glib bug w/ g_thread_init()
+bnc929542 glib-2 packages do not build
+bnc931445 java crashes Files.probeContentType
+bnc956599 File descriptors "leak" with Gnome panel
+bnc970694 include glibconfig.h into the -devel-32bit package

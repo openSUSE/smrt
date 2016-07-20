@@ -1,0 +1,1 @@
+VUL-0: CVE-2015-6252: kernel: vhost fd leak in ioctl VHOST_SET_LOG_FD

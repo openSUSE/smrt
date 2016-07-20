@@ -1,0 +1,1 @@
+VUL-0: CVE-2016-2782: kernel: visor: crash on invalid USB device descriptors in treo_attach() in visor driver

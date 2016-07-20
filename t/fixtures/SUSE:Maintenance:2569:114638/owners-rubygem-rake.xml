@@ -1,0 +1,5 @@
+<collection>
+  <owner rootproject="SUSE" project="SUSE:SLE-11-SP3:Update:Cloud5:Test">
+    <person name="lazy" role="bugowner"/>
+  </owner>
+</collection>

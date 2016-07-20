@@ -1,0 +1,18 @@
+<patchinfo incident="1775">
+  <issue id="960155" tracker="bnc">gdk-pixbuf - Avoid a possible divide-by-zero in the pixbuf loader - and others -  not included in gdk-pixbuf SLES code</issue>
+  <issue id="958963" tracker="bnc">VUL-0: CVE-2015-7552: gdk-pixbuf: heap overflow in flipping bmp files</issue>
+  <issue id="CVE-2015-7552" tracker="cve" />
+  <category>security</category>
+  <rating>moderate</rating>
+  <packager>greedy</packager>
+  <description>
+This update for gdk-pixbuf fixes the following security issues:
+
+- CVE-2015-7552: various overflows, including heap overflow in flipping bmp files (bsc#958963)
+
+The following non-security issue was fixed:
+
+- bsc#960155: fix a possible divide by zero
+</description>
+  <summary>Security update for gdk-pixbuf</summary>
+</patchinfo>

@@ -1,0 +1,80 @@
+<request id="87780">
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="gdk-pixbuf.SUSE_SLE-12_Update"/>
+    <target project="SUSE:SLE-12:Update" package="gdk-pixbuf.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:SLE-12:Update" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DESKTOP:12-SP1:x86_64" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DESKTOP:12:x86_64" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:12-SP1:ppc64le" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:12-SP1:s390x" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:12-SP1:x86_64" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:12:ppc64le" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:12:s390x" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:12:x86_64" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12-SP1:ppc64le" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12-SP1:s390x" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12-SP1:x86_64" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12:ppc64le" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12:s390x" package="patchinfo.1775"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1775" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12:x86_64" package="patchinfo.1775"/>
+  </action>
+  <state name="review" who="leonardocf" when="2016-01-07T20:48:05">
+    <comment/>
+  </state>
+  <review state="accepted" when="2016-01-07T20:32:47" who="leonardocf" by_group="qam-auto">
+    <comment>reviewers added: qam-sle</comment>
+    <history who="leonardocf" when="2016-01-07T20:48:06">
+      <description>Review got accepted</description>
+      <comment>reviewers added: qam-sle</comment>
+    </history>
+  </review>
+  <review state="new" by_group="qam-sle">
+    <comment/>
+  </review>
+  <description>requesting release</description>
+</request>

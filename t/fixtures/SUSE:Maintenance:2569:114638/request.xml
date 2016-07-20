@@ -1,0 +1,41 @@
+<request id="114638">
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2569" package="rubygem-rake.SUSE_SLE-12_Update"/>
+    <target project="SUSE:SLE-12:Update" package="rubygem-rake.2569"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2569" package="patchinfo"/>
+    <target project="SUSE:SLE-12:Update" package="patchinfo.2569"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2569" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-Module-Containers:12:x86_64" package="patchinfo.2569"/>
+  </action>
+  <state name="review" who="maintenance-robot" when="2016-05-17T12:30:36">
+    <comment/>
+  </state>
+  <review state="accepted" when="2016-05-17T10:45:20" who="maintenance-robot" by_group="qam-auto">
+    <comment>reviewers added: docker-team autobuild-team qam-sle</comment>
+    <history who="maintenance-robot" when="2016-05-17T12:30:37">
+      <description>Review got accepted</description>
+      <comment>reviewers added: docker-team autobuild-team qam-sle</comment>
+    </history>
+  </review>
+  <review state="accepted" when="2016-05-17T12:30:36" who="timid" by_group="docker-team">
+    <comment/>
+    <history who="timid" when="2016-05-17T14:07:10">
+      <description>Review got accepted</description>
+    </history>
+  </review>
+  <review state="accepted" when="2016-05-17T12:30:36" who="oertel" by_group="autobuild-team">
+    <comment>reviewed_okay</comment>
+    <history who="oertel" when="2016-05-17T16:27:20">
+      <description>Review got accepted</description>
+      <comment>reviewed_okay</comment>
+    </history>
+  </review>
+  <review state="new" by_group="qam-sle">
+    <comment/>
+  </review>
+  <description/>
+</request>

@@ -1,0 +1,13 @@
+<group>
+  <title>systemd-maintainers</title>
+  <email>systemd-maintainers@suse.de</email>
+  <maintainer userid="painter"/>
+  <person>
+    <person userid="baby"/>
+    <person userid="painter"/>
+    <person userid="snappy"/>
+    <person userid="papa"/>
+    <person userid="slouchy"/>
+    <person userid="tsaupe"/>
+  </person>
+</group>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<response>
+  <meta type="hash">
+    <limit type="integer">20</limit>
+    <next type="null"/>
+    <offset type="integer">0</offset>
+    <previous type="null"/>
+    <total_count type="integer">1</total_count>
+  </meta>
+  <objects type="list">
+    <object>
+      <bug_id type="integer">971961</bug_id>
+      <incident>/api/1/incident/45098/</incident>
+      <outcome>low</outcome>
+      <patch>correct</patch>
+      <probability>n/a</probability>
+      <reproducer>The steps are in [1], there up to the last case (Unicast (2/2)) the fix should work for this.&#13;
+&#13;
+[1] https://bugzilla.suse.com/show_bug.cgi?id=971961#c0</reproducer>
+      <requires_thirdparty type="boolean">False</requires_thirdparty>
+      <resource_uri>/api/1/raederwerk/45098/</resource_uri>
+      <summary>yast2-cluster module wasn't able to generate proper corosync.conf since it couldn't process IPv6 addresses correctly.</summary>
+    </object>
+  </objects>
+</response>

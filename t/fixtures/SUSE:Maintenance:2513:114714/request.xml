@@ -1,0 +1,100 @@
+<request id="114714">
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="quagga.SUSE_SLE-11-SP1_Update"/>
+    <target project="SUSE:SLE-11-SP1:Update" package="quagga.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:SLE-11-SP1:Update" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP1-TERADATA:x86_64" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP3-TERADATA:x86_64" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:i586" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:ia64" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:ppc64" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:s390x" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:x86_64" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:11-SP4:i586" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:11-SP4:ia64" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:11-SP4:ppc64" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:11-SP4:s390x" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:11-SP4:x86_64" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP1-TERADATA:x86_64" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP3-TERADATA:x86_64" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP4:i586" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP4:ia64" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP4:ppc64" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP4:s390x" package="patchinfo.2513"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2513" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP4:x86_64" package="patchinfo.2513"/>
+  </action>
+  <state name="review" who="maintenance-robot" when="2016-05-18T08:25:16">
+    <comment/>
+  </state>
+  <review state="accepted" when="2016-05-18T08:22:59" who="maintenance-robot" by_group="qam-auto">
+    <comment>reviewers added: qam-sle</comment>
+    <history who="maintenance-robot" when="2016-05-18T08:25:16">
+      <description>Review got accepted</description>
+      <comment>reviewers added: qam-sle</comment>
+    </history>
+  </review>
+  <review state="new" by_group="qam-sle">
+    <comment/>
+  </review>
+  <description>requesting release</description>
+</request>

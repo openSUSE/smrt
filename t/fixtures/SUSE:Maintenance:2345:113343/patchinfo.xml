@@ -1,0 +1,43 @@
+<patchinfo incident="2345">
+  <issue id="973848" tracker="bnc">system-journal has executable rights set for all (755) after boot</issue>
+  <issue id="970860" tracker="bnc">missing support for gpio triggered graceful system shutdown</issue>
+  <issue id="972612" tracker="bnc">VUL-1: systemd: Archived journal files are world readable</issue>
+  <issue id="972727" tracker="bnc">'dmsetup remove' always fails when the --force option is used</issue>
+  <issue id="963230" tracker="bnc">systemd ignores systemd.log_level=debug in cmdline with quiet</issue>
+  <issue id="959886" tracker="bnc">L3: Fails to provide echo/prompt in EMERGENCY mode</issue>
+  <issue id="960158" tracker="bnc">nfs-utils and nfs-server make systemd fill up the logs ....</issue>
+  <issue id="967122" tracker="bnc">systemctl bash completion not working properly for "start" able services</issue>
+  <issue id="965897" tracker="bnc">hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest</issue>
+  <issue id="970423" tracker="bnc">systemd: fstab-generator doesn't honor automount option</issue>
+  <issue id="CVE-2014-9770" tracker="cve"/>
+  <issue id="CVE-2015-8842" tracker="cve"/>
+  <issue id="318444" tracker="fate"/>
+  <category>security</category>
+  <rating>moderate</rating>
+  <packager>architect</packager>
+  <description>
+This update for SystemD provides fixes and enhancements.
+
+The following security issue has been fixed:
+
+- Don't allow read access to journal files to users. (bsc#972612, CVE-2014-9770, CVE-2015-8842)
+
+The following non-security issues have been fixed:
+
+- Incorrect permissions set after boot on journal files. (bsc#973848)
+- Exclude device-mapper from block device ownership event locking. (bsc#972727)
+- Explicitly set mode for /run/log.
+- Don't apply sgid and executable bit to journal files, only the directories they are contained in.
+- Add ability to mask access mode by pre-existing access mode on files/directories.
+- No need to pass --all if inactive is explicitly requested in list-units. (bsc#967122)
+- Fix automount option and don't start associated mount unit at boot. (bsc#970423)
+- Support more than just power-gpio-key. (fate#318444, bsc#970860)
+- Add standard gpio power button support. (fate#318444, bsc#970860)
+- Downgrade warnings about wanted unit which are not found. (bsc#960158)
+- Shorten hostname before checking for trailing dot. (bsc#965897)
+- Remove WorkingDirectory parameter from emergency, rescue and console-shell.service. (bsc#959886)
+- Don't ship boot.udev and systemd-journald.init anymore.
+- Revert "log: honour the kernel's quiet cmdline argument". (bsc#963230)
+</description>
+  <summary>Security update for systemd</summary>
+</patchinfo>

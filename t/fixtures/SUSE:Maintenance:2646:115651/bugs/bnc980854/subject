@@ -1,0 +1,1 @@
+VUL-0: CVE-2016-4429: glibc: A stack frame overflow flaw was found in the glibc's clntudp_call

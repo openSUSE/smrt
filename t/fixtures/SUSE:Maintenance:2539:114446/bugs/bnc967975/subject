@@ -1,0 +1,1 @@
+VUL-0: CVE-2016-2546: kernel: ALSA: timer: Fix race among timer ioctls

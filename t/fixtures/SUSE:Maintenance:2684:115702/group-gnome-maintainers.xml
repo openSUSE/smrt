@@ -1,0 +1,21 @@
+<group>
+  <title>gnome-maintainers</title>
+  <email>bnc-team-gnome@forge.provo.novell.com</email>
+  <maintainer userid="papa"/>
+  <person>
+    <person userid="hefty"/>
+    <person userid="harmony"/>
+    <person userid="brainy"/>
+    <person userid="papa"/>
+    <person userid="grouchy"/>
+    <person userid="clumsy"/>
+    <person userid="greedy"/>
+    <person userid="jokey"/>
+    <person userid="chef"/>
+    <person userid="vanity"/>
+    <person userid="handy"/>
+    <person userid="scaredy"/>
+    <person userid="reporter"/>
+    <person userid="sloppy"/>
+  </person>
+</group>

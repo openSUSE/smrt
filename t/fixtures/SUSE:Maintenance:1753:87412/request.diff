@@ -1,0 +1,3188 @@
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/ChangeLog clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/ChangeLog
+--- clamsap/clamsap-0.9.8.0.tar.gz/ChangeLog
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/ChangeLog
+@@ -1,11 +1,30 @@
+ CHANGES
+ ========
++0.98.9 - 11. November 2015
++-------------------------
++Improve MIME check
++Fix SAP archive decompression
++
++0.98.8 - 21. October 2015
++-------------------------
++Fix for internal MIME check
++
++0.98.7 - 18. September 2015
++-------------------------
++Enhance error messages in case of initialisation errors.
++Create default sym.link for libclamdsap
++
++0.9.86 - 30. May 2015
++-------------------------
++Fix problem, if libmagic can not be found in VsaStartup
++Security fix for compression, see CVE-2015-2282 and CVE-2015-2278
++Enhance buffer scan in libclamdsap
+ 
+ 0.9.8  - 30. March 2015
+ -------------------------
+ Support of NW-VSI 2.00
+ This includes the support of MIME type detection in addition to AV.
+-Use code from SAP example adapter to provide SAP archive format scan.
++Use code from SAP example adapter to provide SAP archive format scan.
+ see http://scn.sap.com/docs/DOC-7838
+ 
+ 0.9.74 - 20. April 2012
+@@ -38,4 +57,4 @@
+ Initial release of beta library vsclam
+ 
+ x.x.x
+------------------------
++-----------------------
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/Makefile.am clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/Makefile.am
+--- clamsap/clamsap-0.9.8.0.tar.gz/Makefile.am
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/Makefile.am
+@@ -44,6 +44,10 @@
+ 	-cp src/Makefile.in   ../$(VERSION_DIR)/src
+ 	-cp m4/*              ../$(VERSION_DIR)/m4
+ 	-cp include/*         ../$(VERSION_DIR)/include	
+-	
++
++#install-exec-hook:
++#	-ln -sf $(DESTDIR)$(libdir)/libclamdsap$(LIBEXT) $(libdir)/libsapvsa$(LIBEXT)
++#	-ln -sf $(DESTDIR)$(libdir)/libclamdsap$(LIBEXT) /lib64/libsapvsa$(LIBEXT)
++
+ pack: cleandir makedir distribute_clamsap cleandir
+ 	-cd ..; tar -zcvf $(VERSION_DIR).tar.gz $(VERSION_DIR)
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/Makefile.in clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/Makefile.in
+--- clamsap/clamsap-0.9.8.0.tar.gz/Makefile.in
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/Makefile.in
+@@ -31,6 +31,7 @@
+ POST_UNINSTALL = :
+ build_triplet = @build@
+ host_triplet = @host@
++target_triplet = @target@
+ subdir = .
+ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
+ 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
+@@ -106,6 +107,7 @@
+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+ LD = @LD@
+ LDFLAGS = @LDFLAGS@
++LIBEXT = @LIBEXT@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LIBTOOL = @LIBTOOL@
+@@ -181,7 +183,11 @@
+ sharedstatedir = @sharedstatedir@
+ srcdir = @srcdir@
+ sysconfdir = @sysconfdir@
++target = @target@
+ target_alias = @target_alias@
++target_cpu = @target_cpu@
++target_os = @target_os@
++target_vendor = @target_vendor@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+@@ -677,6 +683,10 @@
+ 	-cp m4/*              ../$(VERSION_DIR)/m4
+ 	-cp include/*         ../$(VERSION_DIR)/include	
+ 
++#install-exec-hook:
++#	-ln -sf $(DESTDIR)$(libdir)/libclamdsap$(LIBEXT) $(libdir)/libsapvsa$(LIBEXT)
++#	-ln -sf $(DESTDIR)$(libdir)/libclamdsap$(LIBEXT) /lib64/libsapvsa$(LIBEXT)
++
+ pack: cleandir makedir distribute_clamsap cleandir
+ 	-cd ..; tar -zcvf $(VERSION_DIR).tar.gz $(VERSION_DIR)
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/clamsap.spec clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/clamsap.spec
+--- clamsap/clamsap-0.9.8.0.tar.gz/clamsap.spec
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/clamsap.spec
+@@ -10,7 +10,7 @@
+   %define platform  linuxintel
+ %endif
+ 
+-%define version     0.9.8.0
++%define version     0.98.9
+ %define name        clamsap
+ %define packname    clamsap-%{version}
+ %define requiresp   clamav &gt;= 0.97
+@@ -78,10 +78,18 @@
+ 
+ 
+ %changelog
++* Wed Oct 21 2015  Markus Strehle
++- Fix internal MIME check
++* Fri Sep 18 2015  Markus Strehle
++- Improve error messages
++* Fri May 29 2015  Markus Strehle
++- Fix problem, if libmagic can not be found in VsaStartup
++- Security fix for compression, see CVE-2015-2282 and CVE-2015-2278
++- Enhance buffer scan in libclamdsap
+ * Fri Mar 27 2015  Markus Strehle
+ - NW-VSI 2.00 support
+-* Fri Apr 19 2012  Markus Strehle
+-- Provide a remote clamd connection
++* Fri Apr 27 2012  Markus Strehle
++- Support remote scan from libclamdsap to clamd
+ * Fri Mar 25 2011  Markus Strehle
+ - Prevent multiple byte code initialisation
+ * Thu Nov 02 2010  Markus Strehle 
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/configure clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/configure
+--- clamsap/clamsap-0.9.8.0.tar.gz/configure
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/configure
+@@ -1,6 +1,6 @@
+ #! /bin/sh
+ # Guess values for system-dependent variables and create Makefiles.
+-# Generated by GNU Autoconf 2.63 for clamsap 0.9.8.0.
++# Generated by GNU Autoconf 2.63 for clamsap 0.98.9.
+ #
+ # Report bugs to &lt;markus.strehle@sap.com&gt;.
+ #
+@@ -745,8 +745,8 @@
+ # Identity of this package.
+ PACKAGE_NAME='clamsap'
+ PACKAGE_TARNAME='clamsap'
+-PACKAGE_VERSION='0.9.8.0'
+-PACKAGE_STRING='clamsap 0.9.8.0'
++PACKAGE_VERSION='0.98.9'
++PACKAGE_STRING='clamsap 0.98.9'
+ PACKAGE_BUGREPORT='markus.strehle@sap.com'
+ 
+ # Factoring default headers for most tests.
+@@ -793,8 +793,11 @@
+ WINDOWS_TRUE
+ SOLARIS_FALSE
+ SOLARIS_TRUE
++DARWIN_FALSE
++DARWIN_TRUE
+ LINUX_FALSE
+ LINUX_TRUE
++LIBEXT
+ CLAMSAP_VERSION_INFO
+ CPP
+ OTOOL64
+@@ -815,14 +818,6 @@
+ EGREP
+ GREP
+ SED
+-host_os
+-host_vendor
+-host_cpu
+-host
+-build_os
+-build_vendor
+-build_cpu
+-build
+ LIBTOOL
+ am__fastdepCC_FALSE
+ am__fastdepCC_TRUE
+@@ -863,6 +858,18 @@
+ INSTALL_DATA
+ INSTALL_SCRIPT
+ INSTALL_PROGRAM
++target_os
++target_vendor
++target_cpu
++target
++host_os
++host_vendor
++host_cpu
++host
++build_os
++build_vendor
++build_cpu
++build
+ target_alias
+ host_alias
+ build_alias
+@@ -1472,7 +1479,7 @@
+   # Omit some internal or obsolete options to make the list less imposing.
+   # This message is too long to be a string in the A/UX 3.1 sh.
+   cat &lt;&lt;_ACEOF
+-\`configure' configures clamsap 0.9.8.0 to adapt to many kinds of systems.
++\`configure' configures clamsap 0.98.9 to adapt to many kinds of systems.
+ 
+ Usage: $0 [OPTION]... [VAR=VALUE]...
+ 
+@@ -1537,12 +1544,13 @@
+ System types:
+   --build=BUILD     configure for building on BUILD [guessed]
+   --host=HOST       cross-compile to build programs to run on HOST [BUILD]
++  --target=TARGET   configure for building compilers for TARGET [HOST]
+ _ACEOF
+ fi
+ 
+ if test -n "$ac_init_help"; then
+   case $ac_init_help in
+-     short | recursive ) echo "Configuration of clamsap 0.9.8.0:";;
++     short | recursive ) echo "Configuration of clamsap 0.98.9:";;
+    esac
+   cat &lt;&lt;\_ACEOF
+ 
+@@ -1641,7 +1649,7 @@
+ test -n "$ac_init_help" &amp;&amp; exit $ac_status
+ if $ac_init_version; then
+   cat &lt;&lt;\_ACEOF
+-clamsap configure 0.9.8.0
++clamsap configure 0.98.9
+ generated by GNU Autoconf 2.63
+ 
+ Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
+@@ -1655,7 +1663,7 @@
+ This file contains any messages produced by compilers while
+ running configure, to aid debugging if configure makes a mistake.
+ 
+-It was created by clamsap $as_me 0.9.8.0, which was
++It was created by clamsap $as_me 0.98.9, which was
+ generated by GNU Autoconf 2.63.  Invocation command line was
+ 
+   $ $0 $@
+@@ -2064,6 +2072,212 @@
+ # AC_CONFIG_SRCDIR(src/vsclam.c)
+ # AC_CONFIG_SRCDIR(src/vsclamd.c)
+ 
++# Make sure we can run config.sub.
++$SHELL "$ac_aux_dir/config.sub" sun4 &gt;/dev/null 2&gt;&amp;1 ||
++  { { $as_echo "$as_me:$LINENO: error: cannot run $SHELL $ac_aux_dir/config.sub" &gt;&amp;5
++$as_echo "$as_me: error: cannot run $SHELL $ac_aux_dir/config.sub" &gt;&amp;2;}
++   { (exit 1); exit 1; }; }
++
++{ $as_echo "$as_me:$LINENO: checking build system type" &gt;&amp;5
++$as_echo_n "checking build system type... " &gt;&amp;6; }
++if test "${ac_cv_build+set}" = set; then
++  $as_echo_n "(cached) " &gt;&amp;6
++else
++  ac_build_alias=$build_alias
++test "x$ac_build_alias" = x &amp;&amp;
++  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
++test "x$ac_build_alias" = x &amp;&amp;
++  { { $as_echo "$as_me:$LINENO: error: cannot guess build type; you must specify one" &gt;&amp;5
++$as_echo "$as_me: error: cannot guess build type; you must specify one" &gt;&amp;2;}
++   { (exit 1); exit 1; }; }
++ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
++  { { $as_echo "$as_me:$LINENO: error: $SHELL $ac_aux_dir/config.sub $ac_build_alias failed" &gt;&amp;5
++$as_echo "$as_me: error: $SHELL $ac_aux_dir/config.sub $ac_build_alias failed" &gt;&amp;2;}
++   { (exit 1); exit 1; }; }
++
++fi
++{ $as_echo "$as_me:$LINENO: result: $ac_cv_build" &gt;&amp;5
++$as_echo "$ac_cv_build" &gt;&amp;6; }
++case $ac_cv_build in
++*-*-*) ;;
++*) { { $as_echo "$as_me:$LINENO: error: invalid value of canonical build" &gt;&amp;5
++$as_echo "$as_me: error: invalid value of canonical build" &gt;&amp;2;}
++   { (exit 1); exit 1; }; };;
++esac
++build=$ac_cv_build
++ac_save_IFS=$IFS; IFS='-'
++set x $ac_cv_build
++shift
++build_cpu=$1
++build_vendor=$2
++shift; shift
++# Remember, the first character of IFS is used to create $*,
++# except with old shells:
++build_os=$*
++IFS=$ac_save_IFS
++case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
++
++
++{ $as_echo "$as_me:$LINENO: checking host system type" &gt;&amp;5
++$as_echo_n "checking host system type... " &gt;&amp;6; }
++if test "${ac_cv_host+set}" = set; then
++  $as_echo_n "(cached) " &gt;&amp;6
++else
++  if test "x$host_alias" = x; then
++  ac_cv_host=$ac_cv_build
++else
++  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
++    { { $as_echo "$as_me:$LINENO: error: $SHELL $ac_aux_dir/config.sub $host_alias failed" &gt;&amp;5
++$as_echo "$as_me: error: $SHELL $ac_aux_dir/config.sub $host_alias failed" &gt;&amp;2;}
++   { (exit 1); exit 1; }; }
++fi
++
++fi
++{ $as_echo "$as_me:$LINENO: result: $ac_cv_host" &gt;&amp;5
++$as_echo "$ac_cv_host" &gt;&amp;6; }
++case $ac_cv_host in
++*-*-*) ;;
++*) { { $as_echo "$as_me:$LINENO: error: invalid value of canonical host" &gt;&amp;5
++$as_echo "$as_me: error: invalid value of canonical host" &gt;&amp;2;}
++   { (exit 1); exit 1; }; };;
++esac
++host=$ac_cv_host
++ac_save_IFS=$IFS; IFS='-'
++set x $ac_cv_host
++shift
++host_cpu=$1
++host_vendor=$2
++shift; shift
++# Remember, the first character of IFS is used to create $*,
++# except with old shells:
++host_os=$*
++IFS=$ac_save_IFS
++case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
++
++
++{ $as_echo "$as_me:$LINENO: checking target system type" &gt;&amp;5
++$as_echo_n "checking target system type... " &gt;&amp;6; }
++if test "${ac_cv_target+set}" = set; then
++  $as_echo_n "(cached) " &gt;&amp;6
++else
++  if test "x$target_alias" = x; then
++  ac_cv_target=$ac_cv_host
++else
++  ac_cv_target=`$SHELL "$ac_aux_dir/config.sub" $target_alias` ||
++    { { $as_echo "$as_me:$LINENO: error: $SHELL $ac_aux_dir/config.sub $target_alias failed" &gt;&amp;5
++$as_echo "$as_me: error: $SHELL $ac_aux_dir/config.sub $target_alias failed" &gt;&amp;2;}
++   { (exit 1); exit 1; }; }
++fi
++
++fi
++{ $as_echo "$as_me:$LINENO: result: $ac_cv_target" &gt;&amp;5
++$as_echo "$ac_cv_target" &gt;&amp;6; }
++case $ac_cv_target in
++*-*-*) ;;
++*) { { $as_echo "$as_me:$LINENO: error: invalid value of canonical target" &gt;&amp;5
++$as_echo "$as_me: error: invalid value of canonical target" &gt;&amp;2;}
++   { (exit 1); exit 1; }; };;
++esac
++target=$ac_cv_target
++ac_save_IFS=$IFS; IFS='-'
++set x $ac_cv_target
++shift
++target_cpu=$1
++target_vendor=$2
++shift; shift
++# Remember, the first character of IFS is used to create $*,
++# except with old shells:
++target_os=$*
++IFS=$ac_save_IFS
++case $target_os in *\ *) target_os=`echo "$target_os" | sed 's/ /-/g'`;; esac
++
++
++# The aliases save the names the user supplied, while $host etc.
++# will get canonicalized.
++test -n "$target_alias" &amp;&amp;
++  test "$program_prefix$program_suffix$program_transform_name" = \
++    NONENONEs,x,x, &amp;&amp;
++  program_prefix=${target_alias}-
++{ $as_echo "$as_me:$LINENO: checking host system type" &gt;&amp;5
++$as_echo_n "checking host system type... " &gt;&amp;6; }
++if test "${ac_cv_host+set}" = set; then
++  $as_echo_n "(cached) " &gt;&amp;6
++else
++  if test "x$host_alias" = x; then
++  ac_cv_host=$ac_cv_build
++else
++  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
++    { { $as_echo "$as_me:$LINENO: error: $SHELL $ac_aux_dir/config.sub $host_alias failed" &gt;&amp;5
++$as_echo "$as_me: error: $SHELL $ac_aux_dir/config.sub $host_alias failed" &gt;&amp;2;}
++   { (exit 1); exit 1; }; }
++fi
++
++fi
++{ $as_echo "$as_me:$LINENO: result: $ac_cv_host" &gt;&amp;5
++$as_echo "$ac_cv_host" &gt;&amp;6; }
++case $ac_cv_host in
++*-*-*) ;;
++*) { { $as_echo "$as_me:$LINENO: error: invalid value of canonical host" &gt;&amp;5
++$as_echo "$as_me: error: invalid value of canonical host" &gt;&amp;2;}
++   { (exit 1); exit 1; }; };;
++esac
++host=$ac_cv_host
++ac_save_IFS=$IFS; IFS='-'
++set x $ac_cv_host
++shift
++host_cpu=$1
++host_vendor=$2
++shift; shift
++# Remember, the first character of IFS is used to create $*,
++# except with old shells:
++host_os=$*
++IFS=$ac_save_IFS
++case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
++
++
++{ $as_echo "$as_me:$LINENO: checking target system type" &gt;&amp;5
++$as_echo_n "checking target system type... " &gt;&amp;6; }
++if test "${ac_cv_target+set}" = set; then
++  $as_echo_n "(cached) " &gt;&amp;6
++else
++  if test "x$target_alias" = x; then
++  ac_cv_target=$ac_cv_host
++else
++  ac_cv_target=`$SHELL "$ac_aux_dir/config.sub" $target_alias` ||
++    { { $as_echo "$as_me:$LINENO: error: $SHELL $ac_aux_dir/config.sub $target_alias failed" &gt;&amp;5
++$as_echo "$as_me: error: $SHELL $ac_aux_dir/config.sub $target_alias failed" &gt;&amp;2;}
++   { (exit 1); exit 1; }; }
++fi
++
++fi
++{ $as_echo "$as_me:$LINENO: result: $ac_cv_target" &gt;&amp;5
++$as_echo "$ac_cv_target" &gt;&amp;6; }
++case $ac_cv_target in
++*-*-*) ;;
++*) { { $as_echo "$as_me:$LINENO: error: invalid value of canonical target" &gt;&amp;5
++$as_echo "$as_me: error: invalid value of canonical target" &gt;&amp;2;}
++   { (exit 1); exit 1; }; };;
++esac
++target=$ac_cv_target
++ac_save_IFS=$IFS; IFS='-'
++set x $ac_cv_target
++shift
++target_cpu=$1
++target_vendor=$2
++shift; shift
++# Remember, the first character of IFS is used to create $*,
++# except with old shells:
++target_os=$*
++IFS=$ac_save_IFS
++case $target_os in *\ *) target_os=`echo "$target_os" | sed 's/ /-/g'`;; esac
++
++
++# The aliases save the names the user supplied, while $host etc.
++# will get canonicalized.
++test -n "$target_alias" &amp;&amp;
++  test "$program_prefix$program_suffix$program_transform_name" = \
++    NONENONEs,x,x, &amp;&amp;
++  program_prefix=${target_alias}-
+ 
+ # Automake initialization
+ am__api_version='1.10'
+@@ -2383,7 +2597,7 @@
+ 
+ # Define the identity of the package.
+  PACKAGE=clamsap
+- VERSION=0.9.8.0
++ VERSION=0.98.9
+ 
+ 
+ cat &gt;&gt;confdefs.h &lt;&lt;_ACEOF
+@@ -3772,89 +3986,6 @@
+ 
+ ltmain="$ac_aux_dir/ltmain.sh"
+ 
+-# Make sure we can run config.sub.
+-$SHELL "$ac_aux_dir/config.sub" sun4 &gt;/dev/null 2&gt;&amp;1 ||
+-  { { $as_echo "$as_me:$LINENO: error: cannot run $SHELL $ac_aux_dir/config.sub" &gt;&amp;5
+-$as_echo "$as_me: error: cannot run $SHELL $ac_aux_dir/config.sub" &gt;&amp;2;}
+-   { (exit 1); exit 1; }; }
+-
+-{ $as_echo "$as_me:$LINENO: checking build system type" &gt;&amp;5
+-$as_echo_n "checking build system type... " &gt;&amp;6; }
+-if test "${ac_cv_build+set}" = set; then
+-  $as_echo_n "(cached) " &gt;&amp;6
+-else
+-  ac_build_alias=$build_alias
+-test "x$ac_build_alias" = x &amp;&amp;
+-  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
+-test "x$ac_build_alias" = x &amp;&amp;
+-  { { $as_echo "$as_me:$LINENO: error: cannot guess build type; you must specify one" &gt;&amp;5
+-$as_echo "$as_me: error: cannot guess build type; you must specify one" &gt;&amp;2;}
+-   { (exit 1); exit 1; }; }
+-ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
+-  { { $as_echo "$as_me:$LINENO: error: $SHELL $ac_aux_dir/config.sub $ac_build_alias failed" &gt;&amp;5
+-$as_echo "$as_me: error: $SHELL $ac_aux_dir/config.sub $ac_build_alias failed" &gt;&amp;2;}
+-   { (exit 1); exit 1; }; }
+-
+-fi
+-{ $as_echo "$as_me:$LINENO: result: $ac_cv_build" &gt;&amp;5
+-$as_echo "$ac_cv_build" &gt;&amp;6; }
+-case $ac_cv_build in
+-*-*-*) ;;
+-*) { { $as_echo "$as_me:$LINENO: error: invalid value of canonical build" &gt;&amp;5
+-$as_echo "$as_me: error: invalid value of canonical build" &gt;&amp;2;}
+-   { (exit 1); exit 1; }; };;
+-esac
+-build=$ac_cv_build
+-ac_save_IFS=$IFS; IFS='-'
+-set x $ac_cv_build
+-shift
+-build_cpu=$1
+-build_vendor=$2
+-shift; shift
+-# Remember, the first character of IFS is used to create $*,
+-# except with old shells:
+-build_os=$*
+-IFS=$ac_save_IFS
+-case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
+-
+-
+-{ $as_echo "$as_me:$LINENO: checking host system type" &gt;&amp;5
+-$as_echo_n "checking host system type... " &gt;&amp;6; }
+-if test "${ac_cv_host+set}" = set; then
+-  $as_echo_n "(cached) " &gt;&amp;6
+-else
+-  if test "x$host_alias" = x; then
+-  ac_cv_host=$ac_cv_build
+-else
+-  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
+-    { { $as_echo "$as_me:$LINENO: error: $SHELL $ac_aux_dir/config.sub $host_alias failed" &gt;&amp;5
+-$as_echo "$as_me: error: $SHELL $ac_aux_dir/config.sub $host_alias failed" &gt;&amp;2;}
+-   { (exit 1); exit 1; }; }
+-fi
+-
+-fi
+-{ $as_echo "$as_me:$LINENO: result: $ac_cv_host" &gt;&amp;5
+-$as_echo "$ac_cv_host" &gt;&amp;6; }
+-case $ac_cv_host in
+-*-*-*) ;;
+-*) { { $as_echo "$as_me:$LINENO: error: invalid value of canonical host" &gt;&amp;5
+-$as_echo "$as_me: error: invalid value of canonical host" &gt;&amp;2;}
+-   { (exit 1); exit 1; }; };;
+-esac
+-host=$ac_cv_host
+-ac_save_IFS=$IFS; IFS='-'
+-set x $ac_cv_host
+-shift
+-host_cpu=$1
+-host_vendor=$2
+-shift; shift
+-# Remember, the first character of IFS is used to create $*,
+-# except with old shells:
+-host_os=$*
+-IFS=$ac_save_IFS
+-case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
+-
+-
+ { $as_echo "$as_me:$LINENO: checking for a sed that does not truncate output" &gt;&amp;5
+ $as_echo_n "checking for a sed that does not truncate output... " &gt;&amp;6; }
+ if test "${ac_cv_path_SED+set}" = set; then
+@@ -4449,13 +4580,13 @@
+ else
+   lt_cv_nm_interface="BSD nm"
+   echo "int some_variable = 0;" &gt; conftest.$ac_ext
+-  (eval echo "\"\$as_me:4452: $ac_compile\"" &gt;&amp;5)
++  (eval echo "\"\$as_me:4583: $ac_compile\"" &gt;&amp;5)
+   (eval "$ac_compile" 2&gt;conftest.err)
+   cat conftest.err &gt;&amp;5
+-  (eval echo "\"\$as_me:4455: $NM \\\"conftest.$ac_objext\\\"\"" &gt;&amp;5)
++  (eval echo "\"\$as_me:4586: $NM \\\"conftest.$ac_objext\\\"\"" &gt;&amp;5)
+   (eval "$NM \"conftest.$ac_objext\"" 2&gt;conftest.err &gt; conftest.out)
+   cat conftest.err &gt;&amp;5
+-  (eval echo "\"\$as_me:4458: output\"" &gt;&amp;5)
++  (eval echo "\"\$as_me:4589: output\"" &gt;&amp;5)
+   cat conftest.out &gt;&amp;5
+   if $GREP 'External.*some_variable' conftest.out &gt; /dev/null; then
+     lt_cv_nm_interface="MS dumpbin"
+@@ -5661,7 +5792,7 @@
+   ;;
+ *-*-irix6*)
+   # Find out which ABI we are using.
+-  echo '#line 5664 "configure"' &gt; conftest.$ac_ext
++  echo '#line 5795 "configure"' &gt; conftest.$ac_ext
+   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") &gt;&amp;5
+   (eval $ac_compile) 2&gt;&amp;5
+   ac_status=$?
+@@ -7518,11 +7649,11 @@
+    -e 's:.*FLAGS}\{0,1\} :&amp;$lt_compiler_flag :; t' \
+    -e 's: [^ ]*conftest\.: $lt_compiler_flag&amp;:; t' \
+    -e 's:$: $lt_compiler_flag:'`
+-   (eval echo "\"\$as_me:7521: $lt_compile\"" &gt;&amp;5)
++   (eval echo "\"\$as_me:7652: $lt_compile\"" &gt;&amp;5)
+    (eval "$lt_compile" 2&gt;conftest.err)
+    ac_status=$?
+    cat conftest.err &gt;&amp;5
+-   echo "$as_me:7525: \$? = $ac_status" &gt;&amp;5
++   echo "$as_me:7656: \$? = $ac_status" &gt;&amp;5
+    if (exit $ac_status) &amp;&amp; test -s "$ac_outfile"; then
+      # The compiler can only warn and ignore the option if not recognized
+      # So say no if there are warnings other than the usual output.
+@@ -7857,11 +7988,11 @@
+    -e 's:.*FLAGS}\{0,1\} :&amp;$lt_compiler_flag :; t' \
+    -e 's: [^ ]*conftest\.: $lt_compiler_flag&amp;:; t' \
+    -e 's:$: $lt_compiler_flag:'`
+-   (eval echo "\"\$as_me:7860: $lt_compile\"" &gt;&amp;5)
++   (eval echo "\"\$as_me:7991: $lt_compile\"" &gt;&amp;5)
+    (eval "$lt_compile" 2&gt;conftest.err)
+    ac_status=$?
+    cat conftest.err &gt;&amp;5
+-   echo "$as_me:7864: \$? = $ac_status" &gt;&amp;5
++   echo "$as_me:7995: \$? = $ac_status" &gt;&amp;5
+    if (exit $ac_status) &amp;&amp; test -s "$ac_outfile"; then
+      # The compiler can only warn and ignore the option if not recognized
+      # So say no if there are warnings other than the usual output.
+@@ -7962,11 +8093,11 @@
+    -e 's:.*FLAGS}\{0,1\} :&amp;$lt_compiler_flag :; t' \
+    -e 's: [^ ]*conftest\.: $lt_compiler_flag&amp;:; t' \
+    -e 's:$: $lt_compiler_flag:'`
+-   (eval echo "\"\$as_me:7965: $lt_compile\"" &gt;&amp;5)
++   (eval echo "\"\$as_me:8096: $lt_compile\"" &gt;&amp;5)
+    (eval "$lt_compile" 2&gt;out/conftest.err)
+    ac_status=$?
+    cat out/conftest.err &gt;&amp;5
+-   echo "$as_me:7969: \$? = $ac_status" &gt;&amp;5
++   echo "$as_me:8100: \$? = $ac_status" &gt;&amp;5
+    if (exit $ac_status) &amp;&amp; test -s out/conftest2.$ac_objext
+    then
+      # The compiler can only warn and ignore the option if not recognized
+@@ -8017,11 +8148,11 @@
+    -e 's:.*FLAGS}\{0,1\} :&amp;$lt_compiler_flag :; t' \
+    -e 's: [^ ]*conftest\.: $lt_compiler_flag&amp;:; t' \
+    -e 's:$: $lt_compiler_flag:'`
+-   (eval echo "\"\$as_me:8020: $lt_compile\"" &gt;&amp;5)
++   (eval echo "\"\$as_me:8151: $lt_compile\"" &gt;&amp;5)
+    (eval "$lt_compile" 2&gt;out/conftest.err)
+    ac_status=$?
+    cat out/conftest.err &gt;&amp;5
+-   echo "$as_me:8024: \$? = $ac_status" &gt;&amp;5
++   echo "$as_me:8155: \$? = $ac_status" &gt;&amp;5
+    if (exit $ac_status) &amp;&amp; test -s out/conftest2.$ac_objext
+    then
+      # The compiler can only warn and ignore the option if not recognized
+@@ -10817,7 +10948,7 @@
+   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
+   lt_status=$lt_dlunknown
+   cat &gt; conftest.$ac_ext &lt;&lt;_LT_EOF
+-#line 10820 "configure"
++#line 10951 "configure"
+ #include "confdefs.h"
+ 
+ #if HAVE_DLFCN_H
+@@ -10913,7 +11044,7 @@
+   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
+   lt_status=$lt_dlunknown
+   cat &gt; conftest.$ac_ext &lt;&lt;_LT_EOF
+-#line 10916 "configure"
++#line 11047 "configure"
+ #include "confdefs.h"
+ 
+ #if HAVE_DLFCN_H
+@@ -11618,7 +11749,7 @@
+    { (exit 1); exit 1; }; }
+ fi
+ 
+-VERSION="0.9.8.0"
++VERSION="0.98.9"
+ 
+ cat &gt;&gt;confdefs.h &lt;&lt;_ACEOF
+ #define VERSION "$VERSION"
+@@ -11634,6 +11765,43 @@
+ 
+ 
+ 
++
++LIBEXT=.so
++case "$target_os" in
++*linux-gnu)
++     build_os="linux"
++     LIBEXT=.so
++     ;;
++freebsd*)
++     build_os="linux"
++     LIBEXT=.so
++     ;;
++openbsd*)
++     build_os="linux"
++     LIBEXT=.so
++     ;;
++netbsd*)
++     build_os="linux"
++     LIBEXT=.so
++     ;;
++*solaris*)
++     build_os="solaris"
++     LIBEXT=.so
++     ;;
++darwin*)
++     build_os="darwin"
++     LIBEXT=.so
++     ;;
++cygwin*)
++     build_os="mingw"
++     LIBEXT=.dll
++     ;;
++mingw*)
++     build_os="mingw"
++     LIBEXT=.dll
++     ;;
++esac
++
+ # conditional stuff
+  if test "$build_os" = "linux"; then
+   LINUX_TRUE=
+@@ -11643,6 +11811,14 @@
+   LINUX_FALSE=
+ fi
+ 
++ if test "$build_os" = "darwin"; then
++  DARWIN_TRUE=
++  DARWIN_FALSE='#'
++else
++  DARWIN_TRUE='#'
++  DARWIN_FALSE=
++fi
++
+  if test "$build_os" = "solaris"; then
+   SOLARIS_TRUE=
+   SOLARIS_FALSE='#'
+@@ -13937,6 +14113,13 @@
+ Usually this means the macro was only invoked conditionally." &gt;&amp;2;}
+    { (exit 1); exit 1; }; }
+ fi
++if test -z "${DARWIN_TRUE}" &amp;&amp; test -z "${DARWIN_FALSE}"; then
++  { { $as_echo "$as_me:$LINENO: error: conditional \"DARWIN\" was never defined.
++Usually this means the macro was only invoked conditionally." &gt;&amp;5
++$as_echo "$as_me: error: conditional \"DARWIN\" was never defined.
++Usually this means the macro was only invoked conditionally." &gt;&amp;2;}
++   { (exit 1); exit 1; }; }
++fi
+ if test -z "${SOLARIS_TRUE}" &amp;&amp; test -z "${SOLARIS_FALSE}"; then
+   { { $as_echo "$as_me:$LINENO: error: conditional \"SOLARIS\" was never defined.
+ Usually this means the macro was only invoked conditionally." &gt;&amp;5
+@@ -14273,7 +14456,7 @@
+ # report actual input values of CONFIG_FILES etc. instead of their
+ # values after options handling.
+ ac_log="
+-This file was extended by clamsap $as_me 0.9.8.0, which was
++This file was extended by clamsap $as_me 0.98.9, which was
+ generated by GNU Autoconf 2.63.  Invocation command line was
+ 
+   CONFIG_FILES    = $CONFIG_FILES
+@@ -14336,7 +14519,7 @@
+ _ACEOF
+ cat &gt;&gt;$CONFIG_STATUS &lt;&lt;_ACEOF || ac_write_fail=1
+ ac_cs_version="\\
+-clamsap config.status 0.9.8.0
++clamsap config.status 0.98.9
+ configured by $0, generated by GNU Autoconf 2.63,
+   with options \\"`$as_echo "$ac_configure_args" | sed 's/^ //; s/[\\""\`\$]/\\\\&amp;/g'`\\"
+ 
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/configure.ac clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/configure.ac
+--- clamsap/clamsap-0.9.8.0.tar.gz/configure.ac
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/configure.ac
+@@ -1,78 +1,119 @@
+-# init
+-AC_INIT(clamsap, 0.9.8.0, markus.strehle@sap.com)
+-
+-# put configure auxiliary into config
+-AC_CONFIG_AUX_DIR([config])
+-AC_CONFIG_HEADERS(config.h)
+-# AC_CONFIG_SRCDIR(src/vsclam.c)
+-# AC_CONFIG_SRCDIR(src/vsclamd.c)
+-
+-
+-# Automake initialization
+-AM_INIT_AUTOMAKE(clamsap, 0.9.8.0)
+-
+-# Checks for programs.
+-AC_PROG_CC
+-AC_PROG_CC_C_O
+-AC_PROG_LIBTOOL
+-# Checks for libraries.
+-
+-# Checks for header files.
+-AC_HEADER_STDC
+-AC_CHECK_HEADERS(clamav.h stdlib.h string.h)
+-have_clamav=no
+-AC_CHECK_HEADER(clamav.h, have_clamav=yes)
+-if test "$have_clamav" = "no"; then
+-	AC_MSG_ERROR(Missing clamav.h! Install ClamAV package)
+-fi
+-
+-dnl change this on a release
+-dnl VERSION="devel-`date +%Y%m%d`"
+-VERSION="0.9.8.0"
+-AC_DEFINE_UNQUOTED([VERSION],"$VERSION",[Version number of package])
+-
+-LC_CURRENT=9
+-LC_REVISION=8
+-LC_AGE=9
+-CLAMSAP_VERSION_INFO="$LC_CURRENT":"$LC_REVISION":"$LC_AGE"
+-AC_SUBST(CLAMSAP_VERSION_INFO)
+-AC_SUBST(VERSION)
+-AC_SUBST(CFLAGS)
+-AC_SUBST(LDFLAGS)
+-
+-# conditional stuff
+-AM_CONDITIONAL(LINUX, test "$build_os" = "linux")
+-AM_CONDITIONAL(SOLARIS, test "$build_os" = "solaris")
+-AM_CONDITIONAL(WINDOWS, test "$build_os" = "mingw")
+-
+-
+-# Checks for typedefs, structures, and compiler characteristics.
+-AC_C_CONST
+-AC_TYPE_SIZE_T
+-AC_STRUCT_TM
+-
+-# Checks for library functions.
+-AC_FUNC_MALLOC
+-AC_FUNC_MKTIME
+-AC_FUNC_STAT
+-AC_FUNC_MALLOC
+-AC_FUNC_MKTIME
+-AC_FUNC_REALLOC
+-AC_CHECK_FUNCS([getcwd memset setlocale socket strchr strdup strrchr strstr])
+-
+-AC_CONFIG_FILES([Makefile src/Makefile])
+-
+-AC_OUTPUT
+-
+-AC_MSG_RESULT(
+-
+-=============
+-Information
+-=============
+-
+-
+-Run now 'make' and find the library in 'src/.libs'
+-Load the library [lib]clam[d]sap with option -V into SAP processes
+-
+-
+-)
++# init
++AC_INIT(clamsap, 0.98.9, markus.strehle@sap.com)
++
++# put configure auxiliary into config
++AC_CONFIG_AUX_DIR([config])
++AC_CONFIG_HEADERS(config.h)
++# AC_CONFIG_SRCDIR(src/vsclam.c)
++# AC_CONFIG_SRCDIR(src/vsclamd.c)
++
++AC_CANONICAL_TARGET
++AC_CANONICAL_HOST
++AC_CANONICAL_SYSTEM
++
++# Automake initialization
++AM_INIT_AUTOMAKE(clamsap, 0.98.9)
++
++# Checks for programs.
++AC_PROG_CC
++AC_PROG_CC_C_O
++AC_PROG_LIBTOOL
++# Checks for libraries.
++
++# Checks for header files.
++AC_HEADER_STDC
++AC_CHECK_HEADERS(clamav.h stdlib.h string.h)
++have_clamav=no
++AC_CHECK_HEADER(clamav.h, have_clamav=yes)
++if test "$have_clamav" = "no"; then
++	AC_MSG_ERROR(Missing clamav.h! Install ClamAV package)
++fi
++
++dnl change this on a release
++dnl VERSION="devel-`date +%Y%m%d`"
++VERSION="0.98.9"
++AC_DEFINE_UNQUOTED([VERSION],"$VERSION",[Version number of package])
++
++LC_CURRENT=9
++LC_REVISION=8
++LC_AGE=9
++CLAMSAP_VERSION_INFO="$LC_CURRENT":"$LC_REVISION":"$LC_AGE"
++AC_SUBST(CLAMSAP_VERSION_INFO)
++AC_SUBST(VERSION)
++AC_SUBST(CFLAGS)
++AC_SUBST(LDFLAGS)
++AC_SUBST(LIBEXT)
++
++LIBEXT=.so
++case "$target_os" in
++*linux-gnu)
++     build_os="linux"
++     LIBEXT=.so
++     ;;
++freebsd*)
++     build_os="linux"
++     LIBEXT=.so
++     ;;
++openbsd*)
++     build_os="linux"
++     LIBEXT=.so
++     ;;
++netbsd*)
++     build_os="linux"
++     LIBEXT=.so
++     ;;
++*solaris*)
++     build_os="solaris" 
++     LIBEXT=.so
++     ;;
++darwin*)
++     build_os="darwin" 
++     LIBEXT=.so
++     ;;
++cygwin*)
++     build_os="mingw" 
++     LIBEXT=.dll
++     ;;
++mingw*)
++     build_os="mingw" 
++     LIBEXT=.dll
++     ;;
++esac
++
++# conditional stuff
++AM_CONDITIONAL(LINUX, test "$build_os" = "linux")
++AM_CONDITIONAL(DARWIN, test "$build_os" = "darwin")
++AM_CONDITIONAL(SOLARIS, test "$build_os" = "solaris")
++AM_CONDITIONAL(WINDOWS, test "$build_os" = "mingw")
++
++
++# Checks for typedefs, structures, and compiler characteristics.
++AC_C_CONST
++AC_TYPE_SIZE_T
++AC_STRUCT_TM
++
++# Checks for library functions.
++AC_FUNC_MALLOC
++AC_FUNC_MKTIME
++AC_FUNC_STAT
++AC_FUNC_MALLOC
++AC_FUNC_MKTIME
++AC_FUNC_REALLOC
++AC_CHECK_FUNCS([getcwd memset setlocale socket strchr strdup strrchr strstr])
++
++AC_CONFIG_FILES([Makefile src/Makefile])
++
++AC_OUTPUT
++
++AC_MSG_RESULT(
++
++=============
++Information
++=============
++
++
++Run now 'make' and find the library in 'src/.libs'
++Load the library [lib]clam[d]sap with option -V into SAP processes
++
++
++)
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/src/Makefile.in clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/Makefile.in
+--- clamsap/clamsap-0.9.8.0.tar.gz/src/Makefile.in
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/Makefile.in
+@@ -32,6 +32,7 @@
+ POST_UNINSTALL = :
+ build_triplet = @build@
+ host_triplet = @host@
++target_triplet = @target@
+ @LINUX_TRUE@am__append_1 = -D__NO_MATH_INLINES -pthread -fPIC -fno-strict-aliasing -fno-omit-frame-pointer -DNDEBUG -fno-strict-aliasing -pipe -fexceptions  -funsigned-char -Wall -Wno-uninitialized -Wno-long-long -Wcast-align 
+ @LINUX_TRUE@am__append_2 = -D__NO_MATH_INLINES -pthread -fPIC -fno-strict-aliasing -fno-omit-frame-pointer -DNDEBUG -fno-strict-aliasing -pipe -fexceptions  -funsigned-char -Wall -Wno-uninitialized -Wno-long-long -Wcast-align 
+ @LINUX_TRUE@am__append_3 = -pthread -fPIC -ldl -pthread -lrt -shared  -lc -Wl,-Bsymbolic 
+@@ -120,6 +121,7 @@
+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+ LD = @LD@
+ LDFLAGS = @LDFLAGS@
++LIBEXT = @LIBEXT@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LIBTOOL = @LIBTOOL@
+@@ -195,7 +197,11 @@
+ sharedstatedir = @sharedstatedir@
+ srcdir = @srcdir@
+ sysconfdir = @sysconfdir@
++target = @target@
+ target_alias = @target_alias@
++target_cpu = @target_cpu@
++target_os = @target_os@
++target_vendor = @target_vendor@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/src/csdecompr.c clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/csdecompr.c
+--- clamsap/clamsap-0.9.8.0.tar.gz/src/csdecompr.c
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/csdecompr.c
+@@ -1,5 +1,5 @@
+ /**********************************************************************/
+-/* $Id: //tools/src/SAPSource/VSA/clm/src/csdecompr.c#1 $
++/* $Id: //tools/src/SAPSource/VSA/clm/src/csdecompr.c#4 $
+  **********************************************************************/
+ /*@(#)cslzh.c		20.7	SAP	97/11/11 
+ 
+@@ -73,8 +73,6 @@
+ /* SAP includes                                                       */
+ /*--------------------------------------------------------------------*/
+ #include "vsaxxtyp.h"
+-//#include "vsaxxvir.h"
+-//#include "vssap.h"
+ #include "csdecompr.h"
+ 
+ static SAP_BYTE CsMagicHead[] = { "\037\235" };  /* 1F 9D */
+@@ -108,16 +106,44 @@
+  *  IsDataBlock()
+  *
+  *  Description:
++ *  Checks the next block for data block := 'DA' or 'ED' or 'UD' or 'UE'
++ *
++ **********************************************************************/
++unsigned char IsDataBlock(const unsigned char* type)
++{
++    return !memcmp(type, IA_DA, BLOCK_TYPE_SIZE) ||
++           !memcmp(type, IA_ED, BLOCK_TYPE_SIZE) ||
++           !memcmp(type, IA_UD, BLOCK_TYPE_SIZE) ||
++           !memcmp(type, IA_UE, BLOCK_TYPE_SIZE);
++}
++
++/**********************************************************************
++ *  IsCompressedDataBlock()
++ *
++ *  Description:
+  *  Checks the next block for data block := 'DA' or 'ED'
+  *
+  **********************************************************************/
+-unsigned char IsDataBlock(const unsigned char* type) 
++unsigned char IsCompressedDataBlock(const unsigned char* type)
+ {
+     return !memcmp(type, IA_DA, BLOCK_TYPE_SIZE) ||
+            !memcmp(type, IA_ED, BLOCK_TYPE_SIZE);
+ }
+ 
+ /**********************************************************************
++ *  IsLastBlock()
++ *
++ *  Description:
++ *  Checks the next block for data block := 'ED' or 'UE'
++ *
++ **********************************************************************/
++unsigned char IsLastBlock(const unsigned char* type)
++{
++    return !memcmp(type, IA_ED, BLOCK_TYPE_SIZE) ||
++           !memcmp(type, IA_UE, BLOCK_TYPE_SIZE);
++}
++
++/**********************************************************************
+  *  BytesToUshort()
+  *
+  *  Description:
+@@ -338,7 +364,7 @@
+      */
+     /* convert the entry name length to ushort */
+     BytesToUshort(entry.nameLength, &amp;nameLen);
+-    /* allocate and initialise a new SAPCARArchiveData */
++    /* allocate and initialize a new SAPCARArchiveData */
+     fi = NewInfo(fp, nameLen);
+     if(fi==NULL)
+         return NULL;
+@@ -409,14 +435,6 @@
+          * perform an addition in cases of several junks
+          */
+         fi-&gt;compressed_size += toMove;
+-        /* end block */
+-        if( !memcmp(blocktype, IA_ED, BLOCK_TYPE_SIZE) ) {
+-            /* only the end block contains a checksum field */
+-            lRead = fread(checksum,sizeof(char),sizeof(checksum),fp);
+-            BytesToUint(checksum, &amp;_checksum);
+-            fi-&gt;checksum = (size_t)_checksum;
+-        }
+-
+         /*-------------------------------------------------------
+          *
+          * &gt;&gt;&gt; Compressed data block &lt;&lt;&lt;
+@@ -424,15 +442,23 @@
+          * expand or decompression call should follow, then 
+          * perform here a fread to your local buffer.
+          * 
+-         * In the moment an umcompress function is not available.
++         * In the moment an uncompress function is not available.
+          *
+          --------------------------------------------------------*/
+-        fseek(fp,toMove, SEEK_CUR);
++        fseek(fp, toMove, SEEK_CUR);
++
++        /* end block */
++        if (IsLastBlock(blocktype)) {
++            /* only the end block contains a checksum field */
++            lRead = fread(checksum, sizeof(char), sizeof(checksum), fp);
++            BytesToUint(checksum, &amp;_checksum);
++            fi-&gt;checksum = (size_t)_checksum;
++        }
+ 
+         /* read further 2 bytes for next loop step */
+         lRead = fread(blocktype,sizeof(char),sizeof(blocktype),fp);
+         if( lRead != sizeof(blocktype) )            
+-            /* EOF encountred? */
++            /* EOF encountered? */
+             break;
+     } 
+     /* if IsDataBlock returns false,
+@@ -564,7 +590,7 @@
+          */
+         fi-&gt;compressed_size += toMove;
+         /* end block */
+-        if( !memcmp(blocktype, IA_ED, BLOCK_TYPE_SIZE) ) {
++        if(IsLastBlock(blocktype)) {
+             /* only the end block contains a checksum field */
+             memcpy(checksum,_ptr,sizeof(checksum));
+             _ptr  += sizeof(checksum);
+@@ -580,14 +606,14 @@
+          * expand or decompression call should follow, then
+          * perform here a fread to your local buffer.
+          *
+-         * In the function an umcompress function is not available.
++         * In the function an uncompress function is not available.
+          *
+          --------------------------------------------------------*/
+         _ptr  += toMove;
+         *inlen -= toMove;
+ 
+         if( *inlen &lt; (signed)sizeof(blocktype) ) {
+-            /* EOF encountred? */
++            /* EOF encountered? */
+             break;
+         }
+         /* read further 2 bytes for next loop step */
+@@ -669,7 +695,6 @@
+ struct SAREntry *
+ ParseEntriesFromBuffer(PByte inbuf, size_t inlen)
+ {
+-
+     struct SAREntry *fi  = NULL; /* begin of list */
+     struct SAREntry *_fi = NULL; /* current ptr   */
+     struct SAREntry *__fi= NULL; /* tmp. pointer  */
+@@ -729,7 +754,7 @@
+     unsigned int   sizeHigh;
+     unsigned int   _checksum = 0;
+     unsigned int   _crc32 = 0;
+-    SAP_RAW        cBuffer[8192];
++    SAP_RAW        cBuffer[65536];
+     CSHDL          cshandle;
+     size_t        _outlen = (outlen?*outlen:0);
+     int            option = CS_INIT_DECOMPRESS;
+@@ -828,15 +853,24 @@
+          * &gt;&gt;&gt; Compressed data block &lt;&lt;&lt;
+          *
+          --------------------------------------------------------*/
+-        if(toMove &lt; sizeof(cBuffer)) {
++        if(toMove &lt;= sizeof(cBuffer)) {
+             SAP_INT read, decom;
+             lRead = fread(cBuffer,sizeof(char),toMove,fp);
+-            if( lRead != toMove )
++            if( lRead != toMove ) {
+                 return NULL;
+-            CsDecompr(&amp;cshandle,cBuffer,(SAP_INT)lRead,out+toMove2,(SAP_INT)_outlen,option,&amp;read,&amp;decom);
+-            toMove2 += (unsigned int)lRead;
+-            _outlen -= (unsigned int)lRead;
+-            PartialCRC(&amp;_crc32,out+toMove2,decom);
++            }
++            if(IsCompressedDataBlock(blocktype)) {
++                CsDecompr(&amp;cshandle,cBuffer,(SAP_INT)lRead,out+toMove2,(SAP_INT)_outlen,CS_INIT_DECOMPRESS,&amp;read,&amp;decom);
++                _outlen -= (unsigned int)decom;
++                PartialCRC(&amp;_crc32,out+toMove2,decom);
++                toMove2 += (unsigned int)decom;
++            } else {
++                read  = lRead;
++                decom = lRead;
++                memcpy(out+toMove2, cBuffer, lRead);
++                PartialCRC(&amp;_crc32,out+toMove2,lRead);
++                toMove2 += (unsigned int)lRead;
++            }
+             if(option == CS_INIT_DECOMPRESS) {
+                 if(outlen) (*outlen) = decom;
+                 option = 0;
+@@ -845,29 +879,25 @@
+             }
+         }
+         /* end block */
+-        if( !memcmp(blocktype, IA_ED, BLOCK_TYPE_SIZE) ) {
++        if(IsLastBlock(blocktype)) {
+             /* only the end block contains a checksum field */
+             lRead = fread(checksum,sizeof(char),sizeof(checksum),fp);
+             BytesToUint(checksum, &amp;_checksum);
+             fi-&gt;checksum = (size_t)_checksum;
+             if(_crc32 != _checksum) {
+                 /* Error */
+-                unlink((const char*)fi-&gt;name);
++                vsaunlink((const char*)fi-&gt;name);
+                 free(fi-&gt;name);
+                 free(fi);
+                 return NULL;
+             }
+         }
+-
+-        fseek(fp,toMove, SEEK_CUR);
+-
+-
+-
+         /* read further 2 bytes for next loop step */
+         lRead = fread(blocktype,sizeof(char),sizeof(blocktype),fp);
+-        if( lRead != sizeof(blocktype) )
++        if( lRead != sizeof(blocktype) ) {
+             /* EOF encountred? */
+             break;
++        }
+     }
+     /* if IsDataBlock returns false,
+      * step back which means reassign
+@@ -1008,12 +1038,20 @@
+          * &gt;&gt;&gt; Compressed data block &lt;&lt;&lt;
+          *
+          --------------------------------------------------------*/
+-        if(toMove &lt; (unsigned)*inlen) {
+-            SAP_INT read, decom;
+-            CsDecompr(&amp;cshandle,_ptr,(SAP_INT)*inlen,out+toMove2,(SAP_INT)_outlen,option,&amp;read,&amp;decom);
+-            toMove2 += toMove;
+-            _outlen -= toMove;
+-            PartialCRC(&amp;_crc32,out+toMove2,decom);
++        if(toMove &lt;= (unsigned)*inlen) {
++            SAP_INT read = 0, decom = 0;
++            if(IsCompressedDataBlock(blocktype)) {
++                CsDecompr(&amp;cshandle,_ptr,(SAP_INT)*inlen,out+toMove2,(SAP_INT)_outlen,option,&amp;read,&amp;decom);
++                _outlen -= (unsigned int)decom;
++                PartialCRC(&amp;_crc32,out+toMove2,decom);
++                toMove2 += (unsigned int)decom;
++            } else {
++                read  = toMove;
++                decom = toMove;
++                memcpy(out+toMove2, _ptr, read);
++                PartialCRC(&amp;_crc32,out+toMove2,read);
++                toMove2 += (unsigned int)read;
++            }
+             if(option == CS_INIT_DECOMPRESS) {
+                 if(outlen) (*outlen) = decom;
+                 option = 0;
+@@ -1023,7 +1061,7 @@
+         }
+ 
+         /* end block */
+-        if( !memcmp(blocktype, IA_ED, BLOCK_TYPE_SIZE) ) {
++        if(IsLastBlock(blocktype)) {
+             /* only the end block contains a checksum field */
+             memcpy(checksum,_ptr,sizeof(checksum));
+             _ptr  += sizeof(checksum);
+@@ -1032,7 +1070,7 @@
+             fi-&gt;checksum = (size_t)_checksum;
+             if(_crc32 != _checksum) {
+                 /* Error */
+-                unlink((const char*)fi-&gt;name);
++                vsaunlink((const char*)fi-&gt;name);
+                 free(fi-&gt;name);
+                 free(fi);
+                 return NULL;
+@@ -1362,7 +1400,7 @@
+              * &gt;&gt;&gt; Compressed data block &lt;&lt;&lt;
+              *
+              --------------------------------------------------------*/
+-            if(toMove &lt; sizeof(iBuffer)) {
++            if(toMove &lt;= sizeof(iBuffer)) {
+                 SAP_INT read, decom;
+                 lRead = fread(iBuffer,sizeof(char),toMove,fp);
+                 if( lRead != toMove ) {
+@@ -1374,7 +1412,14 @@
+                 /*
+                  * tested, output buffer always is limited to 64k, therefore use 64k for in and output
+                  */
+-                CsDecompr(&amp;cshandle,iBuffer,(SAP_INT)lRead,oBuffer,sizeof(oBuffer),CS_INIT_DECOMPRESS,&amp;read,&amp;decom);
++                if(IsCompressedDataBlock(blocktype)) {
++                    CsDecompr(&amp;cshandle,iBuffer,(SAP_INT)lRead,oBuffer,sizeof(oBuffer),CS_INIT_DECOMPRESS,&amp;read,&amp;decom);
++                } else {
++                    read  = lRead;
++                    decom = lRead;
++                    memcpy(oBuffer, iBuffer, lRead);
++                }
++
+                 if(openFile == 1) {
+                     openFile = 0;
+                     fpOut = fopen((const char*)__fi-&gt;name,"w");
+@@ -1394,7 +1439,7 @@
+                 break;
+             }
+             /* end block */
+-            if( !memcmp(blocktype, IA_ED, BLOCK_TYPE_SIZE) ) {
++            if(IsLastBlock(blocktype)) {
+                 /* only the end block contains a checksum field */
+                 lRead = fread(checksum,sizeof(char),sizeof(checksum),fp);
+                 BytesToUint(checksum, &amp;_checksum);
+@@ -1402,7 +1447,7 @@
+                 fclose(fpOut);
+                 if(_crc32 != _checksum) {
+                     /* Error */
+-                    unlink((const char*)__fi-&gt;name);
++                    vsaunlink((const char*)__fi-&gt;name);
+                     free(__fi-&gt;name);
+                     free(__fi);
+                     __fi = NULL;
+@@ -1412,7 +1457,7 @@
+             /* read further 2 bytes for next loop step */
+             lRead = fread(blocktype,sizeof(char),sizeof(blocktype),fp);
+             if( lRead != sizeof(blocktype) )
+-                /* EOF encountred? */
++                /* EOF encountered? */
+                 break;
+         }
+         /* if IsDataBlock returns false,
+@@ -1937,6 +1982,11 @@
+       }
+       else
+       {
++        /* Added check for out-of-bounds read of e &amp; d arrays */
++        if ((*p - s) &gt;= (LENGTH_CODES + 2)){
++            return (CS_E_BAD_HUF_TREE);
++        }
++
+         r.e = (unsigned char) e[*p - s]; /*non-simple,look up in lists*/
+         r.v.n = (unsigned short) d[*p - s];
+         p++;
+@@ -2984,6 +3034,10 @@
+     /* Generate output characters in reverse order ...................*/
+     while (code &gt;= 256)
+     {
++      /* Check for end of stack */
++      if (stackp &gt;= (DE_STACK + DE_STACK_OFFSET)){
++          return (CS_E_STACK_OVERFLOW);
++      }
+       *stackp++ = TAB_SUFFIXOF(code);
+       OVERFLOW_CHECK
+       code = TAB_PREFIXOF(code);
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/src/csdecompr.h clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/csdecompr.h
+--- clamsap/clamsap-0.9.8.0.tar.gz/src/csdecompr.h
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/csdecompr.h
+@@ -1,5 +1,5 @@
+ /**********************************************************************/
+-/* $Id: //tools/src/SAPSource/VSA/clm/src/csdecompr.h#1 $
++/* $Id: //tools/src/SAPSource/VSA/clm/src/csdecompr.h#3 $
+  **********************************************************************/
+ /*@(#)cslzh.h		20.7	SAP	97/11/11 
+ 
+@@ -62,12 +62,14 @@
+ # define getcwd                 _getcwd
+ # define vsaaccess              _access
+ # define vsamkdir( mydir )      mkdir( mydir )
++# define vsaunlink              _unlink
+ #else
+ # include &lt;unistd.h&gt;
+ # define DIRSLASH               '/'
+ # define DIRSLASH_STR           "/"
+ # define vsamkdir( mydir )      mkdir( (mydir) , 0744 )
+ # define vsaaccess              access
++# define vsaunlink              unlink
+ #endif
+ 
+ /*--------------------------------------------------------------------*/
+@@ -200,6 +202,8 @@
+ 
+ #define IA_DA    "\x44\x41"   /* DA  compress data */
+ #define IA_ED    "\x45\x44"   /* ED  end of data   */
++#define IA_UD    "\x55\x44"   /* UD  uncompressed data */
++#define IA_UE    "\x55\x45"   /* UE  uncompressed end  */
+ 
+ #define IA_CAR_  "\x43\x41\x52\x20"  /* normal SAPCAR magic */
+ #define IA_2_00  "\x32\x2E\x30\x30"  /* SAPCAR version 2.00 */
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/src/vsclam.c clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsclam.c
+--- clamsap/clamsap-0.9.8.0.tar.gz/src/vsclam.c
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsclam.c
+@@ -50,7 +50,7 @@
+ /*                  Return VSA_CONTENTINFO for NW-VSI 2.00            */
+ /*                                                                    */
+ /*  Remarks:                                                          */
+-/*      Modifications are done for NW-VSI Version 1.00                */
++/*      Supports NW-VSI Version 2.00 http://scn.sap.com/docs/DOC-7838 */
+ /*                                                                    */
+ /*                                                                    */
+ /**********************************************************************/
+@@ -267,7 +267,7 @@
+     /*--------------------------------------------------------------------*/
+     /* The startup will be called process global                          */
+     /* With this we say, we are ready to work                             */
+-    /*--------------------------------------------------------------------*/      
++    /*--------------------------------------------------------------------*/
+     if(bgInit == FALSE)
+     {
+         int rc = 0;
+@@ -284,7 +284,8 @@
+         InitializeTable();
+         if(pLoadError) free(pLoadError);
+         /* load libmagic library */
+-        if(vsaLoadMagicLibrary(&amp;pLoadError) != VSA_OK) return VSA_E_LOAD_FAILED;
++        rc = vsaLoadMagicLibrary(&amp;pLoadError);
++        /*if(rc) return VSA_E_LOAD_FAILED;*/
+ #endif
+         /* CCQ_OFF */
+         bgInit = TRUE;
+@@ -560,7 +561,7 @@
+  *  VSA_E_NULL_PARAM         |      NULL pointer provided
+  *  VSA_E_INVALID_PARAM      |      At least one parameter is invalid
+  *  VSA_E_DRIVER_FAILED      |      At least one driver failed
+- *  VSA_E_NOT_SUPPORTED      |      At least one param or object is not supported
++ *  VSA_E_NOT_SUPPORTED      |      At least one parameter or object is not supported
+  *  VSA_E_CIO_FAILED         |      Client I/O request action failed.
+  *  VSA_E_NOT_INITIALISED    |      Global initialization not successful
+  *  VSA_E_CBC_TERMINATED     |      Action was terminated during callback
+@@ -638,7 +639,7 @@
+     engine = pClamFPtr-&gt;fp_cl_engine_new( );
+     if (engine == NULL)
+     {
+-        SETERRORTEXT((*pp_init)-&gt;pszErrorText, "ClamAV engine initalization failed");
++        SETERRORTEXT((*pp_init)-&gt;pszErrorText, "ClamAV engine initialization failed");
+         (*pp_init)-&gt;iErrorRC = 7;
+         CLEANUP(VSA_E_LOAD_FAILED);
+     }
+@@ -650,7 +651,7 @@
+     }
+     if(ret)
+     {
+-        SETERRORTEXT((*pp_init)-&gt;pszErrorText,"ClamAV engine could not load db files");
++        SETERRORTEXT((*pp_init)-&gt;pszErrorText,"ClamAV engine could not load signature DB files. Use freshclam to ensure availability of main.cvd and daily.cvd in /var/lib/clamav.");
+         (*pp_init)-&gt;iErrorRC = ret;
+         pClamFPtr-&gt;fp_cl_engine_free(engine);
+         CLEANUP(VSA_E_DRIVER_FAILED);
+@@ -660,10 +661,10 @@
+     {  /* CCQ_OFF */
+        pClamFPtr-&gt;fp_cl_engine_free(engine);
+        (*pp_init)-&gt;iErrorRC   = ret;
+-       SETERRORTEXT((*pp_init)-&gt;pszErrorText, "ClamAV engine could not compile db files");
++       SETERRORTEXT((*pp_init)-&gt;pszErrorText, "ClamAV engine could not compile signature DB files");
+        CLEANUP(VSA_E_LOAD_FAILED);
+     }
+-     /* convert date to calender date *//*CCQ_CLIB_LOCTIME_OK*/
++     /* convert date to calendar date *//*CCQ_CLIB_LOCTIME_OK*/
+     (*pp_init)-&gt;utcDate     = tEngineDate;
+     if((const char*)initConfig.initdirectory) {
+         ret = pClamFPtr-&gt;fp_cl_engine_set_str(engine,CL_ENGINE_TMPDIR,(const char*)initConfig.tmpdir-&gt;pvValue);
+@@ -676,7 +677,7 @@
+      * We allocate one driver info to demonstrate the use case.
+      * The VSA specification does not dictate the usage of VSA_DRIVERINFO.
+      * The information here will only be displayed at SAP internal applications,
+-     * but this information should help you later to anaylse with which pattern
++     * but this information should help you later to analyze with which pattern
+      * files your engine runs.
+      * This information also helps any customer to see which version of pattern
+      * files are loaded.
+@@ -715,7 +716,7 @@
+                   (*pp_init)-&gt;pDriver[i].pszName = NULL;
+               }
+           }
+-          p_driver = NULL; /* initialise the structure */
++          p_driver = NULL; /* Initialize the structure */
+           if( (*pp_init)-&gt;pDriver[i].pszName )
+           {
+               p_driver = pClamFPtr-&gt;fp_cl_cvdhead((const char*)(*pp_init)-&gt;pDriver[i].pszName );
+@@ -732,7 +733,7 @@
+           }
+           else
+           {
+-              /* convert date to calender date *//*CCQ_CLIB_LOCTIME_OK*/
++              /* convert date to calendar date *//*CCQ_CLIB_LOCTIME_OK*/
+               (*pp_init)-&gt;pDriver[i].utcDate = (time_t)pClamFPtr-&gt;fp_cl_engine_get_num(engine,CL_ENGINE_DB_TIME,&amp;ret);
+               (*pp_init)-&gt;pDriver[i].uiViruses        = 0;
+               (*pp_init)-&gt;pDriver[i].uiVariants       = 0;  
+@@ -961,13 +962,15 @@
+         VS_OBJECTTYPE_T a = VS_OT_UNKNOWN;
+         VS_OBJECTTYPE_T b = VS_OT_UNKNOWN;
+         size_t current_read = 0;
++        FILE *_fp = NULL;
++
+         rc = getFileSize(p_scanparam-&gt;pszObjectName,&amp;usrdata.lObjectSize);
+         if(rc) {
+             pszReason = (PChar)"The file could not be opened!";
+             CLEANUP(VSA_E_SCAN_FAILED);
+         }
+         memset(bbyte,0,sizeof(bbyte));
+-        FILE *_fp = fopen((const char*)p_scanparam-&gt;pszObjectName,"r");
++        _fp = fopen((const char*)p_scanparam-&gt;pszObjectName,"r");
+         if(_fp) {
+             do {
+                 current_read = fread(pBuff,1,sizeof(bbyte)-1,_fp);
+@@ -992,6 +995,7 @@
+                                 (*pp_scinfo)-&gt;uiInfections++,
+                                 &amp;(*pp_scinfo)-&gt;pVirusInfo);
+                         }
++                        SET_VSA_RC(rc);
+                         CLEANUP(rc);
+                     }
+                 }
+@@ -1022,6 +1026,7 @@
+                                 (*pp_scinfo)-&gt;uiInfections++,
+                                 &amp;(*pp_scinfo)-&gt;pVirusInfo);
+                         }
++                        SET_VSA_RC(rc);
+                         CLEANUP(rc);
+                     }
+                 }
+@@ -1047,23 +1052,30 @@
+             else
+             {
+                 rc = getFileSize(p_scanparam-&gt;pszObjectName,&amp;usrdata.lObjectSize);
+-                sprintf((char*)szErrorName,"Extension (%s) is not compatible to MIME type (%s)",(const char*)szExt2,(const char*)szMimeType);
+-                if(pp_scinfo != NULL &amp;&amp; (*pp_scinfo) != NULL) {
+-                    addVirusInfo(p_scanparam-&gt;uiJobID,
+-                        p_scanparam-&gt;pszObjectName,
+-                        usrdata.lObjectSize,
+-                        FALSE,
+-                        VS_DT_MIMEVALIDATION,
+-                        VS_VT_NOVIRUS,
+-                        usrdata.tObjectType,
+-                        VS_AT_BLOCKED,
+-                        0,
+-                        szErrorName,
+-                        (PChar)"The extra content check is active, therefore file extension must be compatible to the detected MIME type",
+-                        (*pp_scinfo)-&gt;uiInfections++,
+-                        &amp;(*pp_scinfo)-&gt;pVirusInfo);
++                if(usrdata.bMimeCheck == TRUE)
++                {
++                    sprintf((char*)szErrorName,"Extension (%s) is not compatible to MIME type (%s)",(const char*)szExt2,(const char*)szMimeType);
++                    if(pp_scinfo != NULL &amp;&amp; (*pp_scinfo) != NULL) {
++                        addVirusInfo(p_scanparam-&gt;uiJobID,
++                            p_scanparam-&gt;pszObjectName,
++                            usrdata.lObjectSize,
++                            FALSE,
++                            VS_DT_MIMEVALIDATION,
++                            VS_VT_NOVIRUS,
++                            usrdata.tObjectType,
++                            VS_AT_BLOCKED,
++                            0,
++                            szErrorName,
++                            (PChar)"The extra content check is active, therefore file extension must be compatible to the detected MIME type",
++                            (*pp_scinfo)-&gt;uiInfections++,
++                            &amp;(*pp_scinfo)-&gt;pVirusInfo);
++                    }
++                    SET_VSA_RC(VSA_E_BLOCKED_BY_POLICY);
++                    _vsa_rc = CB_FUNC(VS_M_VIRUS,(*pp_scinfo)-&gt;pVirusInfo);
++                    if(_vsa_rc == VS_CB_NEXT || _vsa_rc == VS_CB_TERMINATE)
++                        CLEANUP(VSA_E_CBC_TERMINATED);
++                    CLEANUP(VSA_E_BLOCKED_BY_POLICY);
+                 }
+-                CLEANUP(VSA_E_BLOCKED_BY_POLICY);
+             }
+         }
+     }
+@@ -1094,7 +1106,10 @@
+             NULL,
+             (*pp_scinfo)-&gt;uiScanned++,
+             &amp;(*pp_scinfo)-&gt;pContentInfo);
+-        if(rc) CLEANUP(rc);
++        if(rc) {
++            SET_VSA_RC(rc);
++            CLEANUP(rc);
++        }
+     }
+ #endif
+     /*--------------------------------------------------------------------*/
+@@ -1613,6 +1628,7 @@
+     }
+     i = stat (_conf, &amp;_lStat);
+     if(i &lt; 0) {
++       lpLibrary = "libclamav.so";
+        hInst = dlopen(lpLibrary,RTLD_LAZY);
+        if(hInst == NULL) {
+          rc = VSA_E_LOAD_FAILED;
+@@ -2009,7 +2025,7 @@
+     int             counter = 0;
+     size_t          lLength = 0;
+     Char            szExt[EXT_LN] = ".*";
+-    Byte            _decompr[65536];
++    PByte           _decompr = NULL;
+     Char            szMimeType[MIME_LN] = "unknown/unknown";
+     struct SAREntry *_loc = NULL,
+         *sentry = ParseEntriesFromFile(pszObjectName);
+@@ -2053,40 +2069,40 @@
+     }
+     _loc = sentry;
+     while(_loc != NULL) {
+-        counter++;
+-        if(_loc-&gt;uncompressed_size &gt; sizeof(_decompr)) {
+-            /* we want only scan the both test objects */
+-            pUsrData-&gt;pScanInfo-&gt;uiNotScanned++;
+-            CLEANUP(VSA_E_NOT_SCANNED);
++        if(_decompr == NULL) {
++            _decompr = (PByte)malloc(_loc-&gt;uncompressed_size);
++        }
++        else {
++            _decompr = (PByte)realloc(_decompr,_loc-&gt;uncompressed_size);
+         }
++        if(_decompr == NULL) {
++            sprintf((char*)errorReason,"The file buffer for %256s cannot be allocated",_loc-&gt;name);
++            CLEANUP(VSA_E_SCAN_FAILED);
++        }
++        lLength = _loc-&gt;uncompressed_size;
+         _loc = _loc-&gt;next;
+-    }
+-
+-    if(counter != 1) CLEANUP(VSA_E_NOT_SCANNED);
+-    lLength = ExtractEntryFromFile(pszObjectName,0,_decompr,65536);
+-    if(lLength == 0)
+-    {
+-        if(pUsrData != NULL &amp;&amp; pUsrData-&gt;pScanInfo != NULL) {
++        lLength = ExtractEntryFromFile(pszObjectName,counter++,_decompr,lLength);
++        if(lLength == 0)
++        {
+             addScanError(uiJobID,
+                 pszObjectName,
+-                pUsrData-&gt;lObjectSize,
++                lLength,
+                 13,
+                 (PChar)"Not extracted",
+                 pUsrData-&gt;pScanInfo-&gt;uiScanErrors,
+                 &amp;pUsrData-&gt;pScanInfo-&gt;pScanError);
++            pUsrData-&gt;pScanInfo-&gt;uiScanErrors++;
++            pUsrData-&gt;pScanInfo-&gt;uiNotScanned++;
++            CLEANUP(VSA_E_NOT_SCANNED);
+         }
+-        pUsrData-&gt;pScanInfo-&gt;uiScanErrors++;
+-        pUsrData-&gt;pScanInfo-&gt;uiNotScanned++;
+-        CLEANUP(VSA_E_NOT_SCANNED);
+-    }
+-    else
+-    {
+-        Bool text = TRUE;
+-        int status = 1;
+-        VS_OBJECTTYPE_T a = VS_OT_UNKNOWN;
+-        VS_OBJECTTYPE_T b = VS_OT_UNKNOWN;
+-        rc = getByteType(_decompr,lLength,szExt,szMimeType,0,&amp;status,&amp;text,&amp;a,&amp;b,&amp;pUsrData-&gt;tFileType,&amp;pUsrData-&gt;tObjectType);
+-        if(pUsrData != NULL &amp;&amp; pUsrData-&gt;pScanInfo != NULL) {
++        else
++        {
++            Bool text = TRUE;
++            int status = 1;
++            VS_OBJECTTYPE_T a = VS_OT_UNKNOWN;
++            VS_OBJECTTYPE_T b = VS_OT_UNKNOWN;
++            rc = getByteType(_decompr,lLength,szExt,szMimeType,0,&amp;status,&amp;text,&amp;a,&amp;b,&amp;pUsrData-&gt;tFileType,&amp;pUsrData-&gt;tObjectType);
++            if(rc) CLEANUP(rc);
+             rc = addContentInfo(uiJobID,
+                 sentry-&gt;name,
+                 lLength,
+@@ -2096,104 +2112,75 @@
+                 NULL,
+                 pUsrData-&gt;pScanInfo-&gt;uiScanned++,
+                 &amp;pUsrData-&gt;pScanInfo-&gt;pContentInfo);
+-        }
+-        if(rc) CLEANUP(rc);
+-        /*
+-        * Comment:
+-        * Perform the Active Content Check inside of archive
+-        */
+-        if(pUsrData-&gt;bActiveContent == TRUE &amp;&amp; pUsrData-&gt;bScanAllFiles == TRUE &amp;&amp; pUsrData-&gt;bScanCompressed == TRUE)
+-        {
+-            rc = check4ActiveContent(
+-                _decompr,
+-                lLength,
+-                pUsrData-&gt;tObjectType);
+-            if(rc &amp;&amp; pUsrData != NULL &amp;&amp; pUsrData-&gt;pScanInfo != NULL) {
+-                addVirusInfo(
+-                    pUsrData-&gt;uiJobID,
+-                    sentry-&gt;name,
+-                    lLength,
+-                    FALSE,
+-                    VS_DT_ACTIVECONTENT,
+-                    VS_VT_PUA,
+-                    pUsrData-&gt;tObjectType,
+-                    VS_AT_BLOCKED,
+-                    0,
+-                    (PChar)"Embedded script found",
+-                    (PChar)"Active content block",
+-                    pUsrData-&gt;pScanInfo-&gt;uiInfections++,
+-                    &amp;pUsrData-&gt;pScanInfo-&gt;pVirusInfo);
+-                pUsrData-&gt;vsa_rc = VSA_E_ACTIVECONTENT_FOUND;
+-            }
+             if(rc) CLEANUP(rc);
+-        }
+-        /*
+-        * Comment:
+-        * Perform the MIME Check inside of archive
+-        */
+-        if(pUsrData-&gt;bMimeCheck == TRUE &amp;&amp; pUsrData-&gt;bScanAllFiles == TRUE &amp;&amp; pUsrData-&gt;bScanCompressed == TRUE)
+-        {
+-            Char szErrorName[1024];
+-            Char szErrorFreeName[1024];
+-            rc = checkContentType(
+-                szExt,
+-                szMimeType,
+-                pUsrData-&gt;pszScanMimeTypes,
+-                pUsrData-&gt;pszBlockMimeTypes,
+-                pUsrData-&gt;pszScanExtensions,
+-                pUsrData-&gt;pszBlockExtensions,
+-                szErrorName,
+-                szErrorFreeName);
+-            if(rc &amp;&amp; pUsrData != NULL &amp;&amp; pUsrData-&gt;pScanInfo != NULL) {
+-                addVirusInfo(
+-                    pUsrData-&gt;uiJobID,
+-                    sentry-&gt;name,
++            /*
++            * Comment:
++            * Perform the Active Content Check inside of archive
++            */
++            if(pUsrData-&gt;bActiveContent == TRUE &amp;&amp; pUsrData-&gt;bScanAllFiles == TRUE &amp;&amp; pUsrData-&gt;bScanCompressed == TRUE)
++            {
++                rc = check4ActiveContent(
++                    _decompr,
+                     lLength,
+-                    FALSE,
+-                    VS_DT_MIMEVALIDATION,
+-                    VS_VT_NOVIRUS,
+-                    pUsrData-&gt;tObjectType,
+-                    VS_AT_BLOCKED,
+-                    0,
++                    pUsrData-&gt;tObjectType);
++                if(rc) CLEANUP(rc);
++            }
++            /*
++            * Comment:
++            * Perform the MIME Check inside of archive
++            */
++            if(pUsrData-&gt;bMimeCheck == TRUE &amp;&amp; pUsrData-&gt;bScanAllFiles == TRUE &amp;&amp; pUsrData-&gt;bScanCompressed == TRUE)
++            {
++                Char szErrorName[1024];
++                Char szErrorFreeName[1024];
++                rc = checkContentType(
++                    szExt,
++                    szMimeType,
++                    pUsrData-&gt;pszScanMimeTypes,
++                    pUsrData-&gt;pszBlockMimeTypes,
++                    pUsrData-&gt;pszScanExtensions,
++                    pUsrData-&gt;pszBlockExtensions,
+                     szErrorName,
+-                    szErrorFreeName,
+-                    pUsrData-&gt;pScanInfo-&gt;uiInfections++,
+-                    &amp;pUsrData-&gt;pScanInfo-&gt;pVirusInfo);
+-                pUsrData-&gt;vsa_rc = VSA_E_BLOCKED_BY_POLICY;
++                    szErrorFreeName);
++                if(rc) CLEANUP(rc);
+             }
+-            if(rc) CLEANUP(rc);
+-        }
+-        {
+-            FILE *fpOut = NULL;
+-            Char szFileName[1024];
+-            PChar  _tmpPath = NULL; /* CCQ_OFF */
+-            if(getenv("TMPDIR") == NULL)
++            {
++                FILE *fpOut = NULL;
++                Char szFileName[1024];
++                PChar  _tmpPath = NULL; /* CCQ_OFF */
++                if(getenv("TMPDIR") == NULL) {
+ #ifdef _WIN32
+-                _tmpPath = (PChar)strdup(".");
++                    _tmpPath = (PChar)strdup(".");
+ #else
+-                _tmpPath = (PChar)strdup("/tmp");
++                    _tmpPath = (PChar)strdup("/tmp");
+ #endif
+-            else
+-                _tmpPath = (PChar)strdup(getenv("TMPDIR"));
+-            sprintf((char*)szFileName,"%s%s%s",(char*)_tmpPath,DIR_SEP,sentry-&gt;name);
+-            if(_tmpPath) free(_tmpPath);
+-            
+-            fpOut = fopen((const char*)szFileName,"w");
+-            if(fpOut != NULL) {
+-                fwrite(_decompr,1,lLength,fpOut);
+-                fclose(fpOut);
++                } else {
++                    _tmpPath = (PChar)strdup(getenv("TMPDIR"));
++                }
++                sprintf((char*)szFileName,"%s%s%s",(char*)_tmpPath,DIR_SEP,sentry-&gt;name);
++                if(_tmpPath) free(_tmpPath);
++
++                fpOut = fopen((const char*)szFileName,"w");
++                if(fpOut != NULL) {
++                    fwrite(_decompr,1,lLength,fpOut);
++                    fclose(fpOut);
++                }
++                rc = scanFile(
++                    pEngine,
++                    pUsrData-&gt;uiJobID,
++                    szFileName,
++                    pUsrData,
++                    errorReason);
++                unlink((const char*)szFileName);
++                /* CCQ_ON */
+             }
+-            rc = scanFile(
+-                        pEngine,
+-                        pUsrData-&gt;uiJobID,
+-                        szFileName,
+-                        pUsrData,
+-                        errorReason);
+-            unlink((const char*)szFileName);
+-            /* CCQ_ON */
+         }
+     }
+ cleanup:
++    if(_decompr) {
++        free(_decompr);
++        _decompr = NULL;
++    }
+     FreeInfo(sentry);
+     return rc;
+ } /* scanCompressed */
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/src/vsclam.h clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsclam.h
+--- clamsap/clamsap-0.9.8.0.tar.gz/src/vsclam.h
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsclam.h
+@@ -52,10 +52,10 @@
+ #ifdef CLAMSAP_VERSION
+ #define VSA_ADAPTER_VERSION    CLAMSAP_VERSION
+ #else
+-#define VSA_ADAPTER_VERSION    "0.9.8.0"
++#define VSA_ADAPTER_VERSION    "0.98.9.0"
+ #endif
+ #define VSA_ADAPTER_MAJVER     0
+-#define VSA_ADAPTER_MINVER     980
++#define VSA_ADAPTER_MINVER     9890
+ #define VSA_VENDORINFO         "OpenSource Project CLAMSAP (http://sourceforge.net/projects/clamsap/) "
+ #define VSA_VENDORINFO_LN      (sizeof(VSA_VENDORINFO)-1)
+ #define VSA_ADAPTERNAME        "CLAMSAP: ClamAV to SAP NW-VSI Adapter Version: "VSA_ADAPTER_VERSION" "
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/src/vsclam.rc clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsclam.rc
+--- clamsap/clamsap-0.9.8.0.tar.gz/src/vsclam.rc
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsclam.rc
+@@ -41,19 +41,19 @@
+ #define SAP_COPYRIGHT_START   "Copyright (c) Markus Strehle 2003"
+ #endif
+ #ifndef SAP_COPYRIGHT_END
+-#define SAP_COPYRIGHT_END     " - 2011"
++#define SAP_COPYRIGHT_END     " - 2015"
+ #endif
+ #ifndef SAP_FILE_VERS
+-#define SAP_FILE_VERS         0, 9, 7, 0
++#define SAP_FILE_VERS         0, 9, 8, 9
+ #endif
+ #ifndef SAP_FILE_VERS_STR
+-#define SAP_FILE_VERS_STR     "0, 9, 7, 0\0"
++#define SAP_FILE_VERS_STR     "0, 9, 8, 9\0"
+ #endif
+ #ifndef SAP_PRODUCT_VERS
+-#define SAP_PRODUCT_VERS      0, 9, 7, 0
++#define SAP_PRODUCT_VERS      0, 9, 8, 9
+ #endif
+ #ifndef SAP_PRODUCT_VERS_STR
+-#define SAP_PRODUCT_VERS_STR  "0, patch 97, changelist 0\0"
++#define SAP_PRODUCT_VERS_STR  "0, patch 98, changelist 0\0"
+ #endif
+ #ifndef SAP_PLATFORM
+ #define SAP_PLATFORM          "ntintel\0"
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/src/vsclamd.c clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsclamd.c
+--- clamsap/clamsap-0.9.8.0.tar.gz/src/vsclamd.c
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsclamd.c
+@@ -31,7 +31,7 @@
+ /*                                                                    */
+ /*  Author:    Markus Strehle, SAP AG (mailto:markus.strehle@sap.com) */
+ /*  Reviewer:                                                         */
+-/*  Version:       0.97                                               */
++/*  Version:       0.98                                               */
+ /*                                                                    */
+ /*  Created:                                                          */
+ /*    20 June 2005  Markus Strehle                                    */
+@@ -141,6 +141,7 @@
+ #else
+ static const char        version[]          =   "@[ C ]CLAMSAP: " VSA_ADAPTER_VERSION;
+ #endif
++static PChar             pClamdaemon        = NULL;
+ #ifdef VSI2_COMPATIBLE
+ static PChar             pLoadError         = NULL;
+ #endif
+@@ -190,6 +191,15 @@
+     USRDATA        *pUsrData,
+     PChar           errorReason);
+ 
++static VSA_RC scanBuffer(
++    void           *pEngine,
++    UInt            uiJobID,
++    PChar           pszObjectName,
++    PByte           pObject,
++    size_t          lObjectSize,
++    USRDATA        *pUsrData,
++    PChar           errorReason);
++
+ static VSA_RC scanCompressed(
+     void           *pEngine,
+     UInt            uiJobID,
+@@ -197,6 +207,15 @@
+     USRDATA        *pUsrData,
+     PChar           errorReason);
+ 
++static VSA_RC scanCompressedBuffer(
++    void           *pEngine,
++    UInt            uiJobID,
++    PChar           pszObjectName,
++    PByte           pObject,
++    size_t          lObjectSize,
++    USRDATA        *pUsrData,
++    PChar           errorReason);
++
+ static VSA_RC vsaSetContentTypeParametes(VSA_OPTPARAM *,
+     USRDATA *
+     );
+@@ -316,7 +335,17 @@
+         InitializeTable();
+         if(pLoadError) free(pLoadError);
+         /* load libmagic library */
+-        if(vsaLoadMagicLibrary(&amp;pLoadError) != VSA_OK) return VSA_E_LOAD_FAILED;
++        vsaLoadMagicLibrary(&amp;pLoadError);
++        /*if(rc) return VSA_E_LOAD_FAILED;*/
++        if(pClamdaemon == NULL) {
++           pClamdaemon = (PChar)getenv("CLAMD");
++           if(pClamdaemon == NULL) {
++              pClamdaemon = (PChar)getenv("INITSERVERS");
++           }
++           if(pClamdaemon == NULL) {
++              pClamdaemon = (PChar)getenv("INITSERVER");
++           }
++        }
+ #endif
+         bgInit = TRUE;
+     }
+@@ -467,10 +496,17 @@
+     /*#else
+                 len = ((sizeof(DEFAULT_PROTOCOL)-1) + (sizeof(LOCAL_SOCKET_PATH)-1) + 6;
+     #endif*/
++                if(pClamdaemon) {
++                   len = strlen((const char*)pClamdaemon) + 1;
++                }
+                 _dir = (PChar)malloc(len+1);
+                 if(_dir == NULL)
+                    CLEANUP(VSA_E_NO_SPACE);
+-                len = snprintf((char*)_dir,len,"%s://%s:%s",DEFAULT_PROTOCOL,DEFAULT_SERVER,DEFAULT_PORT);
++                if(pClamdaemon) {
++                   len = snprintf((char*)_dir,len,"%s",pClamdaemon);
++                } else {
++                   len = snprintf((char*)_dir,len,"%s://%s:%s",DEFAULT_PROTOCOL,DEFAULT_SERVER,DEFAULT_PORT);
++                }
+ 
+                 VSAddINITParameter ( (*pp_config)-&gt;pInitParams-&gt;pInitParam,
+                                      (*pp_config)-&gt;pInitParams-&gt;usInitParams,
+@@ -514,6 +550,10 @@
+         }
+     }
+ 
++    /* default for scanaccesslocal */
++    if(pClamdaemon) {
++        _optparams[1].pvValue = 0;
++    }
+     for(x=0; x&lt;opar;x++)
+     {
+        /*  opar : number of entries in optparams
+@@ -605,7 +645,7 @@
+  *  VSA_E_NULL_PARAM         |      NULL pointer provided
+  *  VSA_E_INVALID_PARAM      |      At least one parameter is invalid
+  *  VSA_E_DRIVER_FAILED      |      At least one driver failed
+- *  VSA_E_NOT_SUPPORTED      |      At least one param or object is not supported
++ *  VSA_E_NOT_SUPPORTED      |      At least one parameter or object is not supported
+  *  VSA_E_CIO_FAILED         |      Client I/O request action failed.
+  *  VSA_E_NOT_INITIALISED    |      Global initialization not successful
+  *  VSA_E_CBC_TERMINATED     |      Action was terminated during callback
+@@ -653,31 +693,48 @@
+      */
+     /* Initialize VSA_INIT structure */
+     (*pp_init)          =   (PVSA_INIT)calloc(1,sizeof(VSA_INIT));
+-    if ((*pp_init) == NULL)
++    if ((*pp_init) == NULL) {
++        (*pp_init)-&gt;iErrorRC = 5;
+         CLEANUP(VSA_E_NO_SPACE);
++    }
+         /* sizeof */
+     (*pp_init)-&gt;struct_size = sizeof(VSA_INIT);
+     rc = vsaSetInitConfig(p_initparams,&amp;initConfig);
+-    if(rc) CLEANUP(rc);
++    if(rc) {
++        (*pp_init)-&gt;iErrorRC = (int)VSA_E_NOT_SUPPORTED;
++        SETERRORTEXT((*pp_init)-&gt;pszErrorText, "At least one INIT parameter is not support");
++        CLEANUP(rc);
++    }
+     /* CCQ_OFF */
+     pConnection = (PCLAMDCON)calloc(1,sizeof(CLAMDCON));
+-    if(pConnection == NULL)
++    if(pConnection == NULL) {
++        (*pp_init)-&gt;iErrorRC = (int)VSA_E_NO_SPACE;
++        SETERRORTEXT((*pp_init)-&gt;pszErrorText, "Memory allocation failed");
+         CLEANUP(VSA_E_NO_SPACE);
++    }
+     if(initConfig.server) {
+         rc = vsaparseURI((PChar)initConfig.server-&gt;pvValue,&amp;pConnection-&gt;bLocal,&amp;pConnection-&gt;pProtocol,&amp;pConnection-&gt;pServer,&amp;pConnection-&gt;pPort);
+     }
+     else {
+-        Char _dir[128];
+-        snprintf((char*)_dir,sizeof(_dir),"%s://%s:%s",DEFAULT_PROTOCOL,DEFAULT_SERVER,DEFAULT_PORT);
++        Char _dir[1024];
++        if(pClamdaemon) {
++          snprintf((char*)_dir,sizeof(_dir),"%.1022s",pClamdaemon);
++        } else {
++          snprintf((char*)_dir,sizeof(_dir),"%.20s://%.512s:%.128s",DEFAULT_PROTOCOL,DEFAULT_SERVER,DEFAULT_PORT);
++        }
+         rc = vsaparseURI(_dir,&amp;pConnection-&gt;bLocal,&amp;pConnection-&gt;pProtocol,&amp;pConnection-&gt;pServer,&amp;pConnection-&gt;pPort);
+     }
+     if(rc) {
++        (*pp_init)-&gt;iErrorRC = (int)VSA_E_LOAD_FAILED;
+         SETERRORTEXT((*pp_init)-&gt;pszErrorText, "Parsing INITSERVERS failed");
+         CLEANUP(rc);
+     }
+     rc = vsaConnectd(pConnection-&gt;pServer, pConnection-&gt;pPort, (PChar)"VERSION",&amp;pDriverName);
+     if(rc) {
+-        SETERRORTEXT((*pp_init)-&gt;pszErrorText, "Connect to clamd (daemon) failed");
++        Char  _error[1024];
++        (*pp_init)-&gt;iErrorRC = 7;
++        snprintf((char*)_error,sizeof(_error),"Connect to ClamAV daemon (process clamd) failed. Connected host: %.512s on port: %.128s.", pConnection-&gt;pServer, pConnection-&gt;pPort);
++        SETERRORTEXT((*pp_init)-&gt;pszErrorText, _error);
+         CLEANUP(rc);
+     }
+     /* CCQ_ON */
+@@ -694,13 +751,15 @@
+     (*pp_init)-&gt;usEngineMajVersion = VSA_ADAPTER_MAJVER;
+     (*pp_init)-&gt;usEngineMinVersion = VSA_ADAPTER_MINVER;
+     SETSTRING( (*pp_init)-&gt;pszEngineVersionText, pDriverName );
+-     /* convert date to calender date *//*CCQ_CLIB_LOCTIME_OK*/
++     /* convert date to calendar date *//*CCQ_CLIB_LOCTIME_OK*/
+     (*pp_init)-&gt;utcDate     = time(NULL);
+     /* set VSA_DRIVERINFO structure */
+-        (*pp_init)-&gt;iErrorRC   = 0;
+-    (*pp_init)-&gt;pDriver = (PVSA_DRIVERINFO)calloc(MAX_DRIVERS,sizeof(VSA_DRIVERINFO));
+-    if ((*pp_init)-&gt;pDriver == NULL)
++    (*pp_init)-&gt;iErrorRC    = 0;
++    (*pp_init)-&gt;pDriver     = (PVSA_DRIVERINFO)calloc(MAX_DRIVERS,sizeof(VSA_DRIVERINFO));
++    if ((*pp_init)-&gt;pDriver == NULL) {
++        (*pp_init)-&gt;iErrorRC = 5;
+         CLEANUP(VSA_E_NO_SPACE);
++    }
+ 
+     /* CCQ_OFF */
+     (*pp_init)-&gt;hEngine     = (PVoid)pConnection;
+@@ -711,7 +770,7 @@
+      * We allocate one driver info to demonstrate the use case.
+      * The VSA specification does not dictate the usage of VSA_DRIVERINFO.
+      * The information here will only be displayed at SAP internal applications,
+-     * but this information should help you later to anaylse with which pattern
++     * but this information should help you later to analyze with which pattern
+      * files your engine runs.
+      * This information also helps any customer to see which version of pattern
+      * files are loaded.
+@@ -721,8 +780,10 @@
+        while(pDriverName!=NULL)
+        {
+           (*pp_init)-&gt;pDriver[i].pszName = (PChar)malloc(strlen((const char*)pDriverName) + 3);
+-          if((*pp_init)-&gt;pDriver[i].pszName == NULL)
+-             CLEANUP(VSA_E_NO_SPACE);
++          if((*pp_init)-&gt;pDriver[i].pszName == NULL) {
++              (*pp_init)-&gt;iErrorRC = 5;
++              CLEANUP(VSA_E_NO_SPACE);
++          }
+ 
+           sprintf((char*)(*pp_init)-&gt;pDriver[i].pszName,"%s", pDriverName);
+           if(pDriverName)
+@@ -735,7 +796,7 @@
+           }
+           else
+           {
+-              /* convert date to calender date *//*CCQ_CLIB_LOCTIME_OK*/
++              /* convert date to calendar date *//*CCQ_CLIB_LOCTIME_OK*/
+               (*pp_init)-&gt;pDriver[i].utcDate = mktime(&amp;_utc_date);
+               (*pp_init)-&gt;pDriver[i].uiViruses        = 0;
+               (*pp_init)-&gt;pDriver[i].uiVariants       = 0;  
+@@ -831,7 +892,9 @@
+     PCLAMDCON           pConnection     = NULL;
+     FILE                *_fp            = NULL;
+     PChar               pAnswer         = NULL;
++#ifndef VSI2_COMPATIBLE
+     char                command[1024];
++#endif
+     const char         *virname = NULL;
+     USRDATA             usrdata;
+ #ifdef VSI2_COMPATIBLE
+@@ -993,6 +1056,7 @@
+             do {
+                 if(p_scanparam-&gt;tScanCode == VSA_SP_BYTES) {
+                     pBuff = p_scanparam-&gt;pbByte;
++                    current_read =  p_scanparam-&gt;lLength;
+                     rc = getByteType(pBuff,p_scanparam-&gt;lLength,szExt,szMimeType,0,&amp;status,&amp;text,&amp;a,&amp;b,&amp;usrdata.tFileType,&amp;usrdata.tObjectType);
+                 }
+                 else {
+@@ -1002,7 +1066,7 @@
+                 }
+                 if(usrdata.bActiveContent == TRUE)
+                 {
+-                    rc = check4ActiveContent(pBuff,sizeof(bbyte) - 1,usrdata.tObjectType);
++                    rc = check4ActiveContent(pBuff,current_read,usrdata.tObjectType);
+                     if(rc) {
+                         if(pp_scinfo != NULL &amp;&amp; (*pp_scinfo) != NULL) {
+                             addVirusInfo(p_scanparam-&gt;uiJobID,
+@@ -1019,6 +1083,7 @@
+                                 (*pp_scinfo)-&gt;uiInfections++,
+                                 &amp;(*pp_scinfo)-&gt;pVirusInfo);
+                         }
++                        SET_VSA_RC(rc);
+                         CLEANUP(rc);
+                     }
+                 }
+@@ -1049,9 +1114,14 @@
+                                 (*pp_scinfo)-&gt;uiInfections++,
+                                 &amp;(*pp_scinfo)-&gt;pVirusInfo);
+                         }
++                        SET_VSA_RC(rc);
+                         CLEANUP(rc);
+                     }
+                 }
++                /* no loop for byte scan */
++                if(p_scanparam-&gt;tScanCode == VSA_SP_BYTES) {
++                    current_read = 0;
++                }
+             } while(current_read &gt; 0 || rc != VSA_OK);
+         }
+         if(_fp) fclose(_fp);
+@@ -1074,23 +1144,30 @@
+             else
+             {
+                 rc = getFileSize(p_scanparam-&gt;pszObjectName,&amp;usrdata.lObjectSize);
+-                sprintf((char*)szErrorName,"Extension (%s) is not compatible to MIME type (%s)",(const char*)szExt2,(const char*)szMimeType);
+-                if(pp_scinfo != NULL &amp;&amp; (*pp_scinfo) != NULL) {
+-                    addVirusInfo(p_scanparam-&gt;uiJobID,
+-                        p_scanparam-&gt;pszObjectName,
+-                        usrdata.lObjectSize,
+-                        FALSE,
+-                        VS_DT_MIMEVALIDATION,
+-                        VS_VT_NOVIRUS,
+-                        usrdata.tObjectType,
+-                        VS_AT_BLOCKED,
+-                        0,
+-                        szErrorName,
+-                        (PChar)"The extra content check is active, therefore file extension must be compatible to the detected MIME type",
+-                        (*pp_scinfo)-&gt;uiInfections++,
+-                        &amp;(*pp_scinfo)-&gt;pVirusInfo);
++                if(usrdata.bMimeCheck == TRUE)
++                {
++                    sprintf((char*)szErrorName,"Extension (%s) is not compatible to MIME type (%s)",(const char*)szExt2,(const char*)szMimeType);
++                    if(pp_scinfo != NULL &amp;&amp; (*pp_scinfo) != NULL) {
++                        addVirusInfo(p_scanparam-&gt;uiJobID,
++                            p_scanparam-&gt;pszObjectName,
++                            usrdata.lObjectSize,
++                            FALSE,
++                            VS_DT_MIMEVALIDATION,
++                            VS_VT_NOVIRUS,
++                            usrdata.tObjectType,
++                            VS_AT_BLOCKED,
++                            0,
++                            szErrorName,
++                            (PChar)"The extra content check is active, therefore file extension must be compatible to the detected MIME type",
++                            (*pp_scinfo)-&gt;uiInfections++,
++                            &amp;(*pp_scinfo)-&gt;pVirusInfo);
++                    }
++                    SET_VSA_RC(VSA_E_BLOCKED_BY_POLICY);
++                    _vsa_rc = CB_FUNC(VS_M_VIRUS,(*pp_scinfo)-&gt;pVirusInfo);
++                    if(_vsa_rc == VS_CB_NEXT || _vsa_rc == VS_CB_TERMINATE)
++                        CLEANUP(VSA_E_CBC_TERMINATED);
++                    CLEANUP(VSA_E_BLOCKED_BY_POLICY);
+                 }
+-                CLEANUP(VSA_E_BLOCKED_BY_POLICY);
+             }
+         }
+     }
+@@ -1121,7 +1198,10 @@
+             NULL,
+             (*pp_scinfo)-&gt;uiScanned++,
+             &amp;(*pp_scinfo)-&gt;pContentInfo);
+-        if(rc) CLEANUP(rc);
++        if(rc) {
++            SET_VSA_RC(rc);
++            CLEANUP(rc);
++        }
+     }
+     if(pp_scinfo != NULL &amp;&amp; (*pp_scinfo) != NULL)
+     {
+@@ -1139,6 +1219,21 @@
+     switch(p_scanparam-&gt;tScanCode)
+     {
+     case VSA_SP_BYTES:
++#ifdef VSI2_COMPATIBLE
++        if(pp_scinfo != NULL &amp;&amp; (*pp_scinfo) != NULL)
++        {
++            usrdata.pScanInfo = (*pp_scinfo);
++        }
++        rc = scanBuffer(
++            p_init-&gt;hEngine,
++            p_scanparam-&gt;uiJobID,
++            p_scanparam-&gt;pszObjectName,
++            p_scanparam-&gt;pbByte,
++            p_scanparam-&gt;lLength,
++            &amp;usrdata,
++            szErrorName);
++        if(rc) SET_VSA_RC(rc);
++#else
+         usrdata.lObjectSize = p_scanparam-&gt;lLength;
+         rc = vsaSendBytes2Clamd(pConnection-&gt;pServer,pConnection-&gt;pPort,NULL,p_scanparam-&gt;pbByte,usrdata.lObjectSize,&amp;pAnswer);
+         if (rc) 
+@@ -1146,6 +1241,7 @@
+                pszReason = (PChar)"The buffer could not be scanned!";
+                CLEANUP( VSA_E_SCAN_FAILED );
+            }
++#endif
+     break;
+     case VSA_SP_FILE:
+         {
+@@ -1256,7 +1352,7 @@
+         p_virusinfo-&gt;struct_size = sizeof(VSA_VIRUSINFO);
+         p_virusinfo-&gt;bRepairable = FALSE;
+         p_virusinfo-&gt;lObjectSize = usrdata.lObjectSize;
+-        SETSTRING( p_virusinfo-&gt;pszFreeTextInfo , "No info available");
++        SETSTRING( p_virusinfo-&gt;pszFreeTextInfo , pAnswer);
+         SETSTRING( p_virusinfo-&gt;pszObjectName, p_scanparam-&gt;pszObjectName);
+         SETSTRING( p_virusinfo-&gt;pszVirusName, virname);
+         p_virusinfo-&gt;tActionType = VS_AT_NOACTION;
+@@ -1265,7 +1361,13 @@
+         p_virusinfo-&gt;uiVirusID   = 0;
+         p_virusinfo-&gt;tObjectType = VS_OT_BINARY;
+ 
+-        SET_VSA_RC( VSA_E_VIRUS_FOUND );
++        if(NULL != (PChar)strstr((const char*)virname,"ContainsMacros")) {
++            SET_VSA_RC( VSA_E_ACTIVECONTENT_FOUND );
++        } else if(NULL != (PChar)strstr((const char*)virname,"Script.PDF.EmbeddedJS")) {
++            SET_VSA_RC( VSA_E_ACTIVECONTENT_FOUND );
++        } else {
++            SET_VSA_RC( VSA_E_VIRUS_FOUND );
++        }
+         _vsa_rc = CB_FUNC( VS_M_VIRUS, p_virusinfo );
+         if (_vsa_rc == VS_CB_NEXT || _vsa_rc == VS_CB_TERMINATE)
+             CLEANUP(VSA_E_CBC_TERMINATED);
+@@ -1750,6 +1852,14 @@
+             }
+         }
+         else {
++            if(pUsrData-&gt;lObjectSize == 0) {
++                rc = getFileSize(pszObjectName,&amp;pUsrData-&gt;lObjectSize);
++                if(rc)
++                {
++                    sprintf((char*)errorReason,"The file %s could not be opened!",pszObjectName);
++                    CLEANUP(VSA_E_SCAN_FAILED);
++                }
++            }
+             rc = VSA_E_CIO_FAILED;
+             _fp = fopen((const char*)pszObjectName,"rb");
+             if(_fp != NULL)
+@@ -1804,6 +1914,12 @@
+         */
+         if(clam_rc == 1)
+         {
++            VSA_RC _RC = VSA_E_VIRUS_FOUND;
++            if(NULL != (PChar)strstr((const char*)virname,"ContainsMacros")) {
++                _RC = VSA_E_ACTIVECONTENT_FOUND;
++            } else if(NULL != (PChar)strstr((const char*)virname,"Script.PDF.EmbeddedJS")) {
++                _RC = VSA_E_ACTIVECONTENT_FOUND;
++            }
+             if(pUsrData != NULL &amp;&amp; pUsrData-&gt;pScanInfo != NULL) {
+                 rc = addVirusInfo(uiJobID,
+                     pszObjectName,
+@@ -1815,18 +1931,18 @@
+                     VS_AT_NOACTION,
+                     0,
+                     (PChar)virname,
+-                    (PChar)"No info available",
++                    (PChar)pAnswer,
+                     pUsrData-&gt;pScanInfo-&gt;uiInfections,
+                     &amp;pUsrData-&gt;pScanInfo-&gt;pVirusInfo);
+                 if(rc) CLEANUP(rc);
+                 pUsrData-&gt;pScanInfo-&gt;uiInfections++;
+-                pUsrData-&gt;vsa_rc = VSA_E_VIRUS_FOUND;
++                pUsrData-&gt;vsa_rc = _RC;
+                 if(pUsrData-&gt;pvFncptr)
+                     pUsrData-&gt;vsa_rc = (VSA_RC)pUsrData-&gt;pvFncptr((VSA_ENGINE)pEngine,(VS_MESSAGE_T)VS_M_VIRUS,pUsrData-&gt;pScanInfo-&gt;pVirusInfo,(VSA_USRDATA)pUsrData-&gt;pvUsrdata);
+                 if(pUsrData-&gt;vsa_rc == VS_CB_NEXT || pUsrData-&gt;vsa_rc == VS_CB_TERMINATE)
+                     CLEANUP(VSA_E_CBC_TERMINATED);
+             }
+-            CLEANUP(VSA_E_VIRUS_FOUND);
++            CLEANUP(_RC);
+         }
+         rc = VSA_OK;
+     }
+@@ -1851,7 +1967,7 @@
+     int             counter = 0;
+     size_t          lLength = 0;
+     Char            szExt[EXT_LN] = ".*";
+-    Byte            _decompr[65536];
++    PByte           _decompr = NULL;
+     Char            szMimeType[MIME_LN] = "unknown/unknown";
+     struct SAREntry *_loc = NULL,
+         *sentry = ParseEntriesFromFile(pszObjectName);
+@@ -1895,40 +2011,40 @@
+     }
+     _loc = sentry;
+     while(_loc != NULL) {
+-        counter++;
+-        if(_loc-&gt;uncompressed_size &gt; sizeof(_decompr)) {
+-            /* we want only scan the both test objects */
+-            pUsrData-&gt;pScanInfo-&gt;uiNotScanned++;
+-            CLEANUP(VSA_E_NOT_SCANNED);
++        if(_decompr == NULL) {
++            _decompr = (PByte)malloc(_loc-&gt;uncompressed_size);
++        }
++        else {
++            _decompr = (PByte)realloc(_decompr,_loc-&gt;uncompressed_size);
+         }
++        if(_decompr == NULL) {
++            sprintf((char*)errorReason,"The file buffer for %256s cannot be allocated",_loc-&gt;name);
++            CLEANUP(VSA_E_SCAN_FAILED);
++        }
++        lLength = _loc-&gt;uncompressed_size;
+         _loc = _loc-&gt;next;
+-    }
+-
+-    if(counter != 1) CLEANUP(VSA_E_NOT_SCANNED);
+-    lLength = ExtractEntryFromFile(pszObjectName,0,_decompr,65536);
+-    if(lLength == 0)
+-    {
+-        if(pUsrData != NULL &amp;&amp; pUsrData-&gt;pScanInfo != NULL) {
++        lLength = ExtractEntryFromFile(pszObjectName,counter++,_decompr,lLength);
++        if(lLength == 0)
++        {
+             addScanError(uiJobID,
+                 pszObjectName,
+-                pUsrData-&gt;lObjectSize,
++                lLength,
+                 13,
+                 (PChar)"Not extracted",
+                 pUsrData-&gt;pScanInfo-&gt;uiScanErrors,
+                 &amp;pUsrData-&gt;pScanInfo-&gt;pScanError);
++            pUsrData-&gt;pScanInfo-&gt;uiScanErrors++;
++            pUsrData-&gt;pScanInfo-&gt;uiNotScanned++;
++            CLEANUP(VSA_E_NOT_SCANNED);
+         }
+-        pUsrData-&gt;pScanInfo-&gt;uiScanErrors++;
+-        pUsrData-&gt;pScanInfo-&gt;uiNotScanned++;
+-        CLEANUP(VSA_E_NOT_SCANNED);
+-    }
+-    else
+-    {
+-        Bool text = TRUE;
+-        int status = 1;
+-        VS_OBJECTTYPE_T a = VS_OT_UNKNOWN;
+-        VS_OBJECTTYPE_T b = VS_OT_UNKNOWN;
+-        rc = getByteType(_decompr,lLength,szExt,szMimeType,0,&amp;status,&amp;text,&amp;a,&amp;b,&amp;pUsrData-&gt;tFileType,&amp;pUsrData-&gt;tObjectType);
+-        if(pUsrData != NULL &amp;&amp; pUsrData-&gt;pScanInfo != NULL) {
++        else
++        {
++            Bool text = TRUE;
++            int status = 1;
++            VS_OBJECTTYPE_T a = VS_OT_UNKNOWN;
++            VS_OBJECTTYPE_T b = VS_OT_UNKNOWN;
++            rc = getByteType(_decompr,lLength,szExt,szMimeType,0,&amp;status,&amp;text,&amp;a,&amp;b,&amp;pUsrData-&gt;tFileType,&amp;pUsrData-&gt;tObjectType);
++            if(rc) CLEANUP(rc);
+             rc = addContentInfo(uiJobID,
+                 sentry-&gt;name,
+                 lLength,
+@@ -1938,107 +2054,325 @@
+                 NULL,
+                 pUsrData-&gt;pScanInfo-&gt;uiScanned++,
+                 &amp;pUsrData-&gt;pScanInfo-&gt;pContentInfo);
++            if(rc) CLEANUP(rc);
++            /*
++            * Comment:
++            * Perform the Active Content Check inside of archive
++            */
++            if(pUsrData-&gt;bActiveContent == TRUE &amp;&amp; pUsrData-&gt;bScanAllFiles == TRUE &amp;&amp; pUsrData-&gt;bScanCompressed == TRUE)
++            {
++                rc = check4ActiveContent(
++                    _decompr,
++                    lLength,
++                    pUsrData-&gt;tObjectType);
++                if(rc) CLEANUP(rc);
++            }
++            /*
++            * Comment:
++            * Perform the MIME Check inside of archive
++            */
++            if(pUsrData-&gt;bMimeCheck == TRUE &amp;&amp; pUsrData-&gt;bScanAllFiles == TRUE &amp;&amp; pUsrData-&gt;bScanCompressed == TRUE)
++            {
++                Char szErrorName[1024];
++                Char szErrorFreeName[1024];
++                rc = checkContentType(
++                    szExt,
++                    szMimeType,
++                    pUsrData-&gt;pszScanMimeTypes,
++                    pUsrData-&gt;pszBlockMimeTypes,
++                    pUsrData-&gt;pszScanExtensions,
++                    pUsrData-&gt;pszBlockExtensions,
++                    szErrorName,
++                    szErrorFreeName);
++                if(rc) CLEANUP(rc);
++            }
++            rc = scanBuffer(
++                pEngine,
++                uiJobID,
++                sentry-&gt;name,
++                _decompr,
++                lLength,
++                pUsrData,
++                errorReason);
++        }
++    }
++cleanup:
++    if(_decompr) {
++        free(_decompr);
++        _decompr = NULL;
++    }
++    FreeInfo(sentry);
++    return rc;
++} /* scanCompressed */
++
++static VSA_RC scanBuffer(
++    void           *pEngine,
++    UInt            uiJobID,
++    PChar           pszObjectName,
++    PByte           pObject,
++    size_t          lObjectSize,
++    USRDATA        *pUsrData,
++    PChar           errorReason)
++{
++    VSA_RC         rc = VSA_OK;
++    VS_CALLRC _vsa_rc = VS_CB_OK;
++    PChar      pAnswer = NULL;
++    PChar    pszBuffer = NULL;
++    PCLAMDCON  pConnection = NULL;
++    int         clam_rc = 0;
++    const char *virname = NULL;
++    if(pUsrData == NULL) {
++        sprintf((char*)errorReason,"User parameter not available");
++        return VSA_E_NULL_PARAM;
++    }
++    pConnection = (PCLAMDCON)pEngine;
++    if(pConnection == NULL || pConnection-&gt;pServer == NULL || pConnection-&gt;pPort == NULL) {
++        sprintf((char*)errorReason,"Connection parameter not available");
++        CLEANUP(VSA_E_NULL_PARAM);
++    }
++    if(pUsrData-&gt;tObjectType == VS_OT_SAR)
++    {
++        if(pUsrData-&gt;bScanAllFiles == FALSE &amp;&amp; pUsrData-&gt;bScanBestEffort == FALSE &amp;&amp; pUsrData-&gt;bScanCompressed == FALSE)
++            CLEANUP(VSA_E_NOT_SCANNED);
++
++        rc = scanCompressedBuffer(
++                                    pEngine,
++                                    uiJobID,
++                                    pszObjectName,
++                                    pObject,
++                                    lObjectSize,
++                                    pUsrData,
++                                    errorReason);
++    }
++    else
++    {
++        rc = vsaSendBytes2Clamd(pConnection-&gt;pServer,pConnection-&gt;pPort,NULL,pObject,lObjectSize,&amp;pAnswer);
++        if(rc)
++        {
++            sprintf((char*)errorReason,"The file %256s could not be send as stream to server %50s",pszObjectName,pConnection-&gt;pServer);
++            CLEANUP(VSA_E_SCAN_FAILED);
++        }
++        pszBuffer = (PChar)strstr((const char*)pAnswer,"OK");
++        if(pszBuffer) /* Success */
++            clam_rc = 0;
++        pszBuffer = (PChar)strstr((const char*)pAnswer,"ERROR");
++        if(pszBuffer) /* Scan Error */
++        {
++            *pszBuffer = 0; /* terminate string */
++            clam_rc = VSA_E_SCAN_FAILED;
++        }
++        pszBuffer = (PChar)strstr((const char*)pAnswer,"FOUND");
++        if(pszBuffer) /* Scan Error */
++        {
++            *pszBuffer = 0; /* Virus Infection found */
++            virname = strchr((const char*)pAnswer,':');
++            if(virname &amp;&amp; *(virname + 2) &amp;&amp; *(virname + 1) == ' ')
++                virname += 2;
++            clam_rc = 1;
++        }
++        /* CCQ_ON */
++        if(clam_rc != 1)
++        {
++            sprintf((char*)errorReason,"Not available");
++            switch(clam_rc)
++            {
++            case 0: rc = VSA_OK;
++                break;
++            case 1: rc = VSA_E_VIRUS_FOUND;
++                break;
++            case 13:
++                sprintf((char*)errorReason,"%s",(PChar)pAnswer);
++                CLEANUP(VSA_E_SCAN_FAILED);
++            default:       rc = VSA_E_SCAN_FAILED;
++                break;
++            }
++        }
++        else
++        {
++            rc = VSA_OK;
+         }
+-        if(rc) CLEANUP(rc);
+         /*
+-        * Comment:
+-        * Perform the Active Content Check inside of archive
++        * After the scan
+         */
+-        if(pUsrData-&gt;bActiveContent == TRUE &amp;&amp; pUsrData-&gt;bScanAllFiles == TRUE &amp;&amp; pUsrData-&gt;bScanCompressed == TRUE)
++        if(clam_rc == 1)
+         {
+-            rc = check4ActiveContent(
+-                _decompr,
+-                lLength,
+-                pUsrData-&gt;tObjectType);
+-            if(rc &amp;&amp; pUsrData != NULL &amp;&amp; pUsrData-&gt;pScanInfo != NULL) {
+-                addVirusInfo(
+-                    pUsrData-&gt;uiJobID,
+-                    sentry-&gt;name,
+-                    lLength,
++            if(pUsrData != NULL &amp;&amp; pUsrData-&gt;pScanInfo != NULL) {
++                rc = addVirusInfo(uiJobID,
++                    pszObjectName,
++                    pUsrData-&gt;lObjectSize,
+                     FALSE,
+-                    VS_DT_ACTIVECONTENT,
+-                    VS_VT_PUA,
++                    VS_DT_KNOWNVIRUS,
++                    VS_VT_TEST,
+                     pUsrData-&gt;tObjectType,
+-                    VS_AT_BLOCKED,
++                    VS_AT_NOACTION,
+                     0,
+-                    (PChar)"Embedded script found",
+-                    (PChar)"Active content block",
+-                    pUsrData-&gt;pScanInfo-&gt;uiInfections++,
++                    (PChar)virname,
++                    (PChar)"No info available",
++                    pUsrData-&gt;pScanInfo-&gt;uiInfections,
+                     &amp;pUsrData-&gt;pScanInfo-&gt;pVirusInfo);
+-                pUsrData-&gt;vsa_rc = VSA_E_ACTIVECONTENT_FOUND;
++                if(rc) CLEANUP(rc);
++                pUsrData-&gt;pScanInfo-&gt;uiInfections++;
++                pUsrData-&gt;vsa_rc = VSA_E_VIRUS_FOUND;
++                if(pUsrData-&gt;pvFncptr)
++                    pUsrData-&gt;vsa_rc = (VSA_RC)pUsrData-&gt;pvFncptr((VSA_ENGINE)pEngine,(VS_MESSAGE_T)VS_M_VIRUS,pUsrData-&gt;pScanInfo-&gt;pVirusInfo,(VSA_USRDATA)pUsrData-&gt;pvUsrdata);
++                if(pUsrData-&gt;vsa_rc == VS_CB_NEXT || pUsrData-&gt;vsa_rc == VS_CB_TERMINATE)
++                    CLEANUP(VSA_E_CBC_TERMINATED);
+             }
++            CLEANUP(VSA_E_VIRUS_FOUND);
++        }
++        rc = VSA_OK;
++    }
++cleanup:
++    if(pAnswer) free(pAnswer);
++    return rc;
++} /* scanBuffer */
++
++static VSA_RC scanCompressedBuffer(
++    void           *pEngine,
++    UInt            uiJobID,
++    PChar           pszObjectName,
++    PByte           pObject,
++    size_t          lObjectSize,
++    USRDATA        *pUsrData,
++    PChar           errorReason)
++{
++    VSA_RC          rc = VSA_OK;
++    int             counter = 0;
++    size_t          lLength = 0;
++    Char            szExt[EXT_LN] = ".*";
++    PByte           _decompr = NULL;
++    Char            szMimeType[MIME_LN] = "unknown/unknown";
++    struct SAREntry *_loc = NULL,
++        *sentry = ParseEntriesFromBuffer(pObject,(SAP_INT)lObjectSize);
++
++    if(sentry == NULL) {
++        if(pUsrData-&gt;bMimeCheck == TRUE || pUsrData-&gt;bScanAllFiles == TRUE)
++        {
++            rc = addVirusInfo(uiJobID,
++                pszObjectName,
++                lObjectSize,
++                FALSE,
++                VS_DT_MIMEVALIDATION,
++                VS_VT_CORRUPTED,
++                pUsrData-&gt;tObjectType,
++                VS_AT_BLOCKED,
++                0,
++                (PChar)"Corrupted SAR",
++                (PChar)"The archive structure is invalid",
++                pUsrData-&gt;pScanInfo-&gt;uiInfections,
++                &amp;(pUsrData-&gt;pScanInfo-&gt;pVirusInfo));
+             if(rc) CLEANUP(rc);
++            pUsrData-&gt;pScanInfo-&gt;uiInfections++;
++            CLEANUP(VSA_E_BLOCKED_BY_POLICY);
+         }
+-        /*
+-        * Comment:
+-        * Perform the MIME Check inside of archive
+-        */
+-        if(pUsrData-&gt;bMimeCheck == TRUE &amp;&amp; pUsrData-&gt;bScanAllFiles == TRUE &amp;&amp; pUsrData-&gt;bScanCompressed == TRUE)
++        else
++        {
++            addScanError(uiJobID,
++                pszObjectName,
++                lObjectSize,
++                13,
++                (PChar)"Corrupted SAR file",
++                pUsrData-&gt;pScanInfo-&gt;uiScanErrors++,
++                &amp;pUsrData-&gt;pScanInfo-&gt;pScanError);
++            CLEANUP(VSA_E_SCAN_FAILED);
++        }
++    }
++    _loc = sentry;
++    while(_loc != NULL) {
++        if(_decompr == NULL) {
++            _decompr = (PByte)malloc(_loc-&gt;uncompressed_size);
++        }
++        else {
++            _decompr = (PByte)realloc(_decompr,_loc-&gt;uncompressed_size);
++        }
++        if(_decompr == NULL) {
++            sprintf((char*)errorReason,"The file buffer for %256s cannot be allocated",_loc-&gt;name);
++            CLEANUP(VSA_E_SCAN_FAILED);
++        }
++        lLength = _loc-&gt;uncompressed_size;
++        _loc = _loc-&gt;next;
++
++        lLength = ExtractEntryFromBuffer(pObject,(SAP_INT)lObjectSize,counter++,_decompr,lLength);
++        if(lLength == 0)
++        {
++            addScanError(uiJobID,
++                pszObjectName,
++                lObjectSize,
++                13,
++                (PChar)"Not extracted",
++                pUsrData-&gt;pScanInfo-&gt;uiScanErrors,
++                &amp;pUsrData-&gt;pScanInfo-&gt;pScanError);
++            pUsrData-&gt;pScanInfo-&gt;uiScanErrors++;
++            pUsrData-&gt;pScanInfo-&gt;uiNotScanned++;
++            CLEANUP(VSA_E_NOT_SCANNED);
++        }
++        else
+         {
+-            Char szErrorName[1024];
+-            Char szErrorFreeName[1024];
+-            rc = checkContentType(
++            Bool text = TRUE;
++            int status = 1;
++            VS_OBJECTTYPE_T a = VS_OT_UNKNOWN;
++            VS_OBJECTTYPE_T b = VS_OT_UNKNOWN;
++            rc = getByteType(_decompr,lLength,szExt,szMimeType,0,&amp;status,&amp;text,&amp;a,&amp;b,&amp;pUsrData-&gt;tFileType,&amp;pUsrData-&gt;tObjectType);
++            if(rc) CLEANUP(rc);
++            rc = addContentInfo(uiJobID,
++                sentry-&gt;name,
++                lLength,
++                pUsrData-&gt;tObjectType,
+                 szExt,
+                 szMimeType,
+-                pUsrData-&gt;pszScanMimeTypes,
+-                pUsrData-&gt;pszBlockMimeTypes,
+-                pUsrData-&gt;pszScanExtensions,
+-                pUsrData-&gt;pszBlockExtensions,
+-                szErrorName,
+-                szErrorFreeName);
+-            if(rc &amp;&amp; pUsrData != NULL &amp;&amp; pUsrData-&gt;pScanInfo != NULL) {
+-                addVirusInfo(
+-                    pUsrData-&gt;uiJobID,
+-                    sentry-&gt;name,
++                NULL,
++                pUsrData-&gt;pScanInfo-&gt;uiScanned++,
++                &amp;pUsrData-&gt;pScanInfo-&gt;pContentInfo);
++            if(rc) CLEANUP(rc);
++            /*
++            * Comment:
++            * Perform the Active Content Check inside of archive
++            */
++            if(pUsrData-&gt;bActiveContent == TRUE &amp;&amp; pUsrData-&gt;bScanAllFiles == TRUE &amp;&amp; pUsrData-&gt;bScanCompressed == TRUE)
++            {
++                rc = check4ActiveContent(
++                    _decompr,
+                     lLength,
+-                    FALSE,
+-                    VS_DT_MIMEVALIDATION,
+-                    VS_VT_NOVIRUS,
+-                    pUsrData-&gt;tObjectType,
+-                    VS_AT_BLOCKED,
+-                    0,
+-                    szErrorName,
+-                    szErrorFreeName,
+-                    pUsrData-&gt;pScanInfo-&gt;uiInfections++,
+-                    &amp;pUsrData-&gt;pScanInfo-&gt;pVirusInfo);
+-                pUsrData-&gt;vsa_rc = VSA_E_BLOCKED_BY_POLICY;
++                    pUsrData-&gt;tObjectType);
++                if(rc) CLEANUP(rc);
+             }
+-            if(rc) CLEANUP(rc);
+-        }
+-        {
+-            FILE *fpOut = NULL;
+-            Char szFileName[1024];
+-            PChar  _tmpPath = NULL; /* CCQ_OFF */
+-            if(getenv("TMPDIR") == NULL)
+-#ifdef _WIN32
+-                _tmpPath = (PChar)strdup(".");
+-#else
+-                _tmpPath = (PChar)strdup("/tmp");
+-#endif
+-            else
+-                _tmpPath = (PChar)strdup(getenv("TMPDIR"));
+-            sprintf((char*)szFileName,"%s%s%s",(char*)_tmpPath,DIR_SEP,sentry-&gt;name);
+-            if(_tmpPath) free(_tmpPath);
+-
+-            fpOut = fopen((const char*)szFileName,"w");
+-            if(fpOut != NULL) {
+-                fwrite(_decompr,1,lLength,fpOut);
+-                fclose(fpOut);
++            /*
++            * Comment:
++            * Perform the MIME Check inside of archive
++            */
++            if(pUsrData-&gt;bMimeCheck == TRUE &amp;&amp; pUsrData-&gt;bScanAllFiles == TRUE &amp;&amp; pUsrData-&gt;bScanCompressed == TRUE)
++            {
++                Char szErrorName[1024];
++                Char szErrorFreeName[1024];
++                rc = checkContentType(
++                    szExt,
++                    szMimeType,
++                    pUsrData-&gt;pszScanMimeTypes,
++                    pUsrData-&gt;pszBlockMimeTypes,
++                    pUsrData-&gt;pszScanExtensions,
++                    pUsrData-&gt;pszBlockExtensions,
++                    szErrorName,
++                    szErrorFreeName);
++                if(rc) CLEANUP(rc);
+             }
+-            rc = scanFile(
++            rc = scanBuffer(
+                 pEngine,
+-                pUsrData-&gt;uiJobID,
+-                szFileName,
++                uiJobID,
++                sentry-&gt;name,
++                _decompr,
++                lLength,
+                 pUsrData,
+                 errorReason);
+-            unlink((const char*)szFileName);
+-            /* CCQ_ON */
+         }
+     }
+ cleanup:
++    if(_decompr) {
++        free(_decompr);
++        _decompr = NULL;
++    }
+     FreeInfo(sentry);
+     return rc;
+-} /* scanCompressed */
++} /* scanCompressedBuffer */
+ 
+ static VSA_RC vsaSetContentTypeParametes(VSA_OPTPARAM *param,
+     USRDATA *pUsrData
+@@ -2127,7 +2461,7 @@
+             {
+                 usrdata-&gt;uiMsgFlags = p_callback-&gt;uiEventMsgFlags;
+             }
+-            else if ( (p_callback-&gt;uiEventMsgFlags) == VS_M_ALL )
++            else if ( (int)(p_callback-&gt;uiEventMsgFlags) == VS_M_ALL )
+             {
+                 usrdata-&gt;uiMsgFlags = uigVS_SAP_ALL;     /* constant for all msg */
+                 
+@@ -2136,12 +2470,12 @@
+             {
+                 usrdata-&gt;uiMsgFlags = uigVS_SAP_ALL;     /* wished msg not supported, use default */
+             }
+-            usrdata-&gt;pvFncptr   = p_callback-&gt;pEventCBFP;            
++            usrdata-&gt;pvFncptr   = p_callback-&gt;pEventCBFP;
+             usrdata-&gt;pvUsrdata  = p_callback-&gt;pvUsrData;
+         }
+         if ( p_callback-&gt;pEventCBFP       == NULL ||  
+              p_callback-&gt;uiEventMsgFlags == 0
+-            )           
++            )
+         {
+ 
+             p_callback-&gt;pEventCBFP        = NULL;
+@@ -2537,11 +2871,11 @@
+   }
+   err = _sendmysocket(s, (const char*)zCommand, (int)(sizeof(zCommand)-1));/* sending byte stream to server */
+   if(pFP) {
+-    buf_len = fread(buff,1,sizeof(buff),pFP);
++    buf_len = (int)fread(buff,1,sizeof(buff),pFP);
+     if(buf_len == EOF) buf_len = 0;
+     else ptr = (PByte)buff;
+   } else {
+-    buf_len = (restlen &lt; sizeof(buff) ? restlen : sizeof(buff));
++    buf_len = (int)(restlen &lt; sizeof(buff) ? restlen : sizeof(buff));
+   }
+   do {
+         INT_2_BYTES(bufflen,buf_len);
+@@ -2558,11 +2892,11 @@
+         restlen-=buf_len;
+         ptr+=buf_len;
+         if(pFP) {
+-          buf_len = fread(buff,1,sizeof(buff),pFP);
++          buf_len = (int)fread(buff,1,sizeof(buff),pFP);
+           if(buf_len == EOF) buf_len = 0;
+           ptr = (PByte)buff;
+         } else {
+-          buf_len = (restlen &lt; sizeof(buff) ? restlen : sizeof(buff));
++          buf_len = (int)(restlen &lt; sizeof(buff) ? restlen : sizeof(buff));
+         }
+   } while( restlen &gt; 0 );
+   _sendmysocket(s, (const char*)endstream, (int)sizeof(endstream));
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/src/vsclamd.h clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsclamd.h
+--- clamsap/clamsap-0.9.8.0.tar.gz/src/vsclamd.h
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsclamd.h
+@@ -52,10 +52,10 @@
+ #ifdef CLAMSAP_VERSION
+ #define VSA_ADAPTER_VERSION    CLAMSAP_VERSION
+ #else
+-#define VSA_ADAPTER_VERSION    "0.9.8.0"
++#define VSA_ADAPTER_VERSION    "0.98.9.0"
+ #endif
+ #define VSA_ADAPTER_MAJVER     0
+-#define VSA_ADAPTER_MINVER     980
++#define VSA_ADAPTER_MINVER     9890
+ #define VSA_VENDORINFO         "OpenSource Project CLAMSAP (http://sourceforge.net/projects/clamsap/) "
+ #define VSA_VENDORINFO_LN      (sizeof(VSA_VENDORINFO)-1)
+ #define VSA_ADAPTERNAME        "CLAMDSAP: ClamAV daemon to SAP NW-VSI Adapter Version: "VSA_ADAPTER_VERSION" "
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/src/vsclamd.rc clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsclamd.rc
+--- clamsap/clamsap-0.9.8.0.tar.gz/src/vsclamd.rc
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsclamd.rc
+@@ -41,19 +41,19 @@
+ #define SAP_COPYRIGHT_START   "Copyright (c) Markus Strehle 2003"
+ #endif
+ #ifndef SAP_COPYRIGHT_END
+-#define SAP_COPYRIGHT_END     " - 2012"
++#define SAP_COPYRIGHT_END     " - 2015"
+ #endif
+ #ifndef SAP_FILE_VERS
+-#define SAP_FILE_VERS         0, 9, 7, 4
++#define SAP_FILE_VERS         0, 9, 8, 9
+ #endif
+ #ifndef SAP_FILE_VERS_STR
+-#define SAP_FILE_VERS_STR     "0, 9, 7, 4\0"
++#define SAP_FILE_VERS_STR     "0, 9, 8, 9\0"
+ #endif
+ #ifndef SAP_PRODUCT_VERS
+-#define SAP_PRODUCT_VERS      0, 9, 7, 4
++#define SAP_PRODUCT_VERS      0, 9, 8, 9
+ #endif
+ #ifndef SAP_PRODUCT_VERS_STR
+-#define SAP_PRODUCT_VERS_STR  "0, patch 97, changelist 0\0"
++#define SAP_PRODUCT_VERS_STR  "0, patch 98, changelist 0\0"
+ #endif
+ #ifndef SAP_PLATFORM
+ #define SAP_PLATFORM          "ntintel\0"
+diff --bs clamsap/clamsap-0.9.8.0.tar.gz/src/vsmime.c clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsmime.c
+--- clamsap/clamsap-0.9.8.0.tar.gz/src/vsmime.c
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap-0.98.9.tar.gz/src/vsmime.c
+@@ -79,7 +79,8 @@
+     UNKNOWN,
+     BEGIN,
+     SEARCH,
+-    LOOKAHEAD
++    LOOKAHEAD,
++    ENDSIGNATURE
+ } TYPE_STATUS;
+ /*--------------------------------------------------------------------*/
+ /* helper functions                                                   */
+@@ -95,8 +96,7 @@
+     struct stat   _lStat;
+     size_t         len = 0;
+ #endif
+-    if(clptr.bLoaded == TRUE) goto libmagic;
+-    memset(pMagicFPtr,0,sizeof(magic_function_pointers));
++
+ #ifdef _WIN32
+     clptr.dll_hdl = 0;
+     clptr.bLoaded = TRUE;
+@@ -107,6 +107,9 @@
+     const char  *lpLibrary = "libmagic.so";
+     const char  *lpLibPath = "/usb/lib";
+ 
++    if(clptr.bLoaded == TRUE) goto libmagic;
++    memset(pMagicFPtr,0,sizeof(magic_function_pointers));
++
+     snprintf((char*)_conf,MAX_PATH_LN,"%s/%s",lpLibPath,lpLibrary);
+     i = stat(_conf,&amp;_lStat);
+     if(i &lt; 0) {
+@@ -179,6 +182,10 @@
+     void * pFunc;
+     const char  *lpLibrary = "libmagic.sl";
+     const char  *lpLibPath = "/usb/lib";
++
++    if(clptr.bLoaded == TRUE) goto libmagic;
++    memset(pMagicFPtr,0,sizeof(magic_function_pointers));
++
+     snprintf((char*)_conf,MAX_PATH_LN,"%s/%s",lpLibPath,lpLibrary);
+     i = stat(_conf,&amp;_lStat);
+     if(i &lt; 0) {
+@@ -241,6 +248,10 @@
+     void * pFunc;
+     const char  *lpLibrary = "libmagic.so";
+     const char  *lpLibPath = "/usb/lib";
++
++    if(clptr.bLoaded == TRUE) goto libmagic;
++    memset(pMagicFPtr,0,sizeof(magic_function_pointers));
++
+     snprintf((char*)_conf,MAX_PATH_LN,"%s/%s",lpLibPath,lpLibrary);
+     i = stat(_conf,&amp;_lStat);
+     if(i &lt; 0) {
+@@ -347,8 +358,12 @@
+     return pMimeType;
+ #else
+     const char *pMTyp = 0;
+-    if(pMagicFPtr-&gt;bLoaded) {
+-        pMTyp = pMagicFPtr-&gt;fp_magic_file(gMagic, (const char *)pszFileName);
++    if(pMagicFPtr &amp;&amp; pMagicFPtr-&gt;bLoaded) {
++       magic_t lMagic = pMagicFPtr-&gt;fp_magic_open(0x000020 | 0x000200 | 0x000010 | 0x000400);
++       pMagicFPtr-&gt;fp_magic_load(lMagic,NULL);
++       pMTyp = pMagicFPtr-&gt;fp_magic_file(lMagic, (const char *)pszFileName);
++       pMagicFPtr-&gt;fp_magic_close(lMagic);
++       /*pMTyp = pMagicFPtr-&gt;fp_magic_file(gMagic, (const char *)pszFileName);*/
+     }
+     if(pMTyp == 0) return NULL;
+     SETSTRING(pMimeType,pMTyp);
+@@ -737,8 +752,8 @@
+         ptr = pByte + i;
+         if(text == TRUE) {
+             if(0 == isprint((int)*ptr)) {
+-                int n = (int)*ptr;
+-                if(n == '\n' || n == '\r' || n == '\t' || n == EOF) continue;
++                unsigned int n = (unsigned int)*ptr;
++                if(n == '\n' || n == '\r' || n == '\t') continue;
+                 if((*st_type) == VS_OT_HTML || (*st_type) == VS_OT_XML || (*st_type) == VS_OT_XSL ||
+                     tFileType == VS_OT_HTML || tFileType == VS_OT_XML || tFileType == VS_OT_XSL) {
+                     text = isHTMLCharacter(n);
+@@ -796,8 +811,8 @@
+                 if(lByte &gt; 5 &amp;&amp; 0 == memcmp(ptr,"\x89PNG",4)) { (*st_tEnd) = (*st_type) = VS_OT_PNG; CLEANUP(VSA_OK); }
+                 break;
+             case 'G':
+-                if(lByte &gt; 5 &amp;&amp; 0 == memcmp(ptr,"GIF8",4)) { (*st_tEnd) = (*st_type) = VS_OT_GIF; CLEANUP(VSA_OK); }
+-                if(lByte &gt; 5 &amp;&amp; 0 == memcmp(ptr,"GIF",3)) { (*st_tEnd) = (*st_type) = VS_OT_IMAGE; CLEANUP(VSA_OK); }
++                if(lByte &gt; 5 &amp;&amp; 0 == memcmp(ptr,"GIF8",4)) { (*st_tEnd) = (*st_type) = VS_OT_GIF;  }
++                if(lByte &gt; 5 &amp;&amp; 0 == memcmp(ptr,"GIF",3)) { (*st_tEnd) = (*st_type) = VS_OT_IMAGE;  }
+                 break;
+             case 'i':
+                 if(lByte &gt; 5 &amp;&amp; 0 == memcmp(ptr,"iTut",4)) { (*st_tEnd) = (*st_type) = VS_OT_SIM; CLEANUP(VSA_OK); }
+@@ -839,6 +854,9 @@
+                     if((lByte - i) &gt; 10 &amp;&amp; 0 == memcmp(ptr,"META-INF/",9)) { (*st_tEnd) = (*st_type) = VS_OT_JAR; CLEANUP(VSA_OK); }
+                     if((lByte - i) &gt; 12 &amp;&amp; 0 == memcmp(ptr,"MANIFEST.MF",11)) { (*st_tEnd) = (*st_type) = VS_OT_JAR; CLEANUP(VSA_OK); }
+                     if((lByte - i) &gt; 7 &amp;&amp; 0 == memcmp(ptr,".class",6)) { (*st_tEnd) = (*st_type) = VS_OT_JAR; CLEANUP(VSA_OK); }
++                } else if ((*st_type) &gt;= VS_OT_IMAGE &amp;&amp; (*st_type) &lt; VS_OT_VIDEO) {
++                    if((lByte - i) &gt; 10 &amp;&amp; 0 == memcmp(ptr,"META-INF/",9)) { (*st_tEnd) = VS_OT_JAR;  }
++                    if((lByte - i) &gt; 12 &amp;&amp; 0 == memcmp(ptr,"MANIFEST.MF",11)) { (*st_tEnd) = VS_OT_JAR;  }
+                 }
+                 break;
+             case 'A':
+@@ -861,6 +879,18 @@
+                     if((lByte - i) &gt; 30 &amp;&amp; 0 == memcmp(ptr,"?xml-stylesheet",15)) { (*st_tEnd) = (*st_type) = VS_OT_XSL; CLEANUP(VSA_OK); }
+                 }
+                 break;
++            case 'P':
++                if((*st_type) == VS_OT_ZIP &amp;&amp; (tFileType == VS_OT_JAR || tFileType == VS_OT_MSO)) {
++                    if((lByte - i) &gt; 6 &amp;&amp; 0 == memcmp(ptr,"PK\005\006",4)) { (*st_tEnd) = (*st_type); status = ENDSIGNATURE; }
++
++                } else if ((*st_type) &gt;= VS_OT_IMAGE &amp;&amp; (*st_type) &lt; VS_OT_VIDEO) {
++                    if((lByte - i) &gt; 6 &amp;&amp; 0 == memcmp(ptr,"PK\005\006",4)) {
++                        if((*st_tEnd)==VS_OT_JAR) { (*st_type) = (*st_tEnd) = VS_OT_JAR; }
++                        else { (*st_type) = (*st_tEnd) = VS_OT_ZIP; }
++                        status = ENDSIGNATURE;
++                    }
++                }
++                break;
+             default: break;
+             }
+             break;
+@@ -878,6 +908,17 @@
+             default: status = SEARCH; break;
+             }
+             break;
++       case ENDSIGNATURE:
++            switch(*ptr)
++            {
++            case '\000':
++                if((*st_type) == VS_OT_ZIP || (*st_type) == VS_OT_JAR || (*st_type) == VS_OT_MSO || (*st_tEnd) == VS_OT_JAR || (*st_tEnd) == VS_OT_ZIP || tFileType == VS_OT_JAR || tFileType == VS_OT_MSO) {
++                    if((lByte - i) == 2 &amp;&amp; 0 == memcmp(ptr,"\000\000",2)) { (*st_tEnd) = (*st_type); CLEANUP(VSA_OK); }
++                }
++                break;
++            default: break;
++            }
++            break;
+         default:
+             status = UNKNOWN;
+             break;
+@@ -912,6 +953,8 @@
+             else {
+                 if((*st_type) == VS_OT_ZIP &amp;&amp; (*st_tEnd) == VS_OT_UNKNOWN)
+                     (*st_type) = VS_OT_ZIP;
++                else if((*st_type) == VS_OT_PDF &amp;&amp; (*st_tEnd) == VS_OT_UNKNOWN)
++                    (*st_type) = VS_OT_PDF;
+                 else
+                     (*st_type) = VS_OT_BINARY;
+             }
+@@ -1141,12 +1184,35 @@
+     return (i == len_input - len_search) ? 0 : input;
+ } /* memstr */
+ 
++static void * memstr2(const char *l,size_t l_len,const char *s,size_t s_len)
++{
++    char *cur = 0,*last = 0;
++    const char *cl = (const char *)l;
++    const char *cs = (const char *)s;
++
++    if(l_len == 0 || s_len == 0)
++        return NULL;
++
++    if(l_len &lt; s_len)
++        return NULL;
++
++    if(s_len == 1)
++        return memchr(l,(int)*cs,l_len);
++
++    last = (char *)cl + l_len - s_len;
++
++    for(cur = (char *)cl; cur &lt;= last; cur++) {
++        if(cur[0] == cs[0] &amp;&amp; memcmp(cur,cs,s_len) == 0) {
++            return cur;
++        }
++    }
++    return NULL;
++}
+ VSA_RC check4ActiveContent(
+     PByte           pObject,
+     size_t          lObjectSize,
+     VS_OBJECTTYPE_T tObjectType)
+ {
+-    Byte   c;
+     char  *p = NULL;
+     char  *str = (char*)pObject;
+     size_t snifflen = lObjectSize &gt; 1024 ? 1024 : lObjectSize;
+@@ -1155,83 +1221,71 @@
+ 
+     if(tObjectType &gt; VS_OT_UNKNOWN &amp;&amp; tObjectType &lt; VS_OT_IMAGE)
+     {
+-        c = *(pObject + lObjectSize);
+-        *(pObject + lObjectSize) = 0;
+-        p = strstr(str,(const char*)"&lt;script");
++        p = memstr2(str,lObjectSize,(const char*)"&lt;script",7);
+         if(p == NULL)
+-            p = strstr(str,(const char*)"&lt;applet");
++            p = memstr2(str,lObjectSize,(const char*)"&lt;applet",7);
+         if(p == NULL)
+-            p = strstr(str,(const char*)"&lt;object");
++            p = memstr2(str,lObjectSize,(const char*)"&lt;object",7);
+         if(p == NULL)
+-            p = strstr(str,(const char*)"&lt;embed");
++            p = memstr2(str,lObjectSize,(const char*)"&lt;embed",6);
+         if(p == NULL)
+-            p = strstr(str,(const char*)"PHNjcmlwdD");
++            p = memstr2(str,lObjectSize,(const char*)"PHNjcmlwdD",10);
+         if(p == NULL)
+-            p = strstr(str,(const char*)"javascript:");
++            p = memstr2(str,lObjectSize,(const char*)"javascript:",11);
+         if(tObjectType == VS_OT_HTML || tObjectType == VS_OT_XHTML || tObjectType == VS_OT_XSL)
+         {
+             if(p == NULL)
+-                p = strstr(str,(const char*)"onclick=\"");
++                p = memstr2(str,lObjectSize,(const char*)"onclick=\"",9);
+             if(p == NULL)
+-                p = strstr(str,(const char*)"ondblclick=\"");
++                p = memstr2(str,lObjectSize,(const char*)"ondblclick=\"",12);
+             if(p == NULL)
+-                p = strstr(str,(const char*)"onkeydown=\"");
++                p = memstr2(str,lObjectSize,(const char*)"onkeydown=\"",11);
+             if(p == NULL)
+-                p = strstr(str,(const char*)"onkeyup=\"");
++                p = memstr2(str,lObjectSize,(const char*)"onkeyup=\"",9);
+             if(p == NULL)
+-                p = strstr(str,(const char*)"onmouseup=\"");
++                p = memstr2(str,lObjectSize,(const char*)"onmouseup=\"",11);
+             if(p == NULL)
+-                p = strstr(str,(const char*)"onmouseover=\"");
++                p = memstr2(str,lObjectSize,(const char*)"onmouseover=\"",13);
+             if(p == NULL)
+-                p = strstr(str,(const char*)"onmousemove=\"");
++                p = memstr2(str,lObjectSize,(const char*)"onmousemove=\"",13);
+             if(p == NULL)
+-                p = strstr(str,(const char*)"onmouseout=\"");
++                p = memstr2(str,lObjectSize,(const char*)"onmouseout=\"",12);
+             if(p == NULL)
+-                p = strstr(str,(const char*)"onkeypress=\"");
++                p = memstr2(str,lObjectSize,(const char*)"onkeypress=\"",12);
+             if(p == NULL)
+-                p = strstr(str,(const char*)"onload=\"");
++                p = memstr2(str,lObjectSize,(const char*)"onload=\"",8);
+             if(p == NULL)
+-                p = strstr(str,(const char*)"onunload=\"");
++                p = memstr2(str,lObjectSize,(const char*)"onunload=\"",10);
+             if(tObjectType == VS_OT_XSL)
+             {
+                 if(p == NULL)
+-                    p = strstr(str,(const char*)"&lt;xsl:attribute name=\"onload\"&gt;");
++                    p = memstr2(str,lObjectSize,(const char*)"&lt;xsl:attribute name=\"onload\"&gt;",29);
+                 if(p == NULL)
+-                    p = strstr(str,(const char*)"&lt;xsl:attribute name=\"onunload\"&gt;");
++                    p = memstr2(str,lObjectSize,(const char*)"&lt;xsl:attribute name=\"onunload\"&gt;",31);
+             }
+         }
+-        *(pObject + lObjectSize) = c;
+     }
+     else if(tObjectType == VS_OT_PDF)
+     {
+-        c = *(pObject + lObjectSize);
+-        *(pObject + lObjectSize) = 0;
+-        p = strstr(str,(const char*)"/JS");
++        p = memstr2(str,lObjectSize,(const char*)"/JS",3);
+         if(p == NULL)
+-            p = strstr(str,(const char*)"/OpenAction");
+-        *(pObject + lObjectSize) = c;
++            p = memstr2(str,lObjectSize,(const char*)"/OpenAction",11);
+     }
+     else if(tObjectType == VS_OT_MSO)
+     {
+-        c = *(pObject + lObjectSize);
+-        *(pObject + lObjectSize) = 0;
+         p = memstr(str,(const unsigned char*)".class",(int)lObjectSize,6);
+         if(p == NULL)
+             p = memstr(str,(const unsigned char*)"vbaProject.bin",(int)lObjectSize,14);
+-        *(pObject + lObjectSize) = c;
+     }
+     else
+     {
+-        c = *(pObject + snifflen);
+-        *(pObject + snifflen) = 0;
+-        p = strstr(str,(const char*)"&lt;script");
++        p = memstr2(str,snifflen,(const char*)"&lt;script",7);
+         if(p == NULL)
+-            p = strstr(str,(const char*)"&lt;applet");
++            p = memstr2(str,snifflen,(const char*)"&lt;applet",7);
+         if(p == NULL)
+-            p = strstr(str,(const char*)"&lt;object");
++            p = memstr2(str,snifflen,(const char*)"&lt;object",7);
+         if(p == NULL)
+-            p = strstr(str,(const char*)"&lt;embed");
+-        *(pObject + snifflen) = c;
++            p = memstr2(str,snifflen,(const char*)"&lt;embed",6);
+     }
+     if(p != NULL)
+     {
+diff --bs clamsap/clamsap.changes clamsap.SUSE_SLE-11-SP4_Update/clamsap.changes
+--- clamsap/clamsap.changes
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap.changes
+@@ -1,4 +1,16 @@
+ -------------------------------------------------------------------
++Mon Dec 28 13:03:23 UTC 2015 - varkoly@suse.com
++
++- Update to Version 0.98.9
++- Improve MIME check
++- Fix SAP archive decompression
++- Enhance error messages in case of initialisation errors.
++- Create default sym.link for libclamdsap
++- Fix problem, if libmagic can not be found in VsaStartup
++- Security fix for compression, see CVE-2015-2282 and CVE-2015-2278
++- Enhance buffer scan in libclamdsap
++
++-------------------------------------------------------------------
+ Tue May 12 13:27:36 UTC 2015 - varkoly@suse.com
+ 
+ - Support of NW-VSI 2.00
+diff --bs clamsap/clamsap.spec clamsap.SUSE_SLE-11-SP4_Update/clamsap.spec
+--- clamsap/clamsap.spec
++++ clamsap.SUSE_SLE-11-SP4_Update/clamsap.spec
+@@ -19,7 +19,7 @@
+ Summary:        Virus Scan Adapter (VSA) for ClamAV
+ 
+ Name:           clamsap
+-Version:        0.9.8.0
++Version:        0.98.9
+ Release:        0.&lt;RELEASE5&gt;
+ License:        GPL (clamsap), MIT (clamdsap)
+ Group:          Productivity/Security
+@@ -29,6 +29,7 @@
+ Requires:       clamav &gt;= 0.96
+ BuildRequires:  clamav &gt;= 0.96
+ BuildRequires:  openssl-devel
++BuildRequires:  libopenssl-devel
+ BuildRequires:  gcc-c++
+ 
+ %description
+@@ -52,7 +53,7 @@
+ mkdir -p $RPM_BUILD_ROOT
+ make install DESTDIR=$RPM_BUILD_ROOT
+ rm $RPM_BUILD_ROOT/%_libdir/*.la
+-rm $RPM_BUILD_ROOT/%_libdir/*.a
++#rm $RPM_BUILD_ROOT/%_libdir/*.a
+ 
+ %post -p /sbin/ldconfig
+ 

@@ -1,0 +1,75 @@
+#
+# spec file for package smrt
+#
+# Copyright (c) 2016 SUSE LINUX GmbH, Nuernberg, Germany.
+#
+# All modifications and additions to the file contributed by third parties
+# remain the property of their copyright owners, unless otherwise agreed
+# upon. The license for this file, and modifications and additions to the
+# file, is the same license as for the pristine package itself (unless the
+# license for the pristine package is not an Open Source License, in which
+# case the license is the MIT License). An "Open Source License" is a
+# license that conforms to the Open Source Definition (Version 1.9)
+# published by the Open Source Initiative.
+
+# Please submit bugfixes or comments via http://bugs.opensuse.org/
+#
+
+Name:           smrt
+Version:        __VERSION__
+Release:        0
+License:        MIT
+Summary:        SUSE Maintenance Reject Tool
+Url:            https://gitlab.suse.de/rneuhauser/smrt
+Group:          Productivity/Other
+Source:         %{name}-%{version}.tar.gz
+BuildRequires:  filesystem
+BuildArch:      noarch
+BuildRoot:      %_tmppath/%name-%version-build
+Requires:       curl >= 7.37
+Requires:       haveopt >= 0.4
+Requires:       openssh
+Requires:       osc
+Requires:       perl
+Requires:       subversion
+Requires:       xmlstarlet >= 1.5
+Requires:       zsh >= 5.0.5
+BuildRequires:  cram >= 0.6
+BuildRequires:  curl >= 7.37
+BuildRequires:  haveopt >= 0.4
+BuildRequires:  perl
+BuildRequires:  subversion
+BuildRequires:  xmlstarlet >= 1.5
+BuildRequires:  zsh >= 5.0.5
+
+%description
+SMRT is a command-line tool for SUSE QAM testers.  SMRT provides
+a convenient interface to a range of remote services used during
+the testing of a maintenance update, from manipulating the review
+request in IBS through bugfix verification and regression tests
+to accessing the repository of test results.
+
+%prep
+%setup -q
+
+%build
+%configure
+make
+
+%check
+make check
+
+%install
+make install DESTDIR=%{buildroot}
+
+%files
+%defattr(-,root,root)
+%dir %{_datadir}/%{name}
+%config %{_sysconfdir}/smrt
+%{_bindir}/smrt
+%{_bindir}/smrt-*
+%{_datadir}/%{name}/smrt.*.zsh
+%{_datadir}/%{name}/smrt.*.pl
+#%{_mandir}/man1/smrt.1.gz
+
+%changelog

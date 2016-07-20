@@ -1,0 +1,2 @@
+bnc977669 After badlock: smbclient connection to NetApp filer fails
+bnc979268 winbind errors gss_init_sec_context failed

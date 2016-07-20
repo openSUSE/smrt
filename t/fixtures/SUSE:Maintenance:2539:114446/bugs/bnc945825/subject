@@ -1,0 +1,1 @@
+VUL-1:  CVE-2015-6937: kernel-source:  NULL pointer dereference in net/rds/connection.c

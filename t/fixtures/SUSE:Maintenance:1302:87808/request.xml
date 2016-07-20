@@ -1,0 +1,56 @@
+<request id="87808">
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1302" package="rsync.SUSE_SLE-12_Update"/>
+    <target project="SUSE:SLE-12:Update" package="rsync.1302"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1302" package="patchinfo"/>
+    <target project="SUSE:SLE-12:Update" package="patchinfo.1302"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1302" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DESKTOP:12-SP1:x86_64" package="patchinfo.1302"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1302" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DESKTOP:12:x86_64" package="patchinfo.1302"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1302" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12-SP1:ppc64le" package="patchinfo.1302"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1302" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12-SP1:s390x" package="patchinfo.1302"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1302" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12-SP1:x86_64" package="patchinfo.1302"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1302" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12:ppc64le" package="patchinfo.1302"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1302" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12:s390x" package="patchinfo.1302"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:1302" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12:x86_64" package="patchinfo.1302"/>
+  </action>
+  <state name="review" who="leonardocf" when="2016-01-08T10:48:10">
+    <comment/>
+  </state>
+  <review state="accepted" when="2016-01-08T10:40:00" who="leonardocf" by_group="qam-auto">
+    <comment>reviewers added: qam-sle</comment>
+    <history who="leonardocf" when="2016-01-08T10:48:10">
+      <description>Review got accepted</description>
+      <comment>reviewers added: qam-sle</comment>
+    </history>
+  </review>
+  <review state="new" by_group="qam-sle">
+    <comment/>
+  </review>
+  <description>requesting release</description>
+</request>

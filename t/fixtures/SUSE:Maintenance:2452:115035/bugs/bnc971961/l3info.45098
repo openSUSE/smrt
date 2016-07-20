@@ -1,0 +1,9 @@
+incident=45098
+summary=yast2-cluster module wasn't able to generate proper corosync.conf since it couldn't process IPv6 addresses correctly.
+probability=n/a
+impact=low
+patch=correct
+reproducer=The steps are in [1], there up to the last case (Unicast (2/2)) the fix should work for this.
+reproducer=
+reproducer=[1] https://bugzilla.suse.com/show_bug.cgi?id=971961#c0
+requires_3dparty=no

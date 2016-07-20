@@ -1,0 +1,42 @@
+<resultlist state="30c1baf088f06cc56f88da68c2ba4694">
+  <result project="SUSE:Maintenance:2569" repository="SUSE_Updates_SLE-Module-Containers_12_x86_64" arch="x86_64" code="published" state="published">
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="rubygem-rake.SUSE_SLE-12_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2569" repository="SUSE_Updates_SLE-Module-Containers_12_x86_64" arch="i586" code="published" state="published">
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="rubygem-rake.SUSE_SLE-12_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2569" repository="SUSE_SLE-12_Update" arch="i586" code="published" state="published">
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="rubygem-rake.SUSE_SLE-12_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2569" repository="SUSE_SLE-12_Update" arch="x86_64" code="published" state="published">
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="rubygem-rake.SUSE_SLE-12_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2569" repository="SUSE_SLE-12_Update" arch="s390" code="published" state="published">
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="rubygem-rake.SUSE_SLE-12_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2569" repository="SUSE_SLE-12_Update" arch="s390x" code="published" state="published">
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="rubygem-rake.SUSE_SLE-12_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2569" repository="SUSE_SLE-12_Update" arch="ppc64le" code="published" state="published">
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="rubygem-rake.SUSE_SLE-12_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2569" repository="SUSE_SLE-12_Update" arch="aarch64" code="published" state="published">
+    <status package="SLE-Module-Containers_12_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="rubygem-rake.SUSE_SLE-12_Update" code="locked" />
+  </result>
+</resultlist>

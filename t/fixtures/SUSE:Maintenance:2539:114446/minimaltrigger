@@ -1,0 +1,126 @@
+#
+# the following lists of packages must be tested on systems with minimal
+# software selection and having no updates applied other than the maintenance
+# update under test
+#
+# tests must be conducted on x86_64 at least
+#
+
+#
+# I) boot loader
+#
+
+grub
+trustedgrub
+lilo
+elilo
+efibootmgr
+gnu-efi
+perl-Bootloader
+mkinitrd
+yast2-bootloader
+bootcycle
+master-boot-code
+
+#
+# II) kernel
+#
+
+module-init-tools
+
+# kernel* on sle11sp2
+kernel-default       
+kernel-default-base  
+kernel-ec2           
+kernel-ec2-base      
+kernel-firmware      
+kernel-source        
+kernel-syms          
+kernel-trace         
+kernel-trace-base    
+kernel-xen           
+kernel-xen-base      
+kernel-pae           
+kernel-pae-base      
+kernel-pae-devel     
+kernel-ppc64         
+kernel-ppc64-base    
+
+# kernel* on sle10sp4
+kernel-bigsmp
+kernel-default
+kernel-iseries64
+kernel-kdump
+kernel-kdumppae
+kernel-ppc64
+kernel-smp
+kernel-source
+kernel-syms
+kernel-um
+kernel-vmi
+kernel-vmipae
+kernel-xen
+kernel-xenpae
+
+# *-kmp-* entirely dropped from this list
+
+#
+# III) storage
+#
+
+lvm2
+device-mapper
+udev
+libudev0
+libvolume_id1
+libgudev-1_0-0
+libgudev-mm-1_0-0
+udev-mm-rules
+libudev-mm0
+hal
+hal-32bit
+multipath-tools
+kpartx
+sg3_utils
+mdadm
+dmraid
+libdmraid-events0
+ipvsadm
+
+#
+# IV) filesystems
+#
+
+e2fsprogs
+reiserfs
+xfsprogs
+btrfsprogs
+ocfs2-tools
+
+#
+# V) software mgmt
+#
+
+rpm
+libzypp
+libsatsolver
+zypper
+gpg*
+curl
+bash
+yast2-online-update
+
+#
+# VI) misc
+#
+
+glibc
+glibc-32bit
+pam
+pam-modules
+sysconfig
+procps
+microcode_ctl
+insserv 
+
+# EOF

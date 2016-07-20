@@ -1,0 +1,7 @@
+<person>
+  <login>doctor</login>
+  <email>doctor@example.com</email>
+  <realname>Doctor Smurf</realname>
+  <state>confirmed</state>
+  <globalrole>User</globalrole>
+</person>

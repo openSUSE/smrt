@@ -1,0 +1,1 @@
+VUL-0: CVE-2016-2543: kernel: ALSA: seq: Fix missing NULL check at remove_events ioctl

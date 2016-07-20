@@ -1,0 +1,8 @@
+assumed_issuer = wtf
+bugzilla_url = https://bugzilla.suse.com
+issuer_apiurls = SUSE:https://api.example.com openSUSE:https://api.example.org
+l3db_creds = smrt:mtui
+l3db_url = http://l3db.example.org/api/1/raederwerk/?incident__bug_id__in=
+metadata_url = file://$FIXTURES
+testplatforms_url = file://$FIXTURES/testplatforms.pm
+testreport_repository = file://$HOME/.svnrepo

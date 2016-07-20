@@ -1,0 +1,76 @@
+SUMMARY: PASSED/FAILED
+
+comment: (none)
+
+$Author$
+
+Products: SLE-DEBUGINFO 11-SP1-TERADATA (x86_64), SLE-DEBUGINFO 11-SP3-TERADATA (x86_64), SLE-DEBUGINFO 11-SP4 (i386, ia64, ppc64, s390x, x86_64), SLE-SDK 11-SP4 (i386, ia64, ppc64, s390x, x86_64), SLE-SERVER 11-SP1-TERADATA (x86_64), SLE-SERVER 11-SP3-TERADATA (x86_64), SLE-SERVER 11-SP4 (i386, ia64, ppc64, s390x, x86_64)
+Category: recommended
+Rating: low
+Packager: clumsy@suse.com
+Bugs: 978972, 981957
+ReviewRequestID: SUSE:Maintenance:2684:115702
+Repository: http://download.suse.de/ibs/SUSE:/Maintenance:/2684/
+Packages: glib2 = 2.22.5-0.8.26.1, glib2-devel = 2.22.5-0.8.26.1, glib2-devel-32bit = 2.22.5-0.8.26.1, glib2-doc = 2.22.5-0.8.26.1, glib2-lang = 2.22.5-0.8.26.1, libgio-2_0-0 = 2.22.5-0.8.26.1, libgio-2_0-0-32bit = 2.22.5-0.8.26.1, libgio-2_0-0-x86 = 2.22.5-0.8.26.1, libgio-fam = 2.22.5-0.8.26.1, libglib-2_0-0 = 2.22.5-0.8.26.1, libglib-2_0-0-32bit = 2.22.5-0.8.26.1, libglib-2_0-0-x86 = 2.22.5-0.8.26.1, libgmodule-2_0-0 = 2.22.5-0.8.26.1, libgmodule-2_0-0-32bit = 2.22.5-0.8.26.1, libgmodule-2_0-0-x86 = 2.22.5-0.8.26.1, libgobject-2_0-0 = 2.22.5-0.8.26.1, libgobject-2_0-0-32bit = 2.22.5-0.8.26.1, libgobject-2_0-0-x86 = 2.22.5-0.8.26.1, libgthread-2_0-0 = 2.22.5-0.8.26.1, libgthread-2_0-0-32bit = 2.22.5-0.8.26.1, libgthread-2_0-0-x86 = 2.22.5-0.8.26.1, pango = 1.26.2-1.5.1, pango-32bit = 1.26.2-1.5.1, pango-devel = 1.26.2-1.5.1, pango-devel-32bit = 1.26.2-1.5.1, pango-doc = 1.26.2-1.5.1, pango-x86 = 1.26.2-1.5.1
+SRCRPMs: glib2, pango
+Suggested Test Plan Reviewers: bnc-team-gnome@forge.provo.novell.com
+Testplatform: base=sles(major=11,minor=sp4);arch=[i386,s390x,x86_64]
+Testplatform: base=sles(major=11,minor=sp4);arch=[i386,s390x,x86_64];addon=sdk(major=11,minor=sp4)
+
+#############################
+Test results by product-arch:
+#############################
+
+
+########################
+notes for/by the tester:
+########################
+
+Bug #978972 ("[build1492] Installation of libpango-1_0-0-32bit failed"):
+------------------------------------------------------------------------
+
+https://bugzilla.suse.com/show_bug.cgi?id=978972
+
+REPRODUCER_PRESENT:     YES/NO
+REPRODUCER_COVERAGE:    YES/NO
+REPRODUCER_APPLICABLE:  YES/NO
+REPRODUCER_WORKING:     YES/NO
+REPRODUCER_AUTOMATABLE: YES/NO
+
+...
+
+Bug #981957 ("glib2-devel missed a dependency pcre-devel"):
+-----------------------------------------------------------
+
+https://bugzilla.suse.com/show_bug.cgi?id=981957
+
+REPRODUCER_PRESENT:     YES/NO
+REPRODUCER_COVERAGE:    YES/NO
+REPRODUCER_APPLICABLE:  YES/NO
+REPRODUCER_WORKING:     YES/NO
+REPRODUCER_AUTOMATABLE: YES/NO
+
+...
+
+regression tests:
+-----------------
+List of testcases in Testopia:
+
+https://bugzilla.suse.com/tr_list_cases.cgi?tags_type=anyexact&tags=packagename_glib2,packagename_glib2-devel,packagename_glib2-devel-32bit,packagename_glib2-doc,packagename_glib2-lang,packagename_libgio-2_0-0,packagename_libgio-2_0-0-32bit,packagename_libgio-2_0-0-x86,packagename_libgio-fam,packagename_libglib-2_0-0,packagename_libglib-2_0-0-32bit,packagename_libglib-2_0-0-x86,packagename_libgmodule-2_0-0,packagename_libgmodule-2_0-0-32bit,packagename_libgmodule-2_0-0-x86,packagename_libgobject-2_0-0,packagename_libgobject-2_0-0-32bit,packagename_libgobject-2_0-0-x86,packagename_libgthread-2_0-0,packagename_libgthread-2_0-0-32bit,packagename_libgthread-2_0-0-x86,packagename_pango,packagename_pango-32bit,packagename_pango-devel,packagename_pango-devel-32bit,packagename_pango-doc,packagename_pango-x86
+
+(put your details here)
+
+source code change review:
+--------------------------
+(put here the assessment of the spec + source changes when compared to the latest release)
+
+zypper update log:
+------------------
+put here the output of the following commands:
+
+export LANG=
+zypper lr -puU
+zypper refresh
+zypper patches | grep :p=2684
+zypper patches | awk -F "|" '/:p=2684>/ { print $2; }' | while read p; do zypper -n install -l -y -t patch $p; done
+zypper patches | grep :p=2684

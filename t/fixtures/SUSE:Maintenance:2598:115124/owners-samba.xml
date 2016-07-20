@@ -1,0 +1,5 @@
+<collection>
+  <owner rootproject="SUSE" project="SUSE:SLE-12:GA" package="samba">
+    <person name="drummer" role="bugowner"/>
+  </owner>
+</collection>

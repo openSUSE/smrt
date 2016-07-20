@@ -1,0 +1,32 @@
+<request id="115035">
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2452" package="yast2-cluster.SUSE_SLE-12-SP1_Update"/>
+    <target project="SUSE:SLE-12-SP1:Update" package="yast2-cluster.2452"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2452" package="patchinfo"/>
+    <target project="SUSE:SLE-12-SP1:Update" package="patchinfo.2452"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2452" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-HA:12-SP1:s390x" package="patchinfo.2452"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2452" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-HA:12-SP1:x86_64" package="patchinfo.2452"/>
+  </action>
+  <state name="review" who="maintenance-robot" when="2016-05-24T08:50:04">
+    <comment/>
+  </state>
+  <review state="accepted" when="2016-05-24T08:48:57" who="maintenance-robot" by_group="qam-auto">
+    <comment>reviewers added: qam-ha</comment>
+    <history who="maintenance-robot" when="2016-05-24T08:50:04">
+      <description>Review got accepted</description>
+      <comment>reviewers added: qam-ha</comment>
+    </history>
+  </review>
+  <review state="new" by_group="qam-ha">
+    <comment/>
+  </review>
+  <description/>
+</request>

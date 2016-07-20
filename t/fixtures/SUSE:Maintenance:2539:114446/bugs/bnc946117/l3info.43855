@@ -1,0 +1,7 @@
+incident=43855
+summary=On certain load failures, nf_contrack can fail to properly clean up (properly remove) one of it's pernet_subsys list entries.  This leaves the list corrupt as the memory for the entry is released.
+probability=low
+impact=medium
+patch=correct
+reproducer=See comment #18
+requires_3dparty=no

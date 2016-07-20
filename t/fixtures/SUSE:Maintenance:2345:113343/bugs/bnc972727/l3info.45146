@@ -1,0 +1,7 @@
+incident=45146
+summary=See SG:43793 (this is a regression incident).
+probability=n/a
+impact=low
+patch=correct
+reproducer=Same as SG:43793 (this is a regression).
+requires_3dparty=no

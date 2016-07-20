@@ -1,0 +1,21 @@
+<patchinfo incident="2598">
+  <issue id="979268" tracker="bnc">winbind errors gss_init_sec_context failed</issue>
+  <issue id="977669" tracker="bnc">After badlock: smbclient connection to NetApp filer fails</issue>
+  <category>recommended</category>
+  <rating>important</rating>
+  <packager>drummer</packager>
+  <description>
+This update for Samba provides the following fixes:
+
+- Fix libads' record session expiry for spnego sasl binds. (bsc#979268)
+- Fix NT_STATUS_ACCESS_DENIED when accessing windows public share.
+- Only validate MIC if "map to guest" is not being used.
+- NetAPP SMB servers don't negotiate NTLMSSP_SIGN. (bsc#977669)
+- Fix non-working anonymous smb connections.
+- Handle broken mechListMIC response from Windows 2000.
+- wbinfo -u or net ads search doesn't work anymore.
+- Fix regressions regarding the NTLMSSP hardening of CVE-2016-2110.
+- Allow Domain member resolve trusted domains' users.
+</description>
+  <summary>Recommended update for samba</summary>
+</patchinfo>

@@ -1,0 +1,2627 @@
+<request id="113343" actions="0">
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="systemd-mini.SUSE_SLE-12_Update"/>
+  <target project="SUSE:SLE-12:Update" package="systemd-mini"/>
+<sourcediff key="301d34c077f3cc8450a44def870f77a1">
+  <old project="SUSE:SLE-12:Update" package="systemd-mini.1524" rev="1" srcmd5="f0083c2123650f6d4708b437fd61aca0"/>
+  <new project="SUSE:Maintenance:2345" package="systemd-mini.SUSE_SLE-12_Update" rev="6" srcmd5="5cb6795202843f7f4eb929bcfeea7bf7"/>
+  <files>
+    <file state="changed">
+      <old name="_link" md5="85bd7b2d3b0aab0da15e3ef3728712bf" size="45"/>
+      <new name="_link" md5="aeab1e5526c66fd8ab80d48571d213c9" size="59"/>
+      <diff lines="5">@@ -1 +1 @@
+-&lt;link package="systemd.1524" cicount="copy"/&gt;
+\ No newline at end of file
++&lt;link package="systemd.SUSE_SLE-12_Update" cicount="copy"/&gt;
+\ No newline at end of file
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="systemd.SUSE_SLE-12_Update"/>
+  <target project="SUSE:SLE-12:Update" package="systemd"/>
+<sourcediff key="50ef76cbeec1c681809f71fc3dcd8e24">
+  <old project="SUSE:SLE-12:Update" package="systemd.1524" rev="1" srcmd5="c3c7c0eb11f58f5de2cf9c46b8bb2569"/>
+  <new project="SUSE:Maintenance:2345" package="systemd.SUSE_SLE-12_Update" rev="6" srcmd5="6f16ac8afcd5cb4c574750553040c7fa"/>
+  <files>
+    <file state="changed">
+      <old name="pre_checkin.sh" md5="7487d5cdb5ae7ed03c6422248d90b650" size="725"/>
+      <new name="pre_checkin.sh" md5="2d136ae68879cf8f43edc2e925f80fb0" size="629"/>
+      <diff lines="12">@@ -6,9 +6,8 @@
+ ORIG_SPEC=systemd
+ EDIT_WARNING="##### WARNING: please do not edit this auto generated spec file. Use the ${ORIG_SPEC}.spec! #####\n"
+ sed "s/^%define bootstrap.*$/${EDIT_WARNING}%define bootstrap 1/;
+-     s/^%define udevpkgname.*$/${EDIT_WARNING}%define udevpkgname udev-mini/;
+-     s/^\(Name:.*\)$/\1-mini/;
+-          s/^BuildRoot.*/&amp;\n\nProvides:    %{real} = %{version}-%{release}\n/
++     s/^%define mini .*$/${EDIT_WARNING}%define mini -mini/;
++     s/^\(Name:.*\)$/\1-mini/
+ 	      " &lt; ${ORIG_SPEC}.spec &gt; ${ORIG_SPEC}-mini.spec
+ cp ${ORIG_SPEC}.changes ${ORIG_SPEC}-mini.changes
+ cp ${ORIG_SPEC}-rpmlintrc ${ORIG_SPEC}-mini-rpmlintrc
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/man/tmpfiles.d.xml" md5="88e58c917a1b2f5340f34173ac6773d5" size="26084"/>
+      <new name="systemd-210.tar.xz/man/tmpfiles.d.xml" md5="5f193791c5303b83c1119533f89a0716" size="26593"/>
+      <diff lines="86">@@ -173,17 +173,6 @@
+                                 &lt;/varlistentry&gt;
+ 
+                                 &lt;varlistentry&gt;
+-                                        &lt;term&gt;&lt;varname&gt;m&lt;/varname&gt;&lt;/term&gt;
+-                                        &lt;listitem&gt;&lt;para&gt;If the
+-                                        specified file path exists,
+-                                        adjust its access mode, group
+-                                        and user to the specified
+-                                        values and reset the SELinux
+-                                        security context. If it does not exist, do
+-                                        nothing.&lt;/para&gt;&lt;/listitem&gt;
+-                                &lt;/varlistentry&gt;
+-
+-                                &lt;varlistentry&gt;
+                                         &lt;term&gt;&lt;varname&gt;x&lt;/varname&gt;&lt;/term&gt;
+                                         &lt;listitem&gt;&lt;para&gt;Ignore a path
+                                         during cleaning. Use this type
+@@ -246,27 +235,29 @@
+ 
+                                 &lt;varlistentry&gt;
+                                         &lt;term&gt;&lt;varname&gt;z&lt;/varname&gt;&lt;/term&gt;
+-                                        &lt;listitem&gt;&lt;para&gt;Restore
+-                                        SELinux security context
+-                                        and set ownership and access
+-                                        mode of a file or directory if
+-                                        it exists.  Lines of this type
+-                                        accept shell-style globs in
+-                                        place of normal path names.
++                                        &lt;listitem&gt;&lt;para&gt;Adjust the
++                                        access mode, group and user,
++                                        and restore the SELinux security
++                                        context of a file or directory,
++                                        if it exists. Lines of this
++                                        type accept shell-style globs
++                                        in place of normal path names.
+                                         &lt;/para&gt;&lt;/listitem&gt;
+                                 &lt;/varlistentry&gt;
+ 
+                                 &lt;varlistentry&gt;
+                                         &lt;term&gt;&lt;varname&gt;Z&lt;/varname&gt;&lt;/term&gt;
+                                         &lt;listitem&gt;&lt;para&gt;Recursively
+-                                        restore SELinux security
+-                                        context and set
+-                                        ownership and access mode of a
+-                                        path and all its
+-                                        subdirectories (if it is a
+-                                        directory). Lines of this type
+-                                        accept shell-style globs in
+-                                        place of normal path
++                                        set the access mode, group and
++                                        user, and restore the SELinux
++                                        security context of a file or
++                                        directory if it exists, as
++                                        well as of its subdirectories
++                                        and the files contained
++                                        therein (if applicable). Lines
++                                        of this type accept
++                                        shell-style globs in place of
++                                        normal path
+                                         names.&lt;/para&gt;&lt;/listitem&gt;
+                                 &lt;/varlistentry&gt;
+                         &lt;/variablelist&gt;
+@@ -357,6 +348,22 @@
+                         ignored for &lt;varname&gt;x&lt;/varname&gt;,
+                         &lt;varname&gt;r&lt;/varname&gt;, &lt;varname&gt;R&lt;/varname&gt;,
+                         &lt;varname&gt;L&lt;/varname&gt; lines.&lt;/para&gt;
++
++                        &lt;para&gt;Optionally, if prefixed with
++                        &lt;literal&gt;~&lt;/literal&gt; the access mode is masked
++                        based on the already set access bits for
++                        existing file or directories: if the existing
++                        file has all executable bits unset then all
++                        executable bits are removed from the new
++                        access mode, too. Similar, if all read bits
++                        are removed from the old access mode they will
++                        be removed from the new access mode too, and
++                        if all write bits are removed, they will be
++                        removed from the new access mode too. In
++                        addition the sticky/suid/gid bit is removed unless
++                        applied to a directory. This
++                        functionality is particularly useful in
++                        conjunction with &lt;varname&gt;Z&lt;/varname&gt;.&lt;/para&gt;
+                 &lt;/refsect2&gt;
+ 
+                 &lt;refsect2&gt;
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/src/core/mount.c" md5="da663bf18ab5faa78e92797c3f8901d7" size="60915"/>
+      <new name="systemd-210.tar.xz/src/core/mount.c" md5="b1411cf4f1cfaee7be01a0ad57594830" size="61182"/>
+      <diff lines="24">@@ -113,6 +113,13 @@
+         return !mount_test_option(p-&gt;options, "noauto");
+ }
+ 
++static bool mount_is_automount(const MountParameters *p) {
++        assert(p);
++
++        return mount_test_option(p-&gt;options, "comment=systemd.automount") ||
++                mount_test_option(p-&gt;options, "x-systemd.automount");
++}
++
+ static bool needs_quota(MountParameters *p) {
+         assert(p);
+ 
+@@ -329,7 +336,8 @@
+         if (path_equal(m-&gt;where, "/"))
+                 return 0;
+ 
+-        if (mount_is_auto(p) &amp;&amp; UNIT(m)-&gt;manager-&gt;running_as == SYSTEMD_SYSTEM)
++        if (mount_is_auto(p) &amp;&amp; !mount_is_automount(p) &amp;&amp;
++            UNIT(m)-&gt;manager-&gt;running_as == SYSTEMD_SYSTEM)
+                 device_wants_mount = true;
+ 
+         r = unit_add_node_link(UNIT(m), p-&gt;what, device_wants_mount);
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/src/core/transaction.c" md5="6a4e2e6a6d8edd5ebea744a4e60e1a5e" size="44761"/>
+      <new name="systemd-210.tar.xz/src/core/transaction.c" md5="82e907eddbc6dfa5e3867c9f627bce3c" size="44885"/>
+      <diff lines="10">@@ -975,7 +975,8 @@
+                         SET_FOREACH(dep, ret-&gt;unit-&gt;dependencies[UNIT_WANTS], i) {
+                                 r = transaction_add_job_and_dependencies(tr, JOB_START, dep, ret, false, false, false, false, ignore_order, e);
+                                 if (r &lt; 0) {
+-                                        log_full_unit(r == -EADDRNOTAVAIL ? LOG_DEBUG : LOG_WARNING, dep-&gt;id,
++                                        /* unit masked and unit not found are not considered as errors. */
++                                        log_full_unit(r ==  -EADDRNOTAVAIL || r == -ENOENT ? LOG_DEBUG : LOG_WARNING, dep-&gt;id,
+                                                       "Cannot add dependency job for unit %s, ignoring: %s",
+                                                       dep-&gt;id, bus_error_message(e, r));
+ 
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/src/fstab-generator/fstab-generator.c" md5="91cdbda52a3a953d48ff30c414c57f04" size="19014"/>
+      <new name="systemd-210.tar.xz/src/fstab-generator/fstab-generator.c" md5="0e4493a6afc0de441b4774efec18dc39" size="19015"/>
+      <diff lines="12">@@ -335,9 +335,9 @@
+         }
+ 
+         c = check_crypttab(what);
+-        if (!noauto &amp;&amp; (c != 0)) {
++        if (!automount &amp;&amp; !noauto &amp;&amp; (c != 0)) {
+                 if (post) {
+-                        lnk = strjoin(arg_dest, "/", post, nofail || automount ? ".wants/" : ".requires/", name, NULL);
++                        lnk = strjoin(arg_dest, "/", post, nofail ? ".wants/" : ".requires/", name, NULL);
+                         if (!lnk)
+                                 return log_oom();
+ 
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/src/journal/journald-kmsg.c" md5="3b81170f7749111ba3762f8dbb3f01b2" size="15076"/>
+      <new name="systemd-210.tar.xz/src/journal/journald-kmsg.c" md5="eb94a989f6cf1325c4d6bb331d07cc25" size="14725"/>
+      <diff lines="26">@@ -391,24 +391,12 @@
+         return server_read_dev_kmsg(s);
+ }
+ 
+-static int parse_proc_cmdline_word(const char *word) {
+-        if (streq(word, "systemd.log_target=null"))
+-                return -115;
+-
+-        return 0;
+-}
+-
+ int server_open_dev_kmsg(Server *s) {
+         int r;
+ 
+         assert(s);
+ 
+-        if (parse_proc_cmdline(parse_proc_cmdline_word) == -115) {
+-                s-&gt;dev_kmsg_fd = open("/dev/null", O_RDWR|O_CLOEXEC|O_NONBLOCK|O_NOCTTY);
+-        } else {
+-                s-&gt;dev_kmsg_fd = open("/dev/kmsg", O_RDWR|O_CLOEXEC|O_NONBLOCK|O_NOCTTY);
+-        }
+-
++        s-&gt;dev_kmsg_fd = open("/dev/kmsg", O_RDWR|O_CLOEXEC|O_NONBLOCK|O_NOCTTY);
+         if (s-&gt;dev_kmsg_fd &lt; 0) {
+                 log_full(errno == ENOENT ? LOG_DEBUG : LOG_WARNING,
+                          "Failed to open /dev/kmsg, ignoring: %m");
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/src/libudev/libudev-util.c" md5="ffd183932821c69c2dc08afeddd3afec" size="12448"/>
+      <new name="systemd-210.tar.xz/src/libudev/libudev-util.c" md5="1ede67d6c7415b9ed53c1f05f0bb7fdb" size="12290"/>
+      <diff lines="11">@@ -419,10 +419,3 @@
+         bits |= 1LLU &lt;&lt; ((hash &gt;&gt; 18) &amp; 63);
+         return bits;
+ }
+-
+-static int parse_proc_cmdline_word(const char *word) {
+-        if (streq(word, "systemd.log_target=null"))
+-                return -115;
+-
+-        return 0;
+-}
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/src/login/70-power-switch.rules" md5="cd64e505b518762d5e3a217f7210a6f3" size="706"/>
+      <new name="systemd-210.tar.xz/src/login/70-power-switch.rules" md5="5e449868265f6bbbe2a22fbd1a5e08bf" size="854"/>
+      <diff lines="8">@@ -11,5 +11,7 @@
+ SUBSYSTEM=="input", KERNEL=="event*", KERNELS=="thinkpad_acpi", TAG+="power-switch"
+ SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="twl4030_pwrbutton", TAG+="power-switch"
+ SUBSYSTEM=="input", KERNEL=="event*", ATTRS{name}=="tps65217_pwr_but", TAG+="power-switch"
++SUBSYSTEM=="input", KERNEL=="event*", \
++  SUBSYSTEMS=="platform", DRIVERS=="gpio-keys", ATTRS{keys}=="*,116|116,*|116|*,116,*", TAG+="power-switch"
+ 
+ LABEL="power_switch_end"
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/src/shared/log.c" md5="0a621c3f5758518e1b89a93eefb7346b" size="29174"/>
+      <new name="systemd-210.tar.xz/src/shared/log.c" md5="b3914b3c07f267fcc84d032926c98376" size="28665"/>
+      <diff lines="36">@@ -92,24 +92,12 @@
+         kmsg_fd = -1;
+ }
+ 
+-static int parse_proc_cmdline_word(const char *word) {
+-        if (streq(word, "systemd.log_target=null"))
+-                return -115;
+-
+-        return 0;
+-}
+-
+ static int log_open_kmsg(void) {
+ 
+         if (kmsg_fd &gt;= 0)
+                 return 0;
+ 
+-        if (parse_proc_cmdline(parse_proc_cmdline_word) == -115) {
+-                kmsg_fd = open("/dev/null", O_WRONLY|O_NOCTTY|O_CLOEXEC);
+-        } else {
+-                kmsg_fd = open("/dev/kmsg", O_WRONLY|O_NOCTTY|O_CLOEXEC);
+-        }
+-
++        kmsg_fd = open("/dev/kmsg", O_WRONLY|O_NOCTTY|O_CLOEXEC);
+         if (kmsg_fd &lt; 0)
+                 return -errno;
+ 
+@@ -905,9 +893,6 @@
+                         if (l == 5 &amp;&amp; startswith(w, "debug")) {
+                                 log_set_max_level(LOG_DEBUG);
+                                 break;
+-                        } else if (l == 5 &amp;&amp; startswith(w, "quiet")) {
+-                                log_set_max_level(LOG_WARNING);
+-                                break;
+                         }
+                 }
+         }
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/src/shared/util.c" md5="5ed688a3d2a85cbf1b7caa73f0dec983" size="173375"/>
+      <new name="systemd-210.tar.xz/src/shared/util.c" md5="b32fe6dfd19113c583de0d5a542c3a75" size="173163"/>
+      <diff lines="31">@@ -4063,6 +4063,8 @@
+         char *p, *d;
+         bool dot;
+ 
++        strshorten(s, HOST_NAME_MAX);
++
+         for (p = s, d = s, dot = true; *p; p++) {
+                 if (*p == '.') {
+                         if (dot)
+@@ -4082,8 +4084,6 @@
+         else
+                 *d = 0;
+ 
+-        strshorten(s, HOST_NAME_MAX);
+-
+         return s;
+ }
+ 
+@@ -6281,11 +6281,7 @@
+ 
+                 r = parse_word(word);
+                 if (r &lt; 0) {
+-                        if (r == -115) {
+-                                log_error("Warning: %s set, redirecting messages to /dev/null.", word);
+-                        } else {
+-                                log_error("Failed on cmdline argument %s: %s", word, strerror(-r));
+-                        }
++                        log_error("Failed on cmdline argument %s: %s", word, strerror(-r));
+                         return r;
+                 }
+         }
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/src/systemctl/systemctl.c" md5="22ca346feb6b3fdf0c78646afbdbb40c" size="232137"/>
+      <new name="systemd-210.tar.xz/src/systemctl/systemctl.c" md5="89319ec4a6e8cb773b84a32bfca08c10" size="232315"/>
+      <diff lines="12">@@ -329,6 +329,11 @@
+         if (arg_all)
+                 return true;
+ 
++        if (!strv_isempty(arg_states))
++                return true;
++
++        /* By default show all units except the ones in inactive
++         * state and with no pending job */
+         if (u-&gt;job_id &gt; 0)
+                 return true;
+ 
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/src/tmpfiles/tmpfiles.c" md5="b698592b0914d01a45a6ee5f9ab4941c" size="47355"/>
+      <new name="systemd-210.tar.xz/src/tmpfiles/tmpfiles.c" md5="2ca00ea2d14ff00c39217eb0106fa692" size="48286"/>
+      <diff lines="195">@@ -63,7 +63,6 @@
+         /* These ones take file names */
+         CREATE_FILE = 'f',
+         TRUNCATE_FILE = 'F',
+-        WRITE_FILE = 'w',
+         CREATE_DIRECTORY = 'd',
+         TRUNCATE_DIRECTORY = 'D',
+         CREATE_FIFO = 'p',
+@@ -73,6 +72,7 @@
+         ADJUST_MODE = 'm',
+ 
+         /* These ones take globs */
++        WRITE_FILE = 'w',
+         IGNORE_PATH = 'x',
+         IGNORE_DIRECTORY_PATH = 'X',
+         REMOVE_PATH = 'r',
+@@ -97,6 +97,7 @@
+         bool gid_set:1;
+         bool mode_set:1;
+         bool age_set:1;
++        bool mask_perms:1;
+ 
+         bool keep_first_level:1;
+ } Item;
+@@ -125,7 +126,14 @@
+ #define MAX_DEPTH 256
+ 
+ static bool needs_glob(ItemType t) {
+-        return t == IGNORE_PATH || t == IGNORE_DIRECTORY_PATH || t == REMOVE_PATH || t == RECURSIVE_REMOVE_PATH || t == RELABEL_PATH || t == RECURSIVE_RELABEL_PATH;
++        return IN_SET(t,
++                      WRITE_FILE,
++                      IGNORE_PATH,
++                      IGNORE_DIRECTORY_PATH,
++                      REMOVE_PATH,
++                      RECURSIVE_REMOVE_PATH,
++                      RELABEL_PATH,
++                      RECURSIVE_RELABEL_PATH);
+ }
+ 
+ static struct Item* find_glob(Hashmap *h, const char *match) {
+@@ -216,7 +224,11 @@
+ }
+ 
+ static int dir_is_mount_point(DIR *d, const char *subdir) {
+-        union file_handle_union h = { .handle.handle_bytes = MAX_HANDLE_SZ };
++
++        union file_handle_union h = {
++                .handle.handle_bytes = MAX_HANDLE_SZ
++        };
++
+         int mount_id_parent, mount_id;
+         int r_p, r;
+ 
+@@ -301,7 +313,8 @@
+                 if (s.st_uid == 0 &amp;&amp; !(s.st_mode &amp; S_IWUSR))
+                         continue;
+ 
+-                if (asprintf(&amp;sub_path, "%s/%s", p, dent-&gt;d_name) &lt; 0) {
++                sub_path = strjoin(p, "/", dent-&gt;d_name, NULL);
++                if (!sub_path) {
+                         r = log_oom();
+                         goto finish;
+                 }
+@@ -359,7 +372,7 @@
+                                 int q;
+ 
+                                 sub_dir = xopendirat(dirfd(d), dent-&gt;d_name, O_NOFOLLOW|O_NOATIME);
+-                                if (sub_dir == NULL) {
++                                if (!sub_dir) {
+                                         if (errno != ENOENT) {
+                                                 log_error("opendir(%s/%s) failed: %m", p, dent-&gt;d_name);
+                                                 r = -errno;
+@@ -369,7 +382,6 @@
+                                 }
+ 
+                                 q = dir_cleanup(i, sub_path, sub_dir, &amp;s, cutoff, rootdev, false, maxdepth-1, false);
+-
+                                 if (q &lt; 0)
+                                         r = q;
+                         }
+@@ -466,15 +478,34 @@
+ }
+ 
+ static int item_set_perms_full(Item *i, const char *path, bool ignore_enoent) {
++        assert(i);
++        assert(path);
++
+         /* not using i-&gt;path directly because it may be a glob */
+-        if (i-&gt;mode_set)
+-                if (chmod(path, i-&gt;mode) &lt; 0) {
+-                        if (errno != ENOENT || !ignore_enoent) {
+-                                log_error("chmod(%s) failed: %m", path);
+-                                return -errno;
++        if (i-&gt;mode_set) {
++                mode_t m = i-&gt;mode;
++
++                if (i-&gt;mask_perms) {
++                        struct stat st;
++
++                        if (stat(path, &amp;st) &gt;= 0) {
++                                if (!(st.st_mode &amp; 0111))
++                                        m &amp;= ~0111;
++                                if (!(st.st_mode &amp; 0222))
++                                        m &amp;= ~0222;
++                                if (!(st.st_mode &amp; 0444))
++                                        m &amp;= ~0444;
++                                if (!S_ISDIR(st.st_mode))
++                                        m &amp;= ~07000; /* remove sticky/sgid/suid bit, unless directory */
+                         }
+                 }
+ 
++                if (chmod(path, m) &lt; 0) {
++                        log_error("chmod(%s) failed: %m", path);
++                        return -errno;
++                }
++        }
++
+         if (i-&gt;uid_set || i-&gt;gid_set)
+                 if (chown(path,
+                           i-&gt;uid_set ? i-&gt;uid : (uid_t) -1,
+@@ -519,9 +550,9 @@
+         }
+ 
+         if (i-&gt;argument) {
++                _cleanup_free_ char *unescaped;
+                 ssize_t n;
+                 size_t l;
+-                _cleanup_free_ char *unescaped;
+ 
+                 unescaped = cunescape(i-&gt;argument);
+                 if (unescaped == NULL) {
+@@ -1029,7 +1060,6 @@
+ }
+ 
+ DEFINE_TRIVIAL_CLEANUP_FUNC(Item*, item_free);
+-#define _cleanup_item_free_ _cleanup_(item_freep)
+ 
+ static bool item_equal(Item *a, Item *b) {
+         assert(a);
+@@ -1075,15 +1105,13 @@
+ static bool should_include_path(const char *path) {
+         char **prefix;
+ 
+-        STRV_FOREACH(prefix, exclude_prefixes) {
++        STRV_FOREACH(prefix, exclude_prefixes)
+                 if (path_startswith(path, *prefix))
+                         return false;
+-        }
+ 
+-        STRV_FOREACH(prefix, include_prefixes) {
++        STRV_FOREACH(prefix, include_prefixes)
+                 if (path_startswith(path, *prefix))
+                         return true;
+-        }
+ 
+         /* no matches, so we should include this path only if we
+          * have no whitelist at all */
+@@ -1100,10 +1128,9 @@
+                 {}
+         };
+ 
+-        _cleanup_item_free_ Item *i = NULL;
++        _cleanup_free_ char *action = NULL, *mode = NULL, *user = NULL, *group = NULL, *age = NULL, *path = NULL;
++        _cleanup_(item_freep) Item *i = NULL;
+         Item *existing;
+-        _cleanup_free_ char
+-                *action = NULL, *mode = NULL, *user = NULL, *group = NULL, *age = NULL, *path = NULL;
+         char type;
+         Hashmap *h;
+         int r, n = -1;
+@@ -1174,6 +1201,7 @@
+                         log_error("[%s:%u] Symlink file requires argument.", fname, line);
+                         return -EBADMSG;
+                 }
++
+                 break;
+ 
+         case WRITE_FILE:
+@@ -1243,9 +1271,15 @@
+         }
+ 
+         if (mode &amp;&amp; !streq(mode, "-")) {
++                const char *mm = mode;
+                 unsigned m;
+ 
+-                if (sscanf(mode, "%o", &amp;m) != 1) {
++                if (*mm == '~') {
++                        i-&gt;mask_perms = true;
++                        mm++;
++                }
++
++                if (sscanf(mm, "%o", &amp;m) != 1) {
+                         log_error("[%s:%u] Invalid mode '%s'.", fname, line, mode);
+                         return -ENOENT;
+                 }
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/src/udev/udevd.c" md5="10f3e7b87263407f5d60db8218f4d838" size="57276"/>
+      <new name="systemd-210.tar.xz/src/udev/udevd.c" md5="664f3f9755c02475bc68ca1393bf5f0c" size="57518"/>
+      <diff lines="22">@@ -291,14 +291,17 @@
+                                 udev_event-&gt;exec_delay = exec_delay;
+ 
+                         /*
+-                         * Take a "read lock" on the device node; this establishes
++                         * Take a shared lock on the device node; this establishes
+                          * a concept of device "ownership" to serialize device
+-                         * access. External processes holding a "write lock" will
++                         * access. External processes holding an exclusive lock will
+                          * cause udev to skip the event handling; in the case udev
+-                         * acquired the lock, the external process will block until
++                         * acquired the lock, the external process can block until
+                          * udev has finished its event handling.
+                          */
+-                        if (streq_ptr("block", udev_device_get_subsystem(dev))) {
++                        if (!streq_ptr(udev_device_get_action(dev), "remove") &amp;&amp;
++                            streq_ptr("block", udev_device_get_subsystem(dev)) &amp;&amp;
++                            !startswith(udev_device_get_sysname(dev), "dm-") &amp;&amp;
++                            !startswith(udev_device_get_sysname(dev), "md")) {
+                                 struct udev_device *d = dev;
+ 
+                                 if (streq_ptr("partition", udev_device_get_devtype(d)))
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/tmpfiles.d/systemd.conf" md5="52a91ee61403f6f5cef9c0404d73b830" size="1097"/>
+      <new name="systemd-210.tar.xz/tmpfiles.d/systemd.conf" md5="478df5d4ef2bc5a2e4da54ba64789ee3" size="1128"/>
+      <diff lines="15">@@ -27,7 +27,10 @@
+ d /run/systemd/machines 0755 root root -
+ d /run/systemd/shutdown 0755 root root -
+ 
+-m /var/log/journal 2755 root systemd-journal - -
+-Z /var/log/journal/%m 2755 root systemd-journal - -
+-m /run/log/journal 2755 root systemd-journal - -
+-Z /run/log/journal/%m 2755 root systemd-journal - -
++d /run/log 0755 root root -
++
++z /run/log/journal 2755 root systemd-journal - -
++Z /run/log/journal/%m ~2750 root systemd-journal - -
++
++z /var/log/journal 2755 root systemd-journal - -
++z /var/log/journal/%m 2755 root systemd-journal - -
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/units/console-shell.service.m4.in" md5="734e6fc9b12b476c0062943767b75237" size="822"/>
+      <new name="systemd-210.tar.xz/units/console-shell.service.m4.in" md5="05c0b98bdcc06726df0c88d0d69bc7e7" size="799"/>
+      <diff lines="8">@@ -16,7 +16,6 @@
+ 
+ [Service]
+ Environment=HOME=/root
+-WorkingDirectory=/root
+ ExecStartPre=-/usr/bin/plymouth quit
+ ExecStartPre=-/usr/bin/plymouth --wait
+ ExecStart=-/usr/sbin/sulogin
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/units/emergency.service.in" md5="d058742270418a633d1600f60580bca3" size="995"/>
+      <new name="systemd-210.tar.xz/units/emergency.service.in" md5="6bbed7f15dc2f831baff7cf0d6a56d27" size="972"/>
+      <diff lines="8">@@ -14,7 +14,6 @@
+ 
+ [Service]
+ Environment=HOME=/root
+-WorkingDirectory=/root
+ ExecStartPre=-/usr/bin/plymouth quit
+ ExecStartPre=-/usr/bin/plymouth --wait
+ ExecStartPre=-/bin/echo -e 'Welcome to emergency mode! After logging in, type "journalctl -xb" to view\\nsystem logs, "systemctl reboot" to reboot, "systemctl default" to try again\\nto boot into default mode.'
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/units/getty@.service.m4" md5="63818aaf4de84defee991e5971af2731" size="1613"/>
+      <new name="systemd-210.tar.xz/units/getty@.service.m4" md5="2a639926fcd5202bacd23ffb8d918814" size="1577"/>
+      <diff lines="8">@@ -29,7 +29,6 @@
+ [Service]
+ # the VT is cleared by TTYVTDisallocate
+ ExecStart=-/sbin/agetty --noclear %I $TERM
+-ExecStopPost=-/sbin/vhangup /dev/%I
+ Type=idle
+ Restart=always
+ RestartSec=0
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/units/rescue.service.m4.in" md5="79e2d1c8c8029b8de4d085356094abfa" size="998"/>
+      <new name="systemd-210.tar.xz/units/rescue.service.m4.in" md5="43a8fe4f88957a99ecc6d15310ea34eb" size="975"/>
+      <diff lines="8">@@ -15,7 +15,6 @@
+ 
+ [Service]
+ Environment=HOME=/root
+-WorkingDirectory=/root
+ ExecStartPre=-/usr/bin/plymouth quit
+ ExecStartPre=-/usr/bin/plymouth --wait
+ ExecStartPre=-/bin/echo -e 'Welcome to rescue mode! Type "systemctl default" or ^D to enter default mode.\\nType "journalctl -xb" to view system logs. Type "systemctl reboot" to reboot.'
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-210.tar.xz/units/serial-getty@.service.m4" md5="1aac90a6bf6062a62fffb9e17e0209fe" size="1136"/>
+      <new name="systemd-210.tar.xz/units/serial-getty@.service.m4" md5="101927349a52f9f8d97a776e8adbceda" size="1100"/>
+      <diff lines="8">@@ -24,7 +24,6 @@
+ 
+ [Service]
+ ExecStart=-/sbin/agetty --keep-baud %I 115200,38400,9600 $TERM
+-ExecStopPost=-/sbin/vhangup /dev/%I
+ Type=idle
+ Restart=always
+ UtmpIdentifier=%I
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-mini.changes" md5="256bc2584637b1b4da0b59ae7a7bb959" size="295376"/>
+      <new name="systemd-mini.changes" md5="0f259ff8ab676af09cbedce002afe955" size="301581"/>
+      <diff lines="152">@@ -1,4 +1,151 @@
+ -------------------------------------------------------------------
++Fri Apr 22 09:05:26 UTC 2016 - fbui@suse.com
++
++- Import commit 7850342baaa, which introduced the following changes:
++
++  - c06dd31 Fix backport of "tmpfiles: add ability to mask access mode by pre-existing access mode on files/directories" (bsc#973848)
++  
++-------------------------------------------------------------------
++Fri Apr  1 09:09:47 UTC 2016 - fbui@suse.com
++
++- Import commit bff8627c81f, which introduced the following changes:
++
++  - e5e362a udev: exclude MD from block device ownership event locking
++  - 8839413 udev: really exclude device-mapper from block device ownership event locking
++  - 66782e6 udev: exclude device-mapper from block device ownership event locking (bsc#972727)
++  - 1386f57 tmpfiles: explicitly set mode for /run/log
++  - faadb74 tmpfiles: don't allow read access to journal files to users not in systemd-journal
++  - 9b1ef37 tmpfiles: don't apply sgid and executable bit to journal files, only the directories they are contained in
++  - 011c39f tmpfiles: add ability to mask access mode by pre-existing access mode on files/directories
++  - 07e2d60 tmpfiles: get rid of "m" lines
++  - d504e28 tmpfiles: various modernizations
++  - f97250d systemctl: no need to pass --all if inactive is explicitly requested in list-units (bsc#967122)
++  - 2686573 fstab-generator: fix automount option and don't start associated mount unit at boot (bsc#970423)
++  - 5c1637d login: support more than just power-gpio-key (fate#318444) (bsc#970860)
++  - 2c95ecd logind: add standard gpio power button support (fate#318444) (bsc#970860)
++  - af3eb93 Revert "log-target-null-instead-kmsg"
++  - 555dad4 shorten hostname before checking for trailing dot (bsc#965897)
++  - 522194c Revert "log: honour the kernel's quiet cmdline argument" (bsc#963230)
++  - cc94e47 transaction: downgrade warnings about wanted unit which are not found (bsc#960158)
++  - eb3cfb3 Revert "vhangup-on-all-consoles"
++  - 0c28752 remove WorkingDirectory parameter from emergency, rescue and console-shell.service (bsc#959886)
++
++-------------------------------------------------------------------
++Fri Apr  1 06:51:02 UTC 2016 - fbui@suse.com
++
++- Don't allow read access to journal files to users (boo#972612 CVE-2014-9770 CVE-2015-8842)
++
++  Remove the world read bit from the permissions of (persistent)
++  archived journals. This was incorrectly set due to backported commit
++  18afa5c2a7a6c215.
++
++  For the same reasons we also have to fix the permissions of
++  /run/log/journal/&lt;machine-id&gt; directory to make sure that regular
++  user won't access to its content.
++
++-------------------------------------------------------------------
++Thu Mar 31 12:38:16 UTC 2016 - fbui@suse.com
++
++- spec: remove libudev1 runtime dependencies on udev
++
++-------------------------------------------------------------------
++Thu Mar 31 12:35:08 UTC 2016 - fbui@suse.com
++
++- spec remove libusb-devel and pkgconfig(usbutils) BRs from systemd
++
++  They're not needed since v196 (see commit 796b06c21b62d13).
++
++-------------------------------------------------------------------
++Thu Mar 31 12:32:33 UTC 2016 - fbui@suse.com
++
++- spec: no need to post-require libudev1 for udev
++
++-------------------------------------------------------------------
++Thu Mar 31 12:27:27 UTC 2016 - fbui@suse.com
++
++- spec: no need for libgudev to require the mini version of libudev.
++
++  Since this package is not built when bootstrapping.
++
++-------------------------------------------------------------------
++Thu Mar 31 12:21:18 UTC 2016 - fbui@suse.com
++
++- Don't ship boot.udev and systemd-journald.init anymore.
++
++  It was used during the systemd transition when both sysvinit and
++  systemd could be used on the same system
++
++-------------------------------------------------------------------
++Thu Mar 31 12:15:42 UTC 2016 - fbui@suse.com
++
++- spec: do not filter out command completions which rely on
++  _init_completion() anymore.
++
++  This function is provided by bash-completion package on all distros
++  we're shipping v210
++
++-------------------------------------------------------------------
++Thu Mar 31 12:11:58 UTC 2016 - fbui@suse.com
++
++- rop %{real} and simplify sed expr in pre_checkin.sh
++
++-------------------------------------------------------------------
++Thu Mar 31 12:07:07 UTC 2016 - fbui@suse.com
++
++- Drop %{udevpkgname}/%{udev_major} and introduce %{mini} instead
++
++  This is imported from Base:System and makes the specfile a little
++  bit easier to parse.
++
++-------------------------------------------------------------------
++Thu Mar 31 11:59:29 UTC 2016 - fbui@suse.com
++
++- spec: disable build of src/test since we currently don't run the testsuite
++
++-------------------------------------------------------------------
++Thu Mar 31 11:56:13 UTC 2016 - fbui@suse.com
++
++- spec: use %{name} in Source1
++
++-------------------------------------------------------------------
++Thu Mar 31 11:51:51 UTC 2016 - fbui@suse.com
++
++- spec: use %make_install
++
++-------------------------------------------------------------------
++Wed Mar 16 15:54:56 UTC 2016 - fbui@suse.com
++
++- drop all compiler/linker option customizations:
++  - -pipe option is used by default since day 0
++  - get rid of cflags() function which is not needed
++  - --hash-size has no impact specially in runtime
++
++  IOW, use the default options for the compiler and the linker,
++  there's no point in making systemd different from other package in
++  this regards.
++
++-------------------------------------------------------------------
++Wed Mar 16 15:03:51 UTC 2016 - fbui@suse.com
++
++- Fix UEFI detection logic: basically we let configure.ac figure out
++  if UEFI is supported by the current build environment. No need to
++  clutter the spec file with a new conditionnal %has_efi.
++
++-------------------------------------------------------------------
++Mon Feb 22 11:06:41 UTC 2016 - fbui@suse.com
++
++- Don't build require binutils-gold anymore 
++
++  The use of the gold linker has been (probably) introduced due to
++  the use of the -flto option. However forcing the version of the linker
++  is not a good idea since it's not supported on various architectures.
++
++  Since -flto has been disabled, it's now safe to use the *default*
++  linker.
++
++  It actually fixed a build error on 13.1 on the ppc arch.
++
++-------------------------------------------------------------------
+ Mon Feb  8 14:04:19 UTC 2016 - fbui@suse.com
+ 
+ - Don't ship fix.service anymore on 13.1, not needed by v210 (boo#965475)
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd-mini.spec" md5="ca838d3d7ecda4241e3a0f9e909e128d" size="46011"/>
+      <new name="systemd-mini.spec" md5="9a2dba1c45ccc85fb42b16d903dcd4e8" size="44417"/>
+      <diff lines="450">@@ -18,20 +18,13 @@
+ 
+ ##### WARNING: please do not edit this auto generated spec file. Use the systemd.spec! #####
+ %define bootstrap 1
+-%define real systemd
+ ##### WARNING: please do not edit this auto generated spec file. Use the systemd.spec! #####
+-%define udevpkgname udev-mini
+-%define udev_major 1
+-%bcond_without  bash_completion
++%define mini -mini
++
+ %bcond_without  compat_libs
+ %bcond_with     networkd
+ %bcond_with     python
+ %bcond_with     parentpathid
+-%ifarch %{ix86} x86_64 aarch64
+-%define has_efi 1
+-%else
+-%define has_efi 0
+-%endif
+ %if 0%{?suse_version} &gt; 1315
+ %bcond_without  permission
+ %bcond_without  blkrrpart
+@@ -59,19 +52,8 @@
+ License:        LGPL-2.1+
+ Group:          System/Base
+ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+-
+-Provides:       %{real} = %{version}-%{release}
+-
+ BuildRequires:  acl
+ BuildRequires:  audit-devel
+-%if %{with compat_libs}
+-%if 0%{?suse_version} &lt;= 1320
+-# See gold_archs in binutils.spec
+-%ifarch %ix86 %arm x86_64 ppc ppc64 ppc64le %sparc
+-BuildRequires:  binutils-gold
+-%endif
+-%endif
+-%endif
+ BuildRequires:  config(suse-module-tools)
+ %if ! 0%{?bootstrap}
+ BuildRequires:  docbook-xsl-stylesheets
+@@ -91,7 +73,6 @@
+ BuildRequires:  libsepol-devel
+ BuildRequires:  libtool
+ %if ! 0%{?bootstrap}
+-BuildRequires:  libusb-devel
+ BuildRequires:  libxslt-tools
+ %endif
+ BuildRequires:  pam-devel
+@@ -124,7 +105,6 @@
+ BuildRequires:  pkgconfig(libpcre)
+ %if ! 0%{?bootstrap}
+ BuildRequires:  pkgconfig(libqrencode)
+-BuildRequires:  pkgconfig(usbutils) &gt;= 0.82
+ %endif
+ %if 0%{?suse_version} &gt;= 1315
+ %ifarch %ix86 x86_64 x32 %arm ppc64le s390x
+@@ -148,6 +128,7 @@
+ %if 0%{?bootstrap}
+ #!BuildIgnore:  dbus-1
+ Requires:       this-is-only-for-build-envs
++Provides:       systemd = %{version}-%{release}
+ Conflicts:      systemd
+ Conflicts:      kiwi
+ %else
+@@ -184,21 +165,15 @@
+ Obsoletes:      systemd-analyze &lt; 201
+ Provides:       systemd-analyze = %{version}
+ Source0:        systemd-%{version}.tar.xz
+-%if ! 0%{?bootstrap}
+-Source1:        systemd-rpmlintrc
+-%else
+-Source1:        systemd-mini-rpmlintrc
+-%endif
++Source1:        %{name}-rpmlintrc
+ Source2:        localfs.service
+ Source3:        systemd-sysv-convert
+ Source6:        baselibs.conf
+ Source7:        libgcrypt.m4
+-Source8:        systemd-journald.init
+ Source9:        nss-myhostname-config
+ Source10:       macros.systemd.upstream
+ Source11:       after-local.service
+ 
+-Source1060:     boot.udev
+ Source1063:     udev-generate-persistent-rule.sh
+ Source1064:     systemd-sleep-grub
+ Source1065:     systemd-remount-tmpfs
+@@ -218,14 +193,11 @@
+ Summary:        Bash completion support for systemd
+ License:        LGPL-2.1+
+ Group:          System/Base
+-Requires:       bash
+-%if %{with bash_completion}
+ Requires:       bash-completion
+-%endif
+ BuildArch:      noarch
+ 
+ %description bash-completion
+-Some systemd commands offer bash completion, but it's an optional dependency.
++Some systemd commands offer bash completion, but it is an optional dependency.
+ 
+ %package devel
+ Summary:        Development headers for systemd
+@@ -252,25 +224,21 @@
+ %description sysvinit
+ Drop-in replacement of System V init tools.
+ 
+-%package -n %{udevpkgname}
++%package -n udev%{?mini}
+ Summary:        A rule-based device node and kernel event manager
+ License:        GPL-2.0
+ Group:          System/Kernel
+ Url:            http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html
+-PreReq:         /bin/rm
+-PreReq:         %insserv_prereq
+-PreReq:         %fillup_prereq
+-PreReq:         /usr/bin/sg_inq
+ Requires(pre):  /usr/bin/stat
+ Requires(pre):  /usr/sbin/groupadd
+ Requires(pre):  /usr/bin/getent
+-Requires(post): lib%{udevpkgname}%{udev_major}
+ Requires(post): sed
+ Requires(post): /usr/bin/systemctl
+ %if %{defined regenerate_initrd_post}
+ Requires(post): coreutils
+ Requires(post): /usr/bin/stat
+ Requires(postun): coreutils
++Requires(postun): %insserv_prereq
+ Requires(posttrans): suse-module-tools
+ Requires(posttrans): /sbin/mkinitrd
+ %else
+@@ -286,13 +254,13 @@
+ Requires:       filesystem
+ %if 0%{?bootstrap}
+ Provides:       udev = %{version}
+-Conflicts:      libudev%{udev_major}
++Conflicts:      libudev1
+ Conflicts:      udev
+ # avoid kiwi picking it for bootstrap
+ Requires:       this-is-only-for-build-envs
+ %endif
+ 
+-%description -n %{udevpkgname}
++%description -n udev%{?mini}
+ Udev creates and removes device nodes in /dev for devices discovered or
+ removed from the system. It receives events via kernel netlink messages
+ and dispatches them according to rules in /lib/udev/rules.d/. Matching
+@@ -301,34 +269,33 @@
+ 
+ 
+ 
+-%package -n lib%{udevpkgname}%{udev_major}
++%package -n libudev%{?mini}1
+ Summary:        Dynamic library to access udev device information
+ License:        LGPL-2.1+
+ Group:          System/Libraries
+-Requires:       %{udevpkgname} &gt;= %{version}-%{release}
+ %if 0%{?bootstrap}
+-Conflicts:      libudev%{udev_major}
++Conflicts:      libudev1
+ Conflicts:      kiwi
+ # avoid kiwi picking it for bootstrap
+ Requires:       this-is-only-for-build-envs
+ %endif
+ 
+-%description -n lib%{udevpkgname}%{udev_major}
++%description -n libudev%{?mini}1
+ This package contains the dynamic library libudev, which provides
+ access to udev device information
+ 
+-%package -n lib%{udevpkgname}-devel
++%package -n libudev%{?mini}-devel
+ Summary:        Development files for libudev
+ License:        LGPL-2.1+
+ Group:          Development/Libraries/Other
+-Requires:       lib%{udevpkgname}%{udev_major} = %{version}-%{release}
++Requires:       libudev%{?mini}1 = %{version}-%{release}
+ %if 0%{?bootstrap}
+ Provides:       libudev-devel = %{version}
+-Conflicts:      libudev%{udev_major} = %{version}
++Conflicts:      libudev1 = %{version}
+ Conflicts:      libudev-devel
+ %endif
+ 
+-%description -n lib%{udevpkgname}-devel
++%description -n libudev%{?mini}-devel
+ This package contains the development files for the library libudev, a
+ dynamic library, which provides access to udev device information.
+ 
+@@ -337,7 +304,7 @@
+ Summary:        GObject library, to access udev device information
+ License:        LGPL-2.1+
+ Group:          System/Libraries
+-Requires:       lib%{udevpkgname}%{udev_major} = %{version}-%{release}
++Requires:       libudev1 = %{version}-%{release}
+ 
+ %description -n libgudev-1_0-0
+ This package contains the GObject library libgudev, which provides
+@@ -405,7 +372,7 @@
+ 
+ Note that nss-myhostname only provides a workaround for broken
+ software. If nss-myhostname is trigged by an application a message
+-is logged to /var/log/messages. Please check whether that's worth
++is logged to /var/log/messages. Please check whether that is worth
+ a bug report then.
+ This package marks the installation to not use syslog but only the journal.
+ 
+@@ -480,11 +447,7 @@
+ 
+ ./autogen.sh
+ 
+-      V=e
+- CFLAGS="%{optflags} $(getconf LFS_CFLAGS)"
+- CFLAGS="$CFLAGS -pipe"
+-LDFLAGS="$LDFLAGS -Wl,-O2"
+-export CFLAGS LDFLAGS V
++export CFLAGS="%{optflags}"
+ %if 0%{?suse_version} == 1315
+   CFLAGS="$CFLAGS -DNET_IFNAMES=1"
+ %else
+@@ -494,6 +457,7 @@
+     sed -ri '/^ENV\{net.ifnames\}=="1", GOTO="[^"]*"$/{ s/=="1"/!="0"/ }' src/udev/rule_generator/${rules}.rules
+   done
+ %endif
++
+ # keep split-usr until all packages have moved their systemd rules to /usr
+ %configure \
+   --docdir=%{_docdir}/systemd \
+@@ -520,9 +484,7 @@
+   --enable-selinux \
+   --enable-split-usr \
+   --disable-static \
+-%if ! 0%{?has_efi}
+-  --disable-efi \
+-%endif
++  --disable-tests \
+   --with-rc-local-script-path-start=/etc/init.d/boot.local \
+   --with-rc-local-script-path-stop=/etc/init.d/halt.local \
+   --with-debug-shell=/bin/bash \
+@@ -535,13 +497,14 @@
+   --disable-networkd \
+ %endif
+   --disable-kdbus
+-make %{?_smp_mflags}
++
++make %{?_smp_mflags} V=e
+ %if ! 0%{?bootstrap}
+-make %{?_smp_mflags} update-man-list man
++make %{?_smp_mflags} V=e update-man-list man
+ %endif
+ 
+ %install
+-make install DESTDIR="%buildroot"
++%make_install
+ 
+ # move to %{_lib}
+ %if ! 0%{?bootstrap}
+@@ -557,15 +520,9 @@
+ ln -sf systemd-udevd.8 %{buildroot}/%{_mandir}/man8/udevd.8
+ %endif
+ %if ! 0%{?bootstrap}
+-install -m755 -D %{S:8} %{buildroot}/etc/init.d/systemd-journald
+ install -D -m 755 %{S:9} %{buildroot}%{_sbindir}/nss-myhostname-config
+ %endif
+ 
+-sed -ie "s|@@PREFIX@@|%{_prefix}/lib/udev|g" %{S:1060}
+-sed -ie "s|@@SYSTEMD@@|%{_prefix}/lib/systemd|g" %{S:1060}
+-sed -ie "s|@@BINDIR@@|%{_bindir}|g" %{S:1060}
+-install -m755 -D %{S:1060} %{buildroot}/etc/init.d/boot.udev
+-ln -s systemd-udevd.service %{buildroot}/%{_prefix}/lib/systemd/system/udev.service
+ install -m755 -D %{S:1063} %{buildroot}/%{_prefix}/lib/udev/udev-generate-persistent-rule
+ install -m755 -D %{S:1064} %{buildroot}/%{_bindir}/systemd-sleep-grub
+ install -m755 -D %{S:1065} %{buildroot}/%{_prefix}/lib/udev/remount-tmpfs
+@@ -684,17 +641,6 @@
+ 
+ %fdupes -s %{buildroot}%{_mandir}
+ 
+-%if ! 0%{?bootstrap}
+-for f in %{buildroot}%{_datadir}/bash-completion/completions/*
+-do
+-    test -e "$f" || break
+-    grep -q _init_completion "$f" || continue
+-    echo "%exclude %{_datadir}/bash-completion/completions/${f##*/}"
+-done &gt; files.completion
+-%else
+-&gt; files.completion
+-%endif
+-
+ %if 0%{suse_version} &gt;= 1310
+ # packaged in systemd-rpm-macros
+ rm -f %{buildroot}/%{_prefix}/lib/rpm/macros.d/macros.systemd
+@@ -758,6 +704,13 @@
+ getent group adm   &amp;&amp; setfacl -Rnm g:adm:rx,d:g:adm:rx     %{_localstatedir}/log/journal/ &gt; /dev/null 2&gt;&amp;1 || :
+ %endif
+ 
++# Make sure the journals have the right permissions (boo#972612).
++# Note that the journals might no be present yet.
++MID=$(cat /etc/machine-id)
++chmod 0640 %{_localstatedir}/log/journal/$MID/*.journal  2&gt;/dev/null || :
++chmod 0640 %{_localstatedir}/log/journal/$MID/*.journal~ 2&gt;/dev/null || :
++chmod o-rx %{_rundir}/log/journal/$MID                   2&gt;/dev/null || :
++
+ # Try to read default runlevel from the old inittab if it exists
+ if [ ! -e /etc/systemd/system/default.target -a -e /etc/inittab ]; then
+   runlevel=$(awk -F ':' '$3 == "initdefault" &amp;&amp; $1 !~ "^#" { print $2 }' /etc/inittab 2&gt; /dev/null)
+@@ -811,12 +764,12 @@
+   rm -f /etc/systemd/system/default.target 2&gt;&amp;1 || :
+ fi
+ 
+-%pretrans -n %{udevpkgname} -p &lt;lua&gt;
++%pretrans -n udev%{?mini} -p &lt;lua&gt;
+ if posix.stat("/lib/udev") and not posix.stat("/usr/lib/udev") then
+   posix.symlink("/lib/udev", "/usr/lib/udev")
+ end
+ 
+-%pre -n %{udevpkgname}
++%pre -n udev%{?mini}
+ if test -L /usr/lib/udev -a /lib/udev -ef /usr/lib/udev ; then
+   rm /usr/lib/udev
+   mv /lib/udev /usr/lib
+@@ -829,14 +782,13 @@
+ # kill daemon if we are not in a chroot
+ if test -f /proc/1/exe -a -d /proc/1/root ; then
+         if test "$(stat -Lc '%%D-%%i' /)" = "$(stat -Lc '%%D-%%i' /proc/1/root)"; then
+-                systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket systemd-udevd.service udev.service udev-control.socket udev-kernel.socket &gt;/dev/null 2&gt;&amp;1 || :
++                systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket systemd-udevd.service udev-control.socket udev-kernel.socket &gt;/dev/null 2&gt;&amp;1 || :
+                 udevadm control --exit 2&gt;&amp;1 || :
+         fi
+ fi
+ 
+-%post -n %{udevpkgname}
++%post -n udev%{?mini}
+ /usr/bin/udevadm hwdb --update &gt;/dev/null 2&gt;&amp;1 || :
+-%{fillup_and_insserv -Y boot.udev}
+ # add KERNEL name match to existing persistent net rules
+ sed -ri '/KERNEL/ ! { s/NAME="(eth|wlan|ath)([0-9]+)"/KERNEL=="\1*", NAME="\1\2"/}' \
+     /etc/udev/rules.d/70-persistent-net.rules &gt;/dev/null 2&gt;&amp;1 || :
+@@ -870,7 +822,7 @@
+  fi
+ fi
+ 
+-%postun -n %{udevpkgname}
++%postun -n udev%{?mini}
+ %insserv_cleanup
+ systemctl daemon-reload &gt;/dev/null 2&gt;&amp;1 || :
+ 
+@@ -890,13 +842,13 @@
+ fi
+ 
+ %if %{defined regenerate_initrd_post}
+-%posttrans -n %{udevpkgname}
++%posttrans -n udev%{?mini}
+ %regenerate_initrd_posttrans
+ %endif
+ 
+-%post -n lib%{udevpkgname}%{udev_major} -p /sbin/ldconfig
++%post -n libudev%{?mini}1 -p /sbin/ldconfig
+ 
+-%postun -n lib%{udevpkgname}%{udev_major} -p /sbin/ldconfig
++%postun -n libudev%{?mini}1 -p /sbin/ldconfig
+ 
+ %if ! 0%{?bootstrap}
+ 
+@@ -959,6 +911,7 @@
+ /bin/systemctl
+ %{_bindir}/systemd-sleep-grub
+ %{_bindir}/busctl
++%{_bindir}/bootctl
+ %{_bindir}/kernel-install
+ %{_bindir}/hostnamectl
+ %{_bindir}/localectl
+@@ -1004,7 +957,6 @@
+ %dir %{_prefix}/lib/systemd/user
+ %dir %{_prefix}/lib/systemd/system
+ %exclude %{_prefix}/lib/systemd/system/systemd-udev*.*
+-%exclude %{_prefix}/lib/systemd/system/udev.service
+ %exclude %{_prefix}/lib/systemd/system/initrd-udevadm-cleanup-db.service
+ %exclude %{_prefix}/lib/systemd/system/systemd-udev-root-symlink.service
+ %exclude %{_prefix}/lib/systemd/system/*.target.wants/systemd-udev*.*
+@@ -1048,10 +1000,7 @@
+ %if ! 0%{?bootstrap}
+ %{_prefix}/lib/systemd/system-generators/systemd-cryptsetup-generator
+ %endif
+-%if 0%{?has_efi}
+-%{_bindir}/bootctl
+ %{_prefix}/lib/systemd/system-generators/systemd-efi-boot-generator
+-%endif
+ %{_prefix}/lib/systemd/system-generators/systemd-getty-generator
+ %{_prefix}/lib/systemd/system-generators/systemd-rc-local-generator
+ %{_prefix}/lib/systemd/system-generators/systemd-fstab-generator
+@@ -1172,7 +1121,7 @@
+ %endif
+ 
+ %if ! 0%{?bootstrap}
+-%files bash-completion -f files.completion
++%files bash-completion
+ %defattr(-,root,root,-)
+ %dir %{_datadir}/bash-completion
+ %dir %{_datadir}/bash-completion/completions
+@@ -1224,7 +1173,7 @@
+ %{_mandir}/man8/runlevel.8*
+ %endif
+ 
+-%files -n %{udevpkgname}
++%files -n udev%{?mini}
+ %defattr(-,root,root)
+ /sbin/udevd
+ /sbin/udevadm
+@@ -1254,7 +1203,6 @@
+ %{_prefix}/lib/udev/rules.d/*.rules
+ %dir %{_prefix}/lib/udev/hwdb.d
+ %{_prefix}/lib/udev/hwdb.d/*
+-%{_sysconfdir}/init.d/boot.udev
+ %dir %{_sysconfdir}/udev/
+ %dir %{_sysconfdir}/udev/rules.d/
+ %ghost %{_sysconfdir}/udev/hwdb.bin
+@@ -1264,7 +1212,7 @@
+ %endif
+ %dir %{_prefix}/lib/systemd/system
+ %{_prefix}/lib/systemd/systemd-udevd
+-%{_prefix}/lib/systemd/system/*udev*.service
++%{_prefix}/lib/systemd/system/systemd-udev*.service
+ %{_prefix}/lib/systemd/system/systemd-udevd*.socket
+ %dir %{_prefix}/lib/systemd/system/sysinit.target.wants
+ %{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-udev*.service
+@@ -1277,11 +1225,11 @@
+ %{_datadir}/pkgconfig/udev.pc
+ %endif
+ 
+-%files -n lib%{udevpkgname}%{udev_major}
++%files -n libudev%{?mini}1
+ %defattr(-,root,root)
+ %{_libdir}/libudev.so.*
+ 
+-%files -n lib%{udevpkgname}-devel
++%files -n libudev%{?mini}-devel
+ %defattr(-,root,root)
+ %{_includedir}/libudev.h
+ %{_libdir}/libudev.so
+@@ -1322,7 +1270,6 @@
+ %defattr(-,root,root)
+ %dir %attr(2755,root,systemd-journal) %{_localstatedir}/log/journal/
+ %{_localstatedir}/log/README
+-/etc/init.d/systemd-journald
+ 
+ %files -n nss-myhostname
+ %defattr(-, root, root)
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd.changes" md5="256bc2584637b1b4da0b59ae7a7bb959" size="295376"/>
+      <new name="systemd.changes" md5="0f259ff8ab676af09cbedce002afe955" size="301581"/>
+      <diff lines="152">@@ -1,4 +1,151 @@
+ -------------------------------------------------------------------
++Fri Apr 22 09:05:26 UTC 2016 - fbui@suse.com
++
++- Import commit 7850342baaa, which introduced the following changes:
++
++  - c06dd31 Fix backport of "tmpfiles: add ability to mask access mode by pre-existing access mode on files/directories" (bsc#973848)
++  
++-------------------------------------------------------------------
++Fri Apr  1 09:09:47 UTC 2016 - fbui@suse.com
++
++- Import commit bff8627c81f, which introduced the following changes:
++
++  - e5e362a udev: exclude MD from block device ownership event locking
++  - 8839413 udev: really exclude device-mapper from block device ownership event locking
++  - 66782e6 udev: exclude device-mapper from block device ownership event locking (bsc#972727)
++  - 1386f57 tmpfiles: explicitly set mode for /run/log
++  - faadb74 tmpfiles: don't allow read access to journal files to users not in systemd-journal
++  - 9b1ef37 tmpfiles: don't apply sgid and executable bit to journal files, only the directories they are contained in
++  - 011c39f tmpfiles: add ability to mask access mode by pre-existing access mode on files/directories
++  - 07e2d60 tmpfiles: get rid of "m" lines
++  - d504e28 tmpfiles: various modernizations
++  - f97250d systemctl: no need to pass --all if inactive is explicitly requested in list-units (bsc#967122)
++  - 2686573 fstab-generator: fix automount option and don't start associated mount unit at boot (bsc#970423)
++  - 5c1637d login: support more than just power-gpio-key (fate#318444) (bsc#970860)
++  - 2c95ecd logind: add standard gpio power button support (fate#318444) (bsc#970860)
++  - af3eb93 Revert "log-target-null-instead-kmsg"
++  - 555dad4 shorten hostname before checking for trailing dot (bsc#965897)
++  - 522194c Revert "log: honour the kernel's quiet cmdline argument" (bsc#963230)
++  - cc94e47 transaction: downgrade warnings about wanted unit which are not found (bsc#960158)
++  - eb3cfb3 Revert "vhangup-on-all-consoles"
++  - 0c28752 remove WorkingDirectory parameter from emergency, rescue and console-shell.service (bsc#959886)
++
++-------------------------------------------------------------------
++Fri Apr  1 06:51:02 UTC 2016 - fbui@suse.com
++
++- Don't allow read access to journal files to users (boo#972612 CVE-2014-9770 CVE-2015-8842)
++
++  Remove the world read bit from the permissions of (persistent)
++  archived journals. This was incorrectly set due to backported commit
++  18afa5c2a7a6c215.
++
++  For the same reasons we also have to fix the permissions of
++  /run/log/journal/&lt;machine-id&gt; directory to make sure that regular
++  user won't access to its content.
++
++-------------------------------------------------------------------
++Thu Mar 31 12:38:16 UTC 2016 - fbui@suse.com
++
++- spec: remove libudev1 runtime dependencies on udev
++
++-------------------------------------------------------------------
++Thu Mar 31 12:35:08 UTC 2016 - fbui@suse.com
++
++- spec remove libusb-devel and pkgconfig(usbutils) BRs from systemd
++
++  They're not needed since v196 (see commit 796b06c21b62d13).
++
++-------------------------------------------------------------------
++Thu Mar 31 12:32:33 UTC 2016 - fbui@suse.com
++
++- spec: no need to post-require libudev1 for udev
++
++-------------------------------------------------------------------
++Thu Mar 31 12:27:27 UTC 2016 - fbui@suse.com
++
++- spec: no need for libgudev to require the mini version of libudev.
++
++  Since this package is not built when bootstrapping.
++
++-------------------------------------------------------------------
++Thu Mar 31 12:21:18 UTC 2016 - fbui@suse.com
++
++- Don't ship boot.udev and systemd-journald.init anymore.
++
++  It was used during the systemd transition when both sysvinit and
++  systemd could be used on the same system
++
++-------------------------------------------------------------------
++Thu Mar 31 12:15:42 UTC 2016 - fbui@suse.com
++
++- spec: do not filter out command completions which rely on
++  _init_completion() anymore.
++
++  This function is provided by bash-completion package on all distros
++  we're shipping v210
++
++-------------------------------------------------------------------
++Thu Mar 31 12:11:58 UTC 2016 - fbui@suse.com
++
++- rop %{real} and simplify sed expr in pre_checkin.sh
++
++-------------------------------------------------------------------
++Thu Mar 31 12:07:07 UTC 2016 - fbui@suse.com
++
++- Drop %{udevpkgname}/%{udev_major} and introduce %{mini} instead
++
++  This is imported from Base:System and makes the specfile a little
++  bit easier to parse.
++
++-------------------------------------------------------------------
++Thu Mar 31 11:59:29 UTC 2016 - fbui@suse.com
++
++- spec: disable build of src/test since we currently don't run the testsuite
++
++-------------------------------------------------------------------
++Thu Mar 31 11:56:13 UTC 2016 - fbui@suse.com
++
++- spec: use %{name} in Source1
++
++-------------------------------------------------------------------
++Thu Mar 31 11:51:51 UTC 2016 - fbui@suse.com
++
++- spec: use %make_install
++
++-------------------------------------------------------------------
++Wed Mar 16 15:54:56 UTC 2016 - fbui@suse.com
++
++- drop all compiler/linker option customizations:
++  - -pipe option is used by default since day 0
++  - get rid of cflags() function which is not needed
++  - --hash-size has no impact specially in runtime
++
++  IOW, use the default options for the compiler and the linker,
++  there's no point in making systemd different from other package in
++  this regards.
++
++-------------------------------------------------------------------
++Wed Mar 16 15:03:51 UTC 2016 - fbui@suse.com
++
++- Fix UEFI detection logic: basically we let configure.ac figure out
++  if UEFI is supported by the current build environment. No need to
++  clutter the spec file with a new conditionnal %has_efi.
++
++-------------------------------------------------------------------
++Mon Feb 22 11:06:41 UTC 2016 - fbui@suse.com
++
++- Don't build require binutils-gold anymore 
++
++  The use of the gold linker has been (probably) introduced due to
++  the use of the -flto option. However forcing the version of the linker
++  is not a good idea since it's not supported on various architectures.
++
++  Since -flto has been disabled, it's now safe to use the *default*
++  linker.
++
++  It actually fixed a build error on 13.1 on the ppc arch.
++
++-------------------------------------------------------------------
+ Mon Feb  8 14:04:19 UTC 2016 - fbui@suse.com
+ 
+ - Don't ship fix.service anymore on 13.1, not needed by v210 (boo#965475)
+</diff>
+    </file>
+    <file state="changed">
+      <old name="systemd.spec" md5="8546247f513524319ef697d085f18cec" size="45760"/>
+      <new name="systemd.spec" md5="badd16e01cb1c9a822153fb5a17c22db" size="44220"/>
+      <diff lines="444">@@ -17,19 +17,12 @@
+ 
+ 
+ %define bootstrap 0
+-%define real systemd
+-%define udevpkgname udev
+-%define udev_major 1
+-%bcond_without  bash_completion
++%define mini %nil
++
+ %bcond_without  compat_libs
+ %bcond_with     networkd
+ %bcond_with     python
+ %bcond_with     parentpathid
+-%ifarch %{ix86} x86_64 aarch64
+-%define has_efi 1
+-%else
+-%define has_efi 0
+-%endif
+ %if 0%{?suse_version} &gt; 1315
+ %bcond_without  permission
+ %bcond_without  blkrrpart
+@@ -59,14 +52,6 @@
+ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+ BuildRequires:  acl
+ BuildRequires:  audit-devel
+-%if %{with compat_libs}
+-%if 0%{?suse_version} &lt;= 1320
+-# See gold_archs in binutils.spec
+-%ifarch %ix86 %arm x86_64 ppc ppc64 ppc64le %sparc
+-BuildRequires:  binutils-gold
+-%endif
+-%endif
+-%endif
+ BuildRequires:  config(suse-module-tools)
+ %if ! 0%{?bootstrap}
+ BuildRequires:  docbook-xsl-stylesheets
+@@ -86,7 +71,6 @@
+ BuildRequires:  libsepol-devel
+ BuildRequires:  libtool
+ %if ! 0%{?bootstrap}
+-BuildRequires:  libusb-devel
+ BuildRequires:  libxslt-tools
+ %endif
+ BuildRequires:  pam-devel
+@@ -119,7 +103,6 @@
+ BuildRequires:  pkgconfig(libpcre)
+ %if ! 0%{?bootstrap}
+ BuildRequires:  pkgconfig(libqrencode)
+-BuildRequires:  pkgconfig(usbutils) &gt;= 0.82
+ %endif
+ %if 0%{?suse_version} &gt;= 1315
+ %ifarch %ix86 x86_64 x32 %arm ppc64le s390x
+@@ -143,6 +126,7 @@
+ %if 0%{?bootstrap}
+ #!BuildIgnore:  dbus-1
+ Requires:       this-is-only-for-build-envs
++Provides:       systemd = %{version}-%{release}
+ Conflicts:      systemd
+ Conflicts:      kiwi
+ %else
+@@ -179,21 +163,15 @@
+ Obsoletes:      systemd-analyze &lt; 201
+ Provides:       systemd-analyze = %{version}
+ Source0:        systemd-%{version}.tar.xz
+-%if ! 0%{?bootstrap}
+-Source1:        systemd-rpmlintrc
+-%else
+-Source1:        systemd-mini-rpmlintrc
+-%endif
++Source1:        %{name}-rpmlintrc
+ Source2:        localfs.service
+ Source3:        systemd-sysv-convert
+ Source6:        baselibs.conf
+ Source7:        libgcrypt.m4
+-Source8:        systemd-journald.init
+ Source9:        nss-myhostname-config
+ Source10:       macros.systemd.upstream
+ Source11:       after-local.service
+ 
+-Source1060:     boot.udev
+ Source1063:     udev-generate-persistent-rule.sh
+ Source1064:     systemd-sleep-grub
+ Source1065:     systemd-remount-tmpfs
+@@ -213,14 +191,11 @@
+ Summary:        Bash completion support for systemd
+ License:        LGPL-2.1+
+ Group:          System/Base
+-Requires:       bash
+-%if %{with bash_completion}
+ Requires:       bash-completion
+-%endif
+ BuildArch:      noarch
+ 
+ %description bash-completion
+-Some systemd commands offer bash completion, but it's an optional dependency.
++Some systemd commands offer bash completion, but it is an optional dependency.
+ 
+ %package devel
+ Summary:        Development headers for systemd
+@@ -247,25 +222,21 @@
+ %description sysvinit
+ Drop-in replacement of System V init tools.
+ 
+-%package -n %{udevpkgname}
++%package -n udev%{?mini}
+ Summary:        A rule-based device node and kernel event manager
+ License:        GPL-2.0
+ Group:          System/Kernel
+ Url:            http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html
+-PreReq:         /bin/rm
+-PreReq:         %insserv_prereq
+-PreReq:         %fillup_prereq
+-PreReq:         /usr/bin/sg_inq
+ Requires(pre):  /usr/bin/stat
+ Requires(pre):  /usr/sbin/groupadd
+ Requires(pre):  /usr/bin/getent
+-Requires(post): lib%{udevpkgname}%{udev_major}
+ Requires(post): sed
+ Requires(post): /usr/bin/systemctl
+ %if %{defined regenerate_initrd_post}
+ Requires(post): coreutils
+ Requires(post): /usr/bin/stat
+ Requires(postun): coreutils
++Requires(postun): %insserv_prereq
+ Requires(posttrans): suse-module-tools
+ Requires(posttrans): /sbin/mkinitrd
+ %else
+@@ -281,13 +252,13 @@
+ Requires:       filesystem
+ %if 0%{?bootstrap}
+ Provides:       udev = %{version}
+-Conflicts:      libudev%{udev_major}
++Conflicts:      libudev1
+ Conflicts:      udev
+ # avoid kiwi picking it for bootstrap
+ Requires:       this-is-only-for-build-envs
+ %endif
+ 
+-%description -n %{udevpkgname}
++%description -n udev%{?mini}
+ Udev creates and removes device nodes in /dev for devices discovered or
+ removed from the system. It receives events via kernel netlink messages
+ and dispatches them according to rules in /lib/udev/rules.d/. Matching
+@@ -296,34 +267,33 @@
+ 
+ 
+ 
+-%package -n lib%{udevpkgname}%{udev_major}
++%package -n libudev%{?mini}1
+ Summary:        Dynamic library to access udev device information
+ License:        LGPL-2.1+
+ Group:          System/Libraries
+-Requires:       %{udevpkgname} &gt;= %{version}-%{release}
+ %if 0%{?bootstrap}
+-Conflicts:      libudev%{udev_major}
++Conflicts:      libudev1
+ Conflicts:      kiwi
+ # avoid kiwi picking it for bootstrap
+ Requires:       this-is-only-for-build-envs
+ %endif
+ 
+-%description -n lib%{udevpkgname}%{udev_major}
++%description -n libudev%{?mini}1
+ This package contains the dynamic library libudev, which provides
+ access to udev device information
+ 
+-%package -n lib%{udevpkgname}-devel
++%package -n libudev%{?mini}-devel
+ Summary:        Development files for libudev
+ License:        LGPL-2.1+
+ Group:          Development/Libraries/Other
+-Requires:       lib%{udevpkgname}%{udev_major} = %{version}-%{release}
++Requires:       libudev%{?mini}1 = %{version}-%{release}
+ %if 0%{?bootstrap}
+ Provides:       libudev-devel = %{version}
+-Conflicts:      libudev%{udev_major} = %{version}
++Conflicts:      libudev1 = %{version}
+ Conflicts:      libudev-devel
+ %endif
+ 
+-%description -n lib%{udevpkgname}-devel
++%description -n libudev%{?mini}-devel
+ This package contains the development files for the library libudev, a
+ dynamic library, which provides access to udev device information.
+ 
+@@ -332,7 +302,7 @@
+ Summary:        GObject library, to access udev device information
+ License:        LGPL-2.1+
+ Group:          System/Libraries
+-Requires:       lib%{udevpkgname}%{udev_major} = %{version}-%{release}
++Requires:       libudev1 = %{version}-%{release}
+ 
+ %description -n libgudev-1_0-0
+ This package contains the GObject library libgudev, which provides
+@@ -400,7 +370,7 @@
+ 
+ Note that nss-myhostname only provides a workaround for broken
+ software. If nss-myhostname is trigged by an application a message
+-is logged to /var/log/messages. Please check whether that's worth
++is logged to /var/log/messages. Please check whether that is worth
+ a bug report then.
+ This package marks the installation to not use syslog but only the journal.
+ 
+@@ -475,11 +445,7 @@
+ 
+ ./autogen.sh
+ 
+-      V=e
+- CFLAGS="%{optflags} $(getconf LFS_CFLAGS)"
+- CFLAGS="$CFLAGS -pipe"
+-LDFLAGS="$LDFLAGS -Wl,-O2"
+-export CFLAGS LDFLAGS V
++export CFLAGS="%{optflags}"
+ %if 0%{?suse_version} == 1315
+   CFLAGS="$CFLAGS -DNET_IFNAMES=1"
+ %else
+@@ -489,6 +455,7 @@
+     sed -ri '/^ENV\{net.ifnames\}=="1", GOTO="[^"]*"$/{ s/=="1"/!="0"/ }' src/udev/rule_generator/${rules}.rules
+   done
+ %endif
++
+ # keep split-usr until all packages have moved their systemd rules to /usr
+ %configure \
+   --docdir=%{_docdir}/systemd \
+@@ -515,9 +482,7 @@
+   --enable-selinux \
+   --enable-split-usr \
+   --disable-static \
+-%if ! 0%{?has_efi}
+-  --disable-efi \
+-%endif
++  --disable-tests \
+   --with-rc-local-script-path-start=/etc/init.d/boot.local \
+   --with-rc-local-script-path-stop=/etc/init.d/halt.local \
+   --with-debug-shell=/bin/bash \
+@@ -530,13 +495,14 @@
+   --disable-networkd \
+ %endif
+   --disable-kdbus
+-make %{?_smp_mflags}
++
++make %{?_smp_mflags} V=e
+ %if ! 0%{?bootstrap}
+-make %{?_smp_mflags} update-man-list man
++make %{?_smp_mflags} V=e update-man-list man
+ %endif
+ 
+ %install
+-make install DESTDIR="%buildroot"
++%make_install
+ 
+ # move to %{_lib}
+ %if ! 0%{?bootstrap}
+@@ -552,15 +518,9 @@
+ ln -sf systemd-udevd.8 %{buildroot}/%{_mandir}/man8/udevd.8
+ %endif
+ %if ! 0%{?bootstrap}
+-install -m755 -D %{S:8} %{buildroot}/etc/init.d/systemd-journald
+ install -D -m 755 %{S:9} %{buildroot}%{_sbindir}/nss-myhostname-config
+ %endif
+ 
+-sed -ie "s|@@PREFIX@@|%{_prefix}/lib/udev|g" %{S:1060}
+-sed -ie "s|@@SYSTEMD@@|%{_prefix}/lib/systemd|g" %{S:1060}
+-sed -ie "s|@@BINDIR@@|%{_bindir}|g" %{S:1060}
+-install -m755 -D %{S:1060} %{buildroot}/etc/init.d/boot.udev
+-ln -s systemd-udevd.service %{buildroot}/%{_prefix}/lib/systemd/system/udev.service
+ install -m755 -D %{S:1063} %{buildroot}/%{_prefix}/lib/udev/udev-generate-persistent-rule
+ install -m755 -D %{S:1064} %{buildroot}/%{_bindir}/systemd-sleep-grub
+ install -m755 -D %{S:1065} %{buildroot}/%{_prefix}/lib/udev/remount-tmpfs
+@@ -679,17 +639,6 @@
+ 
+ %fdupes -s %{buildroot}%{_mandir}
+ 
+-%if ! 0%{?bootstrap}
+-for f in %{buildroot}%{_datadir}/bash-completion/completions/*
+-do
+-    test -e "$f" || break
+-    grep -q _init_completion "$f" || continue
+-    echo "%exclude %{_datadir}/bash-completion/completions/${f##*/}"
+-done &gt; files.completion
+-%else
+-&gt; files.completion
+-%endif
+-
+ %if 0%{suse_version} &gt;= 1310
+ # packaged in systemd-rpm-macros
+ rm -f %{buildroot}/%{_prefix}/lib/rpm/macros.d/macros.systemd
+@@ -753,6 +702,13 @@
+ getent group adm   &amp;&amp; setfacl -Rnm g:adm:rx,d:g:adm:rx     %{_localstatedir}/log/journal/ &gt; /dev/null 2&gt;&amp;1 || :
+ %endif
+ 
++# Make sure the journals have the right permissions (boo#972612).
++# Note that the journals might no be present yet.
++MID=$(cat /etc/machine-id)
++chmod 0640 %{_localstatedir}/log/journal/$MID/*.journal  2&gt;/dev/null || :
++chmod 0640 %{_localstatedir}/log/journal/$MID/*.journal~ 2&gt;/dev/null || :
++chmod o-rx %{_rundir}/log/journal/$MID                   2&gt;/dev/null || :
++
+ # Try to read default runlevel from the old inittab if it exists
+ if [ ! -e /etc/systemd/system/default.target -a -e /etc/inittab ]; then
+   runlevel=$(awk -F ':' '$3 == "initdefault" &amp;&amp; $1 !~ "^#" { print $2 }' /etc/inittab 2&gt; /dev/null)
+@@ -806,12 +762,12 @@
+   rm -f /etc/systemd/system/default.target 2&gt;&amp;1 || :
+ fi
+ 
+-%pretrans -n %{udevpkgname} -p &lt;lua&gt;
++%pretrans -n udev%{?mini} -p &lt;lua&gt;
+ if posix.stat("/lib/udev") and not posix.stat("/usr/lib/udev") then
+   posix.symlink("/lib/udev", "/usr/lib/udev")
+ end
+ 
+-%pre -n %{udevpkgname}
++%pre -n udev%{?mini}
+ if test -L /usr/lib/udev -a /lib/udev -ef /usr/lib/udev ; then
+   rm /usr/lib/udev
+   mv /lib/udev /usr/lib
+@@ -824,14 +780,13 @@
+ # kill daemon if we are not in a chroot
+ if test -f /proc/1/exe -a -d /proc/1/root ; then
+         if test "$(stat -Lc '%%D-%%i' /)" = "$(stat -Lc '%%D-%%i' /proc/1/root)"; then
+-                systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket systemd-udevd.service udev.service udev-control.socket udev-kernel.socket &gt;/dev/null 2&gt;&amp;1 || :
++                systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket systemd-udevd.service udev-control.socket udev-kernel.socket &gt;/dev/null 2&gt;&amp;1 || :
+                 udevadm control --exit 2&gt;&amp;1 || :
+         fi
+ fi
+ 
+-%post -n %{udevpkgname}
++%post -n udev%{?mini}
+ /usr/bin/udevadm hwdb --update &gt;/dev/null 2&gt;&amp;1 || :
+-%{fillup_and_insserv -Y boot.udev}
+ # add KERNEL name match to existing persistent net rules
+ sed -ri '/KERNEL/ ! { s/NAME="(eth|wlan|ath)([0-9]+)"/KERNEL=="\1*", NAME="\1\2"/}' \
+     /etc/udev/rules.d/70-persistent-net.rules &gt;/dev/null 2&gt;&amp;1 || :
+@@ -865,7 +820,7 @@
+  fi
+ fi
+ 
+-%postun -n %{udevpkgname}
++%postun -n udev%{?mini}
+ %insserv_cleanup
+ systemctl daemon-reload &gt;/dev/null 2&gt;&amp;1 || :
+ 
+@@ -885,13 +840,13 @@
+ fi
+ 
+ %if %{defined regenerate_initrd_post}
+-%posttrans -n %{udevpkgname}
++%posttrans -n udev%{?mini}
+ %regenerate_initrd_posttrans
+ %endif
+ 
+-%post -n lib%{udevpkgname}%{udev_major} -p /sbin/ldconfig
++%post -n libudev%{?mini}1 -p /sbin/ldconfig
+ 
+-%postun -n lib%{udevpkgname}%{udev_major} -p /sbin/ldconfig
++%postun -n libudev%{?mini}1 -p /sbin/ldconfig
+ 
+ %if ! 0%{?bootstrap}
+ 
+@@ -954,6 +909,7 @@
+ /bin/systemctl
+ %{_bindir}/systemd-sleep-grub
+ %{_bindir}/busctl
++%{_bindir}/bootctl
+ %{_bindir}/kernel-install
+ %{_bindir}/hostnamectl
+ %{_bindir}/localectl
+@@ -999,7 +955,6 @@
+ %dir %{_prefix}/lib/systemd/user
+ %dir %{_prefix}/lib/systemd/system
+ %exclude %{_prefix}/lib/systemd/system/systemd-udev*.*
+-%exclude %{_prefix}/lib/systemd/system/udev.service
+ %exclude %{_prefix}/lib/systemd/system/initrd-udevadm-cleanup-db.service
+ %exclude %{_prefix}/lib/systemd/system/systemd-udev-root-symlink.service
+ %exclude %{_prefix}/lib/systemd/system/*.target.wants/systemd-udev*.*
+@@ -1043,10 +998,7 @@
+ %if ! 0%{?bootstrap}
+ %{_prefix}/lib/systemd/system-generators/systemd-cryptsetup-generator
+ %endif
+-%if 0%{?has_efi}
+-%{_bindir}/bootctl
+ %{_prefix}/lib/systemd/system-generators/systemd-efi-boot-generator
+-%endif
+ %{_prefix}/lib/systemd/system-generators/systemd-getty-generator
+ %{_prefix}/lib/systemd/system-generators/systemd-rc-local-generator
+ %{_prefix}/lib/systemd/system-generators/systemd-fstab-generator
+@@ -1167,7 +1119,7 @@
+ %endif
+ 
+ %if ! 0%{?bootstrap}
+-%files bash-completion -f files.completion
++%files bash-completion
+ %defattr(-,root,root,-)
+ %dir %{_datadir}/bash-completion
+ %dir %{_datadir}/bash-completion/completions
+@@ -1219,7 +1171,7 @@
+ %{_mandir}/man8/runlevel.8*
+ %endif
+ 
+-%files -n %{udevpkgname}
++%files -n udev%{?mini}
+ %defattr(-,root,root)
+ /sbin/udevd
+ /sbin/udevadm
+@@ -1249,7 +1201,6 @@
+ %{_prefix}/lib/udev/rules.d/*.rules
+ %dir %{_prefix}/lib/udev/hwdb.d
+ %{_prefix}/lib/udev/hwdb.d/*
+-%{_sysconfdir}/init.d/boot.udev
+ %dir %{_sysconfdir}/udev/
+ %dir %{_sysconfdir}/udev/rules.d/
+ %ghost %{_sysconfdir}/udev/hwdb.bin
+@@ -1259,7 +1210,7 @@
+ %endif
+ %dir %{_prefix}/lib/systemd/system
+ %{_prefix}/lib/systemd/systemd-udevd
+-%{_prefix}/lib/systemd/system/*udev*.service
++%{_prefix}/lib/systemd/system/systemd-udev*.service
+ %{_prefix}/lib/systemd/system/systemd-udevd*.socket
+ %dir %{_prefix}/lib/systemd/system/sysinit.target.wants
+ %{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-udev*.service
+@@ -1272,11 +1223,11 @@
+ %{_datadir}/pkgconfig/udev.pc
+ %endif
+ 
+-%files -n lib%{udevpkgname}%{udev_major}
++%files -n libudev%{?mini}1
+ %defattr(-,root,root)
+ %{_libdir}/libudev.so.*
+ 
+-%files -n lib%{udevpkgname}-devel
++%files -n libudev%{?mini}-devel
+ %defattr(-,root,root)
+ %{_includedir}/libudev.h
+ %{_libdir}/libudev.so
+@@ -1317,7 +1268,6 @@
+ %defattr(-,root,root)
+ %dir %attr(2755,root,systemd-journal) %{_localstatedir}/log/journal/
+ %{_localstatedir}/log/README
+-/etc/init.d/systemd-journald
+ 
+ %files -n nss-myhostname
+ %defattr(-, root, root)
+</diff>
+    </file>
+    <file state="deleted">
+      <old name="boot.udev" md5="b129b7afb02c4c7d7557a5a0e61d75ce" size="1530"/>
+      <diff lines="75">@@ -1,74 +0,0 @@
+-#!/bin/sh
+-#
+-### BEGIN INIT INFO
+-# Provides:          boot.udev
+-# Required-Start:
+-# Required-Stop:
+-# Should-Start:
+-# Should-Stop:
+-# Default-Start:     B
+-# Default-Stop:
+-# Short-Description: manage /dev and kernel device-events
+-# Description:       udevd daemon to manage /dev and kernel device events
+-### END INIT INFO
+-
+-. /etc/rc.status
+-
+-PATH="/sbin:/bin:/usr/sbin:/usr/bin"
+-DAEMON="@@SYSTEMD@@/systemd-udevd"
+-UDEVADM="@@BINDIR@@/udevadm"
+-WRITERULE="@@PREFIX@@/write_dev_root_rule"
+-udev_timeout=180
+-
+-case "$1" in
+-	start)
+-		# create /dev/root symlink with dynamic rule
+-		if [ -x ${WRITERULE} ]; then
+-		    ${WRITERULE} &gt;/dev/null 2&gt;&amp;1 || true
+-		fi
+-
+-		# start udevd
+-		echo -n "Starting udevd: "
+-		${DAEMON} --daemon
+-		if [ $? -ne 0 ]; then
+-			rc_status -v
+-			rc_exit
+-		fi
+-		rc_status -v
+-
+-		# trigger events for all devices
+-		echo -n "Loading drivers, configuring devices: "
+-		${UDEVADM} trigger --type=subsystems --action=add
+-		${UDEVADM} trigger --type=devices --action=add
+-
+-		# wait for events to finish
+-		${UDEVADM} settle --timeout=$udev_timeout
+-		rc_status -v
+-		;;
+-	stop)
+-		echo -n "Stopping udevd: "
+-		killproc ${DAEMON}
+-		rc_status -v
+-		;;
+-	restart)
+-		echo -n "Restarting udevd: "
+-		killproc ${DAEMON}
+-		${DAEMON} --daemon
+-		rc_status -v
+-		;;
+-	status)
+-		echo -n "Checking for udevd: "
+-		checkproc ${DAEMON}
+-		rc_status -v
+-		;;
+-	reload|force-reload)
+-		echo -n "Reloading udevd: "
+-		killproc -G -HUP ${DAEMON}
+-		rc_status -v
+-		;;
+-	*)
+-		echo "Usage: $0 {start|stop|restart|status|reload|force-reload}"
+-		exit 1
+-		;;
+-esac
+-rc_exit
+</diff>
+    </file>
+    <file state="deleted">
+      <old name="systemd-journald.init" md5="7ce8e496f62120366814501069544a90" size="560"/>
+      <diff lines="34">@@ -1,33 +0,0 @@
+-#! /bin/sh
+-#
+-# Copyright (c) 2001-2002 SuSE Linux AG, Nuernberg, Germany.
+-# All rights reserved.
+-#
+-# /etc/init.d/systemd-journald
+-#
+-### BEGIN INIT INFO
+-# Provides:          syslog
+-# Required-Start:    $null
+-# Required-Stop:     $null
+-# Default-Start:     2 3 5
+-# Default-Stop:
+-# Short-Description: compat wrapper for journald
+-# Description:       compat wrapper for journald
+-### END INIT INFO
+-
+-. /etc/rc.status
+-
+-rc_reset
+-
+-case "$1" in
+-  start|stop|restart)
+-	rc_failed 3
+-	rc_status -v
+-	;;
+-    *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
+-	;;
+-esac
+-
+-rc_exit
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="patchinfo"/>
+  <target project="SUSE:SLE-12:Update" package="patchinfo"/>
+<sourcediff key="4ae00aa710384dc9615927de4c0545e3">
+  <old project="SUSE:Maintenance:2345" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2345" package="patchinfo" rev="5" srcmd5="5efce46563f314c1bf09d909cbff3338"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="e5fbad0a9acb7d39d959098c88554a0d" size="2741"/>
+      <diff lines="44">@@ -0,0 +1,43 @@
++&lt;patchinfo incident="2345"&gt;
++  &lt;issue id="973848" tracker="bnc"&gt;system-journal has executable rights set for all (755) after boot&lt;/issue&gt;
++  &lt;issue id="970860" tracker="bnc"&gt;missing support for gpio triggered graceful system shutdown&lt;/issue&gt;
++  &lt;issue id="972612" tracker="bnc"&gt;VUL-1: systemd: Archived journal files are world readable&lt;/issue&gt;
++  &lt;issue id="972727" tracker="bnc"&gt;'dmsetup remove' always fails when the --force option is used&lt;/issue&gt;
++  &lt;issue id="963230" tracker="bnc"&gt;systemd ignores systemd.log_level=debug in cmdline with quiet&lt;/issue&gt;
++  &lt;issue id="959886" tracker="bnc"&gt;L3: Fails to provide echo/prompt in EMERGENCY mode&lt;/issue&gt;
++  &lt;issue id="960158" tracker="bnc"&gt;nfs-utils and nfs-server make systemd fill up the logs ....&lt;/issue&gt;
++  &lt;issue id="967122" tracker="bnc"&gt;systemctl bash completion not working properly for "start" able services&lt;/issue&gt;
++  &lt;issue id="965897" tracker="bnc"&gt;hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest&lt;/issue&gt;
++  &lt;issue id="970423" tracker="bnc"&gt;systemd: fstab-generator doesn't honor automount option&lt;/issue&gt;
++  &lt;issue id="CVE-2014-9770" tracker="cve"/&gt;
++  &lt;issue id="CVE-2015-8842" tracker="cve"/&gt;
++  &lt;issue id="318444" tracker="fate"/&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;fbui&lt;/packager&gt;
++  &lt;description&gt;
++This update for SystemD provides fixes and enhancements.
++
++The following security issue has been fixed:
++
++- Don't allow read access to journal files to users. (bsc#972612, CVE-2014-9770, CVE-2015-8842)
++
++The following non-security issues have been fixed:
++
++- Incorrect permissions set after boot on journal files. (bsc#973848)
++- Exclude device-mapper from block device ownership event locking. (bsc#972727)
++- Explicitly set mode for /run/log.
++- Don't apply sgid and executable bit to journal files, only the directories they are contained in.
++- Add ability to mask access mode by pre-existing access mode on files/directories.
++- No need to pass --all if inactive is explicitly requested in list-units. (bsc#967122)
++- Fix automount option and don't start associated mount unit at boot. (bsc#970423)
++- Support more than just power-gpio-key. (fate#318444, bsc#970860)
++- Add standard gpio power button support. (fate#318444, bsc#970860)
++- Downgrade warnings about wanted unit which are not found. (bsc#960158)
++- Shorten hostname before checking for trailing dot. (bsc#965897)
++- Remove WorkingDirectory parameter from emergency, rescue and console-shell.service. (bsc#959886)
++- Don't ship boot.udev and systemd-journald.init anymore.
++- Revert "log: honour the kernel's quiet cmdline argument". (bsc#963230)
++&lt;/description&gt;
++  &lt;summary&gt;Security update for systemd&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-BSK:12:ppc64le" package="patchinfo.2345"/>
+<sourcediff key="4ae00aa710384dc9615927de4c0545e3">
+  <old project="SUSE:Maintenance:2345" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2345" package="patchinfo" rev="5" srcmd5="5efce46563f314c1bf09d909cbff3338"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="e5fbad0a9acb7d39d959098c88554a0d" size="2741"/>
+      <diff lines="44">@@ -0,0 +1,43 @@
++&lt;patchinfo incident="2345"&gt;
++  &lt;issue id="973848" tracker="bnc"&gt;system-journal has executable rights set for all (755) after boot&lt;/issue&gt;
++  &lt;issue id="970860" tracker="bnc"&gt;missing support for gpio triggered graceful system shutdown&lt;/issue&gt;
++  &lt;issue id="972612" tracker="bnc"&gt;VUL-1: systemd: Archived journal files are world readable&lt;/issue&gt;
++  &lt;issue id="972727" tracker="bnc"&gt;'dmsetup remove' always fails when the --force option is used&lt;/issue&gt;
++  &lt;issue id="963230" tracker="bnc"&gt;systemd ignores systemd.log_level=debug in cmdline with quiet&lt;/issue&gt;
++  &lt;issue id="959886" tracker="bnc"&gt;L3: Fails to provide echo/prompt in EMERGENCY mode&lt;/issue&gt;
++  &lt;issue id="960158" tracker="bnc"&gt;nfs-utils and nfs-server make systemd fill up the logs ....&lt;/issue&gt;
++  &lt;issue id="967122" tracker="bnc"&gt;systemctl bash completion not working properly for "start" able services&lt;/issue&gt;
++  &lt;issue id="965897" tracker="bnc"&gt;hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest&lt;/issue&gt;
++  &lt;issue id="970423" tracker="bnc"&gt;systemd: fstab-generator doesn't honor automount option&lt;/issue&gt;
++  &lt;issue id="CVE-2014-9770" tracker="cve"/&gt;
++  &lt;issue id="CVE-2015-8842" tracker="cve"/&gt;
++  &lt;issue id="318444" tracker="fate"/&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;fbui&lt;/packager&gt;
++  &lt;description&gt;
++This update for SystemD provides fixes and enhancements.
++
++The following security issue has been fixed:
++
++- Don't allow read access to journal files to users. (bsc#972612, CVE-2014-9770, CVE-2015-8842)
++
++The following non-security issues have been fixed:
++
++- Incorrect permissions set after boot on journal files. (bsc#973848)
++- Exclude device-mapper from block device ownership event locking. (bsc#972727)
++- Explicitly set mode for /run/log.
++- Don't apply sgid and executable bit to journal files, only the directories they are contained in.
++- Add ability to mask access mode by pre-existing access mode on files/directories.
++- No need to pass --all if inactive is explicitly requested in list-units. (bsc#967122)
++- Fix automount option and don't start associated mount unit at boot. (bsc#970423)
++- Support more than just power-gpio-key. (fate#318444, bsc#970860)
++- Add standard gpio power button support. (fate#318444, bsc#970860)
++- Downgrade warnings about wanted unit which are not found. (bsc#960158)
++- Shorten hostname before checking for trailing dot. (bsc#965897)
++- Remove WorkingDirectory parameter from emergency, rescue and console-shell.service. (bsc#959886)
++- Don't ship boot.udev and systemd-journald.init anymore.
++- Revert "log: honour the kernel's quiet cmdline argument". (bsc#963230)
++&lt;/description&gt;
++  &lt;summary&gt;Security update for systemd&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-BSK:12:s390x" package="patchinfo.2345"/>
+<sourcediff key="4ae00aa710384dc9615927de4c0545e3">
+  <old project="SUSE:Maintenance:2345" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2345" package="patchinfo" rev="5" srcmd5="5efce46563f314c1bf09d909cbff3338"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="e5fbad0a9acb7d39d959098c88554a0d" size="2741"/>
+      <diff lines="44">@@ -0,0 +1,43 @@
++&lt;patchinfo incident="2345"&gt;
++  &lt;issue id="973848" tracker="bnc"&gt;system-journal has executable rights set for all (755) after boot&lt;/issue&gt;
++  &lt;issue id="970860" tracker="bnc"&gt;missing support for gpio triggered graceful system shutdown&lt;/issue&gt;
++  &lt;issue id="972612" tracker="bnc"&gt;VUL-1: systemd: Archived journal files are world readable&lt;/issue&gt;
++  &lt;issue id="972727" tracker="bnc"&gt;'dmsetup remove' always fails when the --force option is used&lt;/issue&gt;
++  &lt;issue id="963230" tracker="bnc"&gt;systemd ignores systemd.log_level=debug in cmdline with quiet&lt;/issue&gt;
++  &lt;issue id="959886" tracker="bnc"&gt;L3: Fails to provide echo/prompt in EMERGENCY mode&lt;/issue&gt;
++  &lt;issue id="960158" tracker="bnc"&gt;nfs-utils and nfs-server make systemd fill up the logs ....&lt;/issue&gt;
++  &lt;issue id="967122" tracker="bnc"&gt;systemctl bash completion not working properly for "start" able services&lt;/issue&gt;
++  &lt;issue id="965897" tracker="bnc"&gt;hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest&lt;/issue&gt;
++  &lt;issue id="970423" tracker="bnc"&gt;systemd: fstab-generator doesn't honor automount option&lt;/issue&gt;
++  &lt;issue id="CVE-2014-9770" tracker="cve"/&gt;
++  &lt;issue id="CVE-2015-8842" tracker="cve"/&gt;
++  &lt;issue id="318444" tracker="fate"/&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;fbui&lt;/packager&gt;
++  &lt;description&gt;
++This update for SystemD provides fixes and enhancements.
++
++The following security issue has been fixed:
++
++- Don't allow read access to journal files to users. (bsc#972612, CVE-2014-9770, CVE-2015-8842)
++
++The following non-security issues have been fixed:
++
++- Incorrect permissions set after boot on journal files. (bsc#973848)
++- Exclude device-mapper from block device ownership event locking. (bsc#972727)
++- Explicitly set mode for /run/log.
++- Don't apply sgid and executable bit to journal files, only the directories they are contained in.
++- Add ability to mask access mode by pre-existing access mode on files/directories.
++- No need to pass --all if inactive is explicitly requested in list-units. (bsc#967122)
++- Fix automount option and don't start associated mount unit at boot. (bsc#970423)
++- Support more than just power-gpio-key. (fate#318444, bsc#970860)
++- Add standard gpio power button support. (fate#318444, bsc#970860)
++- Downgrade warnings about wanted unit which are not found. (bsc#960158)
++- Shorten hostname before checking for trailing dot. (bsc#965897)
++- Remove WorkingDirectory parameter from emergency, rescue and console-shell.service. (bsc#959886)
++- Don't ship boot.udev and systemd-journald.init anymore.
++- Revert "log: honour the kernel's quiet cmdline argument". (bsc#963230)
++&lt;/description&gt;
++  &lt;summary&gt;Security update for systemd&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-BSK:12:x86_64" package="patchinfo.2345"/>
+<sourcediff key="4ae00aa710384dc9615927de4c0545e3">
+  <old project="SUSE:Maintenance:2345" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2345" package="patchinfo" rev="5" srcmd5="5efce46563f314c1bf09d909cbff3338"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="e5fbad0a9acb7d39d959098c88554a0d" size="2741"/>
+      <diff lines="44">@@ -0,0 +1,43 @@
++&lt;patchinfo incident="2345"&gt;
++  &lt;issue id="973848" tracker="bnc"&gt;system-journal has executable rights set for all (755) after boot&lt;/issue&gt;
++  &lt;issue id="970860" tracker="bnc"&gt;missing support for gpio triggered graceful system shutdown&lt;/issue&gt;
++  &lt;issue id="972612" tracker="bnc"&gt;VUL-1: systemd: Archived journal files are world readable&lt;/issue&gt;
++  &lt;issue id="972727" tracker="bnc"&gt;'dmsetup remove' always fails when the --force option is used&lt;/issue&gt;
++  &lt;issue id="963230" tracker="bnc"&gt;systemd ignores systemd.log_level=debug in cmdline with quiet&lt;/issue&gt;
++  &lt;issue id="959886" tracker="bnc"&gt;L3: Fails to provide echo/prompt in EMERGENCY mode&lt;/issue&gt;
++  &lt;issue id="960158" tracker="bnc"&gt;nfs-utils and nfs-server make systemd fill up the logs ....&lt;/issue&gt;
++  &lt;issue id="967122" tracker="bnc"&gt;systemctl bash completion not working properly for "start" able services&lt;/issue&gt;
++  &lt;issue id="965897" tracker="bnc"&gt;hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest&lt;/issue&gt;
++  &lt;issue id="970423" tracker="bnc"&gt;systemd: fstab-generator doesn't honor automount option&lt;/issue&gt;
++  &lt;issue id="CVE-2014-9770" tracker="cve"/&gt;
++  &lt;issue id="CVE-2015-8842" tracker="cve"/&gt;
++  &lt;issue id="318444" tracker="fate"/&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;fbui&lt;/packager&gt;
++  &lt;description&gt;
++This update for SystemD provides fixes and enhancements.
++
++The following security issue has been fixed:
++
++- Don't allow read access to journal files to users. (bsc#972612, CVE-2014-9770, CVE-2015-8842)
++
++The following non-security issues have been fixed:
++
++- Incorrect permissions set after boot on journal files. (bsc#973848)
++- Exclude device-mapper from block device ownership event locking. (bsc#972727)
++- Explicitly set mode for /run/log.
++- Don't apply sgid and executable bit to journal files, only the directories they are contained in.
++- Add ability to mask access mode by pre-existing access mode on files/directories.
++- No need to pass --all if inactive is explicitly requested in list-units. (bsc#967122)
++- Fix automount option and don't start associated mount unit at boot. (bsc#970423)
++- Support more than just power-gpio-key. (fate#318444, bsc#970860)
++- Add standard gpio power button support. (fate#318444, bsc#970860)
++- Downgrade warnings about wanted unit which are not found. (bsc#960158)
++- Shorten hostname before checking for trailing dot. (bsc#965897)
++- Remove WorkingDirectory parameter from emergency, rescue and console-shell.service. (bsc#959886)
++- Don't ship boot.udev and systemd-journald.init anymore.
++- Revert "log: honour the kernel's quiet cmdline argument". (bsc#963230)
++&lt;/description&gt;
++  &lt;summary&gt;Security update for systemd&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DESKTOP:12:x86_64" package="patchinfo.2345"/>
+<sourcediff key="4ae00aa710384dc9615927de4c0545e3">
+  <old project="SUSE:Maintenance:2345" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2345" package="patchinfo" rev="5" srcmd5="5efce46563f314c1bf09d909cbff3338"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="e5fbad0a9acb7d39d959098c88554a0d" size="2741"/>
+      <diff lines="44">@@ -0,0 +1,43 @@
++&lt;patchinfo incident="2345"&gt;
++  &lt;issue id="973848" tracker="bnc"&gt;system-journal has executable rights set for all (755) after boot&lt;/issue&gt;
++  &lt;issue id="970860" tracker="bnc"&gt;missing support for gpio triggered graceful system shutdown&lt;/issue&gt;
++  &lt;issue id="972612" tracker="bnc"&gt;VUL-1: systemd: Archived journal files are world readable&lt;/issue&gt;
++  &lt;issue id="972727" tracker="bnc"&gt;'dmsetup remove' always fails when the --force option is used&lt;/issue&gt;
++  &lt;issue id="963230" tracker="bnc"&gt;systemd ignores systemd.log_level=debug in cmdline with quiet&lt;/issue&gt;
++  &lt;issue id="959886" tracker="bnc"&gt;L3: Fails to provide echo/prompt in EMERGENCY mode&lt;/issue&gt;
++  &lt;issue id="960158" tracker="bnc"&gt;nfs-utils and nfs-server make systemd fill up the logs ....&lt;/issue&gt;
++  &lt;issue id="967122" tracker="bnc"&gt;systemctl bash completion not working properly for "start" able services&lt;/issue&gt;
++  &lt;issue id="965897" tracker="bnc"&gt;hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest&lt;/issue&gt;
++  &lt;issue id="970423" tracker="bnc"&gt;systemd: fstab-generator doesn't honor automount option&lt;/issue&gt;
++  &lt;issue id="CVE-2014-9770" tracker="cve"/&gt;
++  &lt;issue id="CVE-2015-8842" tracker="cve"/&gt;
++  &lt;issue id="318444" tracker="fate"/&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;fbui&lt;/packager&gt;
++  &lt;description&gt;
++This update for SystemD provides fixes and enhancements.
++
++The following security issue has been fixed:
++
++- Don't allow read access to journal files to users. (bsc#972612, CVE-2014-9770, CVE-2015-8842)
++
++The following non-security issues have been fixed:
++
++- Incorrect permissions set after boot on journal files. (bsc#973848)
++- Exclude device-mapper from block device ownership event locking. (bsc#972727)
++- Explicitly set mode for /run/log.
++- Don't apply sgid and executable bit to journal files, only the directories they are contained in.
++- Add ability to mask access mode by pre-existing access mode on files/directories.
++- No need to pass --all if inactive is explicitly requested in list-units. (bsc#967122)
++- Fix automount option and don't start associated mount unit at boot. (bsc#970423)
++- Support more than just power-gpio-key. (fate#318444, bsc#970860)
++- Add standard gpio power button support. (fate#318444, bsc#970860)
++- Downgrade warnings about wanted unit which are not found. (bsc#960158)
++- Shorten hostname before checking for trailing dot. (bsc#965897)
++- Remove WorkingDirectory parameter from emergency, rescue and console-shell.service. (bsc#959886)
++- Don't ship boot.udev and systemd-journald.init anymore.
++- Revert "log: honour the kernel's quiet cmdline argument". (bsc#963230)
++&lt;/description&gt;
++  &lt;summary&gt;Security update for systemd&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:12:ppc64le" package="patchinfo.2345"/>
+<sourcediff key="4ae00aa710384dc9615927de4c0545e3">
+  <old project="SUSE:Maintenance:2345" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2345" package="patchinfo" rev="5" srcmd5="5efce46563f314c1bf09d909cbff3338"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="e5fbad0a9acb7d39d959098c88554a0d" size="2741"/>
+      <diff lines="44">@@ -0,0 +1,43 @@
++&lt;patchinfo incident="2345"&gt;
++  &lt;issue id="973848" tracker="bnc"&gt;system-journal has executable rights set for all (755) after boot&lt;/issue&gt;
++  &lt;issue id="970860" tracker="bnc"&gt;missing support for gpio triggered graceful system shutdown&lt;/issue&gt;
++  &lt;issue id="972612" tracker="bnc"&gt;VUL-1: systemd: Archived journal files are world readable&lt;/issue&gt;
++  &lt;issue id="972727" tracker="bnc"&gt;'dmsetup remove' always fails when the --force option is used&lt;/issue&gt;
++  &lt;issue id="963230" tracker="bnc"&gt;systemd ignores systemd.log_level=debug in cmdline with quiet&lt;/issue&gt;
++  &lt;issue id="959886" tracker="bnc"&gt;L3: Fails to provide echo/prompt in EMERGENCY mode&lt;/issue&gt;
++  &lt;issue id="960158" tracker="bnc"&gt;nfs-utils and nfs-server make systemd fill up the logs ....&lt;/issue&gt;
++  &lt;issue id="967122" tracker="bnc"&gt;systemctl bash completion not working properly for "start" able services&lt;/issue&gt;
++  &lt;issue id="965897" tracker="bnc"&gt;hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest&lt;/issue&gt;
++  &lt;issue id="970423" tracker="bnc"&gt;systemd: fstab-generator doesn't honor automount option&lt;/issue&gt;
++  &lt;issue id="CVE-2014-9770" tracker="cve"/&gt;
++  &lt;issue id="CVE-2015-8842" tracker="cve"/&gt;
++  &lt;issue id="318444" tracker="fate"/&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;fbui&lt;/packager&gt;
++  &lt;description&gt;
++This update for SystemD provides fixes and enhancements.
++
++The following security issue has been fixed:
++
++- Don't allow read access to journal files to users. (bsc#972612, CVE-2014-9770, CVE-2015-8842)
++
++The following non-security issues have been fixed:
++
++- Incorrect permissions set after boot on journal files. (bsc#973848)
++- Exclude device-mapper from block device ownership event locking. (bsc#972727)
++- Explicitly set mode for /run/log.
++- Don't apply sgid and executable bit to journal files, only the directories they are contained in.
++- Add ability to mask access mode by pre-existing access mode on files/directories.
++- No need to pass --all if inactive is explicitly requested in list-units. (bsc#967122)
++- Fix automount option and don't start associated mount unit at boot. (bsc#970423)
++- Support more than just power-gpio-key. (fate#318444, bsc#970860)
++- Add standard gpio power button support. (fate#318444, bsc#970860)
++- Downgrade warnings about wanted unit which are not found. (bsc#960158)
++- Shorten hostname before checking for trailing dot. (bsc#965897)
++- Remove WorkingDirectory parameter from emergency, rescue and console-shell.service. (bsc#959886)
++- Don't ship boot.udev and systemd-journald.init anymore.
++- Revert "log: honour the kernel's quiet cmdline argument". (bsc#963230)
++&lt;/description&gt;
++  &lt;summary&gt;Security update for systemd&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:12:s390x" package="patchinfo.2345"/>
+<sourcediff key="4ae00aa710384dc9615927de4c0545e3">
+  <old project="SUSE:Maintenance:2345" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2345" package="patchinfo" rev="5" srcmd5="5efce46563f314c1bf09d909cbff3338"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="e5fbad0a9acb7d39d959098c88554a0d" size="2741"/>
+      <diff lines="44">@@ -0,0 +1,43 @@
++&lt;patchinfo incident="2345"&gt;
++  &lt;issue id="973848" tracker="bnc"&gt;system-journal has executable rights set for all (755) after boot&lt;/issue&gt;
++  &lt;issue id="970860" tracker="bnc"&gt;missing support for gpio triggered graceful system shutdown&lt;/issue&gt;
++  &lt;issue id="972612" tracker="bnc"&gt;VUL-1: systemd: Archived journal files are world readable&lt;/issue&gt;
++  &lt;issue id="972727" tracker="bnc"&gt;'dmsetup remove' always fails when the --force option is used&lt;/issue&gt;
++  &lt;issue id="963230" tracker="bnc"&gt;systemd ignores systemd.log_level=debug in cmdline with quiet&lt;/issue&gt;
++  &lt;issue id="959886" tracker="bnc"&gt;L3: Fails to provide echo/prompt in EMERGENCY mode&lt;/issue&gt;
++  &lt;issue id="960158" tracker="bnc"&gt;nfs-utils and nfs-server make systemd fill up the logs ....&lt;/issue&gt;
++  &lt;issue id="967122" tracker="bnc"&gt;systemctl bash completion not working properly for "start" able services&lt;/issue&gt;
++  &lt;issue id="965897" tracker="bnc"&gt;hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest&lt;/issue&gt;
++  &lt;issue id="970423" tracker="bnc"&gt;systemd: fstab-generator doesn't honor automount option&lt;/issue&gt;
++  &lt;issue id="CVE-2014-9770" tracker="cve"/&gt;
++  &lt;issue id="CVE-2015-8842" tracker="cve"/&gt;
++  &lt;issue id="318444" tracker="fate"/&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;fbui&lt;/packager&gt;
++  &lt;description&gt;
++This update for SystemD provides fixes and enhancements.
++
++The following security issue has been fixed:
++
++- Don't allow read access to journal files to users. (bsc#972612, CVE-2014-9770, CVE-2015-8842)
++
++The following non-security issues have been fixed:
++
++- Incorrect permissions set after boot on journal files. (bsc#973848)
++- Exclude device-mapper from block device ownership event locking. (bsc#972727)
++- Explicitly set mode for /run/log.
++- Don't apply sgid and executable bit to journal files, only the directories they are contained in.
++- Add ability to mask access mode by pre-existing access mode on files/directories.
++- No need to pass --all if inactive is explicitly requested in list-units. (bsc#967122)
++- Fix automount option and don't start associated mount unit at boot. (bsc#970423)
++- Support more than just power-gpio-key. (fate#318444, bsc#970860)
++- Add standard gpio power button support. (fate#318444, bsc#970860)
++- Downgrade warnings about wanted unit which are not found. (bsc#960158)
++- Shorten hostname before checking for trailing dot. (bsc#965897)
++- Remove WorkingDirectory parameter from emergency, rescue and console-shell.service. (bsc#959886)
++- Don't ship boot.udev and systemd-journald.init anymore.
++- Revert "log: honour the kernel's quiet cmdline argument". (bsc#963230)
++&lt;/description&gt;
++  &lt;summary&gt;Security update for systemd&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:12:x86_64" package="patchinfo.2345"/>
+<sourcediff key="4ae00aa710384dc9615927de4c0545e3">
+  <old project="SUSE:Maintenance:2345" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2345" package="patchinfo" rev="5" srcmd5="5efce46563f314c1bf09d909cbff3338"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="e5fbad0a9acb7d39d959098c88554a0d" size="2741"/>
+      <diff lines="44">@@ -0,0 +1,43 @@
++&lt;patchinfo incident="2345"&gt;
++  &lt;issue id="973848" tracker="bnc"&gt;system-journal has executable rights set for all (755) after boot&lt;/issue&gt;
++  &lt;issue id="970860" tracker="bnc"&gt;missing support for gpio triggered graceful system shutdown&lt;/issue&gt;
++  &lt;issue id="972612" tracker="bnc"&gt;VUL-1: systemd: Archived journal files are world readable&lt;/issue&gt;
++  &lt;issue id="972727" tracker="bnc"&gt;'dmsetup remove' always fails when the --force option is used&lt;/issue&gt;
++  &lt;issue id="963230" tracker="bnc"&gt;systemd ignores systemd.log_level=debug in cmdline with quiet&lt;/issue&gt;
++  &lt;issue id="959886" tracker="bnc"&gt;L3: Fails to provide echo/prompt in EMERGENCY mode&lt;/issue&gt;
++  &lt;issue id="960158" tracker="bnc"&gt;nfs-utils and nfs-server make systemd fill up the logs ....&lt;/issue&gt;
++  &lt;issue id="967122" tracker="bnc"&gt;systemctl bash completion not working properly for "start" able services&lt;/issue&gt;
++  &lt;issue id="965897" tracker="bnc"&gt;hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest&lt;/issue&gt;
++  &lt;issue id="970423" tracker="bnc"&gt;systemd: fstab-generator doesn't honor automount option&lt;/issue&gt;
++  &lt;issue id="CVE-2014-9770" tracker="cve"/&gt;
++  &lt;issue id="CVE-2015-8842" tracker="cve"/&gt;
++  &lt;issue id="318444" tracker="fate"/&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;fbui&lt;/packager&gt;
++  &lt;description&gt;
++This update for SystemD provides fixes and enhancements.
++
++The following security issue has been fixed:
++
++- Don't allow read access to journal files to users. (bsc#972612, CVE-2014-9770, CVE-2015-8842)
++
++The following non-security issues have been fixed:
++
++- Incorrect permissions set after boot on journal files. (bsc#973848)
++- Exclude device-mapper from block device ownership event locking. (bsc#972727)
++- Explicitly set mode for /run/log.
++- Don't apply sgid and executable bit to journal files, only the directories they are contained in.
++- Add ability to mask access mode by pre-existing access mode on files/directories.
++- No need to pass --all if inactive is explicitly requested in list-units. (bsc#967122)
++- Fix automount option and don't start associated mount unit at boot. (bsc#970423)
++- Support more than just power-gpio-key. (fate#318444, bsc#970860)
++- Add standard gpio power button support. (fate#318444, bsc#970860)
++- Downgrade warnings about wanted unit which are not found. (bsc#960158)
++- Shorten hostname before checking for trailing dot. (bsc#965897)
++- Remove WorkingDirectory parameter from emergency, rescue and console-shell.service. (bsc#959886)
++- Don't ship boot.udev and systemd-journald.init anymore.
++- Revert "log: honour the kernel's quiet cmdline argument". (bsc#963230)
++&lt;/description&gt;
++  &lt;summary&gt;Security update for systemd&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:12:ppc64le" package="patchinfo.2345"/>
+<sourcediff key="4ae00aa710384dc9615927de4c0545e3">
+  <old project="SUSE:Maintenance:2345" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2345" package="patchinfo" rev="5" srcmd5="5efce46563f314c1bf09d909cbff3338"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="e5fbad0a9acb7d39d959098c88554a0d" size="2741"/>
+      <diff lines="44">@@ -0,0 +1,43 @@
++&lt;patchinfo incident="2345"&gt;
++  &lt;issue id="973848" tracker="bnc"&gt;system-journal has executable rights set for all (755) after boot&lt;/issue&gt;
++  &lt;issue id="970860" tracker="bnc"&gt;missing support for gpio triggered graceful system shutdown&lt;/issue&gt;
++  &lt;issue id="972612" tracker="bnc"&gt;VUL-1: systemd: Archived journal files are world readable&lt;/issue&gt;
++  &lt;issue id="972727" tracker="bnc"&gt;'dmsetup remove' always fails when the --force option is used&lt;/issue&gt;
++  &lt;issue id="963230" tracker="bnc"&gt;systemd ignores systemd.log_level=debug in cmdline with quiet&lt;/issue&gt;
++  &lt;issue id="959886" tracker="bnc"&gt;L3: Fails to provide echo/prompt in EMERGENCY mode&lt;/issue&gt;
++  &lt;issue id="960158" tracker="bnc"&gt;nfs-utils and nfs-server make systemd fill up the logs ....&lt;/issue&gt;
++  &lt;issue id="967122" tracker="bnc"&gt;systemctl bash completion not working properly for "start" able services&lt;/issue&gt;
++  &lt;issue id="965897" tracker="bnc"&gt;hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest&lt;/issue&gt;
++  &lt;issue id="970423" tracker="bnc"&gt;systemd: fstab-generator doesn't honor automount option&lt;/issue&gt;
++  &lt;issue id="CVE-2014-9770" tracker="cve"/&gt;
++  &lt;issue id="CVE-2015-8842" tracker="cve"/&gt;
++  &lt;issue id="318444" tracker="fate"/&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;fbui&lt;/packager&gt;
++  &lt;description&gt;
++This update for SystemD provides fixes and enhancements.
++
++The following security issue has been fixed:
++
++- Don't allow read access to journal files to users. (bsc#972612, CVE-2014-9770, CVE-2015-8842)
++
++The following non-security issues have been fixed:
++
++- Incorrect permissions set after boot on journal files. (bsc#973848)
++- Exclude device-mapper from block device ownership event locking. (bsc#972727)
++- Explicitly set mode for /run/log.
++- Don't apply sgid and executable bit to journal files, only the directories they are contained in.
++- Add ability to mask access mode by pre-existing access mode on files/directories.
++- No need to pass --all if inactive is explicitly requested in list-units. (bsc#967122)
++- Fix automount option and don't start associated mount unit at boot. (bsc#970423)
++- Support more than just power-gpio-key. (fate#318444, bsc#970860)
++- Add standard gpio power button support. (fate#318444, bsc#970860)
++- Downgrade warnings about wanted unit which are not found. (bsc#960158)
++- Shorten hostname before checking for trailing dot. (bsc#965897)
++- Remove WorkingDirectory parameter from emergency, rescue and console-shell.service. (bsc#959886)
++- Don't ship boot.udev and systemd-journald.init anymore.
++- Revert "log: honour the kernel's quiet cmdline argument". (bsc#963230)
++&lt;/description&gt;
++  &lt;summary&gt;Security update for systemd&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:12:s390x" package="patchinfo.2345"/>
+<sourcediff key="4ae00aa710384dc9615927de4c0545e3">
+  <old project="SUSE:Maintenance:2345" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2345" package="patchinfo" rev="5" srcmd5="5efce46563f314c1bf09d909cbff3338"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="e5fbad0a9acb7d39d959098c88554a0d" size="2741"/>
+      <diff lines="44">@@ -0,0 +1,43 @@
++&lt;patchinfo incident="2345"&gt;
++  &lt;issue id="973848" tracker="bnc"&gt;system-journal has executable rights set for all (755) after boot&lt;/issue&gt;
++  &lt;issue id="970860" tracker="bnc"&gt;missing support for gpio triggered graceful system shutdown&lt;/issue&gt;
++  &lt;issue id="972612" tracker="bnc"&gt;VUL-1: systemd: Archived journal files are world readable&lt;/issue&gt;
++  &lt;issue id="972727" tracker="bnc"&gt;'dmsetup remove' always fails when the --force option is used&lt;/issue&gt;
++  &lt;issue id="963230" tracker="bnc"&gt;systemd ignores systemd.log_level=debug in cmdline with quiet&lt;/issue&gt;
++  &lt;issue id="959886" tracker="bnc"&gt;L3: Fails to provide echo/prompt in EMERGENCY mode&lt;/issue&gt;
++  &lt;issue id="960158" tracker="bnc"&gt;nfs-utils and nfs-server make systemd fill up the logs ....&lt;/issue&gt;
++  &lt;issue id="967122" tracker="bnc"&gt;systemctl bash completion not working properly for "start" able services&lt;/issue&gt;
++  &lt;issue id="965897" tracker="bnc"&gt;hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest&lt;/issue&gt;
++  &lt;issue id="970423" tracker="bnc"&gt;systemd: fstab-generator doesn't honor automount option&lt;/issue&gt;
++  &lt;issue id="CVE-2014-9770" tracker="cve"/&gt;
++  &lt;issue id="CVE-2015-8842" tracker="cve"/&gt;
++  &lt;issue id="318444" tracker="fate"/&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;fbui&lt;/packager&gt;
++  &lt;description&gt;
++This update for SystemD provides fixes and enhancements.
++
++The following security issue has been fixed:
++
++- Don't allow read access to journal files to users. (bsc#972612, CVE-2014-9770, CVE-2015-8842)
++
++The following non-security issues have been fixed:
++
++- Incorrect permissions set after boot on journal files. (bsc#973848)
++- Exclude device-mapper from block device ownership event locking. (bsc#972727)
++- Explicitly set mode for /run/log.
++- Don't apply sgid and executable bit to journal files, only the directories they are contained in.
++- Add ability to mask access mode by pre-existing access mode on files/directories.
++- No need to pass --all if inactive is explicitly requested in list-units. (bsc#967122)
++- Fix automount option and don't start associated mount unit at boot. (bsc#970423)
++- Support more than just power-gpio-key. (fate#318444, bsc#970860)
++- Add standard gpio power button support. (fate#318444, bsc#970860)
++- Downgrade warnings about wanted unit which are not found. (bsc#960158)
++- Shorten hostname before checking for trailing dot. (bsc#965897)
++- Remove WorkingDirectory parameter from emergency, rescue and console-shell.service. (bsc#959886)
++- Don't ship boot.udev and systemd-journald.init anymore.
++- Revert "log: honour the kernel's quiet cmdline argument". (bsc#963230)
++&lt;/description&gt;
++  &lt;summary&gt;Security update for systemd&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2345" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:12:x86_64" package="patchinfo.2345"/>
+<sourcediff key="4ae00aa710384dc9615927de4c0545e3">
+  <old project="SUSE:Maintenance:2345" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2345" package="patchinfo" rev="5" srcmd5="5efce46563f314c1bf09d909cbff3338"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="e5fbad0a9acb7d39d959098c88554a0d" size="2741"/>
+      <diff lines="44">@@ -0,0 +1,43 @@
++&lt;patchinfo incident="2345"&gt;
++  &lt;issue id="973848" tracker="bnc"&gt;system-journal has executable rights set for all (755) after boot&lt;/issue&gt;
++  &lt;issue id="970860" tracker="bnc"&gt;missing support for gpio triggered graceful system shutdown&lt;/issue&gt;
++  &lt;issue id="972612" tracker="bnc"&gt;VUL-1: systemd: Archived journal files are world readable&lt;/issue&gt;
++  &lt;issue id="972727" tracker="bnc"&gt;'dmsetup remove' always fails when the --force option is used&lt;/issue&gt;
++  &lt;issue id="963230" tracker="bnc"&gt;systemd ignores systemd.log_level=debug in cmdline with quiet&lt;/issue&gt;
++  &lt;issue id="959886" tracker="bnc"&gt;L3: Fails to provide echo/prompt in EMERGENCY mode&lt;/issue&gt;
++  &lt;issue id="960158" tracker="bnc"&gt;nfs-utils and nfs-server make systemd fill up the logs ....&lt;/issue&gt;
++  &lt;issue id="967122" tracker="bnc"&gt;systemctl bash completion not working properly for "start" able services&lt;/issue&gt;
++  &lt;issue id="965897" tracker="bnc"&gt;hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest&lt;/issue&gt;
++  &lt;issue id="970423" tracker="bnc"&gt;systemd: fstab-generator doesn't honor automount option&lt;/issue&gt;
++  &lt;issue id="CVE-2014-9770" tracker="cve"/&gt;
++  &lt;issue id="CVE-2015-8842" tracker="cve"/&gt;
++  &lt;issue id="318444" tracker="fate"/&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;fbui&lt;/packager&gt;
++  &lt;description&gt;
++This update for SystemD provides fixes and enhancements.
++
++The following security issue has been fixed:
++
++- Don't allow read access to journal files to users. (bsc#972612, CVE-2014-9770, CVE-2015-8842)
++
++The following non-security issues have been fixed:
++
++- Incorrect permissions set after boot on journal files. (bsc#973848)
++- Exclude device-mapper from block device ownership event locking. (bsc#972727)
++- Explicitly set mode for /run/log.
++- Don't apply sgid and executable bit to journal files, only the directories they are contained in.
++- Add ability to mask access mode by pre-existing access mode on files/directories.
++- No need to pass --all if inactive is explicitly requested in list-units. (bsc#967122)
++- Fix automount option and don't start associated mount unit at boot. (bsc#970423)
++- Support more than just power-gpio-key. (fate#318444, bsc#970860)
++- Add standard gpio power button support. (fate#318444, bsc#970860)
++- Downgrade warnings about wanted unit which are not found. (bsc#960158)
++- Shorten hostname before checking for trailing dot. (bsc#965897)
++- Remove WorkingDirectory parameter from emergency, rescue and console-shell.service. (bsc#959886)
++- Don't ship boot.udev and systemd-journald.init anymore.
++- Revert "log: honour the kernel's quiet cmdline argument". (bsc#963230)
++&lt;/description&gt;
++  &lt;summary&gt;Security update for systemd&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+</request>

@@ -1,0 +1,14 @@
+bnc899334 libvirt claiming Machine already exists
+bnc903757 Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported
+bnc904432 SLE12: Cannot get networking to work in LXC containers
+bnc911737 Starting a libvirt container depending on a stopped network problem
+bnc914297 virt-create-rootfs can't connect to SMT server
+bnc914693 VUL-0: CVE-2015-0236: libvirt:  access control bypass
+bnc921355 libvirt-tck qemu apparmor problems
+bnc921555 libvirt qemu domain with hostdev can't start apparmor-enforced
+bnc921586 default /etc/libvirt/qemu.conf settings prohibit Apparmor confinement of domains
+bnc936524 libvirt-lxc crashes when interface type='direct' is used in domain
+bnc938228 SLES11 SP4:  "virsh dumpxml domain" and "virsh migrate" fail when configuration contains DRBD block device
+bnc948516 virsh dominfo - error "failed to get security label"
+bnc948686 Cluster fenced node and started 2 instances of VirtualDomain resources
+bnc953110 VUL-1: CVE-2015-5313: libvirtd: Directory traversal

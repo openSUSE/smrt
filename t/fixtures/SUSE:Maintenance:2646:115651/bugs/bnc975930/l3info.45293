@@ -1,0 +1,12 @@
+incident=45293
+summary=Customer reports performance drop between SLE11 SP4 and SLE12 SP0 in multithreaded application -- it was demonstrated by simple multithreaded test (and partially affected by MALLOC_ARENA_MAX environment settings). They pointed that upstream glibc version doesn't have such degradation.
+summary=
+probability=medium
+impact=low
+patch=major_change
+reproducer=Simple reproducing program is in [1]. Note that performance drop was not possible to observe on systems with "too many" CPUs [2] (and [3]). 4 CPUs (physical or virtual) were recommended.
+reproducer=
+reproducer=[1] https://bugzilla.suse.com/show_bug.cgi?id=975930#c0
+reproducer=[2] https://bugzilla.suse.com/show_bug.cgi?id=975930#c37
+reproducer=[3] https://bugzilla.suse.com/show_bug.cgi?id=975930#c26
+requires_3dparty=no

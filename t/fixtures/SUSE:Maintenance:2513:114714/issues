@@ -1,0 +1,1 @@
+bnc977012 VUL-0: quagga: Missing size check in bgp_dump_routes_func in bgpd/bgp_dump.c allowing DoS

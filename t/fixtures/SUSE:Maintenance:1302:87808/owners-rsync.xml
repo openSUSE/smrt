@@ -1,0 +1,5 @@
+<collection>
+  <owner rootproject="SUSE" project="SUSE:SLE-12:GA" package="rsync">
+    <person name="farmer" role="bugowner"/>
+  </owner>
+</collection>

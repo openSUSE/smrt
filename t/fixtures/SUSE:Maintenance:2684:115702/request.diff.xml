@@ -1,0 +1,660 @@
+<request id="115702" actions="0">
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="glib2.SUSE_SLE-11-SP1_Update"/>
+  <target project="SUSE:SLE-11-SP1:Update" package="glib2"/>
+<sourcediff key="44f9ae660c9afdd53a5981987beecf01">
+  <old project="SUSE:SLE-11-SP1:Update" package="glib2.1091" rev="1" srcmd5="eb31b4f8e46f08256ec8cc0cb49bec87"/>
+  <new project="SUSE:Maintenance:2684" package="glib2.SUSE_SLE-11-SP1_Update" rev="2" srcmd5="e0c59768ce91b400588708949e54669f"/>
+  <files>
+    <file state="changed">
+      <old name="glib2.changes" md5="5e2cf3ebd69e52c1607ff0b0abc72bc2" size="56083"/>
+      <new name="glib2.changes" md5="98ed21f376c0ac6877193f49e265d978" size="56277"/>
+      <diff lines="11">@@ -1,4 +1,10 @@
+ -------------------------------------------------------------------
++Mon May 30 19:07:56 UTC 2016 - idonmez@suse.com
++
++- devel package must require pcre-devel, fixes pango build for
++  bsc#978972
++
++-------------------------------------------------------------------
+ Tue May 10 22:12:52 CEST 2016 - hpj@suse.com
+ 
+ - Added glib2-bnc956599-fix-gsocket-fd-leak.patch (bnc#956599).
+</diff>
+    </file>
+    <file state="changed">
+      <old name="glib2.spec" md5="59e71df664e844e3071f34f912ff1eb9" size="18683"/>
+      <new name="glib2.spec" md5="08b862d50e360418af0e71bbe62ea145" size="18710"/>
+      <diff lines="8">@@ -155,6 +155,7 @@
+ Requires:       libgio-2_0-0 = %{version}
+ Requires:       libgthread-2_0-0 = %{version}
+ Requires:       libgobject-2_0-0 = %{version}
++Requires:       pcre-devel
+ Summary:        Include files and libraries mandatory for development
+ Group:          Development/Libraries/C and C++
+ AutoReqProv:    on
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="pango.SUSE_SLE-11-SP1_Update"/>
+  <target project="SUSE:SLE-11-SP1:Update" package="pango"/>
+<sourcediff key="d91dba568ceb4bba24866b447bd849eb">
+  <old project="SUSE:SLE-11-SP1:Update" package="pango.imported_4065" rev="1" srcmd5="69544003b79da3249d88fb77176627af"/>
+  <new project="SUSE:Maintenance:2684" package="pango.SUSE_SLE-11-SP1_Update" rev="2" srcmd5="b7e88e678c960fdf256238b36f1217cc"/>
+  <files>
+    <file state="changed">
+      <old name="baselibs.conf" md5="8fe5b075afcfbb65107f2f5154820c36" size="972"/>
+      <new name="baselibs.conf" md5="5f56777c08c9165e4d12496223c3b833" size="1090"/>
+      <diff lines="11">@@ -7,8 +7,8 @@
+   targettype 64bit postun "LD_LIBRARY_PATH=usr/lib64 usr/bin/pango-querymodules-64 &gt; etc/pango/pango64.modules || echo pango-querymodules-64 did not run properly in postun."
+   targettype 64bit postun "fi"
+   targettype 32bit postun "if [ -x usr/bin/pango-querymodules ] ; then"
+-  targettype 32bit postun "LD_LIBRARY_PATH=usr/lib usr/bin/pango-querymodules &gt; etc/pango/pango.modules"
++  targettype 32bit postun "LD_LIBRARY_PATH=usr/lib usr/bin/pango-querymodules &gt; etc/pango/pango.modules || echo pango-querymodules did not run properly in postun."
+   targettype 32bit postun "fi"
+   targettype 64bit post "LD_LIBRARY_PATH=usr/lib64 usr/bin/pango-querymodules-64 &gt; etc/pango/pango64.modules || echo pango-querymodules-64 did not run properly in postin."
+-  targettype 32bit post "LD_LIBRARY_PATH=usr/lib usr/bin/pango-querymodules &gt; etc/pango/pango.modules"
++  targettype 32bit post "LD_LIBRARY_PATH=usr/lib usr/bin/pango-querymodules &gt; etc/pango/pango.modules || echo pango-querymodules did not run properly in postin."
+ arch ppc package pango-devel
+</diff>
+    </file>
+    <file state="changed">
+      <old name="pango.changes" md5="1c0784015e9e5c322afbf363e3fdaf80" size="36165"/>
+      <new name="pango.changes" md5="8c3c35fd783e6d912a68926c31f00542" size="36343"/>
+      <diff lines="10">@@ -1,4 +1,9 @@
+ -------------------------------------------------------------------
++Mon May 30 18:04:47 UTC 2016 - idonmez@suse.com
++
++- Ignore postun/postin errors in 32bit case too bsc#978972 
++
++-------------------------------------------------------------------
+ Mon Feb 28 19:07:59 CST 2011 - gburt@suse.de
+ 
+ - Fix CVE-2011-0020 (bnc#666101)
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:SLE-11-SP1:Update" package="patchinfo"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP1-TERADATA:x86_64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP3-TERADATA:x86_64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:i586" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:ia64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:ppc64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:s390x" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:x86_64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:11-SP4:i586" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:11-SP4:ia64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:11-SP4:ppc64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:11-SP4:s390x" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:11-SP4:x86_64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP1-TERADATA:x86_64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP3-TERADATA:x86_64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP4:i586" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP4:ia64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP4:ppc64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP4:s390x" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:2684" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP4:x86_64" package="patchinfo.2684"/>
+<sourcediff key="0d0d1259d75655bf5f41f395d20c12a0">
+  <old project="SUSE:Maintenance:2684" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:2684" package="patchinfo" rev="3" srcmd5="f973cf2da44405630c15d5695c72f13d"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="37526a3f8e6ad2c9b41f1db3de63631c" size="620"/>
+      <diff lines="16">@@ -0,0 +1,15 @@
++&lt;patchinfo incident="2684"&gt;
++  &lt;name&gt;glib2-pango&lt;/name&gt;
++  &lt;issue id="978972" tracker="bnc"&gt;[build1492] Installation of libpango-1_0-0-32bit failed&lt;/issue&gt;
++  &lt;issue id="981957" tracker="bnc"&gt;glib2-devel missed a dependency pcre-devel&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;low&lt;/rating&gt;
++  &lt;packager&gt;namtrac&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 and pango provides the following fixes:
++
++- Ignore postun/postin errors in 32bit case too. (bsc#978972)
++- Add missing pcre-devel dependency to glib2-devel. (bsc#981957)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2, pango&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+</request>

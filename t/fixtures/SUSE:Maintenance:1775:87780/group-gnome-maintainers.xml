@@ -1,0 +1,8 @@
+<group>
+  <title>gnome-maintainers</title>
+  <email>bnc-team-gnome@forge.provo.novell.com</email>
+  <person>
+    <person userid="hefty"/>
+    <person userid="poet"/>
+  </person>
+</group>

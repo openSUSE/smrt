@@ -1,0 +1,7 @@
+incident=38957
+summary=Customer is using several DomUs on multiple Xen servers, and they are seeing time differences between the host and guest after some guest uptime regardless of guest clock source setting.
+probability=high
+impact=high
+patch=correct
+reproducer=Setup several domUs on multiple dom0s and watch the times on them all.
+requires_3dparty=no

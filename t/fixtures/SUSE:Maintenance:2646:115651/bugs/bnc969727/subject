@@ -1,0 +1,1 @@
+VUL-1: CVE-2016-1234: glibc: buffer overflow in glob with GLOB_ALTDIRFUNC and crafted directory

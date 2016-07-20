@@ -1,0 +1,1300 @@
+<request id="114433" actions="0">
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="glib2.SUSE_SLE-11-SP1_Update"/>
+  <target project="SUSE:SLE-11-SP1:Update" package="glib2"/>
+<sourcediff key="cf576db97c169135eb253355664a6613">
+  <old project="SUSE:SLE-11-SP1:Update" package="glib2.imported_10459" rev="1" srcmd5="a17377c0e7bb33b9e40073145a86b304"/>
+  <new project="SUSE:Maintenance:1091" package="glib2.SUSE_SLE-11-SP1_Update" rev="9" srcmd5="34c02dd63c2b1cd4d1777e1a0e7df361"/>
+  <files>
+    <file state="changed">
+      <old name="baselibs.conf" md5="3b127fcd054b84ef01927bfa9d1ab782" size="204"/>
+      <new name="baselibs.conf" md5="dde02ff87ca690aa4be54332b0c45531" size="516"/>
+      <diff lines="13">@@ -7,4 +7,11 @@
+ libgthread-2_0-0
+ libgobject-2_0-0
+ 
+-arch ppc package glib2-devel
++glib2-devel
++  requires -glib2-&lt;targettype&gt;
++  requires "libgio-2_0-0-&lt;targettype&gt; = &lt;version&gt;"
++  requires "libgmodule-2_0-0-&lt;targettype&gt; = &lt;version&gt;"
++  requires "libgobject-2_0-0-&lt;targettype&gt; = &lt;version&gt;"
++  requires "libgthread-2_0-0-&lt;targettype&gt; = &lt;version&gt;"
++  +^/usr/lib.*/glib-2.0/include/glibconfig.h
++  +^/usr/lib.*/pkgconfig/glib-2.0.pc
+</diff>
+    </file>
+    <file state="changed">
+      <old name="glib2-bnc899590-monotonic-clock.patch" md5="4959d2323ae148392e0905db34a82559" size="27960"/>
+      <new name="glib2-bnc899590-monotonic-clock.patch" md5="173ccdc6cc6e1d52c17514709aad1342" size="27561"/>
+      <diff lines="142">@@ -1,7 +1,5 @@
+-diff --git a/configure.in b/configure.in
+-index b9c3342..f5e7430 100644
+---- a/configure.in
+-+++ b/configure.in
++--- a/configure.in	
+++++ a/configure.in	
+ @@ -957,7 +957,6 @@ AC_CHECK_FUNCS(lstat strerror strsignal memmove vsnprintf stpcpy strcasecmp strn
+  AC_CHECK_FUNCS(chown lchmod lchown fchmod fchown link statvfs statfs utimes getgrgid getpwuid)
+  AC_CHECK_FUNCS(getmntent_r setmntent endmntent hasmntopt getmntinfo)
+@@ -36,10 +34,8 @@
+  
+  
+  dnl ********************************
+-diff --git a/docs/reference/glib/glib-sections.txt b/docs/reference/glib/glib-sections.txt
+-index d78fa4b..dfecc1b 100644
+---- a/docs/reference/glib/glib-sections.txt
+-+++ b/docs/reference/glib/glib-sections.txt
++--- a/docs/reference/glib/glib-sections.txt	
+++++ a/docs/reference/glib/glib-sections.txt	
+ @@ -516,6 +516,7 @@ GSourceFunc
+  g_source_set_callback_indirect
+  g_source_add_poll
+@@ -58,10 +54,8 @@
+  GDate
+  GTime
+  GDateDMY
+-diff --git a/docs/reference/glib/tmpl/date.sgml b/docs/reference/glib/tmpl/date.sgml
+-index 5d2610b..0dec8c2 100644
+---- a/docs/reference/glib/tmpl/date.sgml
+-+++ b/docs/reference/glib/tmpl/date.sgml
++--- a/docs/reference/glib/tmpl/date.sgml	
+++++ a/docs/reference/glib/tmpl/date.sgml	
+ @@ -131,6 +131,14 @@ length of the sleep.
+  @Returns: 
+  
+@@ -77,10 +71,8 @@
+  &lt;!-- ##### STRUCT GDate ##### --&gt;
+  &lt;para&gt;
+  Represents a day between January 1, Year 1 and a few thousand years in
+-diff --git a/gio/glocalfileinfo.c b/gio/glocalfileinfo.c
+-index a913e82..7330fbd 100644
+---- a/gio/glocalfileinfo.c
+-+++ b/gio/glocalfileinfo.c
++--- a/gio/glocalfileinfo.c	
+++++ a/gio/glocalfileinfo.c	
+ @@ -125,18 +125,18 @@ static GHashTable *gid_cache = NULL;
+  char *
+  _g_local_file_info_create_etag (GLocalFileStat *statbuf)
+@@ -107,10 +99,19 @@
+  }
+  
+  static char *
+-diff --git a/glib/Makefile.am b/glib/Makefile.am
+-index e2080fb..31cd315 100644
+---- a/glib/Makefile.am
+-+++ b/glib/Makefile.am
++--- a/glib-2.0.pc.in	
+++++ a/glib-2.0.pc.in	
++@@ -10,6 +10,7 @@ glib_mkenums=glib-mkenums
++ Name: GLib
++ Description: C Utility Library
++ Version: @VERSION@
+++Requires.private: @PCRE_REQUIRES@
++ Libs: -L${libdir} -lglib-2.0 @INTLLIBS@
++-Libs.private: @ICONV_LIBS@
+++Libs.private: @G_THREAD_LIBS@ @G_LIBS_EXTRA@ @PCRE_LIBS@ @INTLLIBS@ @ICONV_LIBS@
++ Cflags: -I${includedir}/glib-2.0 -I${libdir}/glib-2.0/include @GLIB_EXTRA_CFLAGS@
++--- a/glib/Makefile.am	
+++++ a/glib/Makefile.am	
+ @@ -291,7 +291,7 @@ pcre_lib =
+  pcre_inc =
+  endif
+@@ -120,10 +121,8 @@
+  libglib_2_0_la_DEPENDENCIES = libcharset/libcharset.la $(printf_la) @GIO@ @GSPAWN@ @PLATFORMDEP@ $(glib_win32_res) $(glib_def)
+  
+  libglib_2_0_la_LDFLAGS = \
+-diff --git a/glib/glib.symbols b/glib/glib.symbols
+-index 6e3a63b..0a9d8ac 100644
+---- a/glib/glib.symbols
+-+++ b/glib/glib.symbols
++--- a/glib/glib.symbols	
+++++ a/glib/glib.symbols	
+ @@ -614,6 +614,7 @@ g_child_watch_add
+  g_child_watch_add_full
+  g_child_watch_source_new
+@@ -140,10 +139,8 @@
+  g_source_get_current_time
+  g_source_get_id
+  g_source_get_priority
+-diff --git a/glib/gmain.c b/glib/gmain.c
+-index e04c7b5..d11ef50 100644
+---- a/glib/gmain.c
+-+++ b/glib/gmain.c
++--- a/glib/gmain.c	
+++++ a/glib/gmain.c	
+ @@ -159,8 +159,8 @@ struct _GMainContext
+  
+    GPollFunc poll_func;
+@@ -734,10 +731,8 @@
+  
+    return source;
+  }
+-diff --git a/glib/gmain.h b/glib/gmain.h
+-index 15fe54e..171e0be 100644
+---- a/glib/gmain.h
+-+++ b/glib/gmain.h
++--- a/glib/gmain.h	
+++++ a/glib/gmain.h	
+ @@ -217,6 +217,7 @@ void     g_source_remove_poll      (GSource        *source,
+  
+  void     g_source_get_current_time (GSource        *source,
+@@ -756,11 +751,9 @@
+  
+  /* ============== Compat main loop stuff ================== */
+  
+-diff --git a/glib/gtimer.c b/glib/gtimer.c
+-index cd6a082..f39cda6 100644
+---- a/glib/gtimer.c
+-+++ b/glib/gtimer.c
+-@@ -48,12 +48,9 @@
++--- a/glib/gtimer.c	
+++++ a/glib/gtimer.c	
++@@ -48,12 +48,9 @@ 
+  #endif /* G_OS_WIN32 */
+  
+  #include "glib.h"
+@@ -897,11 +890,9 @@
+  }
+  
+  /**
+-diff --git a/glib/gtypes.h b/glib/gtypes.h
+-index 571a7db..f8b6214 100644
+---- a/glib/gtypes.h
+-+++ b/glib/gtypes.h
+-@@ -33,6 +33,7 @@
++--- a/glib/gtypes.h	
+++++ a/glib/gtypes.h	
++@@ -33,6 +33,7 @@ 
+  
+  #include &lt;glibconfig.h&gt;
+  #include &lt;glib/gmacros.h&gt;
+</diff>
+    </file>
+    <file state="changed">
+      <old name="glib2.changes" md5="0d2633ad7fe18b8131092725f3eef587" size="54980"/>
+      <new name="glib2.changes" md5="5e2cf3ebd69e52c1607ff0b0abc72bc2" size="56083"/>
+      <diff lines="32">@@ -1,4 +1,31 @@
+ -------------------------------------------------------------------
++Tue May 10 22:12:52 CEST 2016 - hpj@suse.com
++
++- Added glib2-bnc956599-fix-gsocket-fd-leak.patch (bnc#956599).
++
++-------------------------------------------------------------------
++Thu Apr 28 19:31:14 CDT 2016 - federico@suse.com
++
++- Removed glib2-bnc846912.patch - will be included from upstream in
++  the next patch.  
++- Added glib2-bnc931445-g-threads-init-backport.patch - Relax
++  g_thread_init() requirements so it can be called multiple times.
++  Thanks to Roberto Sassu and Dominique Leuenberger for figuring out
++  the set of commits.
++
++-------------------------------------------------------------------
++Thu Mar 10 16:08:42 UTC 2016 - meissner@suse.com
++
++- Include architecture specific glibconfig.h into the -devel-biarch
++  package, package the devel as biarch for all architectures. bsc#970694
++
++-------------------------------------------------------------------
++Thu Sep  3 14:52:51 CDT 2015 - federico@suse.com
++
++- Updated glib2-bnc899590-monotonic-clock.patch for bnc#929542 - Add
++  the -lrt and PCRE libraries to glib-2.0.pc.in.
++
++-------------------------------------------------------------------
+ Fri Nov  7 17:53:04 CST 2014 - federico@suse.com
+ 
+ - Added glib2-bnc899590-monotonic-clock.patch for bnc#899590.  This
+</diff>
+    </file>
+    <file state="changed">
+      <old name="glib2.spec" md5="b3c855341e660d1f91aaca746ad08fe1" size="18367"/>
+      <new name="glib2.spec" md5="59e71df664e844e3071f34f912ff1eb9" size="18683"/>
+      <diff lines="34">@@ -52,6 +52,7 @@
+ # Not depending on gtk-doc shortens bootstrap compilation path.
+ # Please update this file from the latest gtk-doc package:
+ Source5:        gtk-doc.m4
++Source6:	baselibs.conf
+ # PATCH-FIX-OPENSUSE glib2-mkinstalldirs.patch
+ Patch0:         glib2-mkinstalldirs.patch
+ # PATCH-FIX-OPENSUSE glib2-aclocal.patch
+@@ -65,10 +66,12 @@
+ Patch12:        glib2-bgo554887-threadsafe-boxed-types.patch
+ Patch13:        glib2-bgo660511-use-proc-mounts-1.patch
+ Patch14:        glib2-bgo660511-use-proc-mounts-2.patch
+-# PATCH-FEATURE-OPENSUSE glib2-bnc846912.patch sreeves@suse.com -- workaround a broken Java implementation
+-Patch15:        glib2-bnc846912.patch
+ # PATCH-FIX-UPSTREAM glib2-bnc899590-monotonic-clock.patch federico@suse.com - Use a monotonic clock for timeouts instead of wall time
+ Patch16:        glib2-bnc899590-monotonic-clock.patch
++# PATCH-FIX-UPSTREAM glib2-bnc931445-g-threads-init-backport.patch bnc931445 federico@suse.com -- Relax g_thread_init() requirements so it doesn't print warnings
++Patch17:        glib2-bnc931445-g-threads-init-backport.patch
++# PATCH-FIX-UPSTREAM glib2-bnc956599-fix-gsocket-fd-leak.patch hpj@suse.com -- Fix fd leak when GSocketClient fails to connect asynchronously.
++Patch18:        glib2-bnc956599-fix-gsocket-fd-leak.patch
+ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+ Requires:       %{name}-lang = %{version}
+ # For temporary %%pre script only.
+@@ -429,8 +432,9 @@
+ %patch12 -p1
+ %patch13 -p1
+ %patch14 -p1
+-%patch15 -p1
+ %patch16 -p1
++%patch17 -p1
++%patch18 -p1
+ cp -a %{S:1} %{S:2} %{S:3} .
+ cp -a %{S:4} gnome_defaults.conf
+ if ! test -f %{_datadir}/aclocal/gtk-doc.m4 ; then
+</diff>
+    </file>
+    <file state="added">
+      <new name="glib2-bnc931445-g-threads-init-backport.patch" md5="b02fc8ef99f9aeaf107041cc504d5046" size="10159"/>
+      <diff lines="298">@@ -0,0 +1,297 @@
++Allow g_thread_init() to be called multiple times, and to call glib
++functions before that one is called.
++
++This consists of the following commits from upstream:
++
++3c5e1fd Remove additional thread support in performance test
++3bb404f Mention thread changes in NEWS
++94b8613 Use unconditional thread calls in gio and gobject
++de5c708 Make thread calls unconditional if G_THREADS_MANDATORY is set
++fa2bced Enable threads in g_type_init()
++0df3ca8 Relax g_thread_init() requirements
++
++
++diff --git a/README.in b/README.in
++index 911995e..971e03c 100644
++--- a/README.in
+++++ b/README.in
++@@ -24,6 +24,16 @@ Installation
++ 
++ See the file 'INSTALL'
++ 
+++Notes about GLib 2.24
+++=====================
+++* It is now allowed to call g_thread_init(NULL) multiple times, and
+++  to call glib functions before g_thread_init(NULL) is called
+++  (although the later is mainly a change in docs as this worked before
+++  too). See the GThread reference documentation for the details.
+++
+++* GObject now links to GThread and threads are enabled automatically
+++  when g_type_init() is called.
+++
++ Notes about GLib 2.22
++ =====================
++ 
++diff --git a/configure.in b/configure.in
++index f5e7430..f731b66 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -2337,6 +2337,7 @@ case $host in
++     ;;
++ esac
++ 
+++AM_CONDITIONAL(HAVE_THREADS, [test "$have_threads" != "none"])
++ AC_DEFINE_UNQUOTED(G_THREAD_SOURCE,"gthread-$have_threads.c",
++ 		   [Source file containing theread implementation])
++ AC_SUBST(G_THREAD_CFLAGS)
++diff --git a/docs/reference/glib/tmpl/threads.sgml b/docs/reference/glib/tmpl/threads.sgml
++index 58c62bd..feb9399 100644
++--- a/docs/reference/glib/tmpl/threads.sgml
+++++ b/docs/reference/glib/tmpl/threads.sgml
++@@ -33,25 +33,30 @@ primitives to portably create and manage threads (#GThread).
++ &lt;/para&gt;
++ 
++ &lt;para&gt;
++-You must call g_thread_init() before executing any other GLib
++-functions (except g_mem_set_vtable()) in a GLib program if
++-g_thread_init() will be called at all. This is a requirement even if
++-no threads are in fact ever created by the process. It is enough that
++-g_thread_init() is called. If other GLib functions have been called
++-before that, the behaviour of the program is undefined. An exception
++-is g_mem_set_vtable() which may be called before g_thread_init().
++-
++-Failing this requirement can lead to hangs or crashes, apparently more
++-easily on Windows than on Linux, for example.
++-
++-Please note that if you call functions in some GLib-using library, in
++-particular those above the GTK+ stack, that library might well call
++-g_thread_init() itself, or call some other library that calls
++-g_thread_init(). Thus, if you use some GLib-based library that is
++-above the GTK+ stack, it is safest to call g_thread_init() in your
++-application's main() before calling any GLib functions or functions in
++-GLib-using libraries.
+++The threading system is initialized with g_thread_init(), which takes
+++an optional custom thread implementation or %NULL for the default implementation.
+++If you want to call g_thread_init() with a non-%NULL argument this must be done
+++before executing any other GLib functions (except g_mem_set_vtable()). This is a
+++requirement even if no threads are in fact ever created by the process.
+++&lt;/para&gt;
++ 
+++&lt;para&gt;
+++Calling g_thread_init() with a %NULL argument is somewhat more relaxed. You
+++may call any other glib functions in the main thread before g_thread_init() as
+++long as g_thread_init() is not called from a glib callback, or with any locks held.
+++However, many libraries above glib does not support late initialization of
+++threads, so doing this should be avoided if possible.
+++&lt;/para&gt;
+++
+++&lt;para&gt;
+++Please note that since version 2.24 the GObject initialization
+++function g_type_init() initializes threads (with a %NULL argument), so
+++most applications, including those using Gtk+ will run with threads
+++enabled. If you want a special thread implementation, make sure you
+++call g_thread_init() before g_type_init() is called.
+++&lt;/para&gt;
+++
+++&lt;para&gt;
++ After calling g_thread_init(), GLib is completely
++ thread safe (all global data is automatically locked), but individual
++ data structure instances are not automatically locked for performance
++@@ -198,24 +203,10 @@ may report unreliable times.
++ &lt;/para&gt;&lt;/note&gt;
++ 
++ &lt;para&gt;
++-g_thread_init() might only be called once. On the second call
++-it will abort with an error. If you want to make sure that the thread
++-system is initialized, you can do this:
++-&lt;/para&gt;
++-
++-&lt;para&gt;
++-&lt;informalexample&gt;
++-&lt;programlisting&gt;
++-if (!g_thread_supported (&lt;!-- --&gt;)) g_thread_init (NULL);
++-&lt;/programlisting&gt;
++-&lt;/informalexample&gt;
++-&lt;/para&gt;
++-
++-&lt;para&gt;
++-After that line, either the thread system is initialized or, if no
++-thread system is available in GLib (i.e. either #G_THREADS_ENABLED is
++-not defined or #G_THREADS_IMPL_NONE is defined), the program will
++-abort.
+++Calling g_thread_init() multiple times is allowed (since version
+++2.24), but nothing happens except for the first call. If the argument
+++is non-%NULL on such a call a warning will be printed, but otherwise
+++the argument is ignored.
++ &lt;/para&gt;
++ 
++ &lt;para&gt;
++diff --git a/gio/Makefile.am b/gio/Makefile.am
++index 383fa8f..971c380 100644
++--- a/gio/Makefile.am
+++++ b/gio/Makefile.am
++@@ -41,6 +41,10 @@ TESTS = abicheck.sh pltcheck.sh
++ endif
++ endif
++ 
+++if HAVE_THREADS
+++THREAD_FLAGS=-DG_THREADS_MANDATORY
+++endif
+++
++ AM_CPPFLAGS = \
++ 	-DG_LOG_DOMAIN=\"GLib-GIO\"			\
++ 	-I$(top_builddir)				\
++@@ -48,6 +52,7 @@ AM_CPPFLAGS = \
++ 	-I$(top_srcdir)/glib				\
++ 	-I$(top_srcdir)/gmodule				\
++ 	$(GLIB_DEBUG_FLAGS)				\
+++	$(THREAD_FLAGS)					\
++ 	-DG_DISABLE_DEPRECATED				\
++ 	-DGIO_COMPILATION				\
++ 	-DGIO_MODULE_DIR=\"$(GIO_MODULE_DIR)\"	
++diff --git a/glib/gthread.h b/glib/gthread.h
++index 019d0db..7a0abba 100644
++--- a/glib/gthread.h
+++++ b/glib/gthread.h
++@@ -198,7 +198,11 @@ GMutex* g_static_mutex_get_mutex_impl   (GMutex **mutex);
++           (cond, mutex, abs_time, G_MUTEX_DEBUG_MAGIC, G_STRLOC) : TRUE)
++ #endif /* G_ERRORCHECK_MUTEXES */
++ 
+++#if defined(G_THREADS_ENABLED) &amp;&amp; defined(G_THREADS_MANDATORY)
+++#define g_thread_supported()     1
+++#else
++ #define g_thread_supported()    (g_threads_got_initialized)
+++#endif
++ #define g_mutex_new()            G_THREAD_UF (mutex_new,      ())
++ #define g_cond_new()             G_THREAD_UF (cond_new,       ())
++ #define g_cond_signal(cond)      G_THREAD_CF (cond_signal,    (void)0, (cond))
++diff --git a/gobject-2.0-uninstalled.pc.in b/gobject-2.0-uninstalled.pc.in
++index 1aab1b5..d9378a5 100644
++--- a/gobject-2.0-uninstalled.pc.in
+++++ b/gobject-2.0-uninstalled.pc.in
++@@ -1,6 +1,6 @@
++ Name: GObject Uninstalled
++ Description: Object/type system for GLib, Not Installed
++-Requires: glib-2.0-uninstalled
+++Requires: glib-2.0-uninstalled,gthread-2.0-uninstalled
++ Version: @VERSION@
++ Libs: ${pc_top_builddir}/${pcfiledir}/gobject/libgobject-2.0.la
++ ## cflags contains builddir in addition to srcdir because of gmarshal.h
++diff --git a/gobject-2.0.pc.in b/gobject-2.0.pc.in
++index 31fe34d..41505a9 100644
++--- a/gobject-2.0.pc.in
+++++ b/gobject-2.0.pc.in
++@@ -5,7 +5,7 @@ includedir=@includedir@
++ 
++ Name: GObject
++ Description: GLib Type, Object, Parameter and Signal Library
++-Requires: glib-2.0
+++Requires: glib-2.0,gthread-2.0
++ Version: @VERSION@
++ Libs: -L${libdir} -lgobject-2.0
++ Cflags:
++diff --git a/gobject/Makefile.am b/gobject/Makefile.am
++index 8ec4ee7..f59cc3c 100644
++--- a/gobject/Makefile.am
+++++ b/gobject/Makefile.am
++@@ -6,12 +6,17 @@ include $(top_srcdir)/Makefile.decl
++ 
++ SUBDIRS = . tests
++ 
+++if HAVE_THREADS
+++THREAD_FLAGS=-DG_THREADS_MANDATORY
+++endif
+++
++ AM_CPPFLAGS = 					\
++ 	-DG_LOG_DOMAIN=\"GLib-GObject\"		\
++ 	-I$(top_srcdir)				\
++ 	-I$(top_srcdir)/glib			\
++ 	-I$(top_builddir)			\
++ 	$(GLIB_DEBUG_FLAGS)			\
+++	$(THREAD_FLAGS)				\
++ 	-DG_DISABLE_DEPRECATED			\
++ 	-DGOBJECT_COMPILATION			\
++ 	-DG_DISABLE_CONST_RETURNS
++@@ -31,7 +36,7 @@ TESTS = abicheck.sh pltcheck.sh
++ endif
++ endif
++ 
++-libglib = $(top_builddir)/glib/libglib-2.0.la
+++libglib = $(top_builddir)/glib/libglib-2.0.la $(top_builddir)/gthread/libgthread-2.0.la
++ 
++ # libraries to compile and install
++ lib_LTLIBRARIES = libgobject-2.0.la
++diff --git a/gobject/gtype.c b/gobject/gtype.c
++index a782ce7..05431e7 100644
++--- a/gobject/gtype.c
+++++ b/gobject/gtype.c
++@@ -4027,7 +4027,12 @@ g_type_init_with_debug_flags (GTypeDebugFlags debug_flags)
++   GTypeInfo info;
++   TypeNode *node;
++   volatile GType votype;
++-  
+++
+++#ifdef G_THREADS_ENABLED
+++  if (!g_thread_get_initialized())
+++    g_thread_init (NULL);
+++#endif
+++
++   G_LOCK (type_init_lock);
++   
++   G_WRITE_LOCK (&amp;type_rw_lock);
++@@ -4131,6 +4136,8 @@ g_type_init_with_debug_flags (GTypeDebugFlags debug_flags)
++  * to initialize the type system and assorted other code portions
++  * (such as the various fundamental type implementations or the signal
++  * system).
+++ *
+++ * Since version 2.24 this also initializes the thread system
++  */
++ void
++ g_type_init (void)
++diff --git a/gthread/gthread-impl.c b/gthread/gthread-impl.c
++index 24eb3c4..f0f2be0 100644
++--- a/gthread/gthread-impl.c
+++++ b/gthread/gthread-impl.c
++@@ -294,7 +294,12 @@ g_thread_init (GThreadFunctions* init)
++   gboolean supported;
++ 
++   if (thread_system_already_initialized)
++-    g_error ("GThread system may only be initialized once.");
+++    {
+++      if (init != NULL)
+++	g_warning ("GThread system already initialized, ignoring custom thread implementation.");
+++
+++      return;
+++    }
++ 
++   thread_system_already_initialized = TRUE;
++ 
++diff --git a/tests/gobject/performance.c b/tests/gobject/performance.c
++index 6f1b5d0..c626916 100644
++--- a/tests/gobject/performance.c
+++++ b/tests/gobject/performance.c
++@@ -32,14 +32,11 @@
++ #define TARGET_ROUND_TIME 0.004
++ 
++ static gboolean verbose = FALSE;
++-static gboolean init_threads = FALSE;
++ static int test_length = DEFAULT_TEST_TIME;
++ 
++ static GOptionEntry cmd_entries[] = {
++   {"verbose", 'v', 0, G_OPTION_ARG_NONE, &amp;verbose,
++    "Print extra information", NULL},
++-  {"threads", 't', 0, G_OPTION_ARG_NONE, &amp;init_threads,
++-   "Initialize threads", NULL},
++   {"seconds", 's', 0, G_OPTION_ARG_INT, &amp;test_length,
++    "Time to run each test in seconds", NULL},
++   {NULL}
++@@ -713,9 +710,6 @@ main (int   argc,
++       return 1;
++     }
++ 
++-  if (init_threads)
++-    g_thread_init (NULL);
++-
++   if (argc &gt; 1)
++     {
++       for (i = 1; i &lt; argc; i++)
+</diff>
+    </file>
+    <file state="added">
+      <new name="glib2-bnc956599-fix-gsocket-fd-leak.patch" md5="e9d1dde3de415ccb6e7b2833bed9170c" size="1267"/>
+      <diff lines="38">@@ -0,0 +1,37 @@
++From b76b24f1b3f82c2400cce8948b44ae32aa0e23ee Mon Sep 17 00:00:00 2001
++From: Dan Winship &lt;danw@gnome.org&gt;
++Date: Sat, 14 Aug 2010 16:15:39 -0400
++Subject: GSocketClient: plug two leaks
++
++g_socket_client_connect_async() was always leaking its GCancellable,
++and would also leak any GSocket that eventually failed to connect
++after returning G_IO_ERROR_PENDING.
++---
++ gio/gsocketclient.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/gio/gsocketclient.c b/gio/gsocketclient.c
++index 37b0b59..a4d4ea9 100644
++--- a/gio/gsocketclient.c
+++++ b/gio/gsocketclient.c
++@@ -751,6 +751,8 @@ g_socket_client_async_connect_complete (GSocketClientAsyncConnectData *data)
++   g_simple_async_result_complete (data-&gt;result);
++   g_object_unref (data-&gt;result);
++   g_object_unref (data-&gt;enumerator);
+++  if (data-&gt;cancellable)
+++    g_object_unref (data-&gt;cancellable);
++   g_slice_free (GSocketClientAsyncConnectData, data);
++ }
++ 
++@@ -790,6 +792,8 @@ g_socket_client_socket_callback (GSocket *socket,
++       if (!g_socket_check_connect_result (data-&gt;current_socket, &amp;error))
++ 	{
++ 	  set_last_error (data, error);
+++	  g_object_unref (data-&gt;current_socket);
+++	  data-&gt;current_socket = NULL;
++ 
++ 	  /* try next one */
++ 	  g_socket_address_enumerator_next_async (data-&gt;enumerator,
++-- 
++cgit v0.12
++
+</diff>
+    </file>
+    <file state="deleted">
+      <old name="glib2-bnc846912.patch" md5="62cd35a4d1d0a5163fa15ebe0ee0475f" size="642"/>
+      <diff lines="20">@@ -1,19 +0,0 @@
+-Index: glib-2.22.5/gthread/gthread-impl.c
+-===================================================================
+---- glib-2.22.5.orig/gthread/gthread-impl.c
+-+++ glib-2.22.5/gthread/gthread-impl.c
+-@@ -294,7 +294,13 @@ g_thread_init (GThreadFunctions* init)
+-   gboolean supported;
+- 
+-   if (thread_system_already_initialized)
+--    g_error ("GThread system may only be initialized once.");
+-+  {
+-+    if (init != NULL)
+-+      g_error ("GThread system may only be initialized once with non NULL init.");
+-+    else
+-+      g_warning ("GThread system already initialized, ignoring...");
+-+    return;
+-+  }
+- 
+-   thread_system_already_initialized = TRUE;
+- 
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:SLE-11-SP1:Update" package="patchinfo"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP1-TERADATA:x86_64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP3-TERADATA:x86_64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:i586" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:ia64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:ppc64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:s390x" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP4:x86_64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:11-SP4:i586" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:11-SP4:ia64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:11-SP4:ppc64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:11-SP4:s390x" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:11-SP4:x86_64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP1-TERADATA:x86_64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP3-TERADATA:x86_64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP4:i586" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP4:ia64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP4:ppc64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP4:s390x" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1091" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:11-SP4:x86_64" package="patchinfo.1091"/>
+<sourcediff key="0da31eae79dedecdfcdd188d5be23d00">
+  <old project="SUSE:Maintenance:1091" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1091" package="patchinfo" rev="8" srcmd5="2eabd8b2316e4f7af02713b278003ddc"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="b33cc531f96446c843d6ac53ab2bcf63" size="1063"/>
+      <diff lines="21">@@ -0,0 +1,20 @@
++&lt;patchinfo incident="1091"&gt;
++  &lt;name&gt;glib2&lt;/name&gt;
++  &lt;issue id="846912" tracker="bnc"&gt;gtk/glib bug w/ g_thread_init()&lt;/issue&gt;
++  &lt;issue id="929542" tracker="bnc"&gt;glib-2 packages do not build&lt;/issue&gt;
++  &lt;issue id="931445" tracker="bnc"&gt;java crashes Files.probeContentType&lt;/issue&gt;
++  &lt;issue id="956599" tracker="bnc"&gt;File descriptors "leak" with Gnome panel&lt;/issue&gt;
++  &lt;issue id="970694" tracker="bnc"&gt;include glibconfig.h into the -devel-32bit package&lt;/issue&gt;
++  &lt;category&gt;recommended&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;packager&gt;federico-mena&lt;/packager&gt;
++  &lt;description&gt;
++This update for glib2 provides the following fixes:
++
++- Fix file descriptor leak when GSocketClient fails to connect asynchronously. (bsc#956599)
++- Add -lrt and PCRE libraries to link flags in glib-2.0.pc.in. (bsc#929542)
++- Add glibconfig.h to the -devel-32bit packages and ship them for x86_64 and s390x. (bsc#970694)
++- Relax g_thread_init() requirements so it can be called multiple times. (bsc#931445, bsc#846912)
++&lt;/description&gt;
++  &lt;summary&gt;Recommended update for glib2&lt;/summary&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+</request>

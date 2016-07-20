@@ -1,0 +1,6 @@
+<person>
+  <login>reporter</login>
+  <email>reporter@example.com</email>
+  <realname>Reporter Smurf</realname>
+  <state>confirmed</state>
+</person>

@@ -1,0 +1,72 @@
+<resultlist state="bbc9765325c05cd3e4b9435ca8997816">
+  <result project="SUSE:Maintenance:2452" repository="SUSE_Updates_SLE-HA_12-SP1_x86_64" arch="x86_64" code="published" state="published">
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="yast2-cluster.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2452" repository="SUSE_Updates_SLE-HA_12-SP1_x86_64" arch="i586" code="published" state="published">
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="yast2-cluster.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2452" repository="SUSE_Updates_SLE-HA_12-SP1_s390x" arch="s390x" code="published" state="published">
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="yast2-cluster.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2452" repository="SUSE_Updates_SLE-HA_12-SP1_s390x" arch="s390" code="published" state="published">
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="yast2-cluster.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2452" repository="SUSE_SLE-12-SP1_Update" arch="i586" code="published" state="published">
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="yast2-cluster.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2452" repository="SUSE_SLE-12-SP1_Update" arch="x86_64" code="published" state="published">
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="yast2-cluster.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2452" repository="SUSE_SLE-12-SP1_Update" arch="s390" code="published" state="published">
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="yast2-cluster.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2452" repository="SUSE_SLE-12-SP1_Update" arch="s390x" code="published" state="published">
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="yast2-cluster.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2452" repository="SUSE_SLE-12-SP1_Update" arch="ppc64le" code="published" state="published">
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="yast2-cluster.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+  <result project="SUSE:Maintenance:2452" repository="SUSE_SLE-12-SP1_Update" arch="aarch64" code="published" state="published">
+    <status package="SLE-HA_12-SP1_ppc64le.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_s390x.SUSE_Channels" code="locked" />
+    <status package="SLE-HA_12-SP1_x86_64.SUSE_Channels" code="locked" />
+    <status package="patchinfo" code="locked" />
+    <status package="yast2-cluster.SUSE_SLE-12-SP1_Update" code="locked" />
+  </result>
+</resultlist>

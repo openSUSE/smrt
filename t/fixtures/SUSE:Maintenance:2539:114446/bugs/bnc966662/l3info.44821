@@ -1,0 +1,7 @@
+incident=44821
+summary=Four s390x patches to be added to kernel-default-3.0.101-0.7.37.1 of SLES12SP1LTSS
+probability=high
+impact=high
+patch=correct
+reproducer=lschp shows stale information in the "Cmg" and "Shared" column.
+requires_3dparty=no

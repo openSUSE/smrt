@@ -1,0 +1,1 @@
+VUL-0: CVE-2015-8785: kernel: fuse: possible denial of service in fuse_fill_write_pages()

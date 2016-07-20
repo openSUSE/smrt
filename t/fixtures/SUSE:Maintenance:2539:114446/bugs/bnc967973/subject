@@ -1,0 +1,1 @@
+VUL-0: CVE-2016-2544: kernel: ALSA: seq: Fix race at timer setup and close

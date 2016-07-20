@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<response>
+  <meta type="hash">
+    <limit type="integer">20</limit>
+    <next type="null"/>
+    <offset type="integer">0</offset>
+    <previous type="null"/>
+    <total_count type="integer">3</total_count>
+  </meta>
+  <objects type="list">
+    <object>
+      <bug_id type="integer">959886</bug_id>
+      <incident>/api/1/incident/44467/</incident>
+      <outcome>high</outcome>
+      <patch>correct</patch>
+      <probability>low</probability>
+      <reproducer>Unfortunately, no local reproducer is available.</reproducer>
+      <requires_thirdparty type="boolean">False</requires_thirdparty>
+      <resource_uri>/api/1/raederwerk/44467/</resource_uri>
+      <summary>System booting with 'emergency' cmdline option didn't show a proper shell. The problem was the working directory of the emergency shell was changed so that default utilities couldn't be found resulting into the reported misbehavior.</summary>
+    </object>
+    <object>
+      <bug_id type="integer">972727</bug_id>
+      <incident>/api/1/incident/45146/</incident>
+      <outcome>low</outcome>
+      <patch>correct</patch>
+      <probability>n/a</probability>
+      <reproducer>Same as SG:43793 (this is a regression).</reproducer>
+      <requires_thirdparty type="boolean">False</requires_thirdparty>
+      <resource_uri>/api/1/raederwerk/45146/</resource_uri>
+      <summary>See SG:43793 (this is a regression incident).</summary>
+    </object>
+    <object>
+      <bug_id type="integer">973848</bug_id>
+      <incident>/api/1/incident/45184/</incident>
+      <outcome>low</outcome>
+      <patch>not_isolated</patch>
+      <probability>high</probability>
+      <reproducer>- use default configuration of systemd-journald (so that it logs to /run/log)&#13;
+- reboot&#13;
+- file /run/log/journal/*/system.journal has the reported 755 mode</reproducer>
+      <requires_thirdparty type="boolean">False</requires_thirdparty>
+      <resource_uri>/api/1/raederwerk/45184/</resource_uri>
+      <summary>Log files kept by journald have: a) excutable bits set, b) are readable for all. This is seen only after reboot, manual restart of systemd-journald.service fixes the permissions.</summary>
+    </object>
+  </objects>
+</response>

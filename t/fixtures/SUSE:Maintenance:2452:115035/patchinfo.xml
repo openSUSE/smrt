@@ -1,0 +1,12 @@
+<patchinfo incident="2452">
+  <issue id="971961" tracker="bnc">Apparently no IPv6 support in yast cluster for corosync</issue>
+  <category>recommended</category>
+  <rating>moderate</rating>
+  <packager>tuffy</packager>
+  <description>
+This update for yast2-cluster fixes the following issue:
+
+- Fix error when using ipv6 (bsc#971961)
+</description>
+  <summary>Recommended update for yast2-cluster</summary>
+</patchinfo>

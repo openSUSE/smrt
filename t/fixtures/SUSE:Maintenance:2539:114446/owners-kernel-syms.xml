@@ -1,0 +1,5 @@
+<collection>
+  <owner rootproject="SUSE" project="SUSE:SLE-12:GA" package="kernel-syms">
+    <person name="finance" role="bugowner"/>
+  </owner>
+</collection>

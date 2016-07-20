@@ -1,0 +1,2566 @@
+diff --bs glibc-testsuite.1873/_link glibc-testsuite.SUSE_SLE-12_Update/_link
+--- glibc-testsuite.1873/_link
++++ glibc-testsuite.SUSE_SLE-12_Update/_link
+@@ -1 +1 @@
+-&lt;link package="glibc.1873" cicount="copy"/&gt;
+\ No newline at end of file
++&lt;link package="glibc.SUSE_SLE-12_Update" cicount="copy"/&gt;
+\ No newline at end of file
+diff --bs glibc-testsuite.1873/_link glibc-testsuite.SUSE_SLE-12_Update/_link
+--- glibc-testsuite.1873/_link
++++ glibc-testsuite.SUSE_SLE-12_Update/_link
+@@ -1 +1 @@
+-&lt;link package="glibc.1873" cicount="copy"/&gt;
+\ No newline at end of file
++&lt;link package="glibc.SUSE_SLE-12_Update" cicount="copy"/&gt;
+\ No newline at end of file
+diff --bs glibc.1873/glibc-testsuite.changes glibc.SUSE_SLE-12_Update/glibc-testsuite.changes
+--- glibc.1873/glibc-testsuite.changes
++++ glibc.SUSE_SLE-12_Update/glibc-testsuite.changes
+@@ -1,4 +1,26 @@
+ -------------------------------------------------------------------
++Tue May 24 14:26:03 UTC 2016 - schwab@suse.de
++
++- bandaid-dtv-surplus.diff: Increase DTV_SURPLUS limit (bsc#968787)
++- glob-altdirfunc.patch: Do not copy d_name field of struct dirent
++  (CVE-2016-1234, bsc#969727, BZ #19779)
++- nss-dns-memleak-2.patch: fix memory leak in _nss_dns_gethostbyname4_r
++  (bsc#973010)
++- nss-dns-getnetbyname.patch: fix stack overflow in
++  _nss_dns_getnetbyname_r (CVE-2016-3075, bsc#973164, BZ #19879)
++- Fix malloc performance regression from SLE 11 (bsc#975930)
++  Consolidate-arena_lookup-and-arena_lock-into-a-singl.patch
++  Avoid-deadlock-in-malloc-on-backtrace-BZ-16159.patch
++  malloc-Consistently-apply-trim_threshold-to-all-heap.patch
++  malloc-Prevent-arena-free_list-from-turning-cyclic-B.patch
++  malloc-Fix-attached-thread-reference-count-handling-.patch
++  malloc-Fix-list_lock-arena-lock-deadlock-BZ-19182.patch
++- getaddrinfo-hostent-conv-stack-overflow.patch: getaddrinfo stack
++  overflow in hostent conversion (CVE-2016-3706, bsc#980483, BZ #20010)
++- clntudp-call-alloca.patch: do not use alloca in clntudp_call
++  (CVE-2016-4429, bsc#980854, BZ #20112)
++
++-------------------------------------------------------------------
+ Thu Jan 28 13:26:06 UTC 2016 - schwab@suse.de
+ 
+ - hcreate-overflow-check.patch: Improve check against integer wraparound
+diff --bs glibc.1873/glibc-testsuite.spec glibc.SUSE_SLE-12_Update/glibc-testsuite.spec
+--- glibc.1873/glibc-testsuite.spec
++++ glibc.SUSE_SLE-12_Update/glibc-testsuite.spec
+@@ -205,6 +205,8 @@
+ Patch18:        glibc-cpusetsize.diff
+ # PATCH-FEATURE-SLE Use nscd user for nscd
+ Patch19:        nscd-server-user.patch
++# PATCH-FIX-OPENSUSE A bandaid for bnc#919678 (DTV_SURPLUS running out in some scenarios)
++Patch20:        bandaid-dtv-surplus.diff
+ 
+ ### Locale related patches
+ # PATCH-FIX-OPENSUSE Add additional locales
+@@ -322,6 +324,23 @@
+ Patch1043:      catopen-unbound-alloca.patch
+ # PATCH-FIX-UPSTREAM Don't do lock elision on an error checking mutex (BZ #17514)
+ Patch1044:      errorcheck-mutex-no-elision.patch
++# PATCH-FIX-UPSTREAM glob: Do not copy d_name field of struct dirent (CVE-2016-1234, BZ #19779)
++Patch1045:      glob-altdirfunc.patch
++# PATCH-FIX-UPSTREAM Fix memory leak in _nss_dns_gethostbyname4_r
++Patch1046:      nss-dns-memleak-2.patch
++# PATCH-FIX-UPSTREAM Stack overflow in _nss_dns_getnetbyname_r (CVE-2016-3075, BZ #19879)
++Patch1047:      nss-dns-getnetbyname.patch
++# PATCH-FIX-UPSTREAM Fixes for malloc performance regression from SLE 11
++Patch1048:      Consolidate-arena_lookup-and-arena_lock-into-a-singl.patch
++Patch1049:      Avoid-deadlock-in-malloc-on-backtrace-BZ-16159.patch
++Patch1050:      malloc-Consistently-apply-trim_threshold-to-all-heap.patch
++Patch1051:      malloc-Prevent-arena-free_list-from-turning-cyclic-B.patch
++Patch1052:      malloc-Fix-attached-thread-reference-count-handling-.patch
++Patch1053:      malloc-Fix-list_lock-arena-lock-deadlock-BZ-19182.patch
++# PATCH-FIX-UPSTREAM getaddrinfo: stack overflow in hostent conversion (CVE-2016-3706, BZ #20010)
++Patch1054:      getaddrinfo-hostent-conv-stack-overflow.patch
++# PATCH-FIX-UPSTREAM sunrpc: Do not use alloca in clntudp_call (CVE-2016-4429, BZ #20112)
++Patch1055:      clntudp-call-alloca.patch
+ 
+ ### 
+ # Patches awaiting upstream approval
+@@ -543,6 +562,7 @@
+ %patch15 -p1
+ %patch18 -p1
+ %patch19 -p1
++%patch20 -p1
+ 
+ %patch100 -p1
+ %patch102 -p1
+@@ -599,6 +619,17 @@
+ %patch1042 -p1
+ %patch1043 -p1
+ %patch1044 -p1
++%patch1045 -p1
++%patch1046 -p1
++%patch1047 -p1
++%patch1048 -p1
++%patch1049 -p1
++%patch1050 -p1
++%patch1051 -p1
++%patch1052 -p1
++%patch1053 -p1
++%patch1054 -p1
++%patch1055 -p1
+ 
+ %patch2000 -p1
+ %patch2001 -p1
+diff --bs glibc.1873/glibc-utils.changes glibc.SUSE_SLE-12_Update/glibc-utils.changes
+--- glibc.1873/glibc-utils.changes
++++ glibc.SUSE_SLE-12_Update/glibc-utils.changes
+@@ -1,4 +1,26 @@
+ -------------------------------------------------------------------
++Tue May 24 14:26:03 UTC 2016 - schwab@suse.de
++
++- bandaid-dtv-surplus.diff: Increase DTV_SURPLUS limit (bsc#968787)
++- glob-altdirfunc.patch: Do not copy d_name field of struct dirent
++  (CVE-2016-1234, bsc#969727, BZ #19779)
++- nss-dns-memleak-2.patch: fix memory leak in _nss_dns_gethostbyname4_r
++  (bsc#973010)
++- nss-dns-getnetbyname.patch: fix stack overflow in
++  _nss_dns_getnetbyname_r (CVE-2016-3075, bsc#973164, BZ #19879)
++- Fix malloc performance regression from SLE 11 (bsc#975930)
++  Consolidate-arena_lookup-and-arena_lock-into-a-singl.patch
++  Avoid-deadlock-in-malloc-on-backtrace-BZ-16159.patch
++  malloc-Consistently-apply-trim_threshold-to-all-heap.patch
++  malloc-Prevent-arena-free_list-from-turning-cyclic-B.patch
++  malloc-Fix-attached-thread-reference-count-handling-.patch
++  malloc-Fix-list_lock-arena-lock-deadlock-BZ-19182.patch
++- getaddrinfo-hostent-conv-stack-overflow.patch: getaddrinfo stack
++  overflow in hostent conversion (CVE-2016-3706, bsc#980483, BZ #20010)
++- clntudp-call-alloca.patch: do not use alloca in clntudp_call
++  (CVE-2016-4429, bsc#980854, BZ #20112)
++
++-------------------------------------------------------------------
+ Thu Jan 28 13:26:06 UTC 2016 - schwab@suse.de
+ 
+ - hcreate-overflow-check.patch: Improve check against integer wraparound
+diff --bs glibc.1873/glibc-utils.spec glibc.SUSE_SLE-12_Update/glibc-utils.spec
+--- glibc.1873/glibc-utils.spec
++++ glibc.SUSE_SLE-12_Update/glibc-utils.spec
+@@ -204,6 +204,8 @@
+ Patch18:        glibc-cpusetsize.diff
+ # PATCH-FEATURE-SLE Use nscd user for nscd
+ Patch19:        nscd-server-user.patch
++# PATCH-FIX-OPENSUSE A bandaid for bnc#919678 (DTV_SURPLUS running out in some scenarios)
++Patch20:        bandaid-dtv-surplus.diff
+ 
+ ### Locale related patches
+ # PATCH-FIX-OPENSUSE Add additional locales
+@@ -321,6 +323,23 @@
+ Patch1043:      catopen-unbound-alloca.patch
+ # PATCH-FIX-UPSTREAM Don't do lock elision on an error checking mutex (BZ #17514)
+ Patch1044:      errorcheck-mutex-no-elision.patch
++# PATCH-FIX-UPSTREAM glob: Do not copy d_name field of struct dirent (CVE-2016-1234, BZ #19779)
++Patch1045:      glob-altdirfunc.patch
++# PATCH-FIX-UPSTREAM Fix memory leak in _nss_dns_gethostbyname4_r
++Patch1046:      nss-dns-memleak-2.patch
++# PATCH-FIX-UPSTREAM Stack overflow in _nss_dns_getnetbyname_r (CVE-2016-3075, BZ #19879)
++Patch1047:      nss-dns-getnetbyname.patch
++# PATCH-FIX-UPSTREAM Fixes for malloc performance regression from SLE 11
++Patch1048:      Consolidate-arena_lookup-and-arena_lock-into-a-singl.patch
++Patch1049:      Avoid-deadlock-in-malloc-on-backtrace-BZ-16159.patch
++Patch1050:      malloc-Consistently-apply-trim_threshold-to-all-heap.patch
++Patch1051:      malloc-Prevent-arena-free_list-from-turning-cyclic-B.patch
++Patch1052:      malloc-Fix-attached-thread-reference-count-handling-.patch
++Patch1053:      malloc-Fix-list_lock-arena-lock-deadlock-BZ-19182.patch
++# PATCH-FIX-UPSTREAM getaddrinfo: stack overflow in hostent conversion (CVE-2016-3706, BZ #20010)
++Patch1054:      getaddrinfo-hostent-conv-stack-overflow.patch
++# PATCH-FIX-UPSTREAM sunrpc: Do not use alloca in clntudp_call (CVE-2016-4429, BZ #20112)
++Patch1055:      clntudp-call-alloca.patch
+ 
+ ### 
+ # Patches awaiting upstream approval
+@@ -543,6 +562,7 @@
+ %patch15 -p1
+ %patch18 -p1
+ %patch19 -p1
++%patch20 -p1
+ 
+ %patch100 -p1
+ %patch102 -p1
+@@ -599,6 +619,17 @@
+ %patch1042 -p1
+ %patch1043 -p1
+ %patch1044 -p1
++%patch1045 -p1
++%patch1046 -p1
++%patch1047 -p1
++%patch1048 -p1
++%patch1049 -p1
++%patch1050 -p1
++%patch1051 -p1
++%patch1052 -p1
++%patch1053 -p1
++%patch1054 -p1
++%patch1055 -p1
+ 
+ %patch2000 -p1
+ %patch2001 -p1
+diff --bs glibc.1873/glibc.changes glibc.SUSE_SLE-12_Update/glibc.changes
+--- glibc.1873/glibc.changes
++++ glibc.SUSE_SLE-12_Update/glibc.changes
+@@ -1,4 +1,26 @@
+ -------------------------------------------------------------------
++Tue May 24 14:26:03 UTC 2016 - schwab@suse.de
++
++- bandaid-dtv-surplus.diff: Increase DTV_SURPLUS limit (bsc#968787)
++- glob-altdirfunc.patch: Do not copy d_name field of struct dirent
++  (CVE-2016-1234, bsc#969727, BZ #19779)
++- nss-dns-memleak-2.patch: fix memory leak in _nss_dns_gethostbyname4_r
++  (bsc#973010)
++- nss-dns-getnetbyname.patch: fix stack overflow in
++  _nss_dns_getnetbyname_r (CVE-2016-3075, bsc#973164, BZ #19879)
++- Fix malloc performance regression from SLE 11 (bsc#975930)
++  Consolidate-arena_lookup-and-arena_lock-into-a-singl.patch
++  Avoid-deadlock-in-malloc-on-backtrace-BZ-16159.patch
++  malloc-Consistently-apply-trim_threshold-to-all-heap.patch
++  malloc-Prevent-arena-free_list-from-turning-cyclic-B.patch
++  malloc-Fix-attached-thread-reference-count-handling-.patch
++  malloc-Fix-list_lock-arena-lock-deadlock-BZ-19182.patch
++- getaddrinfo-hostent-conv-stack-overflow.patch: getaddrinfo stack
++  overflow in hostent conversion (CVE-2016-3706, bsc#980483, BZ #20010)
++- clntudp-call-alloca.patch: do not use alloca in clntudp_call
++  (CVE-2016-4429, bsc#980854, BZ #20112)
++
++-------------------------------------------------------------------
+ Thu Jan 28 13:26:06 UTC 2016 - schwab@suse.de
+ 
+ - hcreate-overflow-check.patch: Improve check against integer wraparound
+diff --bs glibc.1873/glibc.spec glibc.SUSE_SLE-12_Update/glibc.spec
+--- glibc.1873/glibc.spec
++++ glibc.SUSE_SLE-12_Update/glibc.spec
+@@ -205,6 +205,8 @@
+ Patch18:        glibc-cpusetsize.diff
+ # PATCH-FEATURE-SLE Use nscd user for nscd
+ Patch19:        nscd-server-user.patch
++# PATCH-FIX-OPENSUSE A bandaid for bnc#919678 (DTV_SURPLUS running out in some scenarios)
++Patch20:        bandaid-dtv-surplus.diff
+ 
+ ### Locale related patches
+ # PATCH-FIX-OPENSUSE Add additional locales
+@@ -322,6 +324,23 @@
+ Patch1043:      catopen-unbound-alloca.patch
+ # PATCH-FIX-UPSTREAM Don't do lock elision on an error checking mutex (BZ #17514)
+ Patch1044:      errorcheck-mutex-no-elision.patch
++# PATCH-FIX-UPSTREAM glob: Do not copy d_name field of struct dirent (CVE-2016-1234, BZ #19779)
++Patch1045:      glob-altdirfunc.patch
++# PATCH-FIX-UPSTREAM Fix memory leak in _nss_dns_gethostbyname4_r
++Patch1046:      nss-dns-memleak-2.patch
++# PATCH-FIX-UPSTREAM Stack overflow in _nss_dns_getnetbyname_r (CVE-2016-3075, BZ #19879)
++Patch1047:      nss-dns-getnetbyname.patch
++# PATCH-FIX-UPSTREAM Fixes for malloc performance regression from SLE 11
++Patch1048:      Consolidate-arena_lookup-and-arena_lock-into-a-singl.patch
++Patch1049:      Avoid-deadlock-in-malloc-on-backtrace-BZ-16159.patch
++Patch1050:      malloc-Consistently-apply-trim_threshold-to-all-heap.patch
++Patch1051:      malloc-Prevent-arena-free_list-from-turning-cyclic-B.patch
++Patch1052:      malloc-Fix-attached-thread-reference-count-handling-.patch
++Patch1053:      malloc-Fix-list_lock-arena-lock-deadlock-BZ-19182.patch
++# PATCH-FIX-UPSTREAM getaddrinfo: stack overflow in hostent conversion (CVE-2016-3706, BZ #20010)
++Patch1054:      getaddrinfo-hostent-conv-stack-overflow.patch
++# PATCH-FIX-UPSTREAM sunrpc: Do not use alloca in clntudp_call (CVE-2016-4429, BZ #20112)
++Patch1055:      clntudp-call-alloca.patch
+ 
+ ### 
+ # Patches awaiting upstream approval
+@@ -543,6 +562,7 @@
+ %patch15 -p1
+ %patch18 -p1
+ %patch19 -p1
++%patch20 -p1
+ 
+ %patch100 -p1
+ %patch102 -p1
+@@ -599,6 +619,17 @@
+ %patch1042 -p1
+ %patch1043 -p1
+ %patch1044 -p1
++%patch1045 -p1
++%patch1046 -p1
++%patch1047 -p1
++%patch1048 -p1
++%patch1049 -p1
++%patch1050 -p1
++%patch1051 -p1
++%patch1052 -p1
++%patch1053 -p1
++%patch1054 -p1
++%patch1055 -p1
+ 
+ %patch2000 -p1
+ %patch2001 -p1
+diff --bs glibc.1873/Avoid-deadlock-in-malloc-on-backtrace-BZ-16159.patch glibc.SUSE_SLE-12_Update/Avoid-deadlock-in-malloc-on-backtrace-BZ-16159.patch
+--- /dev/null
++++ glibc.SUSE_SLE-12_Update/Avoid-deadlock-in-malloc-on-backtrace-BZ-16159.patch
+@@ -0,0 +1,611 @@
++2015-05-19  Siddhesh Poyarekar  &lt;siddhesh@redhat.com&gt;
++
++	[BZ #16159]
++	* malloc/Makefile (tests): New test case tst-malloc-backtrace.
++	* malloc/arena.c (arena_lock): Check if arena is corrupt.
++	(reused_arena): Find a non-corrupt arena.
++	(heap_trim): Pass arena to unlink.
++	* malloc/hooks.c (malloc_check_get_size): Pass arena to
++	malloc_printerr.
++	(top_check): Likewise.
++	(free_check): Likewise.
++	(realloc_check): Likewise.
++	* malloc/malloc.c (malloc_printerr): Add arena argument.
++	(unlink): Likewise.
++	(munmap_chunk): Adjust.
++	(ARENA_CORRUPTION_BIT): New macro.
++	(arena_is_corrupt): Likewise.
++	(set_arena_corrupt): Likewise.
++	(sysmalloc): Use mmap if there are no usable arenas.
++	(_int_malloc): Likewise.
++	(__libc_malloc): Don't fail if arena_get returns NULL.
++	(_mid_memalign): Likewise.
++	(__libc_calloc): Likewise.
++	(__libc_realloc): Adjust for additional argument to
++	malloc_printerr.
++	(_int_free): Likewise.
++	(malloc_consolidate): Likewise.
++	(_int_realloc): Likewise.
++	(_int_memalign): Don't touch corrupt arenas.
++	* malloc/tst-malloc-backtrace.c: New test case.
++
++Index: glibc-2.19/malloc/Makefile
++===================================================================
++--- glibc-2.19.orig/malloc/Makefile
+++++ glibc-2.19/malloc/Makefile
++@@ -27,7 +27,8 @@ headers := $(dist-headers) obstack.h mch
++ tests := mallocbug tst-malloc tst-valloc tst-calloc tst-obstack \
++ 	 tst-mallocstate tst-mcheck tst-mallocfork tst-trim1 \
++ 	 tst-malloc-usable tst-realloc tst-posix_memalign \
++-	 tst-pvalloc tst-memalign
+++	 tst-pvalloc tst-memalign \
+++	 tst-malloc-backtrace
++ test-srcs = tst-mtrace
++ 
++ routines = malloc morecore mcheck mtrace obstack
++@@ -42,6 +43,9 @@ extra-libs-others = $(extra-libs)
++ libmemusage-routines = memusage
++ libmemusage-inhibit-o = $(filter-out .os,$(object-suffixes))
++ 
+++$(objpfx)tst-malloc-backtrace: $(common-objpfx)nptl/libpthread.so \
+++			       $(common-objpfx)nptl/libpthread_nonshared.a
+++
++ # These should be removed by `make clean'.
++ extra-objs = mcheck-init.o libmcheck.a
++ 
++Index: glibc-2.19/malloc/arena.c
++===================================================================
++--- glibc-2.19.orig/malloc/arena.c
+++++ glibc-2.19/malloc/arena.c
++@@ -114,7 +114,7 @@ int __malloc_initialized = -1;
++   } while (0)
++ 
++ #define arena_lock(ptr, size) do {					      \
++-      if (ptr)								      \
+++      if (ptr &amp;&amp; !arena_is_corrupt (ptr))				      \
++         (void) mutex_lock (&amp;ptr-&gt;mutex);				      \
++       else								      \
++         ptr = arena_get2 (ptr, (size), NULL);				      \
++@@ -702,7 +702,7 @@ heap_trim (heap_info *heap, size_t pad)
++       if (!prev_inuse (p)) /* consolidate backward */
++         {
++           p = prev_chunk (p);
++-          unlink (p, bck, fwd);
+++          unlink (ar_ptr, p, bck, fwd);
++         }
++       assert (((unsigned long) ((char *) p + new_size) &amp; (pagesz - 1)) == 0);
++       assert (((char *) p + new_size) == ((char *) heap + heap-&gt;size));
++@@ -828,7 +828,7 @@ reused_arena (mstate avoid_arena)
++   result = next_to_use;
++   do
++     {
++-      if (!mutex_trylock (&amp;result-&gt;mutex))
+++      if (!arena_is_corrupt (result) &amp;&amp; !mutex_trylock (&amp;result-&gt;mutex))
++         goto out;
++ 
++       result = result-&gt;next;
++@@ -840,7 +840,21 @@ reused_arena (mstate avoid_arena)
++   if (result == avoid_arena)
++     result = result-&gt;next;
++ 
++-  /* No arena available.  Wait for the next in line.  */
+++  /* Make sure that the arena we get is not corrupted.  */
+++  mstate begin = result;
+++  while (arena_is_corrupt (result) || result == avoid_arena)
+++    {
+++      result = result-&gt;next;
+++      if (result == begin)
+++	break;
+++    }
+++
+++  /* We could not find any arena that was either not corrupted or not the one
+++     we wanted to avoid.  */
+++  if (result == begin || result == avoid_arena)
+++    return NULL;
+++
+++  /* No arena available without contention.  Wait for the next in line.  */
++   LIBC_PROBE (memory_arena_reuse_wait, 3, &amp;result-&gt;mutex, result, avoid_arena);
++   (void) mutex_lock (&amp;result-&gt;mutex);
++ 
++Index: glibc-2.19/malloc/hooks.c
++===================================================================
++--- glibc-2.19.orig/malloc/hooks.c
+++++ glibc-2.19/malloc/hooks.c
++@@ -112,7 +112,8 @@ malloc_check_get_size (mchunkptr p)
++       if (c &lt;= 0 || size &lt; (c + 2 * SIZE_SZ))
++         {
++           malloc_printerr (check_action, "malloc_check_get_size: memory corruption",
++-                           chunk2mem (p));
+++                           chunk2mem (p),
+++			   chunk_is_mmapped (p) ? NULL : arena_for_chunk (p));
++           return 0;
++         }
++     }
++@@ -237,7 +238,8 @@ top_check (void)
++         (char *) t + chunksize (t) == mp_.sbrk_base + main_arena.system_mem)))
++     return 0;
++ 
++-  malloc_printerr (check_action, "malloc: top chunk is corrupt", t);
+++  malloc_printerr (check_action, "malloc: top chunk is corrupt", t,
+++		   &amp;main_arena);
++ 
++   /* Try to set up a new top chunk. */
++   brk = MORECORE (0);
++@@ -295,7 +297,8 @@ free_check (void *mem, const void *calle
++     {
++       (void) mutex_unlock (&amp;main_arena.mutex);
++ 
++-      malloc_printerr (check_action, "free(): invalid pointer", mem);
+++      malloc_printerr (check_action, "free(): invalid pointer", mem,
+++		       &amp;main_arena);
++       return;
++     }
++   if (chunk_is_mmapped (p))
++@@ -333,7 +336,8 @@ realloc_check (void *oldmem, size_t byte
++   (void) mutex_unlock (&amp;main_arena.mutex);
++   if (!oldp)
++     {
++-      malloc_printerr (check_action, "realloc(): invalid pointer", oldmem);
+++      malloc_printerr (check_action, "realloc(): invalid pointer", oldmem,
+++		       &amp;main_arena);
++       return malloc_check (bytes, NULL);
++     }
++   const INTERNAL_SIZE_T oldsize = chunksize (oldp);
++Index: glibc-2.19/malloc/malloc.c
++===================================================================
++--- glibc-2.19.orig/malloc/malloc.c
+++++ glibc-2.19/malloc/malloc.c
++@@ -1054,7 +1054,7 @@ static void*  _int_realloc(mstate, mchun
++ static void*  _int_memalign(mstate, size_t, size_t);
++ static void*  _mid_memalign(size_t, size_t, void *);
++ 
++-static void malloc_printerr(int action, const char *str, void *ptr);
+++static void malloc_printerr(int action, const char *str, void *ptr, mstate av);
++ 
++ static void* internal_function mem2mem_check(void *p, size_t sz);
++ static int internal_function top_check(void);
++@@ -1406,11 +1406,11 @@ typedef struct malloc_chunk *mbinptr;
++ #define last(b)      ((b)-&gt;bk)
++ 
++ /* Take a chunk off a bin list */
++-#define unlink(P, BK, FD) {                                            \
+++#define unlink(AV, P, BK, FD) {                                            \
++     FD = P-&gt;fd;								      \
++     BK = P-&gt;bk;								      \
++     if (__builtin_expect (FD-&gt;bk != P || BK-&gt;fd != P, 0))		      \
++-      malloc_printerr (check_action, "corrupted double-linked list", P);      \
+++      malloc_printerr (check_action, "corrupted double-linked list", P, AV);  \
++     else {								      \
++         FD-&gt;bk = BK;							      \
++         BK-&gt;fd = FD;							      \
++@@ -1649,6 +1649,15 @@ typedef struct malloc_chunk *mfastbinptr
++ #define set_noncontiguous(M)   ((M)-&gt;flags |= NONCONTIGUOUS_BIT)
++ #define set_contiguous(M)      ((M)-&gt;flags &amp;= ~NONCONTIGUOUS_BIT)
++ 
+++/* ARENA_CORRUPTION_BIT is set if a memory corruption was detected on the
+++   arena.  Such an arena is no longer used to allocate chunks.  Chunks
+++   allocated in that arena before detecting corruption are not freed.  */
+++
+++#define ARENA_CORRUPTION_BIT (4U)
+++
+++#define arena_is_corrupt(A)	(((A)-&gt;flags &amp; ARENA_CORRUPTION_BIT))
+++#define set_arena_corrupt(A)	((A)-&gt;flags |= ARENA_CORRUPTION_BIT)
+++
++ /*
++    Set value of max_fast.
++    Use impossibly small value if 0.
++@@ -2278,8 +2287,9 @@ sysmalloc (INTERNAL_SIZE_T nb, mstate av
++      rather than expanding top.
++    */
++ 
++-  if ((unsigned long) (nb) &gt;= (unsigned long) (mp_.mmap_threshold) &amp;&amp;
++-      (mp_.n_mmaps &lt; mp_.n_mmaps_max))
+++  if (av == NULL
+++      || ((unsigned long) (nb) &gt;= (unsigned long) (mp_.mmap_threshold)
+++	  &amp;&amp; (mp_.n_mmaps &lt; mp_.n_mmaps_max)))
++     {
++       char *mm;           /* return value from mmap call*/
++ 
++@@ -2352,6 +2362,10 @@ sysmalloc (INTERNAL_SIZE_T nb, mstate av
++         }
++     }
++ 
+++  /* There are no usable arenas and mmap also failed.  */
+++  if (av == NULL)
+++    return 0;
+++
++   /* Record incoming configuration of top */
++ 
++   old_top = av-&gt;top;
++@@ -2526,7 +2540,8 @@ sysmalloc (INTERNAL_SIZE_T nb, mstate av
++           else if (contiguous (av) &amp;&amp; old_size &amp;&amp; brk &lt; old_end)
++             {
++               /* Oops!  Someone else killed our space..  Can't touch anything.  */
++-              malloc_printerr (3, "break adjusted to free malloc space", brk);
+++              malloc_printerr (3, "break adjusted to free malloc space", brk,
+++			       av);
++             }
++ 
++           /*
++@@ -2813,7 +2828,7 @@ munmap_chunk (mchunkptr p)
++   if (__builtin_expect (((block | total_size) &amp; (GLRO (dl_pagesize) - 1)) != 0, 0))
++     {
++       malloc_printerr (check_action, "munmap_chunk(): invalid pointer",
++-                       chunk2mem (p));
+++                       chunk2mem (p), NULL);
++       return;
++     }
++ 
++@@ -2883,22 +2898,19 @@ __libc_malloc (size_t bytes)
++ 
++   arena_get (ar_ptr, bytes);
++ 
++-  if (!ar_ptr)
++-    return 0;
++-
++   victim = _int_malloc (ar_ptr, bytes);
++-  if (!victim)
+++  /* Retry with another arena only if we were able to find a usable arena
+++     before.  */
+++  if (!victim &amp;&amp; ar_ptr != NULL)
++     {
++       LIBC_PROBE (memory_malloc_retry, 1, bytes);
++       ar_ptr = arena_get_retry (ar_ptr, bytes);
++-      if (__builtin_expect (ar_ptr != NULL, 1))
++-        {
++-          victim = _int_malloc (ar_ptr, bytes);
++-          (void) mutex_unlock (&amp;ar_ptr-&gt;mutex);
++-        }
+++      victim = _int_malloc (ar_ptr, bytes);
++     }
++-  else
+++
+++  if (ar_ptr != NULL)
++     (void) mutex_unlock (&amp;ar_ptr-&gt;mutex);
+++
++   assert (!victim || chunk_is_mmapped (mem2chunk (victim)) ||
++           ar_ptr == arena_for_chunk (mem2chunk (victim)));
++   return victim;
++@@ -2974,6 +2986,11 @@ __libc_realloc (void *oldmem, size_t byt
++   /* its size */
++   const INTERNAL_SIZE_T oldsize = chunksize (oldp);
++ 
+++  if (chunk_is_mmapped (oldp))
+++    ar_ptr = NULL;
+++  else
+++    ar_ptr = arena_for_chunk (oldp);
+++
++   /* Little security check which won't hurt performance: the
++      allocator never wrapps around at the end of the address space.
++      Therefore we can exclude some size values which might appear
++@@ -2981,7 +2998,8 @@ __libc_realloc (void *oldmem, size_t byt
++   if (__builtin_expect ((uintptr_t) oldp &gt; (uintptr_t) -oldsize, 0)
++       || __builtin_expect (misaligned_chunk (oldp), 0))
++     {
++-      malloc_printerr (check_action, "realloc(): invalid pointer", oldmem);
+++      malloc_printerr (check_action, "realloc(): invalid pointer", oldmem,
+++		       ar_ptr);
++       return NULL;
++     }
++ 
++@@ -3010,7 +3028,6 @@ __libc_realloc (void *oldmem, size_t byt
++       return newmem;
++     }
++ 
++-  ar_ptr = arena_for_chunk (oldp);
++ #if THREAD_STATS
++   if (!mutex_trylock (&amp;ar_ptr-&gt;mutex))
++     ++(ar_ptr-&gt;stat_lock_direct);
++@@ -3023,7 +3040,6 @@ __libc_realloc (void *oldmem, size_t byt
++   (void) mutex_lock (&amp;ar_ptr-&gt;mutex);
++ #endif
++ 
++-
++   newp = _int_realloc (ar_ptr, oldp, oldsize, nb);
++ 
++   (void) mutex_unlock (&amp;ar_ptr-&gt;mutex);
++@@ -3098,22 +3114,18 @@ _mid_memalign (size_t alignment, size_t
++     }
++ 
++   arena_get (ar_ptr, bytes + alignment + MINSIZE);
++-  if (!ar_ptr)
++-    return 0;
++ 
++   p = _int_memalign (ar_ptr, alignment, bytes);
++-  if (!p)
+++  if (!p &amp;&amp; ar_ptr != NULL)
++     {
++       LIBC_PROBE (memory_memalign_retry, 2, bytes, alignment);
++       ar_ptr = arena_get_retry (ar_ptr, bytes);
++-      if (__builtin_expect (ar_ptr != NULL, 1))
++-        {
++-          p = _int_memalign (ar_ptr, alignment, bytes);
++-          (void) mutex_unlock (&amp;ar_ptr-&gt;mutex);
++-        }
+++      p = _int_memalign (ar_ptr, alignment, bytes);
++     }
++-  else
+++
+++  if (ar_ptr != NULL)
++     (void) mutex_unlock (&amp;ar_ptr-&gt;mutex);
+++
++   assert (!p || chunk_is_mmapped (mem2chunk (p)) ||
++           ar_ptr == arena_for_chunk (mem2chunk (p)));
++   return p;
++@@ -3193,47 +3205,53 @@ __libc_calloc (size_t n, size_t elem_siz
++   sz = bytes;
++ 
++   arena_get (av, sz);
++-  if (!av)
++-    return 0;
++-
++-  /* Check if we hand out the top chunk, in which case there may be no
++-     need to clear. */
+++  if (av)
+++    {
+++      /* Check if we hand out the top chunk, in which case there may be no
+++	 need to clear. */
++ #if MORECORE_CLEARS
++-  oldtop = top (av);
++-  oldtopsize = chunksize (top (av));
+++      oldtop = top (av);
+++      oldtopsize = chunksize (top (av));
++ # if MORECORE_CLEARS &lt; 2
++-  /* Only newly allocated memory is guaranteed to be cleared.  */
++-  if (av == &amp;main_arena &amp;&amp;
++-      oldtopsize &lt; mp_.sbrk_base + av-&gt;max_system_mem - (char *) oldtop)
++-    oldtopsize = (mp_.sbrk_base + av-&gt;max_system_mem - (char *) oldtop);
+++      /* Only newly allocated memory is guaranteed to be cleared.  */
+++      if (av == &amp;main_arena &amp;&amp;
+++	  oldtopsize &lt; mp_.sbrk_base + av-&gt;max_system_mem - (char *) oldtop)
+++	oldtopsize = (mp_.sbrk_base + av-&gt;max_system_mem - (char *) oldtop);
++ # endif
++-  if (av != &amp;main_arena)
+++      if (av != &amp;main_arena)
+++	{
+++	  heap_info *heap = heap_for_ptr (oldtop);
+++	  if (oldtopsize &lt; (char *) heap + heap-&gt;mprotect_size - (char *) oldtop)
+++	    oldtopsize = (char *) heap + heap-&gt;mprotect_size - (char *) oldtop;
+++	}
+++#endif
+++    }
+++  else
++     {
++-      heap_info *heap = heap_for_ptr (oldtop);
++-      if (oldtopsize &lt; (char *) heap + heap-&gt;mprotect_size - (char *) oldtop)
++-        oldtopsize = (char *) heap + heap-&gt;mprotect_size - (char *) oldtop;
+++      /* No usable arenas.  */
+++      oldtop = 0;
+++      oldtopsize = 0;
++     }
++-#endif
++   mem = _int_malloc (av, sz);
++ 
++ 
++   assert (!mem || chunk_is_mmapped (mem2chunk (mem)) ||
++           av == arena_for_chunk (mem2chunk (mem)));
++ 
++-  if (mem == 0)
+++  if (mem == 0 &amp;&amp; av != NULL)
++     {
++       LIBC_PROBE (memory_calloc_retry, 1, sz);
++       av = arena_get_retry (av, sz);
++-      if (__builtin_expect (av != NULL, 1))
++-        {
++-          mem = _int_malloc (av, sz);
++-          (void) mutex_unlock (&amp;av-&gt;mutex);
++-        }
++-      if (mem == 0)
++-        return 0;
+++      mem = _int_malloc (av, sz);
++     }
++-  else
+++
+++  if (av != NULL)
++     (void) mutex_unlock (&amp;av-&gt;mutex);
+++
+++  /* Allocation failed even after a retry.  */
+++  if (mem == 0)
+++    return 0;
+++
++   p = mem2chunk (mem);
++ 
++   /* Two optional cases in which clearing not necessary */
++@@ -3329,6 +3347,16 @@ _int_malloc (mstate av, size_t bytes)
++ 
++   checked_request2size (bytes, nb);
++ 
+++  /* There are no usable arenas.  Fall back to sysmalloc to get a chunk from
+++     mmap.  */
+++  if (__glibc_unlikely (av == NULL))
+++    {
+++      void *p = sysmalloc (nb, av);
+++      if (p != NULL)
+++	alloc_perturb (p, bytes);
+++      return p;
+++    }
+++
++   /*
++      If the size qualifies as a fastbin, first check corresponding bin.
++      This code is safe to execute even if av is not yet initialized, so we
++@@ -3354,7 +3382,7 @@ _int_malloc (mstate av, size_t bytes)
++             {
++               errstr = "malloc(): memory corruption (fast)";
++             errout:
++-              malloc_printerr (check_action, errstr, chunk2mem (victim));
+++              malloc_printerr (check_action, errstr, chunk2mem (victim), av);
++               return NULL;
++             }
++           check_remalloced_chunk (av, victim, nb);
++@@ -3443,7 +3471,7 @@ _int_malloc (mstate av, size_t bytes)
++           if (__builtin_expect (victim-&gt;size &lt;= 2 * SIZE_SZ, 0)
++               || __builtin_expect (victim-&gt;size &gt; av-&gt;system_mem, 0))
++             malloc_printerr (check_action, "malloc(): memory corruption",
++-                             chunk2mem (victim));
+++                             chunk2mem (victim), av);
++           size = chunksize (victim);
++ 
++           /*
++@@ -3590,7 +3618,7 @@ _int_malloc (mstate av, size_t bytes)
++                 victim = victim-&gt;fd;
++ 
++               remainder_size = size - nb;
++-              unlink (victim, bck, fwd);
+++              unlink (av, victim, bck, fwd);
++ 
++               /* Exhaust */
++               if (remainder_size &lt; MINSIZE)
++@@ -3695,7 +3723,7 @@ _int_malloc (mstate av, size_t bytes)
++               remainder_size = size - nb;
++ 
++               /* unlink */
++-              unlink (victim, bck, fwd);
+++              unlink (av, victim, bck, fwd);
++ 
++               /* Exhaust */
++               if (remainder_size &lt; MINSIZE)
++@@ -3835,7 +3863,7 @@ _int_free (mstate av, mchunkptr p, int h
++     errout:
++       if (!have_lock &amp;&amp; locked)
++         (void) mutex_unlock (&amp;av-&gt;mutex);
++-      malloc_printerr (check_action, errstr, chunk2mem (p));
+++      malloc_printerr (check_action, errstr, chunk2mem (p), av);
++       return;
++     }
++   /* We know that each chunk is at least MINSIZE bytes in size or a
++@@ -3982,7 +4010,7 @@ _int_free (mstate av, mchunkptr p, int h
++       prevsize = p-&gt;prev_size;
++       size += prevsize;
++       p = chunk_at_offset(p, -((long) prevsize));
++-      unlink(p, bck, fwd);
+++      unlink(av, p, bck, fwd);
++     }
++ 
++     if (nextchunk != av-&gt;top) {
++@@ -3991,7 +4019,7 @@ _int_free (mstate av, mchunkptr p, int h
++ 
++       /* consolidate forward */
++       if (!nextinuse) {
++-	unlink(nextchunk, bck, fwd);
+++	unlink(av, nextchunk, bck, fwd);
++ 	size += nextsize;
++       } else
++ 	clear_inuse_bit_at_offset(nextchunk, 0);
++@@ -4152,7 +4180,7 @@ static void malloc_consolidate(mstate av
++ 	    prevsize = p-&gt;prev_size;
++ 	    size += prevsize;
++ 	    p = chunk_at_offset(p, -((long) prevsize));
++-	    unlink(p, bck, fwd);
+++	    unlink(av, p, bck, fwd);
++ 	  }
++ 
++ 	  if (nextchunk != av-&gt;top) {
++@@ -4160,7 +4188,7 @@ static void malloc_consolidate(mstate av
++ 
++ 	    if (!nextinuse) {
++ 	      size += nextsize;
++-	      unlink(nextchunk, bck, fwd);
+++	      unlink(av, nextchunk, bck, fwd);
++ 	    } else
++ 	      clear_inuse_bit_at_offset(nextchunk, 0);
++ 
++@@ -4229,7 +4257,7 @@ _int_realloc(mstate av, mchunkptr oldp,
++     {
++       errstr = "realloc(): invalid old size";
++     errout:
++-      malloc_printerr (check_action, errstr, chunk2mem (oldp));
+++      malloc_printerr (check_action, errstr, chunk2mem (oldp), av);
++       return NULL;
++     }
++ 
++@@ -4275,7 +4303,7 @@ _int_realloc(mstate av, mchunkptr oldp,
++                (unsigned long) (nb))
++         {
++           newp = oldp;
++-          unlink (next, bck, fwd);
+++          unlink (av, next, bck, fwd);
++         }
++ 
++       /* allocate, copy, free */
++@@ -4470,6 +4498,10 @@ _int_memalign (mstate av, size_t alignme
++ static int
++ mtrim (mstate av, size_t pad)
++ {
+++  /* Don't touch corrupt arenas.  */
+++  if (arena_is_corrupt (av))
+++    return 0;
+++
++   /* Ensure initialization/consolidation */
++   malloc_consolidate (av);
++ 
++@@ -4976,8 +5008,14 @@ libc_hidden_def (__libc_mallopt)
++ extern char **__libc_argv attribute_hidden;
++ 
++ static void
++-malloc_printerr (int action, const char *str, void *ptr)
+++malloc_printerr (int action, const char *str, void *ptr, mstate ar_ptr)
++ {
+++  /* Avoid using this arena in future.  We do not attempt to synchronize this
+++     with anything else because we minimally want to ensure that __libc_message
+++     gets its resources safely without stumbling on the current corruption.  */
+++  if (ar_ptr)
+++    set_arena_corrupt (ar_ptr);
+++
++   if ((action &amp; 5) == 5)
++     __libc_message (action &amp; 2, "%s\n", str);
++   else if (action &amp; 1)
++Index: glibc-2.19/malloc/tst-malloc-backtrace.c
++===================================================================
++--- /dev/null
+++++ glibc-2.19/malloc/tst-malloc-backtrace.c
++@@ -0,0 +1,50 @@
+++/* Verify that backtrace does not deadlock on itself on memory corruption.
+++   Copyright (C) 2015 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   &lt;http://www.gnu.org/licenses/&gt;.  */
+++
+++
+++#include &lt;stdlib.h&gt;
+++
+++#define SIZE 4096
+++
+++/* Wrap free with a function to prevent gcc from optimizing it out.  */
+++static void
+++__attribute__((noinline))
+++call_free (void *ptr)
+++{
+++  free (ptr);
+++  *(size_t *)(ptr - sizeof (size_t)) = 1;
+++}
+++
+++int
+++do_test (void)
+++{
+++  void *ptr1 = malloc (SIZE);
+++  void *ptr2 = malloc (SIZE);
+++
+++  call_free (ptr1);
+++  ptr1 = malloc (SIZE);
+++
+++  /* Not reached.  The return statement is to put ptr2 into use so that gcc
+++     doesn't optimize out that malloc call.  */
+++  return (ptr1 == ptr2);
+++}
+++
+++#define TEST_FUNCTION do_test ()
+++#define EXPECTED_SIGNAL SIGABRT
+++
+++#include "../test-skeleton.c"
+diff --bs glibc.1873/Consolidate-arena_lookup-and-arena_lock-into-a-singl.patch glibc.SUSE_SLE-12_Update/Consolidate-arena_lookup-and-arena_lock-into-a-singl.patch
+--- /dev/null
++++ glibc.SUSE_SLE-12_Update/Consolidate-arena_lookup-and-arena_lock-into-a-singl.patch
+@@ -0,0 +1,20 @@
++2015-02-18  Siddhesh Poyarekar  &lt;siddhesh@redhat.com&gt;
++
++	* malloc/malloc.c (__libc_malloc): Consolidate arena_lookup and
++	arena_lock into a single arena_get.
++
++Index: glibc-2.19/malloc/malloc.c
++===================================================================
++--- glibc-2.19.orig/malloc/malloc.c
+++++ glibc-2.19/malloc/malloc.c
++@@ -2881,9 +2881,8 @@ __libc_malloc (size_t bytes)
++   if (__builtin_expect (hook != NULL, 0))
++     return (*hook)(bytes, RETURN_ADDRESS (0));
++ 
++-  arena_lookup (ar_ptr);
+++  arena_get (ar_ptr, bytes);
++ 
++-  arena_lock (ar_ptr, bytes);
++   if (!ar_ptr)
++     return 0;
++ 
+diff --bs glibc.1873/bandaid-dtv-surplus.diff glibc.SUSE_SLE-12_Update/bandaid-dtv-surplus.diff
+--- /dev/null
++++ glibc.SUSE_SLE-12_Update/bandaid-dtv-surplus.diff
+@@ -0,0 +1,32 @@
++A bandaid for bnc#919678 (DTV_SURPLUS running out in some scenarios).
++This bandaid comes from Fedora
++ ( https://sourceware.org/ml/libc-alpha/2014-10/msg00134.html ).
++The real solution
++ ( https://sourceware.org/ml/libc-alpha/2014-11/msg00590.html )
++was a bit too late to comfortably be included in SLE11 SP4 (and SP3).
++
++Index: glibc-2.19/sysdeps/generic/ldsodefs.h
++===================================================================
++--- glibc-2.19.orig/sysdeps/generic/ldsodefs.h
+++++ glibc-2.19/sysdeps/generic/ldsodefs.h
++@@ -391,8 +391,18 @@ struct rtld_global
++    have to iterate beyond the first element in the slotinfo list.  */
++ #define TLS_SLOTINFO_SURPLUS (62)
++ 
++-/* Number of additional slots in the dtv allocated.  */
++-#define DTV_SURPLUS	(14)
+++/* Number of additional allocated dtv slots.  This was initially
+++   14, but problems with python, MESA, and X11's uses of static TLS meant
+++   that most distributions were very close to this limit when they loaded
+++   dynamically interpreted languages that used graphics. The simplest
+++   solution was to roughly double the number of slots. The actual static
+++   image space usage was relatively small, for example in MESA you
+++   had only two dispatch pointers for a total of 16 bytes.  If we hit up
+++   against this limit again we should start a campaign with the
+++   distributions to coordinate the usage of static TLS.  Any user of this
+++   resource is effectively coordinating a global resource since this
+++   surplus is allocated for each thread at startup.  */
+++#define DTV_SURPLUS    (32)
++ 
++   /* Initial dtv of the main thread, not allocated with normal malloc.  */
++   EXTERN void *_dl_initial_dtv;
+diff --bs glibc.1873/clntudp-call-alloca.patch glibc.SUSE_SLE-12_Update/clntudp-call-alloca.patch
+--- /dev/null
++++ glibc.SUSE_SLE-12_Update/clntudp-call-alloca.patch
+@@ -0,0 +1,41 @@
++2016-05-23  Florian Weimer  &lt;fweimer@redhat.com&gt;
++
++	CVE-2016-4429
++	[BZ #20112]
++	* sunrpc/clnt_udp.c (clntudp_call): Use malloc/free for the error
++	payload.
++
++Index: glibc-2.19/sunrpc/clnt_udp.c
++===================================================================
++--- glibc-2.19.orig/sunrpc/clnt_udp.c
+++++ glibc-2.19/sunrpc/clnt_udp.c
++@@ -420,9 +420,15 @@ send_again:
++ 	  struct sock_extended_err *e;
++ 	  struct sockaddr_in err_addr;
++ 	  struct iovec iov;
++-	  char *cbuf = (char *) alloca (outlen + 256);
+++	  char *cbuf = malloc (outlen + 256);
++ 	  int ret;
++ 
+++	  if (cbuf == NULL)
+++	    {
+++	      cu-&gt;cu_error.re_errno = errno;
+++	      return (cu-&gt;cu_error.re_status = RPC_CANTRECV);
+++	    }
+++
++ 	  iov.iov_base = cbuf + 256;
++ 	  iov.iov_len = outlen;
++ 	  msg.msg_name = (void *) &amp;err_addr;
++@@ -447,10 +453,12 @@ send_again:
++ 		 cmsg = CMSG_NXTHDR (&amp;msg, cmsg))
++ 	      if (cmsg-&gt;cmsg_level == SOL_IP &amp;&amp; cmsg-&gt;cmsg_type == IP_RECVERR)
++ 		{
+++		  free (cbuf);
++ 		  e = (struct sock_extended_err *) CMSG_DATA(cmsg);
++ 		  cu-&gt;cu_error.re_errno = e-&gt;ee_errno;
++ 		  return (cu-&gt;cu_error.re_status = RPC_CANTRECV);
++ 		}
+++	  free (cbuf);
++ 	}
++ #endif
++       do
+diff --bs glibc.1873/getaddrinfo-hostent-conv-stack-overflow.patch glibc.SUSE_SLE-12_Update/getaddrinfo-hostent-conv-stack-overflow.patch
+--- /dev/null
++++ glibc.SUSE_SLE-12_Update/getaddrinfo-hostent-conv-stack-overflow.patch
+@@ -0,0 +1,175 @@
++2016-04-29  Florian Weimer  &lt;fweimer@redhat.com&gt;
++
++	[BZ #20010]
++	CVE-2016-3706
++	* sysdeps/posix/getaddrinfo.c
++	(convert_hostent_to_gaih_addrtuple): New function.
++	(gethosts): Call convert_hostent_to_gaih_addrtuple.
++	(gaih_inet): Use convert_hostent_to_gaih_addrtuple to convert
++	AF_INET data.
++
++Index: glibc-2.19/sysdeps/posix/getaddrinfo.c
++===================================================================
++--- glibc-2.19.orig/sysdeps/posix/getaddrinfo.c
+++++ glibc-2.19/sysdeps/posix/getaddrinfo.c
++@@ -168,9 +168,58 @@ gaih_inet_serv (const char *servicename,
++   return 0;
++ }
++ 
+++/* Convert struct hostent to a list of struct gaih_addrtuple objects.
+++   h_name is not copied, and the struct hostent object must not be
+++   deallocated prematurely.  *RESULT must be NULL or a pointer to an
+++   object allocated using malloc, which is freed.  */
+++static bool
+++convert_hostent_to_gaih_addrtuple (const struct addrinfo *req,
+++				   int family,
+++				   struct hostent *h,
+++				   struct gaih_addrtuple **result)
+++{
+++  free (*result);
+++  *result = NULL;
+++
+++  /* Count the number of addresses in h-&gt;h_addr_list.  */
+++  size_t count = 0;
+++  for (char **p = h-&gt;h_addr_list; *p != NULL; ++p)
+++    ++count;
+++
+++  /* Report no data if no addresses are available, or if the incoming
+++     address size is larger than what we can store.  */
+++  if (count == 0 || h-&gt;h_length &gt; sizeof (((struct gaih_addrtuple) {}).addr))
+++    return true;
+++
+++  struct gaih_addrtuple *array = calloc (count, sizeof (*array));
+++  if (array == NULL)
+++    return false;
+++
+++  for (size_t i = 0; i &lt; count; ++i)
+++    {
+++      if (family == AF_INET &amp;&amp; req-&gt;ai_family == AF_INET6)
+++	{
+++	  /* Perform address mapping. */
+++	  array[i].family = AF_INET6;
+++	  memcpy(array[i].addr + 3, h-&gt;h_addr_list[i], sizeof (uint32_t));
+++	  array[i].addr[2] = htonl (0xffff);
+++	}
+++      else
+++	{
+++	  array[i].family = family;
+++	  memcpy (array[i].addr, h-&gt;h_addr_list[i], h-&gt;h_length);
+++	}
+++      array[i].next = array + i + 1;
+++    }
+++  array[0].name = h-&gt;h_name;
+++  array[count - 1].next = NULL;
+++
+++  *result = array;
+++  return true;
+++}
+++
++ #define gethosts(_family, _type) \
++  {									      \
++-  int i;								      \
++   int herrno;								      \
++   struct hostent th;							      \
++   struct hostent *h;							      \
++@@ -219,36 +268,23 @@ gaih_inet_serv (const char *servicename,
++     }									      \
++   else if (h != NULL)							      \
++     {									      \
++-      for (i = 0; h-&gt;h_addr_list[i]; i++)				      \
+++      /* Make sure that addrmem can be freed.  */			      \
+++      if (!malloc_addrmem)						      \
+++	addrmem = NULL;							      \
+++      if (!convert_hostent_to_gaih_addrtuple (req, _family,h, &amp;addrmem))      \
++ 	{								      \
++-	  if (*pat == NULL)						      \
++-	    {								      \
++-	      *pat = __alloca (sizeof (struct gaih_addrtuple));		      \
++-	      (*pat)-&gt;scopeid = 0;					      \
++-	    }								      \
++-	  uint32_t *addr = (*pat)-&gt;addr;				      \
++-	  (*pat)-&gt;next = NULL;						      \
++-	  (*pat)-&gt;name = i == 0 ? strdupa (h-&gt;h_name) : NULL;		      \
++-	  if (_family == AF_INET &amp;&amp; req-&gt;ai_family == AF_INET6)		      \
++-	    {								      \
++-	      (*pat)-&gt;family = AF_INET6;				      \
++-	      addr[3] = *(uint32_t *) h-&gt;h_addr_list[i];		      \
++-	      addr[2] = htonl (0xffff);					      \
++-	      addr[1] = 0;						      \
++-	      addr[0] = 0;						      \
++-	    }								      \
++-	  else								      \
++-	    {								      \
++-	      (*pat)-&gt;family = _family;					      \
++-	      memcpy (addr, h-&gt;h_addr_list[i], sizeof(_type));		      \
++-	    }								      \
++-	  pat = &amp;((*pat)-&gt;next);					      \
+++	  _res.options |= old_res_options &amp; RES_USE_INET6;		      \
+++	  result = -EAI_SYSTEM;						      \
+++	  goto free_and_return;						      \
++ 	}								      \
+++      *pat = addrmem;							      \
+++      /* The conversion uses malloc unconditionally.  */		      \
+++      malloc_addrmem = true;						      \
++ 									      \
++       if (localcanon !=	NULL &amp;&amp; canon == NULL)				      \
++ 	canon = strdupa (localcanon);					      \
++ 									      \
++-      if (_family == AF_INET6 &amp;&amp; i &gt; 0)					      \
+++      if (_family == AF_INET6 &amp;&amp; *pat != NULL)				      \
++ 	got_ipv6 = true;						      \
++     }									      \
++  }
++@@ -612,44 +648,16 @@ gaih_inet (const char *name, const struc
++ 		{
++ 		  if (h != NULL)
++ 		    {
++-		      int i;
++-		      /* We found data, count the number of addresses.  */
++-		      for (i = 0; h-&gt;h_addr_list[i]; ++i)
++-			;
++-		      if (i &gt; 0 &amp;&amp; *pat != NULL)
++-			--i;
++-
++-		      if (__libc_use_alloca (alloca_used
++-					     + i * sizeof (struct gaih_addrtuple)))
++-			addrmem = alloca_account (i * sizeof (struct gaih_addrtuple),
++-						  alloca_used);
++-		      else
+++		      /* We found data, convert it.  */
+++		      if (!convert_hostent_to_gaih_addrtuple
+++			  (req, AF_INET, h, &amp;addrmem))
++ 			{
++-			  addrmem = malloc (i
++-					    * sizeof (struct gaih_addrtuple));
++-			  if (addrmem == NULL)
++-			    {
++-			      result = -EAI_MEMORY;
++-			      goto free_and_return;
++-			    }
++-			  malloc_addrmem = true;
++-			}
++-
++-		      /* Now convert it into the list.  */
++-		      struct gaih_addrtuple *addrfree = addrmem;
++-		      for (i = 0; h-&gt;h_addr_list[i]; ++i)
++-			{
++-			  if (*pat == NULL)
++-			    {
++-			      *pat = addrfree++;
++-			      (*pat)-&gt;scopeid = 0;
++-			    }
++-			  (*pat)-&gt;next = NULL;
++-			  (*pat)-&gt;family = AF_INET;
++-			  memcpy ((*pat)-&gt;addr, h-&gt;h_addr_list[i],
++-				  h-&gt;h_length);
++-			  pat = &amp;((*pat)-&gt;next);
+++			  result = -EAI_MEMORY;
+++			  goto free_and_return;
++ 			}
+++		      *pat = addrmem;
+++		      /* The conversion uses malloc unconditionally.  */
+++		      malloc_addrmem = true;
++ 		    }
++ 		}
++ 	      else
+diff --bs glibc.1873/glob-altdirfunc.patch glibc.SUSE_SLE-12_Update/glob-altdirfunc.patch
+--- /dev/null
++++ glibc.SUSE_SLE-12_Update/glob-altdirfunc.patch
+@@ -0,0 +1,546 @@
++2016-05-04  Florian Weimer  &lt;fweimer@redhat.com&gt;
++
++	[BZ #19779]
++	CVE-2016-1234
++	Avoid copying names of directory entries.
++	* posix/glob.c (DIRENT_MUST_BE, DIRENT_MIGHT_BE_SYMLINK)
++	(DIRENT_MIGHT_BE_DIR, CONVERT_D_INO, CONVERT_D_TYPE)
++	(CONVERT_DIRENT_DIRENT64, REAL_DIR_ENTRY): Remove macros.
++	(struct readdir_result): New type.
++	(D_TYPE_TO_RESULT, D_INO_TO_RESULT, READDIR_RESULT_INITIALIZER)
++	(GL_READDIR): New macros.
++	(readdir_result_might_be_symlink, readdir_result_might_be_dir)
++	(convert_dirent, convert_dirent64): New functions.
++	(glob_in_dir): Use struct readdir_result.  Call convert_dirent or
++	convert_dirent64.  Adjust references to the readdir result.
++	* sysdeps/unix/sysv/linux/i386/glob64.c:
++	(convert_dirent, GL_READDIR): Redefine for second file inclusion.
++	* posix/bug-glob2.c (LONG_NAME): Define.
++	(filesystem): Add LONG_NAME.
++	(my_DIR): Increase the size of room_for_dirent.
++
++2016-04-29  Florian Weimer  &lt;fweimer@redhat.com&gt;
++
++	glob: Simplify and document the interface for the GLOB_ALTDIRFUNC
++	callback function gl_readdir.
++	* posix/glob.c (NAMELEN, CONVERT_D_NAMLEN): Remove.
++	(CONVERT_DIRENT_DIRENT64): Use strcpy instead of memcpy.
++	(glob_in_dir): Remove len.  Use strdup instead of malloc and
++	memcpy to copy the name.
++	* manual/pattern.texi (Calling Glob): Document requirements for
++	implementations of the gl_readdir callback function.
++	* manual/examples/mkdirent.c: New example.
++	* posix/bug-glob2.c (my_readdir): Set d_ino to 1 unconditionally,
++	per the manual guidance.
++	* posix/tst-gnuglob.c (my_readdir): Likewise.
++
++Index: glibc-2.19/manual/examples/mkdirent.c
++===================================================================
++--- /dev/null
+++++ glibc-2.19/manual/examples/mkdirent.c
++@@ -0,0 +1,42 @@
+++/* Example for creating a struct dirent object for use with glob.
+++   Copyright (C) 2016 Free Software Foundation, Inc.
+++
+++   This program is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU General Public License
+++   as published by the Free Software Foundation; either version 2
+++   of the License, or (at your option) any later version.
+++
+++   This program is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+++   GNU General Public License for more details.
+++
+++   You should have received a copy of the GNU General Public License
+++   along with this program; if not, if not, see &lt;http://www.gnu.org/licenses/&gt;.
+++*/
+++
+++#include &lt;dirent.h&gt;
+++#include &lt;errno.h&gt;
+++#include &lt;stddef.h&gt;
+++#include &lt;stdlib.h&gt;
+++#include &lt;string.h&gt;
+++
+++struct dirent *
+++mkdirent (const char *name)
+++{
+++  size_t dirent_size = offsetof (struct dirent, d_name) + 1;
+++  size_t name_length = strlen (name);
+++  size_t total_size = dirent_size + name_length;
+++  if (total_size &lt; dirent_size)
+++    {
+++      errno = ENOMEM;
+++      return NULL;
+++    }
+++  struct dirent *result = malloc (total_size);
+++  if (result == NULL)
+++    return NULL;
+++  result-&gt;d_type = DT_UNKNOWN;
+++  result-&gt;d_ino = 1;            /* Do not skip this entry.  */
+++  memcpy (result-&gt;d_name, name, name_length + 1);
+++  return result;
+++}
++Index: glibc-2.19/manual/pattern.texi
++===================================================================
++--- glibc-2.19.orig/manual/pattern.texi
+++++ glibc-2.19/manual/pattern.texi
++@@ -237,7 +237,44 @@ function used to read the contents of a
++ @code{GLOB_ALTDIRFUNC} bit is set in the flag parameter.  The type of
++ this field is @w{@code{struct dirent *(*) (void *)}}.
++ 
++-This is a GNU extension.
+++An implementation of @code{gl_readdir} needs to initialize the following
+++members of the @code{struct dirent} object:
+++
+++@table @code
+++@item d_type
+++This member should be set to the file type of the entry if it is known.
+++Otherwise, the value @code{DT_UNKNOWN} can be used.  The @code{glob}
+++function may use the specified file type to avoid callbacks in cases
+++where the file type indicates that the data is not required.
+++
+++@item d_ino
+++This member needs to be non-zero, otherwise @code{glob} may skip the
+++current entry and call the @code{gl_readdir} callback function again to
+++retrieve another entry.
+++
+++@item d_name
+++This member must be set to the name of the entry.  It must be
+++null-terminated.
+++@end table
+++
+++The example below shows how to allocate a @code{struct dirent} object
+++containing a given name.
+++
+++@smallexample
+++@include mkdirent.c.texi
+++@end smallexample
+++
+++The @code{glob} function reads the @code{struct dirent} members listed
+++above and makes a copy of the file name in the @code{d_name} member
+++immediately after the @code{gl_readdir} callback function returns.
+++Future invocations of any of the callback functions may dealloacte or
+++reuse the buffer.  It is the responsibility of the caller of the
+++@code{glob} function to allocate and deallocate the buffer, around the
+++call to @code{glob} or using the callback functions.  For example, an
+++application could allocate the buffer in the @code{gl_readdir} callback
+++function, and deallocate it in the @code{gl_closedir} callback function.
+++
+++The @code{gl_readdir} member is a GNU extension.
++ 
++ @item gl_opendir
++ The address of an alternative implementation of the @code{opendir}
++Index: glibc-2.19/posix/bug-glob2.c
++===================================================================
++--- glibc-2.19.orig/posix/bug-glob2.c
+++++ glibc-2.19/posix/bug-glob2.c
++@@ -40,6 +40,17 @@
++ # define PRINTF(fmt, args...)
++ #endif
++ 
+++#define LONG_NAME \
+++  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+++  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+++  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+++  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+++  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+++  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+++  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+++  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+++  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+++  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
++ 
++ static struct
++ {
++@@ -58,6 +69,7 @@ static struct
++       { ".", 3, DT_DIR, 0755 },
++       { "..", 3, DT_DIR, 0755 },
++       { "a", 3, DT_REG, 0644 },
+++      { LONG_NAME, 3, DT_REG, 0644 },
++     { "unreadable", 2, DT_DIR, 0111 },
++       { ".", 3, DT_DIR, 0111 },
++       { "..", 3, DT_DIR, 0755 },
++@@ -75,7 +87,7 @@ typedef struct
++   int level;
++   int idx;
++   struct dirent d;
++-  char room_for_dirent[NAME_MAX];
+++  char room_for_dirent[sizeof (LONG_NAME)];
++ } my_DIR;
++ 
++ 
++@@ -193,7 +205,7 @@ my_readdir (void *gdir)
++       return NULL;
++     }
++ 
++-  dir-&gt;d.d_ino = dir-&gt;idx;
+++  dir-&gt;d.d_ino = 1;		/* glob should not skip this entry.  */
++ 
++ #ifdef _DIRENT_HAVE_D_TYPE
++   dir-&gt;d.d_type = filesystem[dir-&gt;idx].type;
++Index: glibc-2.19/posix/glob.c
++===================================================================
++--- glibc-2.19.orig/posix/glob.c
+++++ glibc-2.19/posix/glob.c
++@@ -24,7 +24,9 @@
++ #include &lt;errno.h&gt;
++ #include &lt;sys/types.h&gt;
++ #include &lt;sys/stat.h&gt;
+++#include &lt;stdbool.h&gt;
++ #include &lt;stddef.h&gt;
+++#include &lt;stdint.h&gt;
++ 
++ /* Outcomment the following line for production quality code.  */
++ /* #define NDEBUG 1 */
++@@ -57,10 +59,8 @@
++ 
++ #if defined HAVE_DIRENT_H || defined __GNU_LIBRARY__
++ # include &lt;dirent.h&gt;
++-# define NAMLEN(dirent) strlen((dirent)-&gt;d_name)
++ #else
++ # define dirent direct
++-# define NAMLEN(dirent) (dirent)-&gt;d_namlen
++ # ifdef HAVE_SYS_NDIR_H
++ #  include &lt;sys/ndir.h&gt;
++ # endif
++@@ -75,82 +75,8 @@
++ # endif /* HAVE_VMSDIR_H */
++ #endif
++ 
++-
++-/* In GNU systems, &lt;dirent.h&gt; defines this macro for us.  */
++-#ifdef _D_NAMLEN
++-# undef NAMLEN
++-# define NAMLEN(d) _D_NAMLEN(d)
++-#endif
++-
++-/* When used in the GNU libc the symbol _DIRENT_HAVE_D_TYPE is available
++-   if the `d_type' member for `struct dirent' is available.
++-   HAVE_STRUCT_DIRENT_D_TYPE plays the same role in GNULIB.  */
++-#if defined _DIRENT_HAVE_D_TYPE || defined HAVE_STRUCT_DIRENT_D_TYPE
++-/* True if the directory entry D must be of type T.  */
++-# define DIRENT_MUST_BE(d, t)	((d)-&gt;d_type == (t))
++-
++-/* True if the directory entry D might be a symbolic link.  */
++-# define DIRENT_MIGHT_BE_SYMLINK(d) \
++-    ((d)-&gt;d_type == DT_UNKNOWN || (d)-&gt;d_type == DT_LNK)
++-
++-/* True if the directory entry D might be a directory.  */
++-# define DIRENT_MIGHT_BE_DIR(d)	 \
++-    ((d)-&gt;d_type == DT_DIR || DIRENT_MIGHT_BE_SYMLINK (d))
++-
++-#else /* !HAVE_D_TYPE */
++-# define DIRENT_MUST_BE(d, t)		false
++-# define DIRENT_MIGHT_BE_SYMLINK(d)	true
++-# define DIRENT_MIGHT_BE_DIR(d)		true
++-#endif /* HAVE_D_TYPE */
++-
++-/* If the system has the `struct dirent64' type we use it internally.  */
++-#if defined _LIBC &amp;&amp; !defined COMPILE_GLOB64
++-# if defined HAVE_DIRENT_H || defined __GNU_LIBRARY__
++-#  define CONVERT_D_NAMLEN(d64, d32)
++-# else
++-#  define CONVERT_D_NAMLEN(d64, d32) \
++-  (d64)-&gt;d_namlen = (d32)-&gt;d_namlen;
++-# endif
++-
++-# if (defined POSIX || defined WINDOWS32) &amp;&amp; !defined __GNU_LIBRARY__
++-#  define CONVERT_D_INO(d64, d32)
++-# else
++-#  define CONVERT_D_INO(d64, d32) \
++-  (d64)-&gt;d_ino = (d32)-&gt;d_ino;
++-# endif
++-
++-# ifdef _DIRENT_HAVE_D_TYPE
++-#  define CONVERT_D_TYPE(d64, d32) \
++-  (d64)-&gt;d_type = (d32)-&gt;d_type;
++-# else
++-#  define CONVERT_D_TYPE(d64, d32)
++-# endif
++-
++-# define CONVERT_DIRENT_DIRENT64(d64, d32) \
++-  memcpy ((d64)-&gt;d_name, (d32)-&gt;d_name, NAMLEN (d32) + 1);		      \
++-  CONVERT_D_NAMLEN (d64, d32)						      \
++-  CONVERT_D_INO (d64, d32)						      \
++-  CONVERT_D_TYPE (d64, d32)
++-#endif
++-
++-
++-#if (defined POSIX || defined WINDOWS32) &amp;&amp; !defined __GNU_LIBRARY__
++-/* Posix does not require that the d_ino field be present, and some
++-   systems do not provide it. */
++-# define REAL_DIR_ENTRY(dp) 1
++-#else
++-# define REAL_DIR_ENTRY(dp) (dp-&gt;d_ino != 0)
++-#endif /* POSIX */
++-
++ #include &lt;stdlib.h&gt;
++ #include &lt;string.h&gt;
++-
++-/* NAME_MAX is usually defined in &lt;dirent.h&gt; or &lt;limits.h&gt;.  */
++-#include &lt;limits.h&gt;
++-#ifndef NAME_MAX
++-# define NAME_MAX (sizeof (((struct dirent *) 0)-&gt;d_name))
++-#endif
++-
++ #include &lt;alloca.h&gt;
++ 
++ #ifdef _LIBC
++@@ -195,8 +121,111 @@
++ &amp;#xc;
++ static const char *next_brace_sub (const char *begin, int flags) __THROWNL;
++ 
+++/* A representation of a directory entry which does not depend on the
+++   layout of struct dirent, or the size of ino_t.  */
+++struct readdir_result
+++{
+++  const char *name;
+++# if defined _DIRENT_HAVE_D_TYPE || defined HAVE_STRUCT_DIRENT_D_TYPE
+++  uint8_t type;
+++# endif
+++  bool skip_entry;
+++};
+++
+++# if defined _DIRENT_HAVE_D_TYPE || defined HAVE_STRUCT_DIRENT_D_TYPE
+++/* Initializer based on the d_type member of struct dirent.  */
+++#  define D_TYPE_TO_RESULT(source) (source)-&gt;d_type,
+++
+++/* True if the directory entry D might be a symbolic link.  */
+++static bool
+++readdir_result_might_be_symlink (struct readdir_result d)
+++{
+++  return d.type == DT_UNKNOWN || d.type == DT_LNK;
+++}
+++
+++/* True if the directory entry D might be a directory.  */
+++static bool
+++readdir_result_might_be_dir (struct readdir_result d)
+++{
+++  return d.type == DT_DIR || readdir_result_might_be_symlink (d);
+++}
+++# else /* defined _DIRENT_HAVE_D_TYPE || defined HAVE_STRUCT_DIRENT_D_TYPE */
+++#  define D_TYPE_TO_RESULT(source)
+++
+++/* If we do not have type information, symbolic links and directories
+++   are always a possibility.  */
+++
+++static bool
+++readdir_result_might_be_symlink (struct readdir_result d)
+++{
+++  return true;
+++}
+++
+++static bool
+++readdir_result_might_be_dir (struct readdir_result d)
+++{
+++  return true;
+++}
+++
+++# endif /* defined _DIRENT_HAVE_D_TYPE || defined HAVE_STRUCT_DIRENT_D_TYPE */
+++
+++# if (defined POSIX || defined WINDOWS32) &amp;&amp; !defined __GNU_LIBRARY__
+++/* Initializer for skip_entry.  POSIX does not require that the d_ino
+++   field be present, and some systems do not provide it. */
+++#  define D_INO_TO_RESULT(source) false,
+++# else
+++#  define D_INO_TO_RESULT(source) (source)-&gt;d_ino == 0,
+++# endif
+++
+++/* Construct an initializer for a struct readdir_result object from a
+++   struct dirent *.  No copy of the name is made.  */
+++#define READDIR_RESULT_INITIALIZER(source) \
+++  {					   \
+++    source-&gt;d_name,			   \
+++    D_TYPE_TO_RESULT (source)		   \
+++    D_INO_TO_RESULT (source)		   \
+++  }
+++
++ #endif /* !defined _LIBC || !defined GLOB_ONLY_P */
++ 
+++/* Call gl_readdir on STREAM.  This macro can be overridden to reduce
+++   type safety if an old interface version needs to be supported.  */
+++#ifndef GL_READDIR
+++# define GL_READDIR(pglob, stream) ((pglob)-&gt;gl_readdir (stream))
+++#endif
+++
+++/* Extract name and type from directory entry.  No copy of the name is
+++   made.  If SOURCE is NULL, result name is NULL.  Keep in sync with
+++   convert_dirent64 below.  */
+++static struct readdir_result
+++convert_dirent (const struct dirent *source)
+++{
+++  if (source == NULL)
+++    {
+++      struct readdir_result result = { NULL, };
+++      return result;
+++    }
+++  struct readdir_result result = READDIR_RESULT_INITIALIZER (source);
+++  return result;
+++}
+++
+++#ifndef COMPILE_GLOB64
+++/* Like convert_dirent, but works on struct dirent64 instead.  Keep in
+++   sync with convert_dirent above.  */
+++static struct readdir_result
+++convert_dirent64 (const struct dirent64 *source)
+++{
+++  if (source == NULL)
+++    {
+++      struct readdir_result result = { NULL, };
+++      return result;
+++    }
+++  struct readdir_result result = READDIR_RESULT_INITIALIZER (source);
+++  return result;
+++}
+++#endif
+++
+++
++ #ifndef attribute_hidden
++ # define attribute_hidden
++ #endif
++@@ -1561,56 +1590,36 @@ glob_in_dir (const char *pattern, const
++ 
++ 	  while (1)
++ 	    {
++-	      const char *name;
++-	      size_t len;
++-#if defined _LIBC &amp;&amp; !defined COMPILE_GLOB64
++-	      struct dirent64 *d;
++-	      union
++-		{
++-		  struct dirent64 d64;
++-		  char room [offsetof (struct dirent64, d_name[0])
++-			     + NAME_MAX + 1];
++-		}
++-	      d64buf;
++-
++-	      if (__builtin_expect (flags &amp; GLOB_ALTDIRFUNC, 0))
++-		{
++-		  struct dirent *d32 = (*pglob-&gt;gl_readdir) (stream);
++-		  if (d32 != NULL)
++-		    {
++-		      CONVERT_DIRENT_DIRENT64 (&amp;d64buf.d64, d32);
++-		      d = &amp;d64buf.d64;
++-		    }
++-		  else
++-		    d = NULL;
++-		}
++-	      else
++-		d = __readdir64 (stream);
+++	      struct readdir_result d;
+++	      {
+++		if (__builtin_expect (flags &amp; GLOB_ALTDIRFUNC, 0))
+++		  d = convert_dirent (GL_READDIR (pglob, stream));
+++		else
+++		  {
+++#ifdef COMPILE_GLOB64
+++		    d = convert_dirent (__readdir (stream));
++ #else
++-	      struct dirent *d = (__builtin_expect (flags &amp; GLOB_ALTDIRFUNC, 0)
++-				  ? ((struct dirent *)
++-				     (*pglob-&gt;gl_readdir) (stream))
++-				  : __readdir (stream));
+++		    d = convert_dirent64 (__readdir64 (stream));
++ #endif
++-	      if (d == NULL)
+++		  }
+++	      }
+++	      if (d.name == NULL)
++ 		break;
++-	      if (! REAL_DIR_ENTRY (d))
+++	      if (d.skip_entry)
++ 		continue;
++ 
++ 	      /* If we shall match only directories use the information
++ 		 provided by the dirent call if possible.  */
++-	      if ((flags &amp; GLOB_ONLYDIR) &amp;&amp; !DIRENT_MIGHT_BE_DIR (d))
+++	      if ((flags &amp; GLOB_ONLYDIR) &amp;&amp; !readdir_result_might_be_dir (d))
++ 		continue;
++ 
++-	      name = d-&gt;d_name;
++-
++-	      if (fnmatch (pattern, name, fnm_flags) == 0)
+++	      if (fnmatch (pattern, d.name, fnm_flags) == 0)
++ 		{
++ 		  /* If the file we found is a symlink we have to
++ 		     make sure the target file exists.  */
++-		  if (!DIRENT_MIGHT_BE_SYMLINK (d)
++-		      || link_exists_p (dfd, directory, dirlen, name, pglob,
++-					flags))
+++		  if (!readdir_result_might_be_symlink (d)
+++		      || link_exists_p (dfd, directory, dirlen, d.name,
+++					pglob, flags))
++ 		    {
++ 		      if (cur == names-&gt;count)
++ 			{
++@@ -1630,12 +1639,10 @@ glob_in_dir (const char *pattern, const
++ 			  names = newnames;
++ 			  cur = 0;
++ 			}
++-		      len = NAMLEN (d);
++-		      names-&gt;name[cur] = (char *) malloc (len + 1);
+++		      names-&gt;name[cur] = strdup (d.name);
++ 		      if (names-&gt;name[cur] == NULL)
++ 			goto memory_error;
++-		      *((char *) mempcpy (names-&gt;name[cur++], name, len))
++-			= '\0';
+++		      ++cur;
++ 		      ++nfound;
++ 		    }
++ 		}
++Index: glibc-2.19/posix/tst-gnuglob.c
++===================================================================
++--- glibc-2.19.orig/posix/tst-gnuglob.c
+++++ glibc-2.19/posix/tst-gnuglob.c
++@@ -211,7 +211,7 @@ my_readdir (void *gdir)
++       return NULL;
++     }
++ 
++-  dir-&gt;d.d_ino = dir-&gt;idx;
+++  dir-&gt;d.d_ino = 1;		/* glob should not skip this entry.  */
++ 
++ #ifdef _DIRENT_HAVE_D_TYPE
++   dir-&gt;d.d_type = filesystem[dir-&gt;idx].type;
++Index: glibc-2.19/sysdeps/unix/sysv/linux/i386/glob64.c
++===================================================================
++--- glibc-2.19.orig/sysdeps/unix/sysv/linux/i386/glob64.c
+++++ glibc-2.19/sysdeps/unix/sysv/linux/i386/glob64.c
++@@ -1,3 +1,21 @@
+++/* Two glob variants with 64-bit support, for dirent64 and __olddirent64.
+++   Copyright (C) 1998-2016 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   &lt;http://www.gnu.org/licenses/&gt;.  */
+++
++ #include &lt;dirent.h&gt;
++ #include &lt;glob.h&gt;
++ #include &lt;sys/stat.h&gt;
++@@ -38,11 +56,15 @@ int __old_glob64 (const char *__pattern,
++ 
++ #undef dirent
++ #define dirent __old_dirent64
+++#undef GL_READDIR
+++# define GL_READDIR(pglob, stream) \
+++  ((struct __old_dirent64 *) (pglob)-&gt;gl_readdir (stream))
++ #undef __readdir
++ #define __readdir(dirp) __old_readdir64 (dirp)
++ #undef glob
++ #define glob(pattern, flags, errfunc, pglob) \
++   __old_glob64 (pattern, flags, errfunc, pglob)
+++#define convert_dirent __old_convert_dirent
++ #define glob_in_dir __old_glob_in_dir
++ #define GLOB_ATTRIBUTE attribute_compat_text_section
++ 
+diff --bs glibc.1873/malloc-Consistently-apply-trim_threshold-to-all-heap.patch glibc.SUSE_SLE-12_Update/malloc-Consistently-apply-trim_threshold-to-all-heap.patch
+--- /dev/null
++++ glibc.SUSE_SLE-12_Update/malloc-Consistently-apply-trim_threshold-to-all-heap.patch
+@@ -0,0 +1,33 @@
++2015-10-07  Carlos O'Donell  &lt;carlos@redhat.com&gt;
++
++	[BZ #17195]
++	* malloc/arena.c (heap_trim): Apply trim_treshold to top_chunck size,
++	as is similarly done in systrim and _int_free already.
++
++Index: glibc-2.19/malloc/arena.c
++===================================================================
++--- glibc-2.19.orig/malloc/arena.c
+++++ glibc-2.19/malloc/arena.c
++@@ -712,14 +712,20 @@ heap_trim (heap_info *heap, size_t pad)
++     }
++ 
++   /* Uses similar logic for per-thread arenas as the main arena with systrim
++-     by preserving the top pad and at least a page.  */
+++     and _int_free by preserving the top pad and rounding down to the nearest
+++     page.  */
++   top_size = chunksize (top_chunk);
+++  if ((unsigned long)(top_size) &lt;
+++      (unsigned long)(mp_.trim_threshold))
+++    return 0;
+++
++   top_area = top_size - MINSIZE - 1;
++   if (top_area &lt; 0 || (size_t) top_area &lt;= pad)
++     return 0;
++ 
+++  /* Release in pagesize units and round down to the nearest page.  */
++   extra = ALIGN_DOWN(top_area - pad, pagesz);
++-  if ((unsigned long) extra &lt; mp_.trim_threshold)
+++  if (extra == 0)
++     return 0;
++ 
++   /* Try to shrink. */
+diff --bs glibc.1873/malloc-Fix-attached-thread-reference-count-handling-.patch glibc.SUSE_SLE-12_Update/malloc-Fix-attached-thread-reference-count-handling-.patch
+--- /dev/null
++++ glibc.SUSE_SLE-12_Update/malloc-Fix-attached-thread-reference-count-handling-.patch
+@@ -0,0 +1,299 @@
++2015-12-16  Florian Weimer  &lt;fweimer@redhat.com&gt;
++
++	[BZ #19243]
++	* malloc/arena.c (get_free_list): Remove assert and adjust
++	reference count handling.  Add comment about reused_arena
++	interaction.
++	(reused_arena): Add comments abount get_free_list interaction.
++	* malloc/tst-malloc-thread-exit.c: New file.
++	* malloc/Makefile (tests): Add tst-malloc-thread-exit.
++	(tst-malloc-thread-exit): Link against libpthread.
++
++Index: glibc-2.19/malloc/Makefile
++===================================================================
++--- glibc-2.19.orig/malloc/Makefile
+++++ glibc-2.19/malloc/Makefile
++@@ -28,7 +28,7 @@ tests := mallocbug tst-malloc tst-valloc
++ 	 tst-mallocstate tst-mcheck tst-mallocfork tst-trim1 \
++ 	 tst-malloc-usable tst-realloc tst-posix_memalign \
++ 	 tst-pvalloc tst-memalign \
++-	 tst-malloc-backtrace
+++	 tst-malloc-backtrace tst-malloc-thread-exit
++ test-srcs = tst-mtrace
++ 
++ routines = malloc morecore mcheck mtrace obstack
++@@ -45,6 +45,8 @@ libmemusage-inhibit-o = $(filter-out .os
++ 
++ $(objpfx)tst-malloc-backtrace: $(common-objpfx)nptl/libpthread.so \
++ 			       $(common-objpfx)nptl/libpthread_nonshared.a
+++$(objpfx)tst-malloc-thread-exit: $(common-objpfx)nptl/libpthread.so \
+++			       $(common-objpfx)nptl/libpthread_nonshared.a
++ 
++ # These should be removed by `make clean'.
++ extra-objs = mcheck-init.o libmcheck.a
++Index: glibc-2.19/malloc/arena.c
++===================================================================
++--- glibc-2.19.orig/malloc/arena.c
+++++ glibc-2.19/malloc/arena.c
++@@ -824,6 +824,8 @@ _int_new_arena (size_t size)
++ }
++ 
++ 
+++/* Remove an arena from free_list.  The arena may be in use because it
+++   was attached concurrently to a thread by reused_arena below.  */
++ static mstate
++ get_free_list (void)
++ {
++@@ -838,10 +840,8 @@ get_free_list (void)
++ 	{
++ 	  free_list = result-&gt;next_free;
++ 
++-	  /* Arenas on the free list are not attached to any thread.  */
++-	  assert (result-&gt;attached_threads == 0);
++-	  /* But the arena will now be attached to this thread.  */
++-	  result-&gt;attached_threads = 1;
+++	  /* The arena will be attached to this thread.  */
+++	  ++result-&gt;attached_threads;
++ 
++ 	  detach_arena (replaced_arena);
++ 	}
++@@ -870,6 +870,8 @@ reused_arena (mstate avoid_arena)
++   if (next_to_use == NULL)
++     next_to_use = &amp;main_arena;
++ 
+++  /* Iterate over all arenas (including those linked from
+++     free_list).  */
++   result = next_to_use;
++   do
++     {
++@@ -904,6 +906,8 @@ reused_arena (mstate avoid_arena)
++   (void) mutex_lock (&amp;result-&gt;mutex);
++ 
++ out:
+++  /* Attach the arena to the current thread.  Note that we may have
+++     selected an arena which was on free_list.  */
++   {
++     mstate replaced_arena;
++     arena_lookup (replaced_arena);
++Index: glibc-2.19/malloc/tst-malloc-thread-exit.c
++===================================================================
++--- /dev/null
+++++ glibc-2.19/malloc/tst-malloc-thread-exit.c
++@@ -0,0 +1,217 @@
+++/* Test malloc with concurrent thread termination.
+++   Copyright (C) 2015 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   &lt;http://www.gnu.org/licenses/&gt;.  */
+++
+++/* This thread spawns a number of outer threads, equal to the arena
+++   limit.  The outer threads run a loop which start and join two
+++   different kinds of threads: the first kind allocates (attaching an
+++   arena to the thread; malloc_first_thread) and waits, the second
+++   kind waits and allocates (wait_first_threads).  Both kinds of
+++   threads exit immediately after waiting.  The hope is that this will
+++   exhibit races in thread termination and arena management,
+++   particularly related to the arena free list.  */
+++
+++#include &lt;errno.h&gt;
+++#include &lt;pthread.h&gt;
+++#include &lt;stdbool.h&gt;
+++#include &lt;stdio.h&gt;
+++#include &lt;stdlib.h&gt;
+++#include &lt;unistd.h&gt;
+++
+++#define TIMEOUT 7
+++
+++static bool termination_requested;
+++static int inner_thread_count = 4;
+++static size_t malloc_size = 32;
+++
+++static void
+++__attribute__ ((noinline, noclone))
+++unoptimized_free (void *ptr)
+++{
+++  free (ptr);
+++}
+++
+++static void *
+++malloc_first_thread (void * closure)
+++{
+++  pthread_barrier_t *barrier = closure;
+++  void *ptr = malloc (malloc_size);
+++  if (ptr == NULL)
+++    {
+++      printf ("error: malloc: %m\n");
+++      abort ();
+++    }
+++  int ret = pthread_barrier_wait (barrier);
+++  if (ret != 0 &amp;&amp; ret != PTHREAD_BARRIER_SERIAL_THREAD)
+++    {
+++      errno = ret;
+++      printf ("error: pthread_barrier_wait: %m\n");
+++      abort ();
+++    }
+++  unoptimized_free (ptr);
+++  return NULL;
+++}
+++
+++static void *
+++wait_first_thread (void * closure)
+++{
+++  pthread_barrier_t *barrier = closure;
+++  int ret = pthread_barrier_wait (barrier);
+++  if (ret != 0 &amp;&amp; ret != PTHREAD_BARRIER_SERIAL_THREAD)
+++    {
+++      errno = ret;
+++      printf ("error: pthread_barrier_wait: %m\n");
+++      abort ();
+++    }
+++  void *ptr = malloc (malloc_size);
+++  if (ptr == NULL)
+++    {
+++      printf ("error: malloc: %m\n");
+++      abort ();
+++    }
+++  unoptimized_free (ptr);
+++  return NULL;
+++}
+++
+++static void *
+++outer_thread (void *closure)
+++{
+++  pthread_t *threads = calloc (sizeof (*threads), inner_thread_count);
+++  if (threads == NULL)
+++    {
+++      printf ("error: calloc: %m\n");
+++      abort ();
+++    }
+++
+++  while (!__atomic_load_n (&amp;termination_requested, __ATOMIC_RELAXED))
+++    {
+++      pthread_barrier_t barrier;
+++      int ret = pthread_barrier_init (&amp;barrier, NULL, inner_thread_count + 1);
+++      if (ret != 0)
+++        {
+++          errno = ret;
+++          printf ("pthread_barrier_init: %m\n");
+++          abort ();
+++        }
+++      for (int i = 0; i &lt; inner_thread_count; ++i)
+++        {
+++          void *(*func) (void *);
+++          if ((i  % 2) == 0)
+++            func = malloc_first_thread;
+++          else
+++            func = wait_first_thread;
+++          ret = pthread_create (threads + i, NULL, func, &amp;barrier);
+++          if (ret != 0)
+++            {
+++              errno = ret;
+++              printf ("error: pthread_create: %m\n");
+++              abort ();
+++            }
+++        }
+++      ret = pthread_barrier_wait (&amp;barrier);
+++      if (ret != 0 &amp;&amp; ret != PTHREAD_BARRIER_SERIAL_THREAD)
+++        {
+++          errno = ret;
+++          printf ("pthread_wait: %m\n");
+++          abort ();
+++        }
+++      for (int i = 0; i &lt; inner_thread_count; ++i)
+++        {
+++          ret = pthread_join (threads[i], NULL);
+++          if (ret != 0)
+++            {
+++              ret = errno;
+++              printf ("error: pthread_join: %m\n");
+++              abort ();
+++            }
+++        }
+++      ret = pthread_barrier_destroy (&amp;barrier);
+++      if (ret != 0)
+++        {
+++          ret = errno;
+++          printf ("pthread_barrier_destroy: %m\n");
+++          abort ();
+++        }
+++    }
+++
+++  free (threads);
+++
+++  return NULL;
+++}
+++
+++static int
+++do_test (void)
+++{
+++  /* The number of top-level threads should be equal to the number of
+++     arenas.  See arena_get2.  */
+++  long outer_thread_count = sysconf (_SC_NPROCESSORS_ONLN);
+++  if (outer_thread_count &gt;= 1)
+++    {
+++      /* See NARENAS_FROM_NCORES in malloc.c.  */
+++      if (sizeof (long) == 4)
+++        outer_thread_count *= 2;
+++      else
+++        outer_thread_count *= 8;
+++    }
+++
+++  /* Leave some room for shutting down all threads gracefully.  */
+++  int timeout = TIMEOUT - 2;
+++
+++  pthread_t *threads = calloc (sizeof (*threads), outer_thread_count);
+++  if (threads == NULL)
+++    {
+++      printf ("error: calloc: %m\n");
+++      abort ();
+++    }
+++
+++  for (long i = 0; i &lt; outer_thread_count; ++i)
+++    {
+++      int ret = pthread_create (threads + i, NULL, outer_thread, NULL);
+++      if (ret != 0)
+++        {
+++          errno = ret;
+++          printf ("error: pthread_create: %m\n");
+++          abort ();
+++        }
+++    }
+++
+++  struct timespec ts = {timeout, 0};
+++  if (nanosleep (&amp;ts, NULL))
+++    {
+++      printf ("error: error: nanosleep: %m\n");
+++      abort ();
+++    }
+++
+++  __atomic_store_n (&amp;termination_requested, true, __ATOMIC_RELAXED);
+++
+++  for (long i = 0; i &lt; outer_thread_count; ++i)
+++    {
+++      int ret = pthread_join (threads[i], NULL);
+++      if (ret != 0)
+++        {
+++          errno = ret;
+++          printf ("error: pthread_join: %m\n");
+++          abort ();
+++        }
+++    }
+++  free (threads);
+++
+++  return 0;
+++}
+++
+++#define TEST_FUNCTION do_test ()
+++#include "../test-skeleton.c"
+diff --bs glibc.1873/malloc-Fix-list_lock-arena-lock-deadlock-BZ-19182.patch glibc.SUSE_SLE-12_Update/malloc-Fix-list_lock-arena-lock-deadlock-BZ-19182.patch
+--- /dev/null
++++ glibc.SUSE_SLE-12_Update/malloc-Fix-list_lock-arena-lock-deadlock-BZ-19182.patch
+@@ -0,0 +1,209 @@
++2015-12-21  Florian Weimer  &lt;fweimer@redhat.com&gt;
++
++	[BZ #19182]
++	* malloc/arena.c (list_lock): Document lock ordering requirements.
++	(free_list_lock): New lock.
++	(ptmalloc_lock_all): Comment on free_list_lock.
++	(ptmalloc_unlock_all2): Reinitialize free_list_lock.
++	(detach_arena): Update comment.  free_list_lock is now needed.
++	(_int_new_arena): Use free_list_lock around detach_arena call.
++	Acquire arena lock after list_lock.  Add comment, including FIXME
++	about incorrect synchronization.
++	(get_free_list): Switch to free_list_lock.
++	(reused_arena): Acquire free_list_lock around detach_arena call
++	and attached threads counter update.  Add two FIXMEs about
++	incorrect synchronization.
++	(arena_thread_freeres): Switch to free_list_lock.
++	* malloc/malloc.c (struct malloc_state): Update comments to
++	mention free_list_lock.
++
++Index: glibc-2.19/malloc/arena.c
++===================================================================
++--- glibc-2.19.orig/malloc/arena.c
+++++ glibc-2.19/malloc/arena.c
++@@ -75,10 +75,23 @@ extern int sanity_check_heap_info_alignm
++ /* Thread specific data */
++ 
++ static tsd_key_t arena_key;
++-static mutex_t list_lock = MUTEX_INITIALIZER;
+++static mutex_t free_list_lock = MUTEX_INITIALIZER;
++ static size_t narenas = 1;
++ static mstate free_list;
++ 
+++/* list_lock prevents concurrent writes to the next member of struct
+++   malloc_state objects.
+++
+++   Read access to the next member is supposed to synchronize with the
+++   atomic_write_barrier and the write to the next member in
+++   _int_new_arena.  This suffers from data races; see the FIXME
+++   comments in _int_new_arena and reused_arena.
+++
+++   list_lock also prevents concurrent forks.  When list_lock is
+++   acquired, no arena lock must be acquired, but it is permitted to
+++   acquire arena locks after list_lock.  */
+++static mutex_t list_lock = MUTEX_INITIALIZER;
+++
++ #if THREAD_STATS
++ static int stat_n_heaps;
++ # define THREAD_STAT(x) x
++@@ -225,6 +238,9 @@ ptmalloc_lock_all (void)
++   if (__malloc_initialized &lt; 1)
++     return;
++ 
+++  /* We do not acquire free_list_lock here because we completely
+++     reconstruct free_list in ptmalloc_unlock_all2.  */
+++
++   if (mutex_trylock (&amp;list_lock))
++     {
++       void *my_arena;
++@@ -300,6 +316,7 @@ ptmalloc_unlock_all2 (void)
++ 
++   /* Push all arenas to the free list, except save_arena, which is
++      attached to the current thread.  */
+++  mutex_init (&amp;free_list_lock);
++   if (save_arena != NULL)
++     ((mstate) save_arena)-&gt;attached_threads = 1;
++   free_list = NULL;
++@@ -317,6 +334,7 @@ ptmalloc_unlock_all2 (void)
++       if (ar_ptr == &amp;main_arena)
++         break;
++     }
+++
++   mutex_init (&amp;list_lock);
++   atfork_recursive_cntr = 0;
++ }
++@@ -751,7 +769,7 @@ heap_trim (heap_info *heap, size_t pad)
++ /* Create a new arena with initial size "size".  */
++ 
++ /* If REPLACED_ARENA is not NULL, detach it from this thread.  Must be
++-   called while list_lock is held.  */
+++   called while free_list_lock is held.  */
++ static void
++ detach_arena (mstate replaced_arena)
++ {
++@@ -805,19 +823,34 @@ _int_new_arena (size_t size)
++   arena_lookup (replaced_arena);
++   tsd_setspecific (arena_key, (void *) a);
++   mutex_init (&amp;a-&gt;mutex);
++-  (void) mutex_lock (&amp;a-&gt;mutex);
++ 
++   (void) mutex_lock (&amp;list_lock);
++ 
++-  detach_arena (replaced_arena);
++-
++   /* Add the new arena to the global list.  */
++   a-&gt;next = main_arena.next;
+++  /* FIXME: The barrier is an attempt to synchronize with read access
+++     in reused_arena, which does not acquire list_lock while
+++     traversing the list.  */
++   atomic_write_barrier ();
++   main_arena.next = a;
++ 
++   (void) mutex_unlock (&amp;list_lock);
++ 
+++  (void) mutex_lock (&amp;free_list_lock);
+++  detach_arena (replaced_arena);
+++  (void) mutex_unlock (&amp;free_list_lock);
+++
+++  /* Lock this arena.  NB: Another thread may have been attached to
+++     this arena because the arena is now accessible from the
+++     main_arena.next list and could have been picked by reused_arena.
+++     This can only happen for the last arena created (before the arena
+++     limit is reached).  At this point, some arena has to be attached
+++     to two threads.  We could acquire the arena lock before list_lock
+++     to make it less likely that reused_arena picks this new arena,
+++     but this could result in a deadlock with ptmalloc_lock_all.  */
+++
+++  (void) mutex_lock (&amp;a-&gt;mutex);
+++
++   THREAD_STAT (++(a-&gt;stat_lock_loop));
++ 
++   return a;
++@@ -834,7 +867,7 @@ get_free_list (void)
++   mstate result = free_list;
++   if (result != NULL)
++     {
++-      (void) mutex_lock (&amp;list_lock);
+++      (void) mutex_lock (&amp;free_list_lock);
++       result = free_list;
++       if (result != NULL)
++ 	{
++@@ -845,7 +878,7 @@ get_free_list (void)
++ 
++ 	  detach_arena (replaced_arena);
++ 	}
++-      (void) mutex_unlock (&amp;list_lock);
+++      (void) mutex_unlock (&amp;free_list_lock);
++ 
++       if (result != NULL)
++         {
++@@ -866,6 +899,7 @@ static mstate
++ reused_arena (mstate avoid_arena)
++ {
++   mstate result;
+++  /* FIXME: Access to next_to_use suffers from data races.  */
++   static mstate next_to_use;
++   if (next_to_use == NULL)
++     next_to_use = &amp;main_arena;
++@@ -878,6 +912,7 @@ reused_arena (mstate avoid_arena)
++       if (!arena_is_corrupt (result) &amp;&amp; !mutex_trylock (&amp;result-&gt;mutex))
++         goto out;
++ 
+++      /* FIXME: This is a data race, see _int_new_arena.  */
++       result = result-&gt;next;
++     }
++   while (result != next_to_use);
++@@ -909,12 +944,13 @@ out:
++   /* Attach the arena to the current thread.  Note that we may have
++      selected an arena which was on free_list.  */
++   {
+++    /* Update the arena thread attachment counters.   */
++     mstate replaced_arena;
++     arena_lookup (replaced_arena);
++-    (void) mutex_lock (&amp;list_lock);
+++    (void) mutex_lock (&amp;free_list_lock);
++     detach_arena (replaced_arena);
++     ++result-&gt;attached_threads;
++-    (void) mutex_unlock (&amp;list_lock);
+++    (void) mutex_unlock (&amp;free_list_lock);
++   }
++ 
++   LIBC_PROBE (memory_arena_reuse, 2, result, avoid_arena);
++@@ -1010,7 +1046,7 @@ arena_thread_freeres (void)
++ 
++   if (a != NULL)
++     {
++-      (void) mutex_lock (&amp;list_lock);
+++      (void) mutex_lock (&amp;free_list_lock);
++       /* If this was the last attached thread for this arena, put the
++ 	 arena on the free list.  */
++       assert (a-&gt;attached_threads &gt; 0);
++@@ -1019,7 +1055,7 @@ arena_thread_freeres (void)
++ 	  a-&gt;next_free = free_list;
++ 	  free_list = a;
++ 	}
++-      (void) mutex_unlock (&amp;list_lock);
+++      (void) mutex_unlock (&amp;free_list_lock);
++     }
++ }
++ text_set_element (__libc_thread_subfreeres, arena_thread_freeres);
++Index: glibc-2.19/malloc/malloc.c
++===================================================================
++--- glibc-2.19.orig/malloc/malloc.c
+++++ glibc-2.19/malloc/malloc.c
++@@ -1707,12 +1707,12 @@ struct malloc_state
++   struct malloc_state *next;
++ 
++   /* Linked list for free arenas.  Access to this field is serialized
++-     by list_lock in arena.c.  */
+++     by free_list_lock in arena.c.  */
++   struct malloc_state *next_free;
++ 
++   /* Number of threads attached to this arena.  0 if the arena is on
++-     the free list.  Access to this field is serialized by list_lock
++-     in arena.c.  */
+++     the free list.  Access to this field is serialized by
+++     free_list_lock in arena.c.  */
++   INTERNAL_SIZE_T attached_threads;
++ 
++   /* Memory allocated from the system in this arena.  */
+diff --bs glibc.1873/malloc-Prevent-arena-free_list-from-turning-cyclic-B.patch glibc.SUSE_SLE-12_Update/malloc-Prevent-arena-free_list-from-turning-cyclic-B.patch
+--- /dev/null
++++ glibc.SUSE_SLE-12_Update/malloc-Prevent-arena-free_list-from-turning-cyclic-B.patch
+@@ -0,0 +1,179 @@
++2015-10-28  Florian Weimer  &lt;fweimer@redhat.com&gt;
++
++	[BZ# 19048]
++	* malloc/malloc.c (struct malloc_state): Update comment.  Add
++	attached_threads member.
++	(main_arena): Initialize attached_threads.
++	* malloc/arena.c (list_lock): Update comment.
++	(ptmalloc_lock_all, ptmalloc_unlock_all): Likewise.
++	(ptmalloc_unlock_all2): Reinitialize arena reference counts.
++	(deattach_arena): New function.
++	(_int_new_arena): Initialize arena reference count and deattach
++	replaced arena.
++	(get_free_list, reused_arena): Update reference count and deattach
++	replaced arena.
++	(arena_thread_freeres): Update arena reference count and only put
++	unreferenced arenas on the free list.
++
++Index: glibc-2.19/malloc/arena.c
++===================================================================
++--- glibc-2.19.orig/malloc/arena.c
+++++ glibc-2.19/malloc/arena.c
++@@ -297,12 +297,19 @@ ptmalloc_unlock_all2 (void)
++   tsd_setspecific (arena_key, save_arena);
++   __malloc_hook = save_malloc_hook;
++   __free_hook = save_free_hook;
+++
+++  /* Push all arenas to the free list, except save_arena, which is
+++     attached to the current thread.  */
+++  if (save_arena != NULL)
+++    ((mstate) save_arena)-&gt;attached_threads = 1;
++   free_list = NULL;
++   for (ar_ptr = &amp;main_arena;; )
++     {
++       mutex_init (&amp;ar_ptr-&gt;mutex);
++       if (ar_ptr != save_arena)
++         {
+++	  /* This arena is no longer attached to any thread.  */
+++	  ar_ptr-&gt;attached_threads = 0;
++           ar_ptr-&gt;next_free = free_list;
++           free_list = ar_ptr;
++         }
++@@ -743,6 +750,22 @@ heap_trim (heap_info *heap, size_t pad)
++ 
++ /* Create a new arena with initial size "size".  */
++ 
+++/* If REPLACED_ARENA is not NULL, detach it from this thread.  Must be
+++   called while list_lock is held.  */
+++static void
+++detach_arena (mstate replaced_arena)
+++{
+++  if (replaced_arena != NULL)
+++    {
+++      assert (replaced_arena-&gt;attached_threads &gt; 0);
+++      /* The current implementation only detaches from main_arena in
+++	 case of allocation failure.  This means that it is likely not
+++	 beneficial to put the arena on free_list even if the
+++	 reference count reaches zero.  */
+++      --replaced_arena-&gt;attached_threads;
+++    }
+++}
+++
++ static mstate
++ _int_new_arena (size_t size)
++ {
++@@ -764,6 +787,7 @@ _int_new_arena (size_t size)
++     }
++   a = h-&gt;ar_ptr = (mstate) (h + 1);
++   malloc_init_state (a);
+++  a-&gt;attached_threads = 1;
++   /*a-&gt;next = NULL;*/
++   a-&gt;system_mem = a-&gt;max_system_mem = h-&gt;size;
++   arena_mem += h-&gt;size;
++@@ -777,12 +801,16 @@ _int_new_arena (size_t size)
++   set_head (top (a), (((char *) h + h-&gt;size) - ptr) | PREV_INUSE);
++ 
++   LIBC_PROBE (memory_arena_new, 2, a, size);
+++  mstate replaced_arena;
+++  arena_lookup (replaced_arena);
++   tsd_setspecific (arena_key, (void *) a);
++   mutex_init (&amp;a-&gt;mutex);
++   (void) mutex_lock (&amp;a-&gt;mutex);
++ 
++   (void) mutex_lock (&amp;list_lock);
++ 
+++  detach_arena (replaced_arena);
+++
++   /* Add the new arena to the global list.  */
++   a-&gt;next = main_arena.next;
++   atomic_write_barrier ();
++@@ -799,13 +827,24 @@ _int_new_arena (size_t size)
++ static mstate
++ get_free_list (void)
++ {
+++  mstate replaced_arena;
+++  arena_lookup (replaced_arena);
++   mstate result = free_list;
++   if (result != NULL)
++     {
++       (void) mutex_lock (&amp;list_lock);
++       result = free_list;
++       if (result != NULL)
++-        free_list = result-&gt;next_free;
+++	{
+++	  free_list = result-&gt;next_free;
+++
+++	  /* Arenas on the free list are not attached to any thread.  */
+++	  assert (result-&gt;attached_threads == 0);
+++	  /* But the arena will now be attached to this thread.  */
+++	  result-&gt;attached_threads = 1;
+++
+++	  detach_arena (replaced_arena);
+++	}
++       (void) mutex_unlock (&amp;list_lock);
++ 
++       if (result != NULL)
++@@ -865,6 +904,15 @@ reused_arena (mstate avoid_arena)
++   (void) mutex_lock (&amp;result-&gt;mutex);
++ 
++ out:
+++  {
+++    mstate replaced_arena;
+++    arena_lookup (replaced_arena);
+++    (void) mutex_lock (&amp;list_lock);
+++    detach_arena (replaced_arena);
+++    ++result-&gt;attached_threads;
+++    (void) mutex_unlock (&amp;list_lock);
+++  }
+++
++   LIBC_PROBE (memory_arena_reuse, 2, result, avoid_arena);
++   tsd_setspecific (arena_key, (void *) result);
++   THREAD_STAT (++(result-&gt;stat_lock_loop));
++@@ -959,8 +1007,14 @@ arena_thread_freeres (void)
++   if (a != NULL)
++     {
++       (void) mutex_lock (&amp;list_lock);
++-      a-&gt;next_free = free_list;
++-      free_list = a;
+++      /* If this was the last attached thread for this arena, put the
+++	 arena on the free list.  */
+++      assert (a-&gt;attached_threads &gt; 0);
+++      if (--a-&gt;attached_threads == 0)
+++	{
+++	  a-&gt;next_free = free_list;
+++	  free_list = a;
+++	}
++       (void) mutex_unlock (&amp;list_lock);
++     }
++ }
++Index: glibc-2.19/malloc/malloc.c
++===================================================================
++--- glibc-2.19.orig/malloc/malloc.c
+++++ glibc-2.19/malloc/malloc.c
++@@ -1706,9 +1706,15 @@ struct malloc_state
++   /* Linked list */
++   struct malloc_state *next;
++ 
++-  /* Linked list for free arenas.  */
+++  /* Linked list for free arenas.  Access to this field is serialized
+++     by list_lock in arena.c.  */
++   struct malloc_state *next_free;
++ 
+++  /* Number of threads attached to this arena.  0 if the arena is on
+++     the free list.  Access to this field is serialized by list_lock
+++     in arena.c.  */
+++  INTERNAL_SIZE_T attached_threads;
+++
++   /* Memory allocated from the system in this arena.  */
++   INTERNAL_SIZE_T system_mem;
++   INTERNAL_SIZE_T max_system_mem;
++@@ -1752,7 +1758,8 @@ struct malloc_par
++ static struct malloc_state main_arena =
++ {
++   .mutex = MUTEX_INITIALIZER,
++-  .next = &amp;main_arena
+++  .next = &amp;main_arena,
+++  .attached_threads = 1
++ };
++ 
++ /* There is only one instance of the malloc parameters.  */
+diff --bs glibc.1873/nss-dns-getnetbyname.patch glibc.SUSE_SLE-12_Update/nss-dns-getnetbyname.patch
+--- /dev/null
++++ glibc.SUSE_SLE-12_Update/nss-dns-getnetbyname.patch
+@@ -0,0 +1,30 @@
++2016-03-29  Florian Weimer  &lt;fweimer@redhat.com&gt;
++
++	[BZ #19879]
++	CVE-2016-3075
++	* resolv/nss_dns/dns-network.c (_nss_dns_getnetbyname_r): Do not
++	copy name.
++
++Index: glibc-2.19/resolv/nss_dns/dns-network.c
++===================================================================
++--- glibc-2.19.orig/resolv/nss_dns/dns-network.c
+++++ glibc-2.19/resolv/nss_dns/dns-network.c
++@@ -118,17 +118,14 @@ _nss_dns_getnetbyname_r (const char *nam
++   } net_buffer;
++   querybuf *orig_net_buffer;
++   int anslen;
++-  char *qbuf;
++   enum nss_status status;
++ 
++   if (__res_maybe_init (&amp;_res, 0) == -1)
++     return NSS_STATUS_UNAVAIL;
++ 
++-  qbuf = strdupa (name);
++-
++   net_buffer.buf = orig_net_buffer = (querybuf *) alloca (1024);
++ 
++-  anslen = __libc_res_nsearch (&amp;_res, qbuf, C_IN, T_PTR, net_buffer.buf-&gt;buf,
+++  anslen = __libc_res_nsearch (&amp;_res, name, C_IN, T_PTR, net_buffer.buf-&gt;buf,
++ 			       1024, &amp;net_buffer.ptr, NULL, NULL, NULL, NULL);
++   if (anslen &lt; 0)
++     {
+diff --bs glibc.1873/nss-dns-memleak-2.patch glibc.SUSE_SLE-12_Update/nss-dns-memleak-2.patch
+--- /dev/null
++++ glibc.SUSE_SLE-12_Update/nss-dns-memleak-2.patch
+@@ -0,0 +1,35 @@
++Index: glibc-2.19/resolv/nss_dns/dns-host.c
++===================================================================
++--- glibc-2.19.orig/resolv/nss_dns/dns-host.c
+++++ glibc-2.19/resolv/nss_dns/dns-host.c
++@@ -315,7 +315,11 @@ _nss_dns_gethostbyname4_r (const char *n
++   int n = __libc_res_nsearch (&amp;_res, name, C_IN, T_UNSPEC,
++ 			      host_buffer.buf-&gt;buf, 2048, &amp;host_buffer.ptr,
++ 			      &amp;ans2p, &amp;nans2p, &amp;resplen2, &amp;ans2p_malloced);
++-  if (n &lt; 0)
+++  if (n &gt;= 0)
+++    status = gaih_getanswer(host_buffer.buf, n, (const querybuf *) ans2p,
+++			    resplen2, name, pat, buffer, buflen,
+++			    errnop, herrnop, ttlp);
+++  else
++     {
++       switch (errno)
++ 	{
++@@ -342,17 +346,8 @@ _nss_dns_gethostbyname4_r (const char *n
++ 	*errnop = EAGAIN;
++       else
++ 	__set_errno (olderr);
++-
++-      if (host_buffer.buf != orig_host_buffer)
++-	free (host_buffer.buf);
++-
++-      return status;
++     }
++ 
++-  status = gaih_getanswer(host_buffer.buf, n, (const querybuf *) ans2p,
++-			  resplen2, name, pat, buffer, buflen,
++-			  errnop, herrnop, ttlp);
++-
++   /* Check whether ans2p was separately allocated.  */
++   if (ans2p_malloced)
++     free (ans2p);
+diff --bs glibc.i686.1873/_link glibc.i686.SUSE_SLE-12_Update/_link
+--- glibc.i686.1873/_link
++++ glibc.i686.SUSE_SLE-12_Update/_link
+@@ -1,9 +1 @@
+-&lt;link package="glibc.1873" cicount="copy"&gt;
+-  &lt;patches&gt;
+-    &lt;topadd&gt;
+-ExclusiveArch:  i586 i686
+-BuildArch:      i686
+-%{expand:%%global optflags %(echo "%optflags"|sed -e s/i586/i686/) -march=i686 -mtune=generic}
+-&lt;/topadd&gt;
+-  &lt;/patches&gt;
+-&lt;/link&gt;
+\ No newline at end of file
++&lt;link package="glibc.SUSE_SLE-12_Update" cicount="copy"/&gt;
+\ No newline at end of file

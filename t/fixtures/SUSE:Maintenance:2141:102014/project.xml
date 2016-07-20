@@ -1,0 +1,59 @@
+<project name="SUSE:Maintenance:2141" kind="maintenance_incident">
+  <title/>
+  <description/>
+  <person userid="doctor" role="bugowner"/>
+  <person userid="oertel" role="maintainer"/>
+  <group groupid="maintenance-team" role="maintainer"/>
+  <group groupid="autobuild-team" role="reviewer"/>
+  <group groupid="legal-auto" role="reviewer"/>
+  <group groupid="maintenance-team" role="reviewer"/>
+  <lock>
+    <enable/>
+  </lock>
+  <build>
+    <disable/>
+  </build>
+  <publish>
+    <disable/>
+  </publish>
+  <debuginfo>
+    <enable/>
+  </debuginfo>
+  <repository name="SUSE_Updates_SLE-Module-Containers_12_x86_64">
+    <releasetarget project="SUSE:Updates:SLE-Module-Containers:12:x86_64" repository="update" trigger="maintenance"/>
+    <path project="SUSE:Updates:SLE-Module-Containers:12:x86_64" repository="update"/>
+    <arch>x86_64</arch>
+    <arch>i586</arch>
+  </repository>
+  <repository name="SUSE_Updates_SLE-Module-Containers_12_s390x">
+    <releasetarget project="SUSE:Updates:SLE-Module-Containers:12:s390x" repository="update" trigger="maintenance"/>
+    <path project="SUSE:Updates:SLE-Module-Containers:12:s390x" repository="update"/>
+    <arch>s390x</arch>
+    <arch>s390</arch>
+  </repository>
+  <repository name="SUSE_Updates_SLE-Module-Containers_12_ppc64le">
+    <releasetarget project="SUSE:Updates:SLE-Module-Containers:12:ppc64le" repository="update" trigger="maintenance"/>
+    <path project="SUSE:Updates:SLE-Module-Containers:12:ppc64le" repository="update"/>
+    <arch>ppc64le</arch>
+  </repository>
+  <repository name="SUSE_SLE-12-SP1_Docker_Update_images-containment">
+    <releasetarget project="SUSE:SLE-12-SP1:Docker:Update" repository="images-containment" trigger="maintenance"/>
+    <path project="SUSE:Maintenance:2141" repository="SUSE_SLE-12-SP1_Docker_Update"/>
+    <arch>ppc64le</arch>
+    <arch>s390x</arch>
+    <arch>x86_64</arch>
+  </repository>
+  <repository name="SUSE_SLE-12-SP1_Docker_Update_images">
+    <releasetarget project="SUSE:SLE-12-SP1:Docker:Update" repository="images" trigger="maintenance"/>
+    <arch>ppc64le</arch>
+    <arch>s390x</arch>
+    <arch>x86_64</arch>
+  </repository>
+  <repository name="SUSE_SLE-12-SP1_Docker_Update">
+    <releasetarget project="SUSE:SLE-12-SP1:Docker:Update" repository="standard" trigger="maintenance"/>
+    <path project="SUSE:SLE-12-SP1:Docker:Update" repository="standard"/>
+    <arch>ppc64le</arch>
+    <arch>s390x</arch>
+    <arch>x86_64</arch>
+  </repository>
+</project>

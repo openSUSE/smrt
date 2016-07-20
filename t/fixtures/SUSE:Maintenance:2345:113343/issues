@@ -1,0 +1,10 @@
+bnc959886 L3: Fails to provide echo/prompt in EMERGENCY mode
+bnc960158 nfs-utils and nfs-server make systemd fill up the logs ....
+bnc963230 systemd ignores systemd.log_level=debug in cmdline with quiet
+bnc965897 hostnamectl set-hostname fails to set hostnames with "." at position 64 if hostname longer than 64 characters for OpenStack guest
+bnc967122 systemctl bash completion not working properly for "start" able services
+bnc970423 systemd: fstab-generator doesn't honor automount option
+bnc970860 missing support for gpio triggered graceful system shutdown
+bnc972612 VUL-1: systemd: Archived journal files are world readable
+bnc972727 'dmsetup remove' always fails when the --force option is used
+bnc973848 system-journal has executable rights set for all (755) after boot

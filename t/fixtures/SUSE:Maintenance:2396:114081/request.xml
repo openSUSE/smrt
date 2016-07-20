@@ -1,0 +1,55 @@
+<request id="114081">
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2396" package="xorg-x11-driver-input.SUSE_SLE-11-SP2_Update"/>
+    <target project="SUSE:SLE-11-SP2:Update" package="xorg-x11-driver-input.2396"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2396" package="patchinfo"/>
+    <target project="SUSE:SLE-11-SP2:Update" package="patchinfo.2396"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2396" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-POS:11-SP3:i586" package="patchinfo.2396"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2396" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-POS:11-SP3:x86_64" package="patchinfo.2396"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2396" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP3-TERADATA:x86_64" package="patchinfo.2396"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2396" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP4:i586" package="patchinfo.2396"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2396" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP4:ia64" package="patchinfo.2396"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2396" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP4:ppc64" package="patchinfo.2396"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2396" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP4:x86_64" package="patchinfo.2396"/>
+  </action>
+  <state name="review" who="maintenance-robot" when="2016-05-05T01:00:09">
+    <comment/>
+  </state>
+  <review state="accepted" when="2016-05-05T00:57:22" who="maintenance-robot" by_group="qam-auto">
+    <comment>reviewers added: qam-sle slepos-team</comment>
+    <history who="maintenance-robot" when="2016-05-05T01:00:11">
+      <description>Review got accepted</description>
+      <comment>reviewers added: qam-sle slepos-team</comment>
+    </history>
+  </review>
+  <review state="new" by_group="qam-sle">
+    <comment/>
+  </review>
+  <review state="new" by_group="slepos-team">
+    <comment/>
+  </review>
+  <description>requesting release</description>
+</request>

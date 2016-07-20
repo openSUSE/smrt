@@ -1,0 +1,74 @@
+<request id="115651">
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2646" package="glibc-testsuite.SUSE_SLE-12_Update"/>
+    <target project="SUSE:SLE-12:Update" package="glibc-testsuite.2646"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2646" package="glibc-utils.SUSE_SLE-12_Update"/>
+    <target project="SUSE:SLE-12:Update" package="glibc-utils.2646"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2646" package="glibc.SUSE_SLE-12_Update"/>
+    <target project="SUSE:SLE-12:Update" package="glibc.2646"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2646" package="glibc.i686.SUSE_SLE-12_Update"/>
+    <target project="SUSE:SLE-12:Update" package="glibc.i686.2646"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2646" package="patchinfo"/>
+    <target project="SUSE:SLE-12:Update" package="patchinfo.2646"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2646" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DESKTOP:12:x86_64" package="patchinfo.2646"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2646" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:12:ppc64le" package="patchinfo.2646"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2646" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:12:s390x" package="patchinfo.2646"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2646" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:12:x86_64" package="patchinfo.2646"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2646" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12:ppc64le" package="patchinfo.2646"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2646" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12:s390x" package="patchinfo.2646"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2646" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12:x86_64" package="patchinfo.2646"/>
+  </action>
+  <state name="review" who="maintenance-robot" when="2016-05-31T11:55:08">
+    <comment/>
+  </state>
+  <review state="accepted" when="2016-05-31T11:51:45" who="maintenance-robot" by_group="qam-auto">
+    <comment>reviewers added: qam-openqa autobuild-team qam-sle</comment>
+    <history who="maintenance-robot" when="2016-05-31T11:55:10">
+      <description>Review got accepted</description>
+      <comment>reviewers added: qam-openqa autobuild-team qam-sle</comment>
+    </history>
+  </review>
+  <review state="new" by_group="qam-openqa">
+    <comment/>
+  </review>
+  <review state="accepted" when="2016-05-31T11:55:09" who="oertel" by_group="autobuild-team">
+    <comment>reviewed_okay</comment>
+    <history who="oertel" when="2016-05-31T15:41:38">
+      <description>Review got accepted</description>
+      <comment>reviewed_okay</comment>
+    </history>
+  </review>
+  <review state="new" by_group="qam-sle">
+    <comment/>
+  </review>
+  <description>requesting release</description>
+</request>

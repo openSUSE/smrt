@@ -1,0 +1,52 @@
+diff --bs glib2.1091/glib2.changes glib2.SUSE_SLE-11-SP1_Update/glib2.changes
+--- glib2.1091/glib2.changes
++++ glib2.SUSE_SLE-11-SP1_Update/glib2.changes
+@@ -1,4 +1,10 @@
+ -------------------------------------------------------------------
++Mon May 30 19:07:56 UTC 2016 - idonmez@suse.com
++
++- devel package must require pcre-devel, fixes pango build for
++  bsc#978972
++
++-------------------------------------------------------------------
+ Tue May 10 22:12:52 CEST 2016 - hpj@suse.com
+ 
+ - Added glib2-bnc956599-fix-gsocket-fd-leak.patch (bnc#956599).
+diff --bs glib2.1091/glib2.spec glib2.SUSE_SLE-11-SP1_Update/glib2.spec
+--- glib2.1091/glib2.spec
++++ glib2.SUSE_SLE-11-SP1_Update/glib2.spec
+@@ -155,6 +155,7 @@
+ Requires:       libgio-2_0-0 = %{version}
+ Requires:       libgthread-2_0-0 = %{version}
+ Requires:       libgobject-2_0-0 = %{version}
++Requires:       pcre-devel
+ Summary:        Include files and libraries mandatory for development
+ Group:          Development/Libraries/C and C++
+ AutoReqProv:    on
+diff --bs pango.imported_4065/baselibs.conf pango.SUSE_SLE-11-SP1_Update/baselibs.conf
+--- pango.imported_4065/baselibs.conf
++++ pango.SUSE_SLE-11-SP1_Update/baselibs.conf
+@@ -7,8 +7,8 @@
+   targettype 64bit postun "LD_LIBRARY_PATH=usr/lib64 usr/bin/pango-querymodules-64 &gt; etc/pango/pango64.modules || echo pango-querymodules-64 did not run properly in postun."
+   targettype 64bit postun "fi"
+   targettype 32bit postun "if [ -x usr/bin/pango-querymodules ] ; then"
+-  targettype 32bit postun "LD_LIBRARY_PATH=usr/lib usr/bin/pango-querymodules &gt; etc/pango/pango.modules"
++  targettype 32bit postun "LD_LIBRARY_PATH=usr/lib usr/bin/pango-querymodules &gt; etc/pango/pango.modules || echo pango-querymodules did not run properly in postun."
+   targettype 32bit postun "fi"
+   targettype 64bit post "LD_LIBRARY_PATH=usr/lib64 usr/bin/pango-querymodules-64 &gt; etc/pango/pango64.modules || echo pango-querymodules-64 did not run properly in postin."
+-  targettype 32bit post "LD_LIBRARY_PATH=usr/lib usr/bin/pango-querymodules &gt; etc/pango/pango.modules"
++  targettype 32bit post "LD_LIBRARY_PATH=usr/lib usr/bin/pango-querymodules &gt; etc/pango/pango.modules || echo pango-querymodules did not run properly in postin."
+ arch ppc package pango-devel
+diff --bs pango.imported_4065/pango.changes pango.SUSE_SLE-11-SP1_Update/pango.changes
+--- pango.imported_4065/pango.changes
++++ pango.SUSE_SLE-11-SP1_Update/pango.changes
+@@ -1,4 +1,9 @@
+ -------------------------------------------------------------------
++Mon May 30 18:04:47 UTC 2016 - idonmez@suse.com
++
++- Ignore postun/postin errors in 32bit case too bsc#978972 
++
++-------------------------------------------------------------------
+ Mon Feb 28 19:07:59 CST 2011 - gburt@suse.de
+ 
+ - Fix CVE-2011-0020 (bnc#666101)

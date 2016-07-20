@@ -1,0 +1,1 @@
+VUL-0: CVE-2016-2548: kernel: ALSA: timer: Harden slave timer list handling (2nd CVE)

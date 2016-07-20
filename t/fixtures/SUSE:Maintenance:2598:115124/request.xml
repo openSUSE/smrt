@@ -1,0 +1,67 @@
+<request id="115124">
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2598" package="samba.SUSE_SLE-12-SP1_Update"/>
+    <target project="SUSE:SLE-12-SP1:Update" package="samba.2598"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2598" package="patchinfo"/>
+    <target project="SUSE:SLE-12-SP1:Update" package="patchinfo.2598"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2598" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DESKTOP:12-SP1:x86_64" package="patchinfo.2598"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2598" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-HA:12-SP1:s390x" package="patchinfo.2598"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2598" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-HA:12-SP1:x86_64" package="patchinfo.2598"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2598" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:12-SP1:ppc64le" package="patchinfo.2598"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2598" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:12-SP1:s390x" package="patchinfo.2598"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2598" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SDK:12-SP1:x86_64" package="patchinfo.2598"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2598" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12-SP1:ppc64le" package="patchinfo.2598"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2598" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12-SP1:s390x" package="patchinfo.2598"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2598" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:12-SP1:x86_64" package="patchinfo.2598"/>
+  </action>
+  <priority>important</priority>
+  <state name="review" who="maintenance-robot" when="2016-05-24T16:05:07">
+    <comment/>
+  </state>
+  <review state="accepted" when="2016-05-24T16:02:46" who="maintenance-robot" by_group="qam-auto">
+    <comment>reviewers added: qam-ha qam-openqa qam-sle</comment>
+    <history who="maintenance-robot" when="2016-05-24T16:05:09">
+      <description>Review got accepted</description>
+      <comment>reviewers added: qam-ha qam-openqa qam-sle</comment>
+    </history>
+  </review>
+  <review state="new" by_group="qam-ha">
+    <comment/>
+  </review>
+  <review state="new" by_group="qam-openqa">
+    <comment/>
+  </review>
+  <review state="new" by_group="qam-sle">
+    <comment/>
+  </review>
+  <description>requesting release</description>
+</request>

@@ -1,0 +1,7 @@
+bnc968787 DTV_SURPLUS limits loading of Static TLS-requiring modules in multi-threaded programs (SAP HANA on Power)
+bnc969727 VUL-1: CVE-2016-1234: glibc: buffer overflow in glob with GLOB_ALTDIRFUNC and crafted directory
+bnc973010 SLES 11 SP4 - Memory leak in glibc-2.11.3-17.95.2 when resolving a non-existing DNSBL entry using getaddrinfo().
+bnc973164 VUL-0: CVE-2016-3075: glibc: Stack overflow in nss_dns_getnetbyname_r
+bnc975930 L3: Bad performance in malloc/free after upgrading to SLES 12
+bnc980483 VUL-0: CVE-2016-3706: glibc: stack overflow in hostent translation
+bnc980854 VUL-0: CVE-2016-4429: glibc: A stack frame overflow flaw was found in the glibc's clntudp_call

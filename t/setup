@@ -1,0 +1,68 @@
+# vim: ft=zsh sw=2 sts=2 et fdm=marker cms=\ #\ %s
+
+setopt extended_glob
+setopt no_unset
+setopt warn_create_global
+
+PATH="$BUILDDIR:$TESTROOT:$PATH"
+HOME="$PWD"
+export SMRT_PRELUDEDIR=$BUILDDIR
+
+declare -Tgx SMRT_CHATTY smrt_chatty \|
+smrt_chatty=('xdg-open%*' $smrt_chatty)
+
+
+declare -Tgx SMRT_DRYRUN smrt_dryrun \|
+smrt_dryrun=('xdg-open%*' $smrt_dryrun)
+
+declare -gx FIXTURES=$TESTROOT/fixtures
+
+svnadmin create ~/.svnrepo
+
+declare -gx SMRT_CONFIG=~/.smrtrc
+[[ $TESTDIR:t == usage ]] || cp $FIXTURES/dot.smrtrc ~/.smrtrc
+
+declare -x SMRT_IN_DEVELOPMENT=$FIXTURES/smrt.overrides
+
+function commit-fixture # {{{
+(
+  local slug=${1?}
+  svn -q checkout file://$PWD/.svnrepo .checkout
+  cd .checkout
+  reify-fixture $slug
+  svn -q add $slug
+  svn -q commit -m ok
+) # }}}
+
+function compare-with-fixture # {{{
+{
+  local slug=$1 mine orig result
+  if (( $+UPDATE_FIXTURES )); then
+    update-fixture $slug
+  fi
+  for mine in $slug/**/*(.); do
+    orig=$FIXTURES/$mine
+    result=good
+    cmp -s $orig $mine || result=DIFF!
+    print -rf '%s: %s\n' -- $result $mine
+  done
+} # }}}
+
+function update-fixture # {{{
+{
+  local slug=$1 mine orig
+  for mine in $slug/**/*(.); do
+    orig=$FIXTURES/$mine
+    [[ -e $orig ]] || {
+      mkdir -p $orig:h
+    }
+    cp $mine $orig
+  done
+} # }}}
+
+function reify-fixture # {{{
+{
+  local slug=${1?}
+  cp -r $FIXTURES/$slug .
+  [[ -e reviewers ]] || cp $FIXTURES/reviewers $slug
+} # }}}

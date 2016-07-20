@@ -1,0 +1,3802 @@
+<request id="87536" actions="0">
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1263" package="libvirt.SUSE_SLE-12_Update"/>
+  <target project="SUSE:SLE-12:Update" package="libvirt"/>
+<sourcediff key="f0f853d4e7ab946c888158d4d579fe26">
+  <old project="SUSE:SLE-12:Update" package="libvirt.401" rev="2" srcmd5="24135eea6050a7f8265b31dc303e18df"/>
+  <new project="SUSE:Maintenance:1263" package="libvirt.SUSE_SLE-12_Update" rev="9" srcmd5="77bb8b08dcad130f9ed349a39659bc8d"/>
+  <files>
+    <file state="changed">
+      <old name="a58e1cb4-container-cleanup.patch" md5="9b5c223ac027a7838ce0f28f4fa6b973" size="1097"/>
+      <new name="a58e1cb4-container-cleanup.patch" md5="43202cac617e5772a9e60abad6e879d9" size="2270"/>
+      <diff lines="34">@@ -16,7 +16,32 @@
+ ===================================================================
+ --- libvirt-1.2.5.orig/src/lxc/lxc_process.c
+ +++ libvirt-1.2.5/src/lxc/lxc_process.c
+-@@ -1391,6 +1391,7 @@ int virLXCProcessStart(virConnectPtr con
++@@ -1031,6 +1031,7 @@ int virLXCProcessStart(virConnectPtr con
++     virLXCDriverConfigPtr cfg = virLXCDriverGetConfig(driver);
++     virCgroupPtr selfcgroup;
++     int status;
+++    bool clearSeclabel = false;
++ 
++     if (virCgroupNewSelf(&amp;selfcgroup) &lt; 0)
++         return -1;
++@@ -1132,6 +1133,10 @@ int virLXCProcessStart(virConnectPtr con
++     /* If you are using a SecurityDriver with dynamic labelling,
++        then generate a security label for isolation */
++     VIR_DEBUG("Generating domain security label (if required)");
+++
+++    clearSeclabel = vm-&gt;def-&gt;nseclabels == 0 ||
+++                    vm-&gt;def-&gt;seclabels[0]-&gt;type == VIR_DOMAIN_SECLABEL_DEFAULT;
+++
++     if (vm-&gt;def-&gt;nseclabels &amp;&amp;
++         vm-&gt;def-&gt;seclabels[0]-&gt;type == VIR_DOMAIN_SECLABEL_DEFAULT)
++         vm-&gt;def-&gt;seclabels[0]-&gt;type = VIR_DOMAIN_SECLABEL_NONE;
++@@ -1387,10 +1392,12 @@ int virLXCProcessStart(virConnectPtr con
++         virSecurityManagerReleaseLabel(driver-&gt;securityManager, vm-&gt;def);
++         /* Clear out dynamically assigned labels */
++         if (vm-&gt;def-&gt;nseclabels &amp;&amp;
++-            vm-&gt;def-&gt;seclabels[0]-&gt;type == VIR_DOMAIN_SECLABEL_DYNAMIC) {
+++            (vm-&gt;def-&gt;seclabels[0]-&gt;type == VIR_DOMAIN_SECLABEL_DYNAMIC ||
+++            clearSeclabel)) {
+              VIR_FREE(vm-&gt;def-&gt;seclabels[0]-&gt;model);
+              VIR_FREE(vm-&gt;def-&gt;seclabels[0]-&gt;label);
+              VIR_FREE(vm-&gt;def-&gt;seclabels[0]-&gt;imagelabel);
+</diff>
+    </file>
+    <file state="changed">
+      <old name="libvirt-ppc64le-support.patch" md5="68d4bb386557b2d4d4d01b734dc51cee" size="8820"/>
+      <new name="libvirt-ppc64le-support.patch" md5="b6daef10c3e58a521f75b39cb519beaf" size="8820"/>
+      <diff lines="9">@@ -2,7 +2,7 @@
+ ===================================================================
+ --- libvirt-1.2.5.orig/src/conf/domain_conf.c
+ +++ libvirt-1.2.5/src/conf/domain_conf.c
+-@@ -9605,7 +9605,8 @@ virDomainVideoDefaultType(const virDomai
++@@ -9555,7 +9555,8 @@ virDomainVideoDefaultType(const virDomai
+              (STREQ(def-&gt;os.type, "xen") ||
+               STREQ(def-&gt;os.type, "linux")))
+              return VIR_DOMAIN_VIDEO_TYPE_XEN;
+</diff>
+    </file>
+    <file state="changed">
+      <old name="libvirt-suse-netcontrol.patch" md5="56cec2794bb3c3beaf0ae3dd20d21318" size="7723"/>
+      <new name="libvirt-suse-netcontrol.patch" md5="6e5fafde7ce056c1246bfa619dabe3a9" size="7723"/>
+      <diff lines="18">@@ -38,7 +38,7 @@
+ ===================================================================
+ --- libvirt-1.2.5.orig/src/Makefile.am
+ +++ libvirt-1.2.5/src/Makefile.am
+-@@ -813,6 +813,10 @@ if WITH_NETCF
++@@ -814,6 +814,10 @@ if WITH_NETCF
+  INTERFACE_DRIVER_SOURCES +=					\
+  		interface/interface_backend_netcf.c
+  endif WITH_NETCF
+@@ -49,7 +49,7 @@
+  if WITH_UDEV
+  INTERFACE_DRIVER_SOURCES +=					\
+  		interface/interface_backend_udev.c
+-@@ -1403,10 +1407,15 @@ if WITH_NETCF
++@@ -1404,10 +1408,15 @@ if WITH_NETCF
+  libvirt_driver_interface_la_CFLAGS += $(NETCF_CFLAGS)
+  libvirt_driver_interface_la_LIBADD += $(NETCF_LIBS)
+  else ! WITH_NETCF
+</diff>
+    </file>
+    <file state="changed">
+      <old name="libvirt.changes" md5="462771f19c661c1399f3c68088a63d02" size="114386"/>
+      <new name="libvirt.changes" md5="fdc8619d86ce8eab4b1f6c025a50b14a" size="118103"/>
+      <diff lines="107">@@ -1,4 +1,106 @@
+ -------------------------------------------------------------------
++Mon Jan  4 14:52:04 UTC 2016 - cbosdonnat@suse.com
++
++- Fix cve-2015-5313: directory directory traversal privilege
++  escalation vulnerability.
++  890fc0f1-cve-2015-5313.patch
++  bsc#953110
++
++-------------------------------------------------------------------
++Wed Nov 18 16:40:09 UTC 2015 - jfehlig@suse.com
++
++- qemu: Use PAUSED state for domains that are starting up
++  18441ab9-qemu-dom-startup-state.patch
++  bsc#948686
++
++-------------------------------------------------------------------
++Tue Oct 13 15:13:38 UTC 2015 - jfehlig@suse.com
++
++- libxl: provide nodeGetSecurityModel implementation
++  99a42f3c-libxl-sec-model.patch
++  bsc#903757
++- xenconfig: set disk type to BLOCK when driver is not tap or file
++  xen-sxpr-disk-type.patch
++  bsc#938228
++
++-------------------------------------------------------------------
++Tue Oct  6 11:48:41 UTC 2015 - cbosdonnat@suse.com
++
++- Fix profile_status to distringuish between errors and unconfined
++  domains. a1bdf04b-apparmor-dominfo.patch. bsc#948516
++
++-------------------------------------------------------------------
++Fri Jul 24 15:15:43 UTC 2015 - cbosdonnat@suse.com
++
++- Fix error starting lxc containers with direct interfaces.
++  c1deb7f5-ifname_guest_actual_fix.patch
++  bsc#936524
++
++-------------------------------------------------------------------
++Tue Apr 22 10:45:12 UTC 2015 - cbosdonnat@suse.com
++
++- Fixed apparmor generated profile for PCI hostdevs. bsc#921555
++  virt-aa-helper-hotplug.patch
++
++-------------------------------------------------------------------
++Thu Mar 12 11:08:42 MDT 2015 - jfehlig@suse.com
++
++- Include additional upstream fixes for systemd TerminateMachine
++  9661ac2f-qemu-unref-cfg.patch,
++  b3e4401d-systemd-error-reporting.patch
++  bnc#899334
++
++-------------------------------------------------------------------
++Tue Mar 10 09:50:22 MDT 2015 - jfehlig@suse.com
++
++- Fix security driver default settings in /etc/libvirt/qemu.conf
++  Modified suse-qemu-conf.patch
++  bsc#921586
++
++-------------------------------------------------------------------
++Mon Mar  9 16:51:08 UTC 2015 - cbosdonnat@suse.com
++
++- Fixed a number of QEMU apparmor abstraction problems. bsc#921355
++  apparmor-fixes.patch
++
++-------------------------------------------------------------------
++Fri Feb  6 13:26:34 UTC 2015 - cbosdonnat@suse.com
++
++- bsc#911737: additionnal fix for the case where security labels
++  aren't automatically set. a58e1cb4-container-cleanup.patch
++
++-------------------------------------------------------------------
++Wed Jan 28 12:04:09 MST 2015 - jfehlig@suse.com
++
++- CVE-2015-0236: libvirt: access control bypass
++  03c3c0c8-CVE-2015-0236.patch, b347c0c2-CVE-2015-0236.patch
++  bsc#914693
++
++-------------------------------------------------------------------
++Thu Jan 22 14:37:31 UTC 2015 - cbosdonnat@suse.com
++
++- virt-create-rootfs: allow setting the URL of an SMT server to use
++  in place of SCC. virt-create-rootfs.patch. bsc#914297
++
++-------------------------------------------------------------------
++Fri Jan 16 09:27:11 UTC 2015 - cbosdonnat@suse.com
++
++- Backported route definition changes. bsc#904432
++  4b47b4dc-ipv6-regex.patch
++  2fc7e4a2-network-route-definition-to-networkcommon.patch
++  ca481a6f-move-network-route-code-to-networkcommon.patch
++  a1176529-use-network-route-definitions-for-domains.patch
++  3993c2f9-virSocketAddrGetIpPrefix-0-special-cases.patch
++  57e681e5-domain_conf-resolve-Coverity-RESOURCE_LEAK.patch
++  c6adccae-domain_conf-check-virSocketAddrFormat-errors.patch
++
++-------------------------------------------------------------------
++Mon Jan 12 15:23:28 MST 2015 - carnold@suse.com
++
++- Fix build failure for test case securityselinuxlabeltest
++  caf164f1-test-add-user_xattr-check.patch
++
++-------------------------------------------------------------------
+ Thu Jan  8 15:44:57 UTC 2015 - lmb@suse.com
+ 
+ - enable building with rbd on x86_64 (FATE#318349)
+</diff>
+    </file>
+    <file state="changed">
+      <old name="libvirt.spec" md5="b8f158434988248c1f14b78fe2960a1b" size="63054"/>
+      <new name="libvirt.spec" md5="55aa6f821080141f97fa7956753eee02" size="64419"/>
+      <diff lines="88">@@ -506,6 +506,23 @@
+ Patch72:        b61fb8e8-apparmor-xen-fixup.patch
+ Patch73:        338b07af-apparmor-allow-helpers.patch
+ Patch74:        c0273cd6-apparmor-tck-raw-packets.patch
++Patch75:        caf164f1-test-add-user_xattr-check.patch
++Patch76:        4b47b4dc-ipv6-regex.patch
++Patch77:        2fc7e4a2-network-route-definition-to-networkcommon.patch
++Patch78:        ca481a6f-move-network-route-code-to-networkcommon.patch
++Patch79:        a1176529-use-network-route-definitions-for-domains.patch
++Patch80:        3993c2f9-virSocketAddrGetIpPrefix-0-special-cases.patch
++Patch81:        57e681e5-domain_conf-resolve-Coverity-RESOURCE_LEAK.patch
++Patch82:        c6adccae-domain_conf-check-virSocketAddrFormat-errors.patch
++Patch83:        03c3c0c8-CVE-2015-0236.patch
++Patch84:        b347c0c2-CVE-2015-0236.patch
++Patch85:        9661ac2f-qemu-unref-cfg.patch
++Patch86:        b3e4401d-systemd-error-reporting.patch
++Patch87:        c1deb7f5-ifname_guest_actual_fix.patch
++Patch88:        a1bdf04b-apparmor-dominfo.patch
++Patch89:        99a42f3c-libxl-sec-model.patch
++Patch90:        18441ab9-qemu-dom-startup-state.patch
++Patch91:        890fc0f1-cve-2015-5313.patch
+ # pending review upstream patches
+ Patch100:       libxl-add-discard-support.patch
+ Patch101:       libxl-domxml-to-native.patch
+@@ -523,6 +540,7 @@
+ Patch156:       ppc64le-canonical-name.patch
+ Patch157:       apparmor-rework-fix.patch
+ Patch158:       sys-net-rw.patch
++Patch159:       virt-aa-helper-hotplug.patch
+ # Our patches
+ Patch200:       libvirtd-defaults.patch
+ Patch201:       libvirtd-init-script.patch
+@@ -536,9 +554,11 @@
+ Patch208:       lxc-convert-fix-sle11-rootfs.patch
+ Patch209:       libxl-set-cach-mode.patch
+ Patch210:       virt-create-rootfs.patch
++Patch211:       xen-sxpr-disk-type.patch
+ %if %{with_apparmor}
+ Patch250:       apparmor-profile-no-mount.patch
+ Patch251:       qemu-apparmor-screenshot.patch
++Patch252:       apparmor-fixes.patch
+ %endif
+ %if %{with_netcontrol}
+ Patch300:       libvirt-suse-netcontrol.patch
+@@ -1117,6 +1137,23 @@
+ %patch72 -p1
+ %patch73 -p1
+ %patch74 -p1
++%patch75 -p1
++%patch76 -p1
++%patch77 -p1
++%patch78 -p1
++%patch79 -p1
++%patch80 -p1
++%patch81 -p1
++%patch82 -p1
++%patch83 -p1
++%patch84 -p1
++%patch85 -p1
++%patch86 -p1
++%patch87 -p1
++%patch88 -p1
++%patch89 -p1
++%patch90 -p1
++%patch91 -p1
+ %patch100 -p1
+ %patch101 -p1
+ %patch102 -p1
+@@ -1132,6 +1169,7 @@
+ %patch156 -p1
+ %patch157 -p1
+ %patch158 -p1
++%patch159 -p1
+ %patch200 -p1
+ %patch201 -p1
+ %patch202 -p1
+@@ -1143,9 +1181,11 @@
+ %patch208 -p1
+ %patch209 -p1
+ %patch210 -p1
++%patch211 -p1
+ %if %{with_apparmor}
+ %patch250 -p1
+ %patch251 -p1
++%patch252 -p1
+ %endif
+ %if %{with_netcontrol}
+ %patch300 -p1
+</diff>
+    </file>
+    <file state="changed">
+      <old name="libxl-dom-reset.patch" md5="16554c3ed4e07b3d89ff0dc8e4abf1ef" size="2776"/>
+      <new name="libxl-dom-reset.patch" md5="91c64f1d867c3a6a6145499e500f7103" size="2776"/>
+      <diff lines="9">@@ -75,7 +75,7 @@
+  libxlDomainDestroyFlags(virDomainPtr dom,
+                          unsigned int flags)
+  {
+-@@ -4763,6 +4819,7 @@ static virDriver libxlDriver = {
++@@ -4781,6 +4837,7 @@ static virDriver libxlDriver = {
+      .domainShutdown = libxlDomainShutdown, /* 0.9.0 */
+      .domainShutdownFlags = libxlDomainShutdownFlags, /* 0.9.10 */
+      .domainReboot = libxlDomainReboot, /* 0.9.0 */
+</diff>
+    </file>
+    <file state="changed">
+      <old name="libxl-set-migration-constraints.patch" md5="8e9b070d0040716f4ef19dd709d73926" size="10450"/>
+      <new name="libxl-set-migration-constraints.patch" md5="e10e477d8356bbb549f6966865d49b8b" size="10450"/>
+      <diff lines="9">@@ -19,7 +19,7 @@
+ ===================================================================
+ --- libvirt-1.2.5.orig/include/libvirt/libvirt.h.in
+ +++ libvirt-1.2.5/include/libvirt/libvirt.h.in
+-@@ -1313,6 +1313,31 @@ typedef enum {
++@@ -1314,6 +1314,31 @@ typedef enum {
+   */
+  #define VIR_MIGRATE_PARAM_LISTEN_ADDRESS    "listen_address"
+  
+</diff>
+    </file>
+    <file state="changed">
+      <old name="qemu-apparmor-screenshot.patch" md5="1a138cebd1be6bbd3df3ec20e5c8d466" size="523"/>
+      <new name="qemu-apparmor-screenshot.patch" md5="95f28c728d4232ea1bf28108e5e6e7f6" size="523"/>
+      <diff lines="9">@@ -2,7 +2,7 @@
+ ===================================================================
+ --- libvirt-1.2.5.orig/examples/apparmor/libvirt-qemu
+ +++ libvirt-1.2.5/examples/apparmor/libvirt-qemu
+-@@ -123,6 +123,9 @@
++@@ -124,6 +124,9 @@
+    /sys/bus/ r,
+    /sys/class/ r,
+  
+</diff>
+    </file>
+    <file state="changed">
+      <old name="suse-qemu-conf.patch" md5="a80bde417c9407050e6ed71719806c48" size="2199"/>
+      <new name="suse-qemu-conf.patch" md5="2e73e6761830bc8a8d29bfe95cd15911" size="2340"/>
+      <diff lines="38">@@ -2,23 +2,28 @@
+ ===================================================================
+ --- libvirt-1.2.5.orig/src/qemu/qemu.conf
+ +++ libvirt-1.2.5/src/qemu/qemu.conf
+-@@ -200,7 +200,16 @@
+- # a special value; security_driver can be set to that value in
++@@ -201,11 +201,20 @@
+  # isolation, but it cannot appear in a list of drivers.
+  #
++ #security_driver = "selinux"
+++#security_driver = "apparmor"
++ 
++ # If set to non-zero, then the default security labeling
++ # will make guests confined. If set to zero, then guests
++ # will be unconfined by default. Defaults to 1.
++-#security_default_confined = 1
+++#
+ +# SUSE Note:
+ +# Currently, Apparmor is the default security framework in SUSE
+ +# distros.  If Apparmor is enabled on the host, libvirtd is
+ +# generously confined but users must opt-in to confine qemu
+-+# instances.  Change this to 'apparmor' to enable Apparmor
+-+# confinement of qemu instances.
+++# instances.  Change this to a non-zero value to enable default
+++# Apparmor confinement of qemu instances.
+ +#
+- #security_driver = "selinux"
+-+# security_driver = "apparmor"
+-+security_driver = "none"
+++security_default_confined = 0
+  
+- # If set to non-zero, then the default security labeling
+- # will make guests confined. If set to zero, then guests
++ # If set to non-zero, then attempts to create unconfined
++ # guests will be blocked. Defaults to 0.
+ @@ -402,16 +411,26 @@
+  #allow_disk_format_probing = 1
+  
+</diff>
+    </file>
+    <file state="changed">
+      <old name="sys-net-rw.patch" md5="8e3eb6ff04268dac6e030adc1e099a8b" size="4664"/>
+      <new name="sys-net-rw.patch" md5="d066a3d9329d77766ef97ed743db4dc8" size="4664"/>
+      <diff lines="45">@@ -2,7 +2,7 @@
+ ===================================================================
+ --- libvirt-1.2.5.orig/src/lxc/lxc_container.c
+ +++ libvirt-1.2.5/src/lxc/lxc_container.c
+-@@ -846,15 +846,18 @@ typedef struct {
++@@ -840,15 +840,18 @@ typedef struct {
+      int mflags;
+      bool skipUserNS;
+      bool skipUnmounted;
+@@ -26,7 +26,7 @@
+  #endif
+  };
+  
+-@@ -977,19 +980,35 @@ static int lxcContainerMountBasicFS(bool
++@@ -971,19 +974,35 @@ static int lxcContainerMountBasicFS(bool
+              if (ret == 0) {
+                  VIR_DEBUG("Skipping '%s' which isn't mounted in host",
+                            mnt-&gt;dst);
+@@ -63,7 +63,7 @@
+              goto cleanup;
+          }
+  
+-@@ -1741,6 +1760,23 @@ static int lxcContainerUnmountForSharedR
++@@ -1735,6 +1754,23 @@ static int lxcContainerUnmountForSharedR
+  }
+  
+  
+@@ -87,7 +87,7 @@
+  /* Got a FS mapped to /, we're going the pivot_root
+   * approach to do a better-chroot-than-chroot
+   * this is based on this thread http://lkml.org/lkml/2008/3/5/29
+-@@ -1785,7 +1821,7 @@ static int lxcContainerSetupPivotRoot(vi
++@@ -1779,7 +1815,7 @@ static int lxcContainerSetupPivotRoot(vi
+  
+      /* Mounts the core /proc, /sys, etc filesystems */
+      if (lxcContainerMountBasicFS(vmDef-&gt;idmap.nuidmap,
+@@ -96,7 +96,7 @@
+          goto cleanup;
+  
+      /* Ensure entire root filesystem (except /.oldroot) is readonly */
+-@@ -2282,22 +2318,6 @@ virArch lxcContainerGetAlt32bitArch(virA
++@@ -2276,22 +2312,6 @@ virArch lxcContainerGetAlt32bitArch(virA
+  }
+  
+  
+</diff>
+    </file>
+    <file state="changed">
+      <old name="virt-create-rootfs.patch" md5="bc768e4232f67b74fd724141ee498dff" size="10133"/>
+      <new name="virt-create-rootfs.patch" md5="2cb54072dbdfd69ea034c854b7fadf9d" size="10671"/>
+      <diff lines="99">@@ -89,8 +89,9 @@
+ ===================================================================
+ --- /dev/null
+ +++ libvirt-1.2.5/tools/virt-create-rootfs
+-@@ -0,0 +1,197 @@
++@@ -0,0 +1,214 @@
+ +#!/bin/sh
+++set -e
+ +
+ +function fail
+ +{
+@@ -111,8 +112,9 @@
+ +    -r, --root          path where to create the root FS
+ +    -d, --distro        distribution to install
+ +    -a, --arch          target architecture
+++    -u, --url           URL of the registration server
+ +    -c, --regcode       registration code for the product
+-+    -p, --root-pass     the root password to set in the root FS 
+++    -p, --root-pass     the root password to set in the root FS
+ +    --dry-run           don't actually run it
+ +EOF
+ +}
+@@ -120,6 +122,7 @@
+ +ARCH=$(uname -i)
+ +ROOT=
+ +DISTRO=
+++URL=
+ +REG_CODE=
+ +ROOT_PASS=
+ +DRY_RUN=
+@@ -164,6 +167,14 @@
+ +        esac
+ +        ;;
+ +
+++    -u | --url)
+++        if test $# -lt 2; then
+++            fail "$1 needs a value"
+++        fi
+++        URL="$2"
+++        shift
+++        ;;
+++
+ +    -d | --distro)
+ +        if test $# -lt 2; then
+ +            fail "$1 needs a value"
+@@ -235,10 +246,6 @@
+ +            ;;
+ +    esac
+ +
+-+    if test -z "$REG_CODE"; then
+-+        fail "Registration code is needed"
+-+    fi
+-+
+ +    # First copy the SUSE GPG keys from the host to the new root
+ +    rpm -qa gpg-pubkey\* --qf "%{name}-%{version}-%{release}: %{summary}\n" | \
+ +    grep 'gpg(SuSE Package Signing Key &lt;build@suse.de&gt;)' | \
+@@ -252,10 +259,20 @@
+ +
+ +    # SUSE Connect adds the repositories, and refreshes them,
+ +    # but requires the GPG key to be already imported
+-+    $RUN SUSEConnect -p "$PRODUCT/$VERSION/$ARCH" --root "$ROOT" -r "$REG_CODE"
+++    CONNECT_ARGS=
+++    if test -n "$REG_CODE"; then
+++        CONNECT_ARGS="$CONNECT_ARGS -r $REG_CODE"
+++    fi
+++    if test -n "$URL"; then
+++        CONNECT_ARGS="$CONNECT_ARGS --url $URL"
+++    fi
+++    $RUN SUSEConnect -p "$PRODUCT/$VERSION/$ARCH" --root "$ROOT" $CONNECT_ARGS
+ +
+ +    # Then we install what we need
+ +    call_zypper in -t pattern Minimal
+++
+++    # Create the baseproduct symlink
+++    ln -s $PRODUCT.prod "$ROOT/etc/products.d/baseproduct"
+ +}
+ +
+ +case "$DISTRO" in
+@@ -291,7 +308,7 @@
+ ===================================================================
+ --- /dev/null
+ +++ libvirt-1.2.5/tools/virt-create-rootfs.pod
+-@@ -0,0 +1,72 @@
++@@ -0,0 +1,77 @@
+ +=head1 NAME
+ +
+ +virt-create-rootfs - tool to create a root file system for distro containers.
+@@ -338,6 +355,11 @@
+ +Set the registration code for the product to install in the root file system.
+ +For SLE distributions, use a registration code from SUSE Customer Center.
+ +
+++=item B&lt;-u, --url&gt;
+++
+++For SLE distributions, set the registration server to use.
+++Default: http://scc.suse.com.
+++
+ +=item B&lt;-p, --root-pass&gt;
+ +
+ +If defined, set the root password for the new root file system.
+</diff>
+    </file>
+    <file state="added">
+      <new name="03c3c0c8-CVE-2015-0236.patch" md5="f5bc36575202fd8822f75a3445b88ca4" size="1295"/>
+      <diff lines="35">@@ -0,0 +1,34 @@
++commit 03c3c0c874c84dfa51ef17556062b095c6e1c0a3
++Author: Peter Krempa &lt;pkrempa@redhat.com&gt;
++Date:   Tue Jan 20 17:01:01 2015 +0100
++
++    CVE-2015-0236: qemu: Check ACLs when dumping security info from save image
++    
++    The ACL check didn't check the VIR_DOMAIN_XML_SECURE flag and the
++    appropriate permission for it.
++
++Index: libvirt-1.2.5/src/qemu/qemu_driver.c
++===================================================================
++--- libvirt-1.2.5.orig/src/qemu/qemu_driver.c
+++++ libvirt-1.2.5/src/qemu/qemu_driver.c
++@@ -5564,7 +5564,7 @@ qemuDomainSaveImageGetXMLDesc(virConnect
++     if (fd &lt; 0)
++         goto cleanup;
++ 
++-    if (virDomainSaveImageGetXMLDescEnsureACL(conn, def) &lt; 0)
+++    if (virDomainSaveImageGetXMLDescEnsureACL(conn, def, flags) &lt; 0)
++         goto cleanup;
++ 
++     ret = qemuDomainDefFormatXML(driver, def, flags);
++Index: libvirt-1.2.5/src/remote/remote_protocol.x
++===================================================================
++--- libvirt-1.2.5.orig/src/remote/remote_protocol.x
+++++ libvirt-1.2.5/src/remote/remote_protocol.x
++@@ -4667,6 +4667,7 @@ enum remote_procedure {
++      * @generate: both
++      * @priority: high
++      * @acl: domain:read
+++     * @acl: domain:read_secure:VIR_DOMAIN_XML_SECURE
++      */
++     REMOTE_PROC_DOMAIN_SAVE_IMAGE_GET_XML_DESC = 235,
++ 
+</diff>
+    </file>
+    <file state="added">
+      <new name="18441ab9-qemu-dom-startup-state.patch" md5="3d5ae6534651a41b46ba1795fb8b410e" size="5118"/>
+      <diff lines="119">@@ -0,0 +1,118 @@
++commit 18441ab914459cd4439a578aa3c8d667697393ee
++Author: Jiri Denemark &lt;jdenemar@redhat.com&gt;
++Date:   Mon Feb 16 15:17:00 2015 +0100
++
++    Use PAUSED state for domains that are starting up
++    
++    When libvirt is starting a domain, it reports the state as SHUTOFF until
++    it's RUNNING. This is not ideal because domain startup may take a long
++    time (usually because of some configuration issues, firewalls blocking
++    access to network disks, etc.) and domain lists provided by libvirt look
++    awkward. One can see weird shutoff domains with IDs in a list of active
++    domains or even shutoff transient domains. In any case, it looks more
++    like a bug in libvirt than a normal state a domain goes through.
++    
++    Signed-off-by: Jiri Denemark &lt;jdenemar@redhat.com&gt;
++
++Index: libvirt-1.2.5/src/conf/domain_conf.c
++===================================================================
++--- libvirt-1.2.5.orig/src/conf/domain_conf.c
+++++ libvirt-1.2.5/src/conf/domain_conf.c
++@@ -706,7 +706,8 @@ VIR_ENUM_IMPL(virDomainPausedReason, VIR
++               "from snapshot",
++               "shutdown",
++               "snapshot",
++-              "panicked")
+++              "panicked",
+++              "starting up")
++ 
++ VIR_ENUM_IMPL(virDomainShutdownReason, VIR_DOMAIN_SHUTDOWN_LAST,
++               "unknown",
++Index: libvirt-1.2.5/src/qemu/qemu_process.c
++===================================================================
++--- libvirt-1.2.5.orig/src/qemu/qemu_process.c
+++++ libvirt-1.2.5/src/qemu/qemu_process.c
++@@ -2856,6 +2856,7 @@ qemuProcessUpdateState(virQEMUDriverPtr
++     virDomainState state;
++     virDomainPausedReason reason;
++     virDomainState newState = VIR_DOMAIN_NOSTATE;
+++    int oldReason;
++     int newReason;
++     bool running;
++     char *msg = NULL;
++@@ -2868,9 +2869,16 @@ qemuProcessUpdateState(virQEMUDriverPtr
++     if (ret &lt; 0 || !virDomainObjIsActive(vm))
++         return -1;
++ 
++-    state = virDomainObjGetState(vm, NULL);
+++    state = virDomainObjGetState(vm, &amp;oldReason);
++ 
++-    if (state == VIR_DOMAIN_PAUSED &amp;&amp; running) {
+++    if (running &amp;&amp;
+++        (state == VIR_DOMAIN_SHUTOFF ||
+++         (state == VIR_DOMAIN_PAUSED &amp;&amp;
+++          oldReason == VIR_DOMAIN_PAUSED_STARTING_UP))) {
+++        newState = VIR_DOMAIN_RUNNING;
+++        newReason = VIR_DOMAIN_RUNNING_BOOTED;
+++        ignore_value(VIR_STRDUP_QUIET(msg, "finished booting"));
+++    } else if (state == VIR_DOMAIN_PAUSED &amp;&amp; running) {
++         newState = VIR_DOMAIN_RUNNING;
++         newReason = VIR_DOMAIN_RUNNING_UNPAUSED;
++         ignore_value(VIR_STRDUP_QUIET(msg, "was unpaused"));
++@@ -2889,10 +2897,6 @@ qemuProcessUpdateState(virQEMUDriverPtr
++             ignore_value(virAsprintf(&amp;msg, "was paused (%s)",
++                                  virDomainPausedReasonTypeToString(reason)));
++         }
++-    } else if (state == VIR_DOMAIN_SHUTOFF &amp;&amp; running) {
++-        newState = VIR_DOMAIN_RUNNING;
++-        newReason = VIR_DOMAIN_RUNNING_BOOTED;
++-        ignore_value(VIR_STRDUP_QUIET(msg, "finished booting"));
++     }
++ 
++     if (newState != VIR_DOMAIN_NOSTATE) {
++@@ -3245,7 +3249,9 @@ qemuProcessReconnect(void *opaque)
++         goto error;
++ 
++     state = virDomainObjGetState(obj, &amp;reason);
++-    if (state == VIR_DOMAIN_SHUTOFF) {
+++    if (state == VIR_DOMAIN_SHUTOFF ||
+++        (state == VIR_DOMAIN_PAUSED &amp;&amp;
+++         reason == VIR_DOMAIN_PAUSED_STARTING_UP)) {
++         VIR_DEBUG("Domain '%s' wasn't fully started yet, killing it",
++                   obj-&gt;def-&gt;name);
++         goto error;
++@@ -3703,7 +3709,7 @@ int qemuProcessStart(virConnectPtr conn,
++ 
++     vm-&gt;def-&gt;id = qemuDriverAllocateID(driver);
++     qemuDomainSetFakeReboot(driver, vm, false);
++-    virDomainObjSetState(vm, VIR_DOMAIN_SHUTOFF, VIR_DOMAIN_SHUTOFF_UNKNOWN);
+++    virDomainObjSetState(vm, VIR_DOMAIN_PAUSED, VIR_DOMAIN_PAUSED_STARTING_UP);
++ 
++     if (virAtomicIntInc(&amp;driver-&gt;nactive) == 1 &amp;&amp; driver-&gt;inhibitCallback)
++         driver-&gt;inhibitCallback(true, driver-&gt;inhibitOpaque);
++Index: libvirt-1.2.5/tools/virsh-domain-monitor.c
++===================================================================
++--- libvirt-1.2.5.orig/tools/virsh-domain-monitor.c
+++++ libvirt-1.2.5/tools/virsh-domain-monitor.c
++@@ -184,7 +184,8 @@ VIR_ENUM_IMPL(vshDomainPausedReason,
++               N_("from snapshot"),
++               N_("shutting down"),
++               N_("creating snapshot"),
++-              N_("crashed"))
+++              N_("crashed"),
+++              N_("starting up"))
++ 
++ VIR_ENUM_DECL(vshDomainShutdownReason)
++ VIR_ENUM_IMPL(vshDomainShutdownReason,
++Index: libvirt-1.2.5/include/libvirt/libvirt.h.in
++===================================================================
++--- libvirt-1.2.5.orig/include/libvirt/libvirt.h.in
+++++ libvirt-1.2.5/include/libvirt/libvirt.h.in
++@@ -182,6 +182,7 @@ typedef enum {
++     VIR_DOMAIN_PAUSED_SHUTTING_DOWN = 8, /* paused during shutdown process */
++     VIR_DOMAIN_PAUSED_SNAPSHOT = 9,      /* paused while creating a snapshot */
++     VIR_DOMAIN_PAUSED_CRASHED = 10,     /* paused due to a guest crash */
+++    VIR_DOMAIN_PAUSED_STARTING_UP = 11, /* the domain is being started */
++ 
++ #ifdef VIR_ENUM_SENTINELS
++     VIR_DOMAIN_PAUSED_LAST
+</diff>
+    </file>
+    <file state="added">
+      <new name="2fc7e4a2-network-route-definition-to-networkcommon.patch" md5="227c89755b89655d9c479efcfb3876b7" size="2994"/>
+      <diff lines="74">@@ -0,0 +1,73 @@
++From 2fc7e4a25a4ca72bce4dae7452531e43ecf80d89 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?C=C3=A9dric=20Bosdonnat?= &lt;cbosdonnat@suse.com&gt;
++Date: Wed, 14 Jan 2015 10:51:52 +0100
++Subject: [PATCH 2/7] Move network route definition to networkcommon.rng
++
++Moving network route to the network common schema will allow reusing it.
++---
++ docs/schemas/network.rng       | 20 +-------------------
++ docs/schemas/networkcommon.rng | 22 ++++++++++++++++++++++
++ 2 files changed, 23 insertions(+), 19 deletions(-)
++
++Index: libvirt-1.2.5/docs/schemas/network.rng
++===================================================================
++--- libvirt-1.2.5.orig/docs/schemas/network.rng
+++++ libvirt-1.2.5/docs/schemas/network.rng
++@@ -367,25 +367,7 @@
++         &lt;/zeroOrMore&gt;
++         &lt;!-- &lt;route&gt; element --&gt;
++         &lt;zeroOrMore&gt;
++-          &lt;!-- The (static) route element specifies a network address and gateway
++-               address to access that network. Both the network address and
++-               the gateway address must be specified. --&gt;
++-          &lt;element name="route"&gt;
++-            &lt;optional&gt;
++-              &lt;attribute name="family"&gt;&lt;ref name="addr-family"/&gt;&lt;/attribute&gt;
++-            &lt;/optional&gt;
++-            &lt;attribute name="address"&gt;&lt;ref name="ipAddr"/&gt;&lt;/attribute&gt;
++-            &lt;optional&gt;
++-              &lt;choice&gt;
++-                &lt;attribute name="netmask"&gt;&lt;ref name="ipv4Addr"/&gt;&lt;/attribute&gt;
++-                &lt;attribute name="prefix"&gt;&lt;ref name="ipPrefix"/&gt;&lt;/attribute&gt;
++-              &lt;/choice&gt;
++-            &lt;/optional&gt;
++-            &lt;attribute name="gateway"&gt;&lt;ref name="ipAddr"/&gt;&lt;/attribute&gt;
++-            &lt;optional&gt;
++-              &lt;attribute name="metric"&gt;&lt;ref name="unsignedInt"/&gt;&lt;/attribute&gt;
++-            &lt;/optional&gt;
++-          &lt;/element&gt;
+++          &lt;ref name="routex"/&gt;
++         &lt;/zeroOrMore&gt;
++       &lt;/interleave&gt;
++     &lt;/element&gt;
++Index: libvirt-1.2.5/docs/schemas/networkcommon.rng
++===================================================================
++--- libvirt-1.2.5.orig/docs/schemas/networkcommon.rng
+++++ libvirt-1.2.5/docs/schemas/networkcommon.rng
++@@ -224,4 +224,26 @@
++       &lt;param name='maxInclusive'&gt;65535&lt;/param&gt;
++     &lt;/data&gt;
++   &lt;/define&gt;
+++
+++  &lt;!-- The (static) route element specifies a network address and gateway
+++       address to access that network. Both the network address and
+++       the gateway address must be specified. --&gt;
+++  &lt;define name='routex'&gt;
+++    &lt;element name="route"&gt;
+++      &lt;optional&gt;
+++        &lt;attribute name="family"&gt;&lt;ref name="addr-family"/&gt;&lt;/attribute&gt;
+++      &lt;/optional&gt;
+++      &lt;attribute name="address"&gt;&lt;ref name="ipAddr"/&gt;&lt;/attribute&gt;
+++      &lt;optional&gt;
+++        &lt;choice&gt;
+++          &lt;attribute name="netmask"&gt;&lt;ref name="ipv4Addr"/&gt;&lt;/attribute&gt;
+++          &lt;attribute name="prefix"&gt;&lt;ref name="ipPrefix"/&gt;&lt;/attribute&gt;
+++        &lt;/choice&gt;
+++      &lt;/optional&gt;
+++      &lt;attribute name="gateway"&gt;&lt;ref name="ipAddr"/&gt;&lt;/attribute&gt;
+++      &lt;optional&gt;
+++        &lt;attribute name="metric"&gt;&lt;ref name="unsignedInt"/&gt;&lt;/attribute&gt;
+++      &lt;/optional&gt;
+++    &lt;/element&gt;
+++  &lt;/define&gt;
++ &lt;/grammar&gt;
+</diff>
+    </file>
+    <file state="added">
+      <new name="3993c2f9-virSocketAddrGetIpPrefix-0-special-cases.patch" md5="f468f1fcc9088f3ed394669d1ed8dac8" size="1378"/>
+      <diff lines="40">@@ -0,0 +1,39 @@
++From 3993c2f91cbaab94ceb65557fd1c54dff01d24cc Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?C=C3=A9dric=20Bosdonnat?= &lt;cbosdonnat@suse.com&gt;
++Date: Thu, 15 Jan 2015 09:13:09 +0100
++Subject: [PATCH 5/7] virSocketAddrGetIpPrefix 0.0.0.0 and :: special cases
++
++If 0.0.0.0  or :: address is provided, then the returned prefix should
++be 0, for the default address.
++
++Squashed in bug fix commit '981f0cda4'
++---
++ src/util/virsocketaddr.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++Index: libvirt-1.2.5/src/util/virsocketaddr.c
++===================================================================
++--- libvirt-1.2.5.orig/src/util/virsocketaddr.c
+++++ libvirt-1.2.5/src/util/virsocketaddr.c
++@@ -832,6 +832,12 @@ virSocketAddrGetIpPrefix(const virSocket
++          */
++         unsigned char octet
++             = ntohl(address-&gt;data.inet4.sin_addr.s_addr) &gt;&gt; 24;
+++
+++        /* If address is 0.0.0.0, we surely want to have 0 prefix for
+++         * the default route. */
+++        if (address-&gt;data.inet4.sin_addr.s_addr == 0)
+++            return 0;
+++
++         if ((octet &amp; 0x80) == 0) {
++             /* Class A network */
++             return 8;
++@@ -844,6 +850,8 @@ virSocketAddrGetIpPrefix(const virSocket
++         }
++         return -1;
++     } else if (VIR_SOCKET_ADDR_IS_FAMILY(address, AF_INET6)) {
+++        if (virSocketAddrIsWildcard(address))
+++            return 0;
++         return 64;
++     }
++ 
+</diff>
+    </file>
+    <file state="added">
+      <new name="4b47b4dc-ipv6-regex.patch" md5="432f84ede2f65011730b7d03f666532b" size="2638"/>
+      <diff lines="23">@@ -0,0 +1,22 @@
++From 4b47b4dc7a56e065d179e26f44c7f40dc19c0d2b Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?C=C3=A9dric=20Bosdonnat?= &lt;cbosdonnat@suse.com&gt;
++Date: Wed, 14 Jan 2015 10:42:19 +0100
++Subject: [PATCH 1/7] Fix ipv6 regex in RNG schemas to match '::'
++
++---
++ docs/schemas/basictypes.rng | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: libvirt-1.2.5/docs/schemas/basictypes.rng
++===================================================================
++--- libvirt-1.2.5.orig/docs/schemas/basictypes.rng
+++++ libvirt-1.2.5/docs/schemas/basictypes.rng
++@@ -177,7 +177,7 @@
++   &lt;define name="ipv6Addr"&gt;
++     &lt;data type="string"&gt;
++       &lt;!-- To understand this better, take apart the toplevel "|"s --&gt;
++-&lt;param name="pattern"&gt;(([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}(((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([1-9][0-9])|([0-9]))\.){3}((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([1-9][0-9])|([0-9])))|(([0-9A-Fa-f]{1,4}:){0,5}:(((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([1-9][0-9])|([0-9]))\.){3}((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([1-9][0-9])|([0-9])))|(::([0-9A-Fa-f]{1,4}:){0,5}(((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([1-9][0-9])|([0-9]))\.){3}((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([1-9][0-9])|([0-9])))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:)&lt;/param&gt;
+++&lt;param name="pattern"&gt;(([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}(((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([1-9][0-9])|([0-9]))\.){3}((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([1-9][0-9])|([0-9])))|(([0-9A-Fa-f]{1,4}:){0,5}:(((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([1-9][0-9])|([0-9]))\.){3}((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([1-9][0-9])|([0-9])))|(::([0-9A-Fa-f]{1,4}:){0,5}(((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([1-9][0-9])|([0-9]))\.){3}((25[0-5])|(2[0-4][0-9])|(1[0-9]{2})|([1-9][0-9])|([0-9])))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:)|(::)&lt;/param&gt;
++     &lt;/data&gt;
++   &lt;/define&gt;
++ 
+</diff>
+    </file>
+    <file state="added">
+      <new name="57e681e5-domain_conf-resolve-Coverity-RESOURCE_LEAK.patch" md5="578e380b5dff1ecf8fe04bfb67219f3d" size="959"/>
+      <diff lines="26">@@ -0,0 +1,25 @@
++From 57e681e529103c90ed4699cb9ba625bd109d2ef3 Mon Sep 17 00:00:00 2001
++From: John Ferlan &lt;jferlan@redhat.com&gt;
++Date: Fri, 9 Jan 2015 11:02:04 -0500
++Subject: [PATCH 6/7] domain_conf: Resolve Coverity RESOURCE_LEAK
++
++Commit id 'aa2cc721' added call to virSocketAddrFormat
++and did not VIR_FREE() the returned memory.
++
++Signed-off-by: John Ferlan &lt;jferlan@redhat.com&gt;
++---
++ src/conf/domain_conf.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++Index: libvirt-1.2.5/src/conf/domain_conf.c
++===================================================================
++--- libvirt-1.2.5.orig/src/conf/domain_conf.c
+++++ libvirt-1.2.5/src/conf/domain_conf.c
++@@ -15722,6 +15722,7 @@ virDomainNetIpsFormat(virBufferPtr buf,
++             familyStr = "ipv4";
++         virBufferAsprintf(buf, "&lt;ip address='%s'",
++                           ipStr);
+++        VIR_FREE(ipStr);
++         if (familyStr)
++             virBufferAsprintf(buf, " family='%s'", familyStr);
++         if (ips[i]-&gt;prefix != 0)
+</diff>
+    </file>
+    <file state="added">
+      <new name="890fc0f1-cve-2015-5313.patch" md5="a4bf7cef6a9fbdf519db6b50fb5d9cfb" size="2865"/>
+      <diff lines="76">@@ -0,0 +1,75 @@
++From 890fc0f1ffcc479b08b9fd01de31b62e3d9e7427 Mon Sep 17 00:00:00 2001
++From: Eric Blake &lt;eblake@redhat.com&gt;
++Date: Tue, 8 Dec 2015 17:46:31 -0700
++Subject: [PATCH] CVE-2015-5313: storage: don't allow '/' in filesystem volume
++ names
++
++The libvirt file system storage driver determines what file to
++act on by concatenating the pool location with the volume name.
++If a user is able to pick names like "../../../etc/passwd", then
++they can escape the bounds of the pool.  For that matter,
++virStoragePoolListVolumes() doesn't descend into subdirectories,
++so a user really shouldn't use a name with a slash.
++
++Normally, only privileged users can coerce libvirt into creating
++or opening existing files using the virStorageVol APIs; and such
++users already have full privilege to create any domain XML (so it
++is not an escalation of privilege).  But in the case of
++fine-grained ACLs, it is feasible that a user can be granted
++storage_vol:create but not domain:write, and it violates
++assumptions if such a user can abuse libvirt to access files
++outside of the storage pool.
++
++Therefore, prevent all use of volume names that contain "/",
++whether or not such a name is actually attempting to escape the
++pool.
++
++This changes things from:
++
++$ virsh vol-create-as default ../../../../../../etc/haha --capacity 128
++Vol ../../../../../../etc/haha created
++$ rm /etc/haha
++
++to:
++
++$ virsh vol-create-as default ../../../../../../etc/haha --capacity 128
++error: Failed to create vol ../../../../../../etc/haha
++error: Requested operation is not valid: volume name '../../../../../../etc/haha' cannot contain '/'
++
++Signed-off-by: Eric Blake &lt;eblake@redhat.com&gt;
++(cherry picked from commit 034e47c338b13a95cf02106a3af912c1c5f818d7)
++---
++ src/storage/storage_backend_fs.c | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/src/storage/storage_backend_fs.c b/src/storage/storage_backend_fs.c
++index 5099a1c..0afc079 100644
++--- a/src/storage/storage_backend_fs.c
+++++ b/src/storage/storage_backend_fs.c
++@@ -1,7 +1,7 @@
++ /*
++  * storage_backend_fs.c: storage backend for FS and directory handling
++  *
++- * Copyright (C) 2007-2014 Red Hat, Inc.
+++ * Copyright (C) 2007-2015 Red Hat, Inc.
++  * Copyright (C) 2007-2008 Daniel P. Berrange
++  *
++  * This library is free software; you can redistribute it and/or
++@@ -1004,6 +1004,14 @@ virStorageBackendFileSystemVolCreate(virConnectPtr conn ATTRIBUTE_UNUSED,
++ 
++     vol-&gt;type = VIR_STORAGE_VOL_FILE;
++ 
+++    /* Volumes within a directory pools are not recursive; do not
+++     * allow escape to ../ or a subdir */
+++    if (strchr(vol-&gt;name, '/')) {
+++        virReportError(VIR_ERR_OPERATION_INVALID,
+++                       _("volume name '%s' cannot contain '/'"), vol-&gt;name);
+++        return -1;
+++    }
+++
++     VIR_FREE(vol-&gt;target.path);
++     if (virAsprintf(&amp;vol-&gt;target.path, "%s/%s",
++                     pool-&gt;def-&gt;target.path,
++-- 
++2.6.2
++
+</diff>
+    </file>
+    <file state="added">
+      <new name="9661ac2f-qemu-unref-cfg.patch" md5="e5b66ffd3019205eb65988696cfd6b7b" size="809"/>
+      <diff lines="25">@@ -0,0 +1,24 @@
++commit 9661ac2f46eeb4690a25dfc48bdf9dc9a4dfe822
++Author: Martin Kletzander &lt;mkletzan@redhat.com&gt;
++Date:   Tue Oct 21 11:44:13 2014 +0200
++
++    qemu: unref cfg after TerminateMachine has been called
++    
++    Commit 4882618ed13b469d92fa8b2b4a158fdb17dbe9f1 added the code that
++    requests driver cfg, but forgot to unref it.
++    
++    Signed-off-by: Martin Kletzander &lt;mkletzan@redhat.com&gt;
++
++Index: libvirt-1.2.5/src/qemu/qemu_cgroup.c
++===================================================================
++--- libvirt-1.2.5.orig/src/qemu/qemu_cgroup.c
+++++ libvirt-1.2.5/src/qemu/qemu_cgroup.c
++@@ -1046,6 +1046,8 @@ qemuRemoveCgroup(virQEMUDriverPtr driver
++             VIR_DEBUG("Failed to terminate cgroup for %s", vm-&gt;def-&gt;name);
++     }
++ 
+++    virObjectUnref(cfg);
+++
++     return virCgroupRemove(priv-&gt;cgroup);
++ }
++ 
+</diff>
+    </file>
+    <file state="added">
+      <new name="99a42f3c-libxl-sec-model.patch" md5="9eba2e1bddf1ec51fe62b8f0861250b8" size="2104"/>
+      <diff lines="60">@@ -0,0 +1,59 @@
++commit 99a42f3c0fd77ab9bd596bd107f924a455564dde
++Author: Jim Fehlig &lt;jfehlig@suse.com&gt;
++Date:   Fri May 15 12:26:30 2015 -0600
++
++    libxl: provide impl for nodeGetSecurityModel
++    
++    Currently, the libxl driver does not support any security drivers.
++    When the qemu driver has no security driver configued,
++    nodeGetSecurityModel succeeds but returns an empty virSecurityModel
++    object.  Do the same in the libxl driver instead of reporting
++    
++    this function is not supported by the connection driver:
++    virNodeGetSecurityModel
++
++Index: libvirt-1.2.5/src/libxl/libxl_driver.c
++===================================================================
++--- libvirt-1.2.5.orig/src/libxl/libxl_driver.c
+++++ libvirt-1.2.5/src/libxl/libxl_driver.c
++@@ -4738,6 +4738,24 @@ libxlDomainMigrateConfirm3Params(virDoma
++     return libxlDomainMigrationConfirm(driver, vm, flags, cancelled);
++ }
++ 
+++static int libxlNodeGetSecurityModel(virConnectPtr conn,
+++                                     virSecurityModelPtr secmodel)
+++{
+++    memset(secmodel, 0, sizeof(*secmodel));
+++
+++    if (virNodeGetSecurityModelEnsureACL(conn) &lt; 0)
+++        return -1;
+++
+++    /*
+++     * Currently the libxl driver does not support security model.
+++     * Similar to the qemu driver, treat this as success and simply
+++     * return no data in secmodel.  Avoids spamming the libvirt log
+++     * with "this function is not supported by the connection driver:
+++     * virNodeGetSecurityModel"
+++     */
+++    return 0;
+++}
+++
++ 
++ static virDriver libxlDriver = {
++     .no = VIR_DRV_LIBXL,
++@@ -4833,6 +4851,7 @@ static virDriver libxlDriver = {
++     .domainMigratePerform3Params = libxlDomainMigratePerform3Params, /* 1.2.3 */
++     .domainMigrateFinish3Params = libxlDomainMigrateFinish3Params, /* 1.2.3 */
++     .domainMigrateConfirm3Params = libxlDomainMigrateConfirm3Params, /* 1.2.3 */
+++    .nodeGetSecurityModel = libxlNodeGetSecurityModel, /* 1.2.16 */
++ };
++ 
++ static virStateDriver libxlStateDriver = {
++@@ -4843,7 +4862,6 @@ static virStateDriver libxlStateDriver =
++     .stateReload = libxlStateReload,
++ };
++ 
++-
++ int
++ libxlRegister(void)
++ {
+</diff>
+    </file>
+    <file state="added">
+      <new name="a1176529-use-network-route-definitions-for-domains.patch" md5="2112745e6e9f4afc5dc17e3170614cd2" size="21995"/>
+      <diff lines="568">@@ -0,0 +1,567 @@
++From a117652917ed9755ebf7bec1603b0cb048b8d5a0 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?C=C3=A9dric=20Bosdonnat?= &lt;cbosdonnat@suse.com&gt;
++Date: Wed, 14 Jan 2015 16:15:57 +0100
++Subject: [PATCH 4/7] Use the network route definitions for domains
++
++---
++ docs/formatdomain.html.in                         |   9 +-
++ docs/schemas/domaincommon.rng                     |  29 +-----
++ docs/schemas/network.rng                          |   2 +-
++ docs/schemas/networkcommon.rng                    |   2 +-
++ src/conf/domain_conf.c                            | 121 +++++-----------------
++ src/conf/domain_conf.h                            |  14 +--
++ src/conf/networkcommon_conf.c                     |   6 +-
++ src/conf/networkcommon_conf.h                     |   6 +-
++ src/lxc/lxc_container.c                           |  22 ++--
++ src/lxc/lxc_native.c                              |  25 +++--
++ tests/lxcconf2xmldata/lxcconf2xml-physnetwork.xml |   4 +-
++ tests/lxcconf2xmldata/lxcconf2xml-simple.xml      |   4 +-
++ tests/lxcxml2xmldata/lxc-hostdev.xml              |   4 +-
++ tests/lxcxml2xmldata/lxc-idmap.xml                |   4 +-
++ 14 files changed, 79 insertions(+), 173 deletions(-)
++
++Index: libvirt-1.2.5/docs/formatdomain.html.in
++===================================================================
++--- libvirt-1.2.5.orig/docs/formatdomain.html.in
+++++ libvirt-1.2.5/docs/formatdomain.html.in
++@@ -3965,12 +3965,9 @@ qemu-kvm -net nic,model=? /dev/null
++ 
++     &lt;p&gt;
++     &lt;span class="since"&gt;Since 1.2.12&lt;/span&gt; route elements can also be added
++-    to define the network routes to use for the network device. This element
++-    has a &lt;code&gt;family&lt;/code&gt; attribute set either to &lt;code&gt;ipv4&lt;/code&gt; or
++-    &lt;code&gt;ipv6&lt;/code&gt;, a mandatory &lt;code&gt;via&lt;/code&gt; attribute defining the
++-    IP address to route throught and optional &lt;code&gt;address&lt;/code&gt; and &lt;code&gt;prefix&lt;/code&gt;
++-    attributes defining the target network range. If those aren't given, then
++-    a default route will be set.
+++    to define the network routes to use for the network device. The attributes
+++    of this element are described in the documentation for the &lt;code&gt;route&lt;/code&gt;
+++    element in &lt;a href="formatnetwork.html#elementsStaticroute"&gt;network definitions&lt;/a&gt;.
++     This is only used by the LXC driver.
++     &lt;/p&gt;
++ 
++Index: libvirt-1.2.5/docs/schemas/domaincommon.rng
++===================================================================
++--- libvirt-1.2.5.orig/docs/schemas/domaincommon.rng
+++++ libvirt-1.2.5/docs/schemas/domaincommon.rng
++@@ -2208,9 +2208,7 @@
++         &lt;/element&gt;
++       &lt;/zeroOrMore&gt;
++       &lt;zeroOrMore&gt;
++-        &lt;element name="route"&gt;
++-          &lt;ref name="route"/&gt;
++-        &lt;/element&gt;
+++        &lt;ref name="route"/&gt;
++       &lt;/zeroOrMore&gt;
++       &lt;optional&gt;
++         &lt;element name="script"&gt;
++@@ -3388,27 +3386,6 @@
++     &lt;/element&gt;
++   &lt;/define&gt;
++ 
++-  &lt;define name="route"&gt;
++-    &lt;interleave&gt;
++-      &lt;attribute name="family"&gt;
++-        &lt;ref name="addr-family"/&gt;
++-      &lt;/attribute&gt;
++-      &lt;attribute name="via"&gt;
++-        &lt;ref name="ipAddr"/&gt;
++-      &lt;/attribute&gt;
++-      &lt;optional&gt;
++-        &lt;attribute name="address"&gt;
++-          &lt;ref name="ipAddr"/&gt;
++-        &lt;/attribute&gt;
++-      &lt;/optional&gt;
++-      &lt;optional&gt;
++-        &lt;attribute name="prefix"&gt;
++-          &lt;ref name="ipPrefix"/&gt;
++-        &lt;/attribute&gt;
++-      &lt;/optional&gt;
++-    &lt;/interleave&gt;
++-  &lt;/define&gt;
++-
++   &lt;define name="hostdev"&gt;
++     &lt;element name="hostdev"&gt;
++       &lt;interleave&gt;
++@@ -3606,9 +3583,7 @@
++         &lt;/element&gt;
++       &lt;/zeroOrMore&gt;
++       &lt;zeroOrMore&gt;
++-        &lt;element name="route"&gt;
++-          &lt;ref name="route"/&gt;
++-        &lt;/element&gt;
+++        &lt;ref name="route"/&gt;
++       &lt;/zeroOrMore&gt;
++     &lt;/interleave&gt;
++   &lt;/define&gt;
++Index: libvirt-1.2.5/docs/schemas/network.rng
++===================================================================
++--- libvirt-1.2.5.orig/docs/schemas/network.rng
+++++ libvirt-1.2.5/docs/schemas/network.rng
++@@ -367,7 +367,7 @@
++         &lt;/zeroOrMore&gt;
++         &lt;!-- &lt;route&gt; element --&gt;
++         &lt;zeroOrMore&gt;
++-          &lt;ref name="routex"/&gt;
+++          &lt;ref name="route"/&gt;
++         &lt;/zeroOrMore&gt;
++       &lt;/interleave&gt;
++     &lt;/element&gt;
++Index: libvirt-1.2.5/docs/schemas/networkcommon.rng
++===================================================================
++--- libvirt-1.2.5.orig/docs/schemas/networkcommon.rng
+++++ libvirt-1.2.5/docs/schemas/networkcommon.rng
++@@ -228,7 +228,7 @@
++   &lt;!-- The (static) route element specifies a network address and gateway
++        address to access that network. Both the network address and
++        the gateway address must be specified. --&gt;
++-  &lt;define name='routex'&gt;
+++  &lt;define name='route'&gt;
++     &lt;element name="route"&gt;
++       &lt;optional&gt;
++         &lt;attribute name="family"&gt;&lt;ref name="addr-family"/&gt;&lt;/attribute&gt;
++Index: libvirt-1.2.5/src/conf/domain_conf.c
++===================================================================
++--- libvirt-1.2.5.orig/src/conf/domain_conf.c
+++++ libvirt-1.2.5/src/conf/domain_conf.c
++@@ -3,6 +3,7 @@
++  *
++  * Copyright (C) 2006-2014 Red Hat, Inc.
++  * Copyright (C) 2006-2008 Daniel P. Berrange
+++ * Copyright (c) 2015 SUSE LINUX Products GmbH, Nuernberg, Germany.
++  *
++  * This library is free software; you can redistribute it and/or
++  * modify it under the terms of the GNU Lesser General Public
++@@ -1423,10 +1424,10 @@ void virDomainNetDefFree(virDomainNetDef
++     VIR_FREE(def-&gt;ips);
++ 
++     for (i = 0; i &lt; def-&gt;nroutes; i++)
++-        VIR_FREE(def-&gt;routes[i]);
+++        virNetworkRouteDefFree(def-&gt;routes[i]);
++     VIR_FREE(def-&gt;routes);
++ 
++-        virDomainDeviceInfoClear(&amp;def-&gt;info);
+++    virDomainDeviceInfoClear(&amp;def-&gt;info);
++ 
++     VIR_FREE(def-&gt;filter);
++     virNWFilterHashTableFree(def-&gt;filterparams);
++@@ -4465,64 +4466,6 @@ virDomainNetIpParseXML(xmlNodePtr node)
++     return NULL;
++ }
++ 
++-static virDomainNetRouteDefPtr
++-virDomainNetRouteParse(xmlNodePtr node)
++-{
++-    virDomainNetRouteDefPtr route = NULL;
++-    char *familyStr = NULL;
++-    int family = AF_UNSPEC;
++-    char *via = NULL;
++-    char *to = NULL;
++-    char *prefixStr = NULL;
++-
++-    to = virXMLPropString(node, "address");
++-    if (!(via = virXMLPropString(node, "via"))) {
++-        virReportError(VIR_ERR_INVALID_ARG, "%s",
++-                       _("Missing route address"));
++-        goto error;
++-    }
++-
++-    familyStr = virXMLPropString(node, "family");
++-    if (familyStr &amp;&amp; STREQ(familyStr, "ipv4"))
++-        family = AF_INET;
++-    else if (familyStr &amp;&amp; STREQ(familyStr, "ipv6"))
++-        family = AF_INET6;
++-    else
++-        family = virSocketAddrNumericFamily(via);
++-
++-    if (VIR_ALLOC(route) &lt; 0)
++-        goto error;
++-
++-    if (virSocketAddrParse(&amp;route-&gt;via, via, family) &lt; 0) {
++-        virReportError(VIR_ERR_INVALID_ARG,
++-                       _("Failed to parse IP address: '%s'"),
++-                       via);
++-        goto error;
++-    }
++-
++-    if (to &amp;&amp; virSocketAddrParse(&amp;route-&gt;to, to, family) &lt; 0) {
++-        virReportError(VIR_ERR_INVALID_ARG,
++-                       _("Failed to parse IP address: '%s'"),
++-                       to);
++-        goto error;
++-    }
++-
++-    if (!(prefixStr = virXMLPropString(node, "prefix")) ||
++-        (virStrToLong_ui(prefixStr, NULL, 10, &amp;route-&gt;prefix) &lt; 0)) {
++-    }
++-
++-    return route;
++-
++- error:
++-    VIR_FREE(familyStr);
++-    VIR_FREE(via);
++-    VIR_FREE(to);
++-    VIR_FREE(prefixStr);
++-    VIR_FREE(route);
++-
++-    return NULL;
++-}
++-
++ static int
++ virDomainHostdevDefParseXMLCaps(xmlNodePtr node ATTRIBUTE_UNUSED,
++                                 xmlXPathContextPtr ctxt,
++@@ -4616,14 +4559,17 @@ virDomainHostdevDefParseXMLCaps(xmlNodeP
++         if (nroutenodes) {
++             size_t i;
++             for (i = 0; i &lt; nroutenodes; i++) {
++-                virDomainNetRouteDefPtr route = virDomainNetRouteParse(routenodes[i]);
+++                virNetworkRouteDefPtr route = NULL;
++ 
++-                if (!route)
+++                if (!(route = virNetworkRouteDefParseXML(_("Domain hostdev device"),
+++                                                         routenodes[i],
+++                                                         ctxt)))
++                     goto error;
++ 
+++
++                 if (VIR_APPEND_ELEMENT(def-&gt;source.caps.u.net.routes,
++                                        def-&gt;source.caps.u.net.nroutes, route) &lt; 0) {
++-                    VIR_FREE(route);
+++                    virNetworkRouteDefFree(route);
++                     goto error;
++                 }
++             }
++@@ -6845,7 +6791,7 @@ virDomainNetDefParseXML(virDomainXMLOpti
++     size_t nips = 0;
++     virDomainNetIpDefPtr *ips = NULL;
++     size_t nroutes = 0;
++-    virDomainNetRouteDefPtr *routes = NULL;
+++    virNetworkRouteDefPtr *routes = NULL;
++ 
++     if (VIR_ALLOC(def) &lt; 0)
++         return NULL;
++@@ -6927,12 +6873,15 @@ virDomainNetDefParseXML(virDomainXMLOpti
++                 if (VIR_APPEND_ELEMENT(ips, nips, ip) &lt; 0)
++                     goto error;
++             } else if (xmlStrEqual(cur-&gt;name, BAD_CAST "route")) {
++-                virDomainNetRouteDefPtr route = NULL;
++-                if (!(route = virDomainNetRouteParse(cur)))
+++                virNetworkRouteDefPtr route = NULL;
+++                if (!(route = virNetworkRouteDefParseXML(_("Domain interface"),
+++                                                         cur, ctxt)))
++                     goto error;
++ 
++-                if (VIR_APPEND_ELEMENT(routes, nroutes, route) &lt; 0)
+++                if (VIR_APPEND_ELEMENT(routes, nroutes, route) &lt; 0) {
+++                    virNetworkRouteDefFree(route);
++                     goto error;
+++                }
++             } else if (!ifname &amp;&amp;
++                        xmlStrEqual(cur-&gt;name, BAD_CAST "target")) {
++                 ifname = virXMLPropString(cur, "dev");
++@@ -15781,35 +15730,17 @@ virDomainNetIpsFormat(virBufferPtr buf,
++     }
++ }
++ 
++-static void
+++static int
++ virDomainNetRoutesFormat(virBufferPtr buf,
++-                         virDomainNetRouteDefPtr *routes,
+++                         virNetworkRouteDefPtr *routes,
++                          size_t nroutes)
++ {
++     size_t i;
++ 
++-    for (i = 0; i &lt; nroutes; i++) {
++-        virDomainNetRouteDefPtr route = routes[i];
++-        const char *familyStr = NULL;
++-        char *via = virSocketAddrFormat(&amp;route-&gt;via);
++-        char *to = NULL;
++-
++-        if (VIR_SOCKET_ADDR_IS_FAMILY(&amp;route-&gt;via, AF_INET6))
++-            familyStr = "ipv6";
++-        else if (VIR_SOCKET_ADDR_IS_FAMILY(&amp;route-&gt;via, AF_INET))
++-            familyStr = "ipv4";
++-        virBufferAsprintf(buf, "&lt;route family='%s' via='%s'", familyStr, via);
++-
++-        if (VIR_SOCKET_ADDR_VALID(&amp;route-&gt;to)) {
++-            to = virSocketAddrFormat(&amp;route-&gt;to);
++-            virBufferAsprintf(buf, " address='%s'", to);
++-        }
++-
++-        if (route-&gt;prefix &gt; 0)
++-            virBufferAsprintf(buf, " prefix='%d'", route-&gt;prefix);
++-
++-        virBufferAddLit(buf, "/&gt;\n");
++-    }
+++    for (i = 0; i &lt; nroutes; i++)
+++        if (virNetworkRouteDefFormat(buf, routes[i]) &lt; 0)
+++            return -1;
+++    return 0;
++ }
++ 
++ static int
++@@ -15943,8 +15874,9 @@ virDomainHostdevDefFormatCaps(virBufferP
++     if (def-&gt;source.caps.type == VIR_DOMAIN_HOSTDEV_CAPS_TYPE_NET) {
++         virDomainNetIpsFormat(buf, def-&gt;source.caps.u.net.ips,
++                               def-&gt;source.caps.u.net.nips);
++-        virDomainNetRoutesFormat(buf, def-&gt;source.caps.u.net.routes,
++-                                 def-&gt;source.caps.u.net.nroutes);
+++        if (virDomainNetRoutesFormat(buf, def-&gt;source.caps.u.net.routes,
+++                                     def-&gt;source.caps.u.net.nroutes) &lt; 0)
+++            return -1;
++     }
++ 
++     return 0;
++@@ -16196,7 +16128,8 @@ virDomainNetDefFormat(virBufferPtr buf,
++     }
++ 
++     virDomainNetIpsFormat(buf, def-&gt;ips, def-&gt;nips);
++-    virDomainNetRoutesFormat(buf, def-&gt;routes, def-&gt;nroutes);
+++    if (virDomainNetRoutesFormat(buf, def-&gt;routes, def-&gt;nroutes) &lt; 0)
+++        return -1;
++ 
++     virBufferEscapeString(buf, "&lt;script path='%s'/&gt;\n",
++                           def-&gt;script);
++Index: libvirt-1.2.5/src/conf/domain_conf.h
++===================================================================
++--- libvirt-1.2.5.orig/src/conf/domain_conf.h
+++++ libvirt-1.2.5/src/conf/domain_conf.h
++@@ -3,6 +3,7 @@
++  *
++  * Copyright (C) 2006-2014 Red Hat, Inc.
++  * Copyright (C) 2006-2008 Daniel P. Berrange
+++ * Copyright (c) 2015 SUSE LINUX Products GmbH, Nuernberg, Germany.
++  *
++  * This library is free software; you can redistribute it and/or
++  * modify it under the terms of the GNU Lesser General Public
++@@ -35,6 +36,7 @@
++ # include "virthread.h"
++ # include "virhash.h"
++ # include "virsocketaddr.h"
+++# include "networkcommon_conf.h"
++ # include "nwfilter_params.h"
++ # include "virnetdevmacvlan.h"
++ # include "virsysinfo.h"
++@@ -434,14 +436,6 @@ struct _virDomainNetIpDef {
++     unsigned int prefix; /* number of 1 bits in the net mask */
++ };
++ 
++-typedef struct _virDomainNetRouteDef virDomainNetRouteDef;
++-typedef virDomainNetRouteDef *virDomainNetRouteDefPtr;
++-struct _virDomainNetRouteDef {
++-    virSocketAddr via;
++-    virSocketAddr to;
++-    unsigned int prefix;
++-};
++-
++ typedef struct _virDomainHostdevCaps virDomainHostdevCaps;
++ typedef virDomainHostdevCaps *virDomainHostdevCapsPtr;
++ struct _virDomainHostdevCaps {
++@@ -458,7 +452,7 @@ struct _virDomainHostdevCaps {
++             size_t nips;
++             virDomainNetIpDefPtr *ips;
++             size_t nroutes;
++-            virDomainNetRouteDefPtr *routes;
+++            virNetworkRouteDefPtr *routes;
++         } net;
++     } u;
++ };
++@@ -945,7 +939,7 @@ struct _virDomainNetDef {
++     size_t nips;
++     virDomainNetIpDefPtr *ips;
++     size_t nroutes;
++-    virDomainNetRouteDefPtr *routes;
+++    virNetworkRouteDefPtr *routes;
++ };
++ 
++ /* Used for prefix of ifname of any network name generated dynamically
++Index: libvirt-1.2.5/src/conf/networkcommon_conf.c
++===================================================================
++--- libvirt-1.2.5.orig/src/conf/networkcommon_conf.c
+++++ libvirt-1.2.5/src/conf/networkcommon_conf.c
++@@ -61,9 +61,9 @@ virNetworkRouteDefFree(virNetworkRouteDe
++ virNetworkRouteDefPtr
++ virNetworkRouteDefCreate(const char *errorDetail,
++                          char *family,
++-                         char *address,
++-                         char *netmask,
++-                         char *gateway,
+++                         const char *address,
+++                         const char *netmask,
+++                         const char *gateway,
++                          unsigned int prefix,
++                          bool hasPrefix,
++                          unsigned int metric,
++Index: libvirt-1.2.5/src/conf/networkcommon_conf.h
++===================================================================
++--- libvirt-1.2.5.orig/src/conf/networkcommon_conf.h
+++++ libvirt-1.2.5/src/conf/networkcommon_conf.h
++@@ -41,9 +41,9 @@ virNetworkRouteDefFree(virNetworkRouteDe
++ virNetworkRouteDefPtr
++ virNetworkRouteDefCreate(const char *networkName,
++                          char *family,
++-                         char *address,
++-                         char *netmask,
++-                         char *gateway,
+++                         const char *address,
+++                         const char *netmask,
+++                         const char *gateway,
++                          unsigned int prefix,
++                          bool hasPrefix,
++                          unsigned int metric,
++Index: libvirt-1.2.5/src/lxc/lxc_container.c
++===================================================================
++--- libvirt-1.2.5.orig/src/lxc/lxc_container.c
+++++ libvirt-1.2.5/src/lxc/lxc_container.c
++@@ -1,6 +1,7 @@
++ /*
++  * Copyright (C) 2008-2013 Red Hat, Inc.
++  * Copyright (C) 2008 IBM Corp.
+++ * Copyright (c) 2015 SUSE LINUX Products GmbH, Nuernberg, Germany.
++  *
++  * lxc_container.c: file description
++  *
++@@ -544,20 +545,13 @@ static int lxcContainerRenameAndEnableIn
++ 
++             /* Set the routes */
++             for (j = 0; j &lt; netDef-&gt;nroutes; j++) {
++-                virDomainNetRouteDefPtr route = netDef-&gt;routes[j];
++-                if (VIR_SOCKET_ADDR_VALID(&amp;route-&gt;to))
++-                    toStr = virSocketAddrFormat(&amp;route-&gt;to);
++-                else
++-                    if (VIR_STRDUP(toStr, "default") &lt; 0)
++-                        goto error_out;
++-                viaStr = virSocketAddrFormat(&amp;route-&gt;via);
++-                VIR_DEBUG("Adding route %s/%d via %s", toStr, route-&gt;prefix, viaStr);
++-
++-                if (virNetDevAddRoute(newname, &amp;route-&gt;to, route-&gt;prefix,
++-                                      &amp;route-&gt;via, 0) &lt; 0) {
++-                    virReportError(VIR_ERR_SYSTEM_ERROR,
++-                                   _("Failed to add route %s/%d via %s"),
++-                                   toStr, route-&gt;prefix, viaStr);
+++                virNetworkRouteDefPtr route = netDef-&gt;routes[j];
+++
+++                if (virNetDevAddRoute(newname,
+++                                      virNetworkRouteDefGetAddress(route),
+++                                      virNetworkRouteDefGetPrefix(route),
+++                                      virNetworkRouteDefGetGateway(route),
+++                                      virNetworkRouteDefGetMetric(route)) &lt; 0) {
++                     goto error_out;
++                 }
++                 VIR_FREE(toStr);
++Index: libvirt-1.2.5/src/lxc/lxc_native.c
++===================================================================
++--- libvirt-1.2.5.orig/src/lxc/lxc_native.c
+++++ libvirt-1.2.5/src/lxc/lxc_native.c
++@@ -2,6 +2,7 @@
++  * lxc_native.c: LXC native configuration import
++  *
++  * Copyright (c) 2013 SUSE LINUX Products GmbH, Nuernberg, Germany.
+++ * Copyright (c) 2013-2015 SUSE LINUX Products GmbH, Nuernberg, Germany.
++  *
++  * This library is free software; you can redistribute it and/or
++  * modify it under the terms of the GNU Lesser General Public
++@@ -432,24 +433,37 @@ typedef struct {
++ static int
++ lxcAddNetworkRouteDefinition(const char *address,
++                              int family,
++-                             virDomainNetRouteDefPtr **routes,
+++                             virNetworkRouteDefPtr **routes,
++                              size_t *nroutes)
++ {
++-    virDomainNetRouteDefPtr route = NULL;
+++    virNetworkRouteDefPtr route = NULL;
+++    char *familyStr = NULL;
+++    char *zero = NULL;
++ 
++-    if (VIR_ALLOC(route) &lt; 0)
+++    if (VIR_STRDUP(zero, family == AF_INET ? VIR_SOCKET_ADDR_IPV4_ALL
+++                   : VIR_SOCKET_ADDR_IPV6_ALL) &lt; 0)
++         goto error;
++ 
++-    if (virSocketAddrParse(&amp;route-&gt;via, address, family) &lt; 0)
+++    if (VIR_STRDUP(familyStr, family == AF_INET ? "ipv4" : "ipv6") &lt; 0)
+++        goto error;
+++
+++    if (!(route = virNetworkRouteDefCreate(_("Domain interface"), familyStr,
+++                                          zero, NULL, address, 0, false,
+++                                          0, false)))
++         goto error;
++ 
++     if (VIR_APPEND_ELEMENT(*routes, *nroutes, route) &lt; 0)
++         goto error;
++ 
+++    VIR_FREE(familyStr);
+++    VIR_FREE(zero);
+++
++     return 0;
++ 
++  error:
++-    VIR_FREE(route);
+++    VIR_FREE(familyStr);
+++    VIR_FREE(zero);
+++    virNetworkRouteDefFree(route);
++     return -1;
++ }
++ 
++Index: libvirt-1.2.5/tests/lxcconf2xmldata/lxcconf2xml-physnetwork.xml
++===================================================================
++--- libvirt-1.2.5.orig/tests/lxcconf2xmldata/lxcconf2xml-physnetwork.xml
+++++ libvirt-1.2.5/tests/lxcconf2xmldata/lxcconf2xml-physnetwork.xml
++@@ -27,8 +27,8 @@
++       &lt;/source&gt;
++       &lt;ip address='192.168.122.2' family='ipv4' prefix='24'/&gt;
++       &lt;ip address='2003:db8:1:0:214:1234:fe0b:3596' family='ipv6' prefix='64'/&gt;
++-      &lt;route family='ipv4' via='192.168.122.1'/&gt;
++-      &lt;route family='ipv6' via='2003:db8:1:0:214:1234:fe0b:3595'/&gt;
+++      &lt;route family='ipv4' address='0.0.0.0' gateway='192.168.122.1'/&gt;
+++      &lt;route family='ipv6' address='::' gateway='2003:db8:1:0:214:1234:fe0b:3595'/&gt;
++     &lt;/hostdev&gt;
++   &lt;/devices&gt;
++ &lt;/domain&gt;
++Index: libvirt-1.2.5/tests/lxcconf2xmldata/lxcconf2xml-simple.xml
++===================================================================
++--- libvirt-1.2.5.orig/tests/lxcconf2xmldata/lxcconf2xml-simple.xml
+++++ libvirt-1.2.5/tests/lxcconf2xmldata/lxcconf2xml-simple.xml
++@@ -39,8 +39,8 @@
++       &lt;source bridge='virbr0'/&gt;
++       &lt;ip address='192.168.122.2' family='ipv4' prefix='24'/&gt;
++       &lt;ip address='2003:db8:1:0:214:1234:fe0b:3596' family='ipv6' prefix='64'/&gt;
++-      &lt;route family='ipv4' via='192.168.122.1'/&gt;
++-      &lt;route family='ipv6' via='2003:db8:1:0:214:1234:fe0b:3595'/&gt;
+++      &lt;route family='ipv4' address='0.0.0.0' gateway='192.168.122.1'/&gt;
+++      &lt;route family='ipv6' address='::' gateway='2003:db8:1:0:214:1234:fe0b:3595'/&gt;
++       &lt;guest dev='eth0'/&gt;
++       &lt;link state='up'/&gt;
++     &lt;/interface&gt;
++Index: libvirt-1.2.5/tests/lxcxml2xmldata/lxc-hostdev.xml
++===================================================================
++--- libvirt-1.2.5.orig/tests/lxcxml2xmldata/lxc-hostdev.xml
+++++ libvirt-1.2.5/tests/lxcxml2xmldata/lxc-hostdev.xml
++@@ -37,8 +37,8 @@
++       &lt;/source&gt;
++       &lt;ip address='192.168.122.2' family='ipv4'/&gt;
++       &lt;ip address='2003:db8:1:0:214:1234:fe0b:3596' family='ipv6' prefix='24'/&gt;
++-      &lt;route family='ipv4' via='192.168.122.1'/&gt;
++-      &lt;route family='ipv6' via='2003:db8:1:0:214:1234:fe0b:3595'/&gt;
+++      &lt;route family='ipv4' address='0.0.0.0' gateway='192.168.122.1'/&gt;
+++      &lt;route family='ipv6' address='::' gateway='2003:db8:1:0:214:1234:fe0b:3595'/&gt;
++     &lt;/hostdev&gt;
++   &lt;/devices&gt;
++ &lt;/domain&gt;
++Index: libvirt-1.2.5/tests/lxcxml2xmldata/lxc-idmap.xml
++===================================================================
++--- libvirt-1.2.5.orig/tests/lxcxml2xmldata/lxc-idmap.xml
+++++ libvirt-1.2.5/tests/lxcxml2xmldata/lxc-idmap.xml
++@@ -30,8 +30,8 @@
++       &lt;source bridge='bri0'/&gt;
++       &lt;ip address='192.168.122.12' family='ipv4' prefix='24'/&gt;
++       &lt;ip address='192.168.122.13' family='ipv4' prefix='24'/&gt;
++-      &lt;route family='ipv4' via='192.168.122.1'/&gt;
++-      &lt;route family='ipv4' via='192.168.124.1' address='192.168.124.0' prefix='24'/&gt;
+++      &lt;route family='ipv4' address='0.0.0.0' gateway='192.168.122.1'/&gt;
+++      &lt;route family='ipv4' address='192.168.124.0' prefix='24' gateway='192.168.124.1'/&gt;
++       &lt;target dev='veth0'/&gt;
++       &lt;guest dev='eth2'/&gt;
++     &lt;/interface&gt;
+</diff>
+    </file>
+    <file state="added">
+      <new name="a1bdf04b-apparmor-dominfo.patch" md5="21d6ab2fa555819d8760205200339944" size="2831"/>
+      <diff lines="83">@@ -0,0 +1,82 @@
++diff --git a/src/security/security_apparmor.c b/src/security/security_apparmor.c
++index 16b8f87..2cf333d 100644
++--- a/src/security/security_apparmor.c
+++++ b/src/security/security_apparmor.c
++@@ -66,10 +66,11 @@ struct SDPDOP {
++ };
++ 
++ /*
++- * profile_status returns '-1' on error, '0' if loaded
+++ * profile_status returns '-2' on error, '-1' if not loaded, '0' if loaded
++  *
++- * If check_enforcing is set to '1', then returns '-1' on error, '0' if
++- * loaded in complain mode, and '1' if loaded in enforcing mode.
+++ * If check_enforcing is set to '1', then returns '-2' on error, '-1' if
+++ * not loaded, '0' if loaded in complain mode, and '1' if loaded in
+++ * enforcing mode.
++  */
++ static int
++ profile_status(const char *str, const int check_enforcing)
++@@ -77,7 +78,7 @@ profile_status(const char *str, const int check_enforcing)
++     char *content = NULL;
++     char *tmp = NULL;
++     char *etmp = NULL;
++-    int rc = -1;
+++    int rc = -2;
++ 
++     /* create string that is '&lt;str&gt; \0' for accurate matching */
++     if (virAsprintf(&amp;tmp, "%s ", str) == -1)
++@@ -100,6 +101,8 @@ profile_status(const char *str, const int check_enforcing)
++ 
++     if (strstr(content, tmp) != NULL)
++         rc = 0;
+++    else
+++        rc = -1; /* return -1 if not loaded */
++     if (check_enforcing != 0) {
++         if (rc == 0 &amp;&amp; strstr(content, etmp) != NULL)
++             rc = 1;                 /* return '1' if loaded and enforcing */
++@@ -262,6 +265,9 @@ use_apparmor(void)
++         goto cleanup;
++ 
++     rc = profile_status(libvirt_daemon, 1);
+++    /* Error or unconfined should all result in -1*/
+++    if (rc &lt; 0)
+++        rc = -1;
++ 
++  cleanup:
++     VIR_FREE(libvirt_daemon);
++@@ -517,23 +523,29 @@ AppArmorGetSecurityProcessLabel(virSecurityManagerPtr mgr ATTRIBUTE_UNUSED,
++                                 virSecurityLabelPtr sec)
++ {
++     int rc = -1;
+++    int status;
++     char *profile_name = NULL;
++ 
++     if ((profile_name = get_profile_name(def)) == NULL)
++         return rc;
++ 
++-    if (virStrcpy(sec-&gt;label, profile_name,
++-        VIR_SECURITY_LABEL_BUFLEN) == NULL) {
+++    status = profile_status(profile_name, 1);
+++    if (status &lt; -1) {
++         virReportError(VIR_ERR_INTERNAL_ERROR,
++-                       "%s", _("error copying profile name"));
+++                       "%s", _("error getting profile status"));
++         goto cleanup;
+++    } else if (status == -1) {
+++        profile_name[0] = '\0';
++     }
++ 
++-    if ((sec-&gt;enforcing = profile_status(profile_name, 1)) &lt; 0) {
+++    if (virStrcpy(sec-&gt;label, profile_name,
+++        VIR_SECURITY_LABEL_BUFLEN) == NULL) {
++         virReportError(VIR_ERR_INTERNAL_ERROR,
++-                       "%s", _("error calling profile_status()"));
+++                       "%s", _("error copying profile name"));
++         goto cleanup;
++     }
+++
+++    sec-&gt;enforcing = status == 1;
++     rc = 0;
++ 
++  cleanup:
+</diff>
+    </file>
+    <file state="added">
+      <new name="apparmor-fixes.patch" md5="99a04583b73813dedc6f13a808a52ccf" size="866"/>
+      <diff lines="34">@@ -0,0 +1,33 @@
++Index: libvirt-1.2.5/examples/apparmor/libvirt-qemu
++===================================================================
++--- libvirt-1.2.5.orig/examples/apparmor/libvirt-qemu
+++++ libvirt-1.2.5/examples/apparmor/libvirt-qemu
++@@ -58,6 +58,7 @@
++   # access to firmware's etc
++   /usr/share/kvm/** r,
++   /usr/share/qemu/** r,
+++  /usr/share/qemu-kvm/** r,
++   /usr/share/bochs/** r,
++   /usr/share/openbios/** r,
++   /usr/share/openhackware/** r,
++@@ -72,6 +73,7 @@
++   # the various binaries
++   /usr/bin/kvm rmix,
++   /usr/bin/qemu rmix,
+++  /usr/bin/qemu-kvm rmix,
++   /usr/bin/qemu-system-arm rmix,
++   /usr/bin/qemu-system-cris rmix,
++   /usr/bin/qemu-system-i386 rmix,
++@@ -118,6 +120,12 @@
++   /bin/dd rmix,
++   /bin/cat rmix,
++ 
+++  # for restore
+++  /bin/bash rmix,
+++
+++  /run/nscd/passwd r,
+++  /run/nscd/group r,
+++
++   # for usb access
++   /dev/bus/usb/ r,
++   /etc/udev/udev.conf r,
+</diff>
+    </file>
+    <file state="added">
+      <new name="b347c0c2-CVE-2015-0236.patch" md5="bcb8285a57ef7c52eddb3056024f2d4a" size="1445"/>
+      <diff lines="36">@@ -0,0 +1,35 @@
++commit b347c0c2a321ec5c20aae214927949832a288c5a
++Author: Peter Krempa &lt;pkrempa@redhat.com&gt;
++Date:   Tue Jan 20 17:01:01 2015 +0100
++
++    CVE-2015-0236: qemu: Check ACLs when dumping security info from snapshots
++    
++    The ACL check didn't check the VIR_DOMAIN_XML_SECURE flag and the
++    appropriate permission for it. Found via code inspection while fixing
++    permissions for save images.
++
++Index: libvirt-1.2.5/src/qemu/qemu_driver.c
++===================================================================
++--- libvirt-1.2.5.orig/src/qemu/qemu_driver.c
+++++ libvirt-1.2.5/src/qemu/qemu_driver.c
++@@ -13912,7 +13912,7 @@ static char *qemuDomainSnapshotGetXMLDes
++     if (!(vm = qemuDomObjFromSnapshot(snapshot)))
++         goto cleanup;
++ 
++-    if (virDomainSnapshotGetXMLDescEnsureACL(snapshot-&gt;domain-&gt;conn, vm-&gt;def) &lt; 0)
+++    if (virDomainSnapshotGetXMLDescEnsureACL(snapshot-&gt;domain-&gt;conn, vm-&gt;def, flags) &lt; 0)
++         goto cleanup;
++ 
++     if (!(snap = qemuSnapObjFromSnapshot(vm, snapshot)))
++Index: libvirt-1.2.5/src/remote/remote_protocol.x
++===================================================================
++--- libvirt-1.2.5.orig/src/remote/remote_protocol.x
+++++ libvirt-1.2.5/src/remote/remote_protocol.x
++@@ -4337,6 +4337,7 @@ enum remote_procedure {
++      * @generate: both
++      * @priority: high
++      * @acl: domain:read
+++     * @acl: domain:read_secure:VIR_DOMAIN_XML_SECURE
++      */
++     REMOTE_PROC_DOMAIN_SNAPSHOT_GET_XML_DESC = 186,
++ 
+</diff>
+    </file>
+    <file state="added">
+      <new name="b3e4401d-systemd-error-reporting.patch" md5="bb3972798597127b4519e49805378490" size="2211"/>
+      <diff lines="70">@@ -0,0 +1,69 @@
++commit b3e4401dc6203b16f4fb2c123a6f033f1747f448
++Author: Daniel P. Berrange &lt;berrange@redhat.com&gt;
++Date:   Fri Jan 16 11:26:39 2015 +0000
++
++    systemd: don't report an error if the guest is already terminated
++    
++    In many cases where we invoke virSystemdTerminateMachine the
++    process(es) will have already gone away on their own accord.
++    In these cases we log an error message that the machine does
++    not exist. We should catch this particular error and simply
++    ignore it, so we don't pollute the logs.
++
++Index: libvirt-1.2.5/src/util/virsystemd.c
++===================================================================
++--- libvirt-1.2.5.orig/src/util/virsystemd.c
+++++ libvirt-1.2.5/src/util/virsystemd.c
++@@ -274,18 +274,22 @@ int virSystemdTerminateMachine(const cha
++     int ret;
++     DBusConnection *conn;
++     char *machinename = NULL;
+++    DBusError error;
+++
+++    dbus_error_init(&amp;error);
++ 
++     ret = virDBusIsServiceEnabled("org.freedesktop.machine1");
++     if (ret &lt; 0)
++-        return ret;
+++        goto cleanup;
++ 
++     if ((ret = virDBusIsServiceRegistered("org.freedesktop.systemd1")) &lt; 0)
++-        return ret;
+++        goto cleanup;
+++
+++    ret = -1;
++ 
++     if (!(conn = virDBusGetSystemBus()))
++-        return -1;
+++        goto cleanup;
++ 
++-    ret = -1;
++     if (!(machinename = virSystemdMakeMachineName(name, drivername, privileged)))
++         goto cleanup;
++ 
++@@ -302,7 +306,7 @@ int virSystemdTerminateMachine(const cha
++     VIR_DEBUG("Attempting to terminate machine via systemd");
++     if (virDBusCallMethod(conn,
++                           NULL,
++-                          NULL,
+++                          &amp;error,
++                           "org.freedesktop.machine1",
++                           "/org/freedesktop/machine1",
++                           "org.freedesktop.machine1.Manager",
++@@ -311,9 +315,16 @@ int virSystemdTerminateMachine(const cha
++                           machinename) &lt; 0)
++         goto cleanup;
++ 
+++    if (dbus_error_is_set(&amp;error)) {
+++        if (!STREQ_NULLABLE("org.freedesktop.machine1.NoSuchMachine", error.name))
+++            goto cleanup;
+++    }
+++
++     ret = 0;
++ 
++  cleanup:
+++    dbus_error_free(&amp;error);
+++
++     VIR_FREE(machinename);
++     return ret;
++ }
+</diff>
+    </file>
+    <file state="added">
+      <new name="c1deb7f5-ifname_guest_actual_fix.patch" md5="9ef6b7eba18a7e265b0c64d2a613409a" size="1485"/>
+      <diff lines="39">@@ -0,0 +1,38 @@
++From c1deb7f58ced1d1d1888aec2632d78bb2cd99eb1 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Guido=20G=C3=BCnther?= &lt;agx@sigxcpu.org&gt;
++Date: Fri, 19 Dec 2014 10:08:38 +0100
++Subject: [PATCH] lxc: Move setting ifname_guest_actual to
++ virLXCSetupInterfaces
++
++so it applies to interfaces of type 'direct' too.
++
++Reported and patch provided by Bastian Blank at
++
++    https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=769600
++---
++ src/lxc/lxc_process.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++Index: libvirt-1.2.5/src/lxc/lxc_process.c
++===================================================================
++--- libvirt-1.2.5.orig/src/lxc/lxc_process.c
+++++ libvirt-1.2.5/src/lxc/lxc_process.c
++@@ -259,8 +259,6 @@ char *virLXCProcessSetupInterfaceBridged
++ 
++     if (virNetDevSetMAC(containerVeth, &amp;net-&gt;mac) &lt; 0)
++         goto cleanup;
++-    if (VIR_STRDUP(net-&gt;ifname_guest_actual, containerVeth) &lt; 0)
++-        goto cleanup;
++ 
++     if (vport &amp;&amp; vport-&gt;virtPortType == VIR_NETDEV_VPORT_PROFILE_OPENVSWITCH) {
++         if (virNetDevOpenvswitchAddPort(brname, parentVeth, &amp;net-&gt;mac,
++@@ -455,6 +453,9 @@ static int virLXCProcessSetupInterfaces(
++ 
++         (*veths)[(*nveths)-1] = veth;
++ 
+++        if (VIR_STRDUP(def-&gt;nets[i]-&gt;ifname_guest_actual, veth) &lt; 0)
+++            goto cleanup;
+++
++         /* Make sure all net definitions will have a name in the container */
++         if (!def-&gt;nets[i]-&gt;ifname_guest) {
++             if (virAsprintf(&amp;def-&gt;nets[i]-&gt;ifname_guest, "eth%zu", niface) &lt; 0)
+</diff>
+    </file>
+    <file state="added">
+      <new name="c6adccae-domain_conf-check-virSocketAddrFormat-errors.patch" md5="b19618eee346a204898594f81670a4f6" size="2558"/>
+      <diff lines="68">@@ -0,0 +1,67 @@
++From c6adccae3a3767753f278cefdf8e9e66b828da9a Mon Sep 17 00:00:00 2001
++From: John Ferlan &lt;jferlan@redhat.com&gt;
++Date: Fri, 9 Jan 2015 11:02:05 -0500
++Subject: [PATCH 7/7] domain_conf: Check errors from virSocketAddrFormat
++
++Commit id 'aa2cc721' added calls to virSocketAddrFormat but did not
++check for a NULL (error) return which could lead to bad output
++in the XML file.  Need to check for NULL return and cause failure.
++
++Signed-off-by: John Ferlan &lt;jferlan@redhat.com&gt;
++---
++ src/conf/domain_conf.c | 14 ++++++++++----
++ 1 file changed, 10 insertions(+), 4 deletions(-)
++
++Index: libvirt-1.2.5/src/conf/domain_conf.c
++===================================================================
++--- libvirt-1.2.5.orig/src/conf/domain_conf.c
+++++ libvirt-1.2.5/src/conf/domain_conf.c
++@@ -15706,7 +15706,7 @@ virDomainFSDefFormat(virBufferPtr buf,
++     return 0;
++ }
++ 
++-static void
+++static int
++ virDomainNetIpsFormat(virBufferPtr buf, virDomainNetIpDefPtr *ips, size_t nips)
++ {
++     size_t i;
++@@ -15716,6 +15716,9 @@ virDomainNetIpsFormat(virBufferPtr buf,
++         virSocketAddrPtr address = &amp;ips[i]-&gt;address;
++         char *ipStr = virSocketAddrFormat(address);
++         const char *familyStr = NULL;
+++
+++        if (!ipStr)
+++            return -1;
++         if (VIR_SOCKET_ADDR_IS_FAMILY(address, AF_INET6))
++             familyStr = "ipv6";
++         else if (VIR_SOCKET_ADDR_IS_FAMILY(address, AF_INET))
++@@ -15729,6 +15732,7 @@ virDomainNetIpsFormat(virBufferPtr buf,
++             virBufferAsprintf(buf, " prefix='%u'", ips[i]-&gt;prefix);
++         virBufferAddLit(buf, "/&gt;\n");
++     }
+++    return 0;
++ }
++ 
++ static int
++@@ -15873,8 +15877,9 @@ virDomainHostdevDefFormatCaps(virBufferP
++     virBufferAddLit(buf, "&lt;/source&gt;\n");
++ 
++     if (def-&gt;source.caps.type == VIR_DOMAIN_HOSTDEV_CAPS_TYPE_NET) {
++-        virDomainNetIpsFormat(buf, def-&gt;source.caps.u.net.ips,
++-                              def-&gt;source.caps.u.net.nips);
+++        if (virDomainNetIpsFormat(buf, def-&gt;source.caps.u.net.ips,
+++                                 def-&gt;source.caps.u.net.nips) &lt; 0)
+++            return -1;
++         if (virDomainNetRoutesFormat(buf, def-&gt;source.caps.u.net.routes,
++                                      def-&gt;source.caps.u.net.nroutes) &lt; 0)
++             return -1;
++@@ -16128,7 +16133,8 @@ virDomainNetDefFormat(virBufferPtr buf,
++             return -1;
++     }
++ 
++-    virDomainNetIpsFormat(buf, def-&gt;ips, def-&gt;nips);
+++    if (virDomainNetIpsFormat(buf, def-&gt;ips, def-&gt;nips) &lt; 0)
+++        return -1;
++     if (virDomainNetRoutesFormat(buf, def-&gt;routes, def-&gt;nroutes) &lt; 0)
++         return -1;
++ 
+</diff>
+    </file>
+    <file state="added">
+      <new name="ca481a6f-move-network-route-code-to-networkcommon.patch" md5="4ab9a83f272a374dd5bdb04c7db9c92a" size="39594"/>
+      <diff lines="1064">@@ -0,0 +1,1063 @@
++From ca481a6f8f230f41a93a296dc8ee50398bb50ed4 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?C=C3=A9dric=20Bosdonnat?= &lt;cbosdonnat@suse.com&gt;
++Date: Wed, 14 Jan 2015 14:21:10 +0100
++Subject: [PATCH 3/7] Move code related to network routes to
++ networkcommon_conf.[ch]
++
++Moving code for parsing and formatting network routes to
++networkcommon_conf helps reusing those routes for domains. The route
++definition has been hidden to help reducing the number of unnecessary
++checks in the format function.
++
++Squashed in bug fix commit '6f32ebc7'
++---
++ po/POTFILES.in                |   1 +
++ src/Makefile.am               |   3 +-
++ src/conf/network_conf.c       | 299 ++----------------------------
++ src/conf/network_conf.h       |  22 +--
++ src/conf/networkcommon_conf.c | 413 ++++++++++++++++++++++++++++++++++++++++++
++ src/conf/networkcommon_conf.h |  72 ++++++++
++ src/libvirt_private.syms      |  11 ++
++ src/network/bridge_driver.c   |  44 ++---
++ 8 files changed, 526 insertions(+), 339 deletions(-)
++ create mode 100644 src/conf/networkcommon_conf.c
++ create mode 100644 src/conf/networkcommon_conf.h
++
++Index: libvirt-1.2.5/po/POTFILES.in
++===================================================================
++--- libvirt-1.2.5.orig/po/POTFILES.in
+++++ libvirt-1.2.5/po/POTFILES.in
++@@ -22,6 +22,7 @@ src/conf/netdev_bandwidth_conf.c
++ src/conf/netdev_vlan_conf.c
++ src/conf/netdev_vport_profile_conf.c
++ src/conf/network_conf.c
+++src/conf/networkcommon_conf.c
++ src/conf/node_device_conf.c
++ src/conf/nwfilter_conf.c
++ src/conf/nwfilter_params.c
++Index: libvirt-1.2.5/src/Makefile.am
++===================================================================
++--- libvirt-1.2.5.orig/src/Makefile.am
+++++ libvirt-1.2.5/src/Makefile.am
++@@ -265,7 +265,8 @@ NETWORK_EVENT_SOURCES =						\
++ 
++ # Network driver generic impl APIs
++ NETWORK_CONF_SOURCES =						\
++-		conf/network_conf.c conf/network_conf.h
+++		conf/network_conf.c conf/network_conf.h \
+++		conf/networkcommon_conf.c conf/networkcommon_conf.h
++ 
++ # Network filter driver generic impl APIs
++ NWFILTER_PARAM_CONF_SOURCES =					\
++Index: libvirt-1.2.5/src/conf/network_conf.c
++===================================================================
++--- libvirt-1.2.5.orig/src/conf/network_conf.c
+++++ libvirt-1.2.5/src/conf/network_conf.c
++@@ -165,12 +165,6 @@ virNetworkIpDefClear(virNetworkIpDefPtr
++ }
++ 
++ static void
++-virNetworkRouteDefClear(virNetworkRouteDefPtr def)
++-{
++-    VIR_FREE(def-&gt;family);
++-}
++-
++-static void
++ virNetworkDNSTxtDefClear(virNetworkDNSTxtDefPtr def)
++ {
++     VIR_FREE(def-&gt;name);
++@@ -255,9 +249,8 @@ virNetworkDefFree(virNetworkDefPtr def)
++     }
++     VIR_FREE(def-&gt;ips);
++ 
++-    for (i = 0; i &lt; def-&gt;nroutes &amp;&amp; def-&gt;routes; i++) {
++-        virNetworkRouteDefClear(&amp;def-&gt;routes[i]);
++-    }
+++    for (i = 0; i &lt; def-&gt;nroutes &amp;&amp; def-&gt;routes; i++)
+++        virNetworkRouteDefFree(def-&gt;routes[i]);
++     VIR_FREE(def-&gt;routes);
++ 
++     for (i = 0; i &lt; def-&gt;nPortGroups &amp;&amp; def-&gt;portGroups; i++) {
++@@ -1381,233 +1374,6 @@ virNetworkIPDefParseXML(const char *netw
++ }
++ 
++ static int
++-virNetworkRouteDefParseXML(const char *networkName,
++-                           xmlNodePtr node,
++-                           xmlXPathContextPtr ctxt,
++-                           virNetworkRouteDefPtr def)
++-{
++-    /*
++-     * virNetworkRouteDef object is already allocated as part
++-     * of an array.  On failure clear: it out, but don't free it.
++-     */
++-
++-    xmlNodePtr save;
++-    char *address = NULL, *netmask = NULL;
++-    char *gateway = NULL;
++-    unsigned long prefix = 0, metric = 0;
++-    int result = -1;
++-    int prefixRc, metricRc;
++-    virSocketAddr testAddr;
++-
++-    save = ctxt-&gt;node;
++-    ctxt-&gt;node = node;
++-
++-    /* grab raw data from XML */
++-    def-&gt;family = virXPathString("string(./@family)", ctxt);
++-    address = virXPathString("string(./@address)", ctxt);
++-    netmask = virXPathString("string(./@netmask)", ctxt);
++-    gateway = virXPathString("string(./@gateway)", ctxt);
++-    prefixRc = virXPathULong("string(./@prefix)", ctxt, &amp;prefix);
++-    if (prefixRc == -2) {
++-        virReportError(VIR_ERR_XML_ERROR,
++-                       _("Invalid prefix specified "
++-                         "in route definition of network '%s'"),
++-                       networkName);
++-        goto cleanup;
++-    }
++-    def-&gt;has_prefix = (prefixRc == 0);
++-    def-&gt;prefix = prefix;
++-    metricRc = virXPathULong("string(./@metric)", ctxt, &amp;metric);
++-    if (metricRc == -2) {
++-        virReportError(VIR_ERR_XML_ERROR,
++-                       _("Invalid metric specified "
++-                         "in route definition of network '%s'"),
++-                       networkName);
++-        goto cleanup;
++-    }
++-    if (metricRc == 0) {
++-        def-&gt;has_metric = true;
++-        if (metric == 0) {
++-            virReportError(VIR_ERR_XML_ERROR,
++-                           _("Invalid metric value, must be &gt; 0 "
++-                             "in route definition of network '%s'"),
++-                           networkName);
++-            goto cleanup;
++-        }
++-    }
++-    def-&gt;metric = metric;
++-
++-    /* Note: both network and gateway addresses must be specified */
++-
++-    if (!address) {
++-        virReportError(VIR_ERR_XML_ERROR,
++-                       _("Missing required address attribute "
++-                         "in route definition of network '%s'"),
++-                       networkName);
++-        goto cleanup;
++-    }
++-
++-    if (!gateway) {
++-        virReportError(VIR_ERR_XML_ERROR,
++-                       _("Missing required gateway attribute "
++-                         "in route definition of network '%s'"),
++-                       networkName);
++-        goto cleanup;
++-    }
++-
++-    if (virSocketAddrParse(&amp;def-&gt;address, address, AF_UNSPEC) &lt; 0) {
++-        virReportError(VIR_ERR_XML_ERROR,
++-                       _("Bad network address '%s' "
++-                         "in route definition of network '%s'"),
++-                       address, networkName);
++-        goto cleanup;
++-    }
++-
++-    if (virSocketAddrParse(&amp;def-&gt;gateway, gateway, AF_UNSPEC) &lt; 0) {
++-        virReportError(VIR_ERR_XML_ERROR,
++-                       _("Bad gateway address '%s' "
++-                         "in route definition of network '%s'"),
++-                       gateway, networkName);
++-        goto cleanup;
++-    }
++-
++-    /* validate network address, etc. for each family */
++-    if ((def-&gt;family == NULL) || (STREQ(def-&gt;family, "ipv4"))) {
++-        if (!(VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;address, AF_INET) ||
++-              VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;address, AF_UNSPEC))) {
++-            virReportError(VIR_ERR_XML_ERROR,
++-                           def-&gt;family == NULL ?
++-                           _("No family specified for non-IPv4 address '%s' "
++-                             "in route definition of network '%s'") :
++-                           _("IPv4 family specified for non-IPv4 address '%s' "
++-                             "in route definition of network '%s'"),
++-                           address, networkName);
++-            goto cleanup;
++-        }
++-        if (!VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;gateway, AF_INET)) {
++-            virReportError(VIR_ERR_XML_ERROR,
++-                           def-&gt;family == NULL ?
++-                           _("No family specified for non-IPv4 gateway '%s' "
++-                             "in route definition of network '%s'") :
++-                           _("IPv4 family specified for non-IPv4 gateway '%s' "
++-                             "in route definition of network '%s'"),
++-                           address, networkName);
++-            goto cleanup;
++-        }
++-        if (netmask) {
++-            if (virSocketAddrParse(&amp;def-&gt;netmask, netmask, AF_UNSPEC) &lt; 0) {
++-                virReportError(VIR_ERR_XML_ERROR,
++-                               _("Bad netmask address '%s' "
++-                                 "in route definition of network '%s'"),
++-                               netmask, networkName);
++-                goto cleanup;
++-            }
++-            if (!VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;netmask, AF_INET)) {
++-                virReportError(VIR_ERR_XML_ERROR,
++-                               _("Network '%s' has invalid netmask '%s' "
++-                                 "for address '%s' (both must be IPv4)"),
++-                               networkName, netmask, address);
++-                goto cleanup;
++-            }
++-            if (def-&gt;has_prefix) {
++-                /* can't have both netmask and prefix at the same time */
++-                virReportError(VIR_ERR_XML_ERROR,
++-                               _("Route definition '%s' cannot have both "
++-                                 "a prefix and a netmask"),
++-                               networkName);
++-                goto cleanup;
++-            }
++-        }
++-        if (def-&gt;prefix &gt; 32) {
++-            virReportError(VIR_ERR_XML_ERROR,
++-                           _("Invalid prefix %u specified "
++-                             "in route definition of network '%s', "
++-                             "must be 0 - 32"),
++-                           def-&gt;prefix, networkName);
++-            goto cleanup;
++-        }
++-    } else if (STREQ(def-&gt;family, "ipv6")) {
++-        if (!VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;address, AF_INET6)) {
++-            virReportError(VIR_ERR_XML_ERROR,
++-                           _("ipv6 family specified for non-IPv6 address '%s' "
++-                             "in route definition of network '%s'"),
++-                           address, networkName);
++-            goto cleanup;
++-        }
++-        if (netmask) {
++-            virReportError(VIR_ERR_XML_ERROR,
++-                           _("Specifying netmask invalid for IPv6 address '%s' "
++-                             "in route definition of network '%s'"),
++-                           address, networkName);
++-            goto cleanup;
++-        }
++-        if (!VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;gateway, AF_INET6)) {
++-            virReportError(VIR_ERR_XML_ERROR,
++-                           _("ipv6 specified for non-IPv6 gateway address '%s' "
++-                             "in route definition of network '%s'"),
++-                           gateway, networkName);
++-            goto cleanup;
++-        }
++-        if (def-&gt;prefix &gt; 128) {
++-            virReportError(VIR_ERR_XML_ERROR,
++-                           _("Invalid prefix %u specified "
++-                             "in route definition of network '%s', "
++-                             "must be 0 - 128"),
++-                           def-&gt;prefix, networkName);
++-            goto cleanup;
++-        }
++-    } else {
++-        virReportError(VIR_ERR_XML_ERROR,
++-                       _("Unrecognized family '%s' "
++-                         "in route definition of network'%s'"),
++-                       def-&gt;family, networkName);
++-        goto cleanup;
++-    }
++-
++-    /* make sure the address is a network address */
++-    if (netmask) {
++-        if (virSocketAddrMask(&amp;def-&gt;address, &amp;def-&gt;netmask, &amp;testAddr) &lt; 0) {
++-            virReportError(VIR_ERR_INTERNAL_ERROR,
++-                           _("error converting address '%s' with netmask '%s' "
++-                             "to network-address "
++-                             "in route definition of network '%s'"),
++-                           address, netmask, networkName);
++-            goto cleanup;
++-        }
++-    } else {
++-        if (virSocketAddrMaskByPrefix(&amp;def-&gt;address,
++-                                      def-&gt;prefix, &amp;testAddr) &lt; 0) {
++-            virReportError(VIR_ERR_INTERNAL_ERROR,
++-                           _("error converting address '%s' with prefix %u "
++-                             "to network-address "
++-                             "in route definition of network '%s'"),
++-                           address, def-&gt;prefix, networkName);
++-            goto cleanup;
++-        }
++-    }
++-    if (!virSocketAddrEqual(&amp;def-&gt;address, &amp;testAddr)) {
++-        virReportError(VIR_ERR_XML_ERROR,
++-                       _("address '%s' in route definition of network '%s' "
++-                         "is not a network address"),
++-                       address, networkName);
++-        goto cleanup;
++-    }
++-
++-    result = 0;
++-
++- cleanup:
++-    if (result &lt; 0) {
++-        virNetworkRouteDefClear(def);
++-    }
++-    VIR_FREE(address);
++-    VIR_FREE(netmask);
++-    VIR_FREE(gateway);
++-
++-    ctxt-&gt;node = save;
++-    return result;
++-}
++-
++-static int
++ virNetworkPortGroupParseXML(virPortGroupDefPtr def,
++                             xmlNodePtr node,
++                             xmlXPathContextPtr ctxt)
++@@ -2175,10 +1941,13 @@ virNetworkDefParseXML(xmlXPathContextPtr
++             goto error;
++         /* parse each definition */
++         for (i = 0; i &lt; nRoutes; i++) {
++-            int ret = virNetworkRouteDefParseXML(def-&gt;name, routeNodes[i],
++-                                              ctxt, &amp;def-&gt;routes[i]);
++-            if (ret &lt; 0)
+++            virNetworkRouteDefPtr route = NULL;
+++
+++            if (!(route = virNetworkRouteDefParseXML(def-&gt;name,
+++                                                     routeNodes[i],
+++                                                     ctxt)))
++                 goto error;
+++            def-&gt;routes[i] = route;
++             def-&gt;nroutes++;
++         }
++ 
++@@ -2194,17 +1963,18 @@ virNetworkDefParseXML(xmlXPathContextPtr
++             size_t j;
++             virSocketAddr testAddr, testGw;
++             bool addrMatch;
++-            virNetworkRouteDefPtr gwdef = &amp;def-&gt;routes[i];
+++            virNetworkRouteDefPtr gwdef = def-&gt;routes[i];
+++            virSocketAddrPtr gateway = virNetworkRouteDefGetGateway(gwdef);
++             addrMatch = false;
++             for (j = 0; j &lt; nIps; j++) {
++                 virNetworkIpDefPtr def2 = &amp;def-&gt;ips[j];
++-                if (VIR_SOCKET_ADDR_FAMILY(&amp;gwdef-&gt;gateway)
+++                if (VIR_SOCKET_ADDR_FAMILY(gateway)
++                     != VIR_SOCKET_ADDR_FAMILY(&amp;def2-&gt;address)) {
++                     continue;
++                 }
++                 int prefix = virNetworkIpDefPrefix(def2);
++                 virSocketAddrMaskByPrefix(&amp;def2-&gt;address, prefix, &amp;testAddr);
++-                virSocketAddrMaskByPrefix(&amp;gwdef-&gt;gateway, prefix, &amp;testGw);
+++                virSocketAddrMaskByPrefix(gateway, prefix, &amp;testGw);
++                 if (VIR_SOCKET_ADDR_VALID(&amp;testAddr) &amp;&amp;
++                     VIR_SOCKET_ADDR_VALID(&amp;testGw) &amp;&amp;
++                     virSocketAddrEqual(&amp;testAddr, &amp;testGw)) {
++@@ -2213,7 +1983,7 @@ virNetworkDefParseXML(xmlXPathContextPtr
++                 }
++             }
++             if (!addrMatch) {
++-                char *gw = virSocketAddrFormat(&amp;gwdef-&gt;gateway);
+++                char *gw = virSocketAddrFormat(gateway);
++                 virReportError(VIR_ERR_CONFIG_UNSUPPORTED,
++                                _("unreachable static route gateway '%s' specified for network '%s'"),
++                                gw, def-&gt;name);
++@@ -2541,53 +2311,6 @@ virNetworkIpDefFormat(virBufferPtr buf,
++ }
++ 
++ static int
++-virNetworkRouteDefFormat(virBufferPtr buf,
++-                         const virNetworkRouteDef *def)
++-{
++-    int result = -1;
++-
++-    virBufferAddLit(buf, "&lt;route");
++-
++-    if (def-&gt;family) {
++-        virBufferAsprintf(buf, " family='%s'", def-&gt;family);
++-    }
++-    if (VIR_SOCKET_ADDR_VALID(&amp;def-&gt;address)) {
++-        char *addr = virSocketAddrFormat(&amp;def-&gt;address);
++-
++-        if (!addr)
++-            goto error;
++-        virBufferAsprintf(buf, " address='%s'", addr);
++-        VIR_FREE(addr);
++-    }
++-    if (VIR_SOCKET_ADDR_VALID(&amp;def-&gt;netmask)) {
++-        char *addr = virSocketAddrFormat(&amp;def-&gt;netmask);
++-
++-        if (!addr)
++-            goto error;
++-        virBufferAsprintf(buf, " netmask='%s'", addr);
++-        VIR_FREE(addr);
++-    }
++-    if (def-&gt;has_prefix) {
++-        virBufferAsprintf(buf, " prefix='%u'", def-&gt;prefix);
++-    }
++-    if (VIR_SOCKET_ADDR_VALID(&amp;def-&gt;gateway)) {
++-        char *addr = virSocketAddrFormat(&amp;def-&gt;gateway);
++-        if (!addr)
++-            goto error;
++-        virBufferAsprintf(buf, " gateway='%s'", addr);
++-        VIR_FREE(addr);
++-    }
++-    if (def-&gt;has_metric &amp;&amp; def-&gt;metric &gt; 0) {
++-        virBufferAsprintf(buf, " metric='%u'", def-&gt;metric);
++-    }
++-    virBufferAddLit(buf, "/&gt;\n");
++-
++-    result = 0;
++- error:
++-    return result;
++-}
++-
++-static int
++ virPortGroupDefFormat(virBufferPtr buf,
++                       const virPortGroupDef *def)
++ {
++@@ -2801,7 +2524,7 @@ virNetworkDefFormatBuf(virBufferPtr buf,
++     }
++ 
++     for (i = 0; i &lt; def-&gt;nroutes; i++) {
++-        if (virNetworkRouteDefFormat(buf, &amp;def-&gt;routes[i]) &lt; 0)
+++        if (virNetworkRouteDefFormat(buf, def-&gt;routes[i]) &lt; 0)
++             goto error;
++     }
++ 
++Index: libvirt-1.2.5/src/conf/network_conf.h
++===================================================================
++--- libvirt-1.2.5.orig/src/conf/network_conf.h
+++++ libvirt-1.2.5/src/conf/network_conf.h
++@@ -39,6 +39,7 @@
++ # include "virmacaddr.h"
++ # include "device_conf.h"
++ # include "virbitmap.h"
+++# include "networkcommon_conf.h"
++ 
++ typedef enum {
++     VIR_NETWORK_FORWARD_NONE   = 0,
++@@ -165,25 +166,6 @@ struct _virNetworkIpDef {
++     virSocketAddr bootserver;
++    };
++ 
++-typedef struct _virNetworkRouteDef virNetworkRouteDef;
++-typedef virNetworkRouteDef *virNetworkRouteDefPtr;
++-struct _virNetworkRouteDef {
++-    char *family;               /* ipv4 or ipv6 - default is ipv4 */
++-    virSocketAddr address;      /* Routed Network IP address */
++-
++-    /* One or the other of the following two will be used for a given
++-     * Network address, but never both. The parser guarantees this.
++-     * The virSocketAddrGetIpPrefix() can be used to get a
++-     * valid prefix.
++-     */
++-    virSocketAddr netmask;      /* ipv4 - either netmask or prefix specified */
++-    unsigned int prefix;        /* ipv6 - only prefix allowed */
++-    bool has_prefix;            /* prefix= was specified */
++-    unsigned int metric;        /* value for metric (defaults to 1) */
++-    bool has_metric;            /* metric= was specified */
++-    virSocketAddr gateway;      /* gateway IP address for ip-route */
++-   };
++-
++ typedef struct _virNetworkForwardIfDef virNetworkForwardIfDef;
++ typedef virNetworkForwardIfDef *virNetworkForwardIfDefPtr;
++ struct _virNetworkForwardIfDef {
++@@ -260,7 +242,7 @@ struct _virNetworkDef {
++     virNetworkIpDefPtr ips; /* ptr to array of IP addresses on this network */
++ 
++     size_t nroutes;
++-    virNetworkRouteDefPtr routes; /* ptr to array of static routes on this interface */
+++    virNetworkRouteDefPtr *routes; /* ptr to array of static routes on this interface */
++ 
++     virNetworkDNSDef dns;   /* dns related configuration */
++     virNetDevVPortProfilePtr virtPortProfile;
++Index: libvirt-1.2.5/src/conf/networkcommon_conf.c
++===================================================================
++--- /dev/null
+++++ libvirt-1.2.5/src/conf/networkcommon_conf.c
++@@ -0,0 +1,415 @@
+++/*
+++ * networkcommon_conf.c: network XML handling
+++ *
+++ * Copyright (C) 2006-2014 Red Hat, Inc.
+++ * Copyright (C) 2006-2008 Daniel P. Berrange
+++ *
+++ * This library is free software; you can redistribute it and/or
+++ * modify it under the terms of the GNU Lesser General Public
+++ * License as published by the Free Software Foundation; either
+++ * version 2.1 of the License, or (at your option) any later version.
+++ *
+++ * This library is distributed in the hope that it will be useful,
+++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++ * Lesser General Public License for more details.
+++ *
+++ * You should have received a copy of the GNU Lesser General Public
+++ * License along with this library.  If not, see
+++ * &lt;http://www.gnu.org/licenses/&gt;.
+++ *
+++ * Author: Daniel P. Berrange &lt;berrange@redhat.com&gt;
+++ */
+++
+++#include &lt;config.h&gt;
+++
+++#include "virerror.h"
+++#include "datatypes.h"
+++#include "networkcommon_conf.h"
+++#include "viralloc.h"
+++#include "virstring.h"
+++#include "virxml.h"
+++
+++#define VIR_FROM_THIS VIR_FROM_NETWORK
+++
+++struct _virNetworkRouteDef {
+++    char *family;               /* ipv4 or ipv6 - default is ipv4 */
+++    virSocketAddr address;      /* Routed Network IP address */
+++
+++    /* One or the other of the following two will be used for a given
+++     * Network address, but never both. The parser guarantees this.
+++     * The virSocketAddrGetIpPrefix() can be used to get a
+++     * valid prefix.
+++     */
+++    virSocketAddr netmask;      /* ipv4 - either netmask or prefix specified */
+++    unsigned int prefix;        /* ipv6 - only prefix allowed */
+++    bool has_prefix;            /* prefix= was specified */
+++    unsigned int metric;        /* value for metric (defaults to 1) */
+++    bool has_metric;            /* metric= was specified */
+++    virSocketAddr gateway;      /* gateway IP address for ip-route */
+++};
+++
+++void
+++virNetworkRouteDefFree(virNetworkRouteDefPtr def)
+++{
+++    if (!def)
+++        return;
+++    VIR_FREE(def-&gt;family);
+++    VIR_FREE(def);
+++}
+++
+++virNetworkRouteDefPtr
+++virNetworkRouteDefCreate(const char *errorDetail,
+++                         char *family,
+++                         char *address,
+++                         char *netmask,
+++                         char *gateway,
+++                         unsigned int prefix,
+++                         bool hasPrefix,
+++                         unsigned int metric,
+++                         bool hasMetric)
+++{
+++    virNetworkRouteDefPtr def = NULL;
+++    virSocketAddr testAddr;
+++
+++    if (VIR_ALLOC(def) &lt; 0)
+++        return NULL;
+++
+++    if (VIR_STRDUP(def-&gt;family, family) &lt; 0)
+++        goto error;
+++
+++    def-&gt;prefix = prefix;
+++    def-&gt;has_prefix = hasPrefix;
+++    def-&gt;metric = metric;
+++    def-&gt;has_metric = hasMetric;
+++
+++    /* Note: both network and gateway addresses must be specified */
+++
+++    if (!address) {
+++        virReportError(VIR_ERR_XML_ERROR,
+++                       _("%s: Missing required address attribute "
+++                         "in route definition"),
+++                       errorDetail);
+++        goto error;
+++    }
+++
+++    if (!gateway) {
+++        virReportError(VIR_ERR_XML_ERROR,
+++                       _("%s: Missing required gateway attribute "
+++                         "in route definition"),
+++                       errorDetail);
+++        goto error;
+++    }
+++
+++    if (virSocketAddrParse(&amp;def-&gt;address, address, AF_UNSPEC) &lt; 0) {
+++        virReportError(VIR_ERR_XML_ERROR,
+++                       _("%s: Bad network address '%s' "
+++                         "in route definition"),
+++                       errorDetail, address);
+++        goto error;
+++    }
+++
+++    if (virSocketAddrParse(&amp;def-&gt;gateway, gateway, AF_UNSPEC) &lt; 0) {
+++        virReportError(VIR_ERR_XML_ERROR,
+++                       _("%s: Bad gateway address '%s' "
+++                         "in route definition"),
+++                       errorDetail, gateway);
+++        goto error;
+++    }
+++
+++    /* validate network address, etc. for each family */
+++    if ((def-&gt;family == NULL) || (STREQ(def-&gt;family, "ipv4"))) {
+++        if (!(VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;address, AF_INET) ||
+++              VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;address, AF_UNSPEC))) {
+++            virReportError(VIR_ERR_XML_ERROR,
+++                           def-&gt;family == NULL ?
+++                           _("%s: No family specified for non-IPv4 address '%s' "
+++                             "in route definition") :
+++                           _("%s: IPv4 family specified for non-IPv4 address '%s' "
+++                             "in route definition"),
+++                           errorDetail, address);
+++            goto error;
+++        }
+++        if (!VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;gateway, AF_INET)) {
+++            virReportError(VIR_ERR_XML_ERROR,
+++                           def-&gt;family == NULL ?
+++                           _("%s: No family specified for non-IPv4 gateway '%s' "
+++                             "in route definition") :
+++                           _("%s: IPv4 family specified for non-IPv4 gateway '%s' "
+++                             "in route definition"),
+++                           errorDetail, address);
+++            goto error;
+++        }
+++        if (netmask) {
+++            if (virSocketAddrParse(&amp;def-&gt;netmask, netmask, AF_UNSPEC) &lt; 0) {
+++                virReportError(VIR_ERR_XML_ERROR,
+++                               _("%s: Bad netmask address '%s' "
+++                                 "in route definition"),
+++                               errorDetail, netmask);
+++                goto error;
+++            }
+++            if (!VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;netmask, AF_INET)) {
+++                virReportError(VIR_ERR_XML_ERROR,
+++                               _("%s: Invalid netmask '%s' "
+++                                 "for address '%s' (both must be IPv4)"),
+++                               errorDetail, netmask, address);
+++                goto error;
+++            }
+++            if (def-&gt;has_prefix) {
+++                /* can't have both netmask and prefix at the same time */
+++                virReportError(VIR_ERR_XML_ERROR,
+++                               _("%s: Route definition cannot have both "
+++                                 "a prefix and a netmask"),
+++                               errorDetail);
+++                goto error;
+++            }
+++        }
+++        if (def-&gt;prefix &gt; 32) {
+++            virReportError(VIR_ERR_XML_ERROR,
+++                           _("%s: Invalid prefix %u specified "
+++                             "in route definition, "
+++                             "must be 0 - 32"),
+++                           errorDetail, def-&gt;prefix);
+++            goto error;
+++        }
+++    } else if (STREQ(def-&gt;family, "ipv6")) {
+++        if (!VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;address, AF_INET6)) {
+++            virReportError(VIR_ERR_XML_ERROR,
+++                           _("%s: ipv6 family specified for non-IPv6 address '%s' "
+++                             "in route definition"),
+++                           errorDetail, address);
+++            goto error;
+++        }
+++        if (netmask) {
+++            virReportError(VIR_ERR_XML_ERROR,
+++                           _("%s: Specifying netmask invalid for IPv6 address '%s' "
+++                             "in route definition"),
+++                           errorDetail, address);
+++            goto error;
+++        }
+++        if (!VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;gateway, AF_INET6)) {
+++            virReportError(VIR_ERR_XML_ERROR,
+++                           _("%s: ipv6 specified for non-IPv6 gateway address '%s' "
+++                             "in route definition"),
+++                           errorDetail, gateway);
+++            goto error;
+++        }
+++        if (def-&gt;prefix &gt; 128) {
+++            virReportError(VIR_ERR_XML_ERROR,
+++                           _("%s: Invalid prefix %u specified "
+++                             "in route definition, "
+++                             "must be 0 - 128"),
+++                           errorDetail, def-&gt;prefix);
+++            goto error;
+++        }
+++    } else {
+++        virReportError(VIR_ERR_XML_ERROR,
+++                       _("%s: Unrecognized family '%s' "
+++                         "in route definition"),
+++                       errorDetail, def-&gt;family);
+++        goto error;
+++    }
+++
+++    /* make sure the address is a network address */
+++    if (netmask) {
+++        if (virSocketAddrMask(&amp;def-&gt;address, &amp;def-&gt;netmask, &amp;testAddr) &lt; 0) {
+++            virReportError(VIR_ERR_INTERNAL_ERROR,
+++                           _("%s: Error converting address '%s' with netmask '%s' "
+++                             "to network-address "
+++                             "in route definition"),
+++                           errorDetail, address, netmask);
+++            goto error;
+++        }
+++    } else {
+++        if (virSocketAddrMaskByPrefix(&amp;def-&gt;address,
+++                                      def-&gt;prefix, &amp;testAddr) &lt; 0) {
+++            virReportError(VIR_ERR_INTERNAL_ERROR,
+++                           _("%s: Error converting address '%s' with prefix %u "
+++                             "to network-address "
+++                             "in route definition"),
+++                           errorDetail, address, def-&gt;prefix);
+++            goto error;
+++        }
+++    }
+++    if (!virSocketAddrEqual(&amp;def-&gt;address, &amp;testAddr)) {
+++        virReportError(VIR_ERR_XML_ERROR,
+++                       _("%s: Address '%s' in route definition "
+++                         "is not a network address"),
+++                       errorDetail, address);
+++        goto error;
+++    }
+++
+++    return def;
+++
+++ error:
+++    virNetworkRouteDefFree(def);
+++    return NULL;
+++}
+++
+++virNetworkRouteDefPtr
+++virNetworkRouteDefParseXML(const char *errorDetail,
+++                           xmlNodePtr node,
+++                           xmlXPathContextPtr ctxt)
+++{
+++    /*
+++     * virNetworkRouteDef object is already allocated as part
+++     * of an array.  On failure clear: it out, but don't free it.
+++     */
+++
+++    virNetworkRouteDefPtr def = NULL;
+++    xmlNodePtr save;
+++    char *family = NULL;
+++    char *address = NULL, *netmask = NULL;
+++    char *gateway = NULL;
+++    unsigned long prefix = 0, metric = 0;
+++    int prefixRc, metricRc;
+++    bool hasPrefix = false;
+++    bool hasMetric = false;
+++
+++    save = ctxt-&gt;node;
+++    ctxt-&gt;node = node;
+++
+++    /* grab raw data from XML */
+++    family = virXPathString("string(./@family)", ctxt);
+++    address = virXPathString("string(./@address)", ctxt);
+++    netmask = virXPathString("string(./@netmask)", ctxt);
+++    gateway = virXPathString("string(./@gateway)", ctxt);
+++    prefixRc = virXPathULong("string(./@prefix)", ctxt, &amp;prefix);
+++    if (prefixRc == -2) {
+++        virReportError(VIR_ERR_XML_ERROR,
+++                       _("%s: Invalid prefix specified "
+++                         "in route definition"),
+++                       errorDetail);
+++        goto cleanup;
+++    }
+++    hasPrefix = (prefixRc == 0);
+++    metricRc = virXPathULong("string(./@metric)", ctxt, &amp;metric);
+++    if (metricRc == -2) {
+++        virReportError(VIR_ERR_XML_ERROR,
+++                       _("%s: Invalid metric specified "
+++                         "in route definition"),
+++                       errorDetail);
+++        goto cleanup;
+++    }
+++    if (metricRc == 0) {
+++        hasMetric = true;
+++        if (metric == 0) {
+++            virReportError(VIR_ERR_XML_ERROR,
+++                           _("%s: Invalid metric value, must be &gt; 0 "
+++                             "in route definition"),
+++                           errorDetail);
+++            goto cleanup;
+++        }
+++    }
+++
+++    def = virNetworkRouteDefCreate(errorDetail, family, address, netmask,
+++                                   gateway, prefix, hasPrefix, metric,
+++                                   hasMetric);
+++
+++ cleanup:
+++    ctxt-&gt;node = save;
+++    VIR_FREE(family);
+++    VIR_FREE(address);
+++    VIR_FREE(netmask);
+++    VIR_FREE(gateway);
+++    return def;
+++}
+++
+++int
+++virNetworkRouteDefFormat(virBufferPtr buf,
+++                         const virNetworkRouteDef *def)
+++{
+++    int result = -1;
+++    char *addr = NULL;
+++
+++    virBufferAddLit(buf, "&lt;route");
+++
+++    if (def-&gt;family)
+++        virBufferAsprintf(buf, " family='%s'", def-&gt;family);
+++
+++    if (!(addr = virSocketAddrFormat(&amp;def-&gt;address)))
+++        goto cleanup;
+++    virBufferAsprintf(buf, " address='%s'", addr);
+++    VIR_FREE(addr);
+++
+++    if (VIR_SOCKET_ADDR_VALID(&amp;def-&gt;netmask)) {
+++        if (!(addr = virSocketAddrFormat(&amp;def-&gt;netmask)))
+++            goto cleanup;
+++        virBufferAsprintf(buf, " netmask='%s'", addr);
+++        VIR_FREE(addr);
+++    }
+++    if (def-&gt;has_prefix)
+++        virBufferAsprintf(buf, " prefix='%u'", def-&gt;prefix);
+++
+++    if (!(addr = virSocketAddrFormat(&amp;def-&gt;gateway)))
+++        goto cleanup;
+++    virBufferAsprintf(buf, " gateway='%s'", addr);
+++    VIR_FREE(addr);
+++
+++    if (def-&gt;has_metric &amp;&amp; def-&gt;metric &gt; 0)
+++        virBufferAsprintf(buf, " metric='%u'", def-&gt;metric);
+++    virBufferAddLit(buf, "/&gt;\n");
+++
+++    result = 0;
+++ cleanup:
+++    return result;
+++}
+++
+++virSocketAddrPtr
+++virNetworkRouteDefGetAddress(virNetworkRouteDefPtr def)
+++{
+++    if (def)
+++        return &amp;def-&gt;address;
+++
+++    return NULL;
+++}
+++
+++int
+++virNetworkRouteDefGetPrefix(virNetworkRouteDefPtr def)
+++{
+++    int prefix = 0;
+++    virSocketAddr zero;
+++
+++    if (!def)
+++        return -1;
+++
+++    /* this creates an all-0 address of the appropriate family */
+++    ignore_value(virSocketAddrParse(&amp;zero,
+++                                    (VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;address, AF_INET)
+++                                     ? VIR_SOCKET_ADDR_IPV4_ALL
+++                                     : VIR_SOCKET_ADDR_IPV6_ALL),
+++                                    VIR_SOCKET_ADDR_FAMILY(&amp;def-&gt;address)));
+++
+++    if (virSocketAddrEqual(&amp;def-&gt;address, &amp;zero)) {
+++        if (def-&gt;has_prefix &amp;&amp; def-&gt;prefix == 0)
+++            prefix = 0;
+++        else if ((VIR_SOCKET_ADDR_IS_FAMILY(&amp;def-&gt;netmask, AF_INET) &amp;&amp;
+++                  virSocketAddrEqual(&amp;def-&gt;netmask, &amp;zero)))
+++            prefix = 0;
+++        else
+++            prefix = virSocketAddrGetIpPrefix(&amp;def-&gt;address, &amp;def-&gt;netmask,
+++                                              def-&gt;prefix);
+++    } else {
+++        prefix = virSocketAddrGetIpPrefix(&amp;def-&gt;address, &amp;def-&gt;netmask,
+++                                          def-&gt;prefix);
+++    }
+++
+++    return prefix;
+++}
+++
+++unsigned int
+++virNetworkRouteDefGetMetric(virNetworkRouteDefPtr def)
+++{
+++    if (def &amp;&amp; def-&gt;has_metric &amp;&amp; def-&gt;metric &gt; 0)
+++        return def-&gt;metric;
+++
+++    return 1;
+++}
+++
+++virSocketAddrPtr
+++virNetworkRouteDefGetGateway(virNetworkRouteDefPtr def)
+++{
+++    if (def)
+++        return &amp;def-&gt;gateway;
+++    return NULL;
+++}
++Index: libvirt-1.2.5/src/conf/networkcommon_conf.h
++===================================================================
++--- /dev/null
+++++ libvirt-1.2.5/src/conf/networkcommon_conf.h
++@@ -0,0 +1,72 @@
+++/*
+++ * networkcommon_conf.h: network XML handling
+++ *
+++ * Copyright (C) 2006-2014 Red Hat, Inc.
+++ * Copyright (C) 2006-2008 Daniel P. Berrange
+++ * Copyright (c) 2015 SUSE LINUX Products GmbH, Nuernberg, Germany.
+++ *
+++ * This library is free software; you can redistribute it and/or
+++ * modify it under the terms of the GNU Lesser General Public
+++ * License as published by the Free Software Foundation; either
+++ * version 2.1 of the License, or (at your option) any later version.
+++ *
+++ * This library is distributed in the hope that it will be useful,
+++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++ * Lesser General Public License for more details.
+++ *
+++ * You should have received a copy of the GNU Lesser General Public
+++ * License along with this library.  If not, see
+++ * &lt;http://www.gnu.org/licenses/&gt;.
+++ *
+++ * Author: Daniel P. Berrange &lt;berrange@redhat.com&gt;
+++ */
+++
+++#ifndef __NETWORKCOMMON_CONF_H__
+++# define __NETWORKCOMMON_CONF_H__
+++
+++# include &lt;libxml/tree.h&gt;
+++# include &lt;libxml/xpath.h&gt;
+++
+++# include "internal.h"
+++# include "virbuffer.h"
+++# include "virsocketaddr.h"
+++
+++typedef struct _virNetworkRouteDef virNetworkRouteDef;
+++typedef virNetworkRouteDef *virNetworkRouteDefPtr;
+++
+++void
+++virNetworkRouteDefFree(virNetworkRouteDefPtr def);
+++
+++virNetworkRouteDefPtr
+++virNetworkRouteDefCreate(const char *networkName,
+++                         char *family,
+++                         char *address,
+++                         char *netmask,
+++                         char *gateway,
+++                         unsigned int prefix,
+++                         bool hasPrefix,
+++                         unsigned int metric,
+++                         bool hasMetric);
+++
+++virNetworkRouteDefPtr
+++virNetworkRouteDefParseXML(const char *networkName,
+++                           xmlNodePtr node,
+++                           xmlXPathContextPtr ctxt);
+++int
+++virNetworkRouteDefFormat(virBufferPtr buf,
+++                         const virNetworkRouteDef *def);
+++
+++virSocketAddrPtr
+++virNetworkRouteDefGetAddress(virNetworkRouteDefPtr def);
+++
+++int
+++virNetworkRouteDefGetPrefix(virNetworkRouteDefPtr def);
+++
+++unsigned int
+++virNetworkRouteDefGetMetric(virNetworkRouteDefPtr def);
+++
+++virSocketAddrPtr
+++virNetworkRouteDefGetGateway(virNetworkRouteDefPtr def);
+++
+++#endif /* __NETWORKCOMMON_CONF_H__ */
++Index: libvirt-1.2.5/src/libvirt_private.syms
++===================================================================
++--- libvirt-1.2.5.orig/src/libvirt_private.syms
+++++ libvirt-1.2.5/src/libvirt_private.syms
++@@ -566,6 +566,17 @@ virNetworkEventLifecycleNew;
++ virNetworkEventStateRegisterID;
++ 
++ 
+++# conf/networkcommon_conf.h
+++virNetworkRouteDefCreate;
+++virNetworkRouteDefFormat;
+++virNetworkRouteDefFree;
+++virNetworkRouteDefGetAddress;
+++virNetworkRouteDefGetGateway;
+++virNetworkRouteDefGetMetric;
+++virNetworkRouteDefGetPrefix;
+++virNetworkRouteDefParseXML;
+++
+++
++ # conf/node_device_conf.h
++ virNodeDevCapsDefFree;
++ virNodeDevCapTypeFromString;
++Index: libvirt-1.2.5/src/network/bridge_driver.c
++===================================================================
++--- libvirt-1.2.5.orig/src/network/bridge_driver.c
+++++ libvirt-1.2.5/src/network/bridge_driver.c
++@@ -1886,29 +1886,10 @@ static int
++ networkAddRouteToBridge(virNetworkObjPtr network,
++                         virNetworkRouteDefPtr routedef)
++ {
++-    int prefix = 0;
++-    unsigned int metric;
++-    virSocketAddrPtr addr = &amp;routedef-&gt;address;
++-    virSocketAddrPtr mask = &amp;routedef-&gt;netmask;
++-    virSocketAddr zero;
++-
++-    /* this creates an all-0 address of the appropriate family */
++-    ignore_value(virSocketAddrParse(&amp;zero,
++-                                    (VIR_SOCKET_ADDR_IS_FAMILY(addr, AF_INET)
++-                                     ? "0.0.0.0" : "::"),
++-                                    VIR_SOCKET_ADDR_FAMILY(addr)));
++-
++-    if (virSocketAddrEqual(addr, &amp;zero)) {
++-        if (routedef-&gt;has_prefix &amp;&amp; routedef-&gt;prefix == 0)
++-            prefix = 0;
++-        else if ((VIR_SOCKET_ADDR_IS_FAMILY(mask, AF_INET) &amp;&amp;
++-                virSocketAddrEqual(mask, &amp;zero)))
++-            prefix = 0;
++-        else
++-            prefix = virSocketAddrGetIpPrefix(addr, mask, routedef-&gt;prefix);
++-    } else {
++-        prefix = virSocketAddrGetIpPrefix(addr, mask, routedef-&gt;prefix);
++-    }
+++    int prefix = virNetworkRouteDefGetPrefix(routedef);
+++    unsigned int metric = virNetworkRouteDefGetMetric(routedef);
+++    virSocketAddrPtr addr = virNetworkRouteDefGetAddress(routedef);
+++    virSocketAddrPtr gateway = virNetworkRouteDefGetGateway(routedef);
++ 
++     if (prefix &lt; 0) {
++         virReportError(VIR_ERR_INTERNAL_ERROR,
++@@ -1918,13 +1899,8 @@ networkAddRouteToBridge(virNetworkObjPtr
++         return -1;
++     }
++ 
++-    if (routedef-&gt;has_metric &amp;&amp; routedef-&gt;metric &gt; 0)
++-        metric = routedef-&gt;metric;
++-    else
++-        metric = 1;
++-
++-    if (virNetDevAddRoute(network-&gt;def-&gt;bridge, &amp;routedef-&gt;address,
++-                          prefix, &amp;routedef-&gt;gateway, metric) &lt; 0) {
+++    if (virNetDevAddRoute(network-&gt;def-&gt;bridge, addr,
+++                          prefix, gateway, metric) &lt; 0) {
++         return -1;
++     }
++     return 0;
++@@ -2014,11 +1990,15 @@ networkStartNetworkVirtual(virNetworkDri
++         goto err2;
++ 
++     for (i = 0; i &lt; network-&gt;def-&gt;nroutes; i++) {
++-        routedef = &amp;network-&gt;def-&gt;routes[i];
+++        virSocketAddrPtr gateway = NULL;
+++
+++        routedef = network-&gt;def-&gt;routes[i];
+++        gateway = virNetworkRouteDefGetGateway(routedef);
+++
++         /* Add the IP route to the bridge */
++         /* ignore errors, error msg will be generated */
++         /* but libvirt will not know and net-destroy will work. */
++-        if (VIR_SOCKET_ADDR_VALID(&amp;routedef-&gt;gateway)) {
+++        if (VIR_SOCKET_ADDR_VALID(gateway)) {
++             if (networkAddRouteToBridge(network, routedef) &lt; 0) {
++                 /* an error occurred adding the static route */
++                 continue; /* for now, do nothing */
+</diff>
+    </file>
+    <file state="added">
+      <new name="caf164f1-test-add-user_xattr-check.patch" md5="ebb4ec4e8486a92ffe31caba2714f8f6" size="2364"/>
+      <diff lines="82">@@ -0,0 +1,81 @@
++Subject: test: add user_xattr check for securityselinuxlabeltest
++From: Jincheng Miao jmiao@redhat.com Mon Jun 9 19:36:07 2014 +0800
++Date: Thu Jun 26 15:36:46 2014 -0600:
++Git: caf164f1e476f254cb67498e8fc615ec1e0dd444
++
++libvirt unit test used setxattr with "user.libvirt.selinux" name to
++emulate setfilecon of selinux. But for some old kernel filesystem
++(like 2.6.32-431.el6.x86_64), if the filesystem is not mounted with
++user_xattr flag, the setxattr with "user.libvirt.selinux" will fail.
++
++So adding testUserXattrEnabled() in securityselinuxlabeltest.c,
++if user_xattr is not enabled, skip this case.
++
++The user_xattr is departed in newer kernel, therefore this commit is
++only for the compatablity for old kernel.
++
++Signed-off-by: Jincheng Miao &lt;jmiao@redhat.com&gt;
++Signed-off-by: Eric Blake &lt;eblake@redhat.com&gt;
++Tested-by: Scott Sullivan &lt;ssullivan@liquidweb.com&gt;
++
++Index: libvirt-1.2.5/tests/securityselinuxlabeltest.c
++===================================================================
++--- libvirt-1.2.5.orig/tests/securityselinuxlabeltest.c
+++++ libvirt-1.2.5/tests/securityselinuxlabeltest.c
++@@ -28,6 +28,7 @@
++ 
++ #include &lt;selinux/selinux.h&gt;
++ #include &lt;selinux/context.h&gt;
+++#include &lt;attr/xattr.h&gt;
++ 
++ #include "internal.h"
++ #include "testutils.h"
++@@ -56,6 +57,35 @@ struct testSELinuxFile {
++     char *context;
++ };
++ 
+++static int
+++testUserXattrEnabled(void)
+++{
+++    int ret = -1;
+++    ssize_t len;
+++    const char *con_value = "system_u:object_r:svirt_image_t:s0:c41,c264";
+++    char *path = NULL;
+++    if (virAsprintf(&amp;path, "%s/securityselinuxlabeldata/testxattr",
+++                    abs_srcdir) &lt; 0)
+++        goto cleanup;
+++
+++    if (virFileTouch(path, 0600) &lt; 0)
+++        goto cleanup;
+++
+++    len = setxattr(path, "user.libvirt.selinux", con_value,
+++                   strlen(con_value), 0);
+++    if (len &lt; 0) {
+++        if (errno == EOPNOTSUPP)
+++            ret = 0;
+++        goto cleanup;
+++    }
+++
+++    ret = 1;
+++
+++ cleanup:
+++    unlink(path);
+++    VIR_FREE(path);
+++    return ret;
+++}
++ 
++ static int
++ testSELinuxMungePath(char **path)
++@@ -321,6 +351,12 @@ static int
++ mymain(void)
++ {
++     int ret = 0;
+++    int rc = testUserXattrEnabled();
+++
+++    if (rc &lt; 0)
+++        return EXIT_FAILURE;
+++    if (!rc)
+++        return EXIT_AM_SKIP;
++ 
++     if (!(mgr = virSecurityManagerNew("selinux", "QEMU", false, true, false))) {
++         virErrorPtr err = virGetLastError();
+</diff>
+    </file>
+    <file state="added">
+      <new name="virt-aa-helper-hotplug.patch" md5="3991fe83bd79462bfd8bd3abb406a5c1" size="1354"/>
+      <diff lines="32">@@ -0,0 +1,31 @@
++Index: libvirt-1.2.5/src/util/virpci.c
++===================================================================
++--- libvirt-1.2.5.orig/src/util/virpci.c
+++++ libvirt-1.2.5/src/util/virpci.c
++@@ -1922,11 +1922,13 @@ int virPCIDeviceFileIterate(virPCIDevice
++     while ((direrr = virDirRead(dir, &amp;ent, pcidir)) &gt; 0) {
++         /* Device assignment requires:
++          *   $PCIDIR/config, $PCIDIR/resource, $PCIDIR/resourceNNN,
++-         *   $PCIDIR/rom, $PCIDIR/reset
+++         *   $PCIDIR/rom, $PCIDIR/reset, $PCIDIR/vendor, $PCIDIR/device
++          */
++         if (STREQ(ent-&gt;d_name, "config") ||
++             STRPREFIX(ent-&gt;d_name, "resource") ||
++             STREQ(ent-&gt;d_name, "rom") ||
+++            STREQ(ent-&gt;d_name, "vendor") ||
+++            STREQ(ent-&gt;d_name, "device") ||
++             STREQ(ent-&gt;d_name, "reset")) {
++             if (virAsprintf(&amp;file, "%s/%s", pcidir, ent-&gt;d_name) &lt; 0)
++                 goto cleanup;
++Index: libvirt-1.2.5/examples/apparmor/libvirt-qemu
++===================================================================
++--- libvirt-1.2.5.orig/examples/apparmor/libvirt-qemu
+++++ libvirt-1.2.5/examples/apparmor/libvirt-qemu
++@@ -111,6 +111,7 @@
++   /usr/bin/qemu-sparc64 rmix,
++   /usr/bin/qemu-x86_64 rmix,
++   /usr/{lib,lib64}/qemu/block-curl.so mr,
+++  /usr/{lib,lib64}/qemu/block-rbd.so mr,
++ 
++   # for save and resume
++   /bin/dash rmix,
+</diff>
+    </file>
+    <file state="added">
+      <new name="xen-sxpr-disk-type.patch" md5="9744147e647d012839bcc36a38f5e5ad" size="1357"/>
+      <diff lines="27">@@ -0,0 +1,26 @@
++xen_sxpr: set disk type to BLOCK when driver is not tap or file
++
++When parsing disk s-expression to virDomainDiskDef structure, explicitly
++set type to VIR_STORAGE_TYPE_BLOCK for all drivers except 'tap', 'tap2',
++and 'file'. This was implicitly done prior to commit 9673418c.
++
++https://bugzilla.suse.com/show_bug.cgi?id=938228
++
++Index: libvirt-1.2.5/src/xenxs/xen_sxpr.c
++===================================================================
++--- libvirt-1.2.5.orig/src/xenxs/xen_sxpr.c
+++++ libvirt-1.2.5/src/xenxs/xen_sxpr.c
++@@ -447,10 +447,11 @@ xenParseSxprDisks(virDomainDefPtr def,
++                        omnipotent, we can revisit this, perhaps stat()'ing
++                        the src file in question */
++                     virDomainDiskSetType(disk, VIR_STORAGE_TYPE_FILE);
++-                } else if (STREQ(virDomainDiskGetDriver(disk), "phy")) {
++-                    virDomainDiskSetType(disk, VIR_STORAGE_TYPE_BLOCK);
++                 } else if (STREQ(virDomainDiskGetDriver(disk), "file")) {
++                     virDomainDiskSetType(disk, VIR_STORAGE_TYPE_FILE);
+++                } else {
+++                    /* Set type to BLOCK for drivers != {tap,tap2,file} */
+++                    virDomainDiskSetType(disk, VIR_STORAGE_TYPE_BLOCK);
++                 }
++             } else {
++                 /* No CDROM media so can't really tell. We'll just
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1263" package="patchinfo"/>
+  <target project="SUSE:SLE-12:Update" package="patchinfo"/>
+<sourcediff key="24840408313b7486f981fc1490627107">
+  <old project="SUSE:Maintenance:1263" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1263" package="patchinfo" rev="6" srcmd5="2dc8c54c151e86a710b17712fb3b88ae"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="d14da707c3af50fa7c159a93e92e9fe8" size="3246"/>
+      <diff lines="48">@@ -0,0 +1,47 @@
++&lt;patchinfo incident="1263"&gt;
++  &lt;packager&gt;jfehlig&lt;/packager&gt;
++  &lt;issue tracker="bnc" id="948686"&gt;Cluster fenced node and started 2 instances of VirtualDomain resources&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="903757"&gt;Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="938228"&gt;SLES11 SP4:  "virsh dumpxml domain" and "virsh migrate" fail when configuration contains DRBD block device&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="911737"&gt;Starting a libvirt container depending on a stopped network problem&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914693"&gt;VUL-0: CVE-2015-0236: libvirt:  access control bypass&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921586"&gt;default /etc/libvirt/qemu.conf settings prohibit Apparmor confinement of domains&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="948516"&gt;virsh dominfo - error "failed to get security label"&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="899334"&gt;libvirt claiming Machine already exists&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="936524"&gt;libvirt-lxc crashes when interface type='direct' is used in domain&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="904432"&gt;SLE12: Cannot get networking to work in LXC containers&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921355"&gt;libvirt-tck qemu apparmor problems&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914297"&gt;virt-create-rootfs can't connect to SMT server&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921555"&gt;libvirt qemu domain with hostdev can't start apparmor-enforced&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-0236"&gt;&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="953110"&gt;VUL-1: CVE-2015-5313: libvirtd: Directory traversal&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-5313"&gt;&lt;/issue&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;summary&gt;Security update for libvirt&lt;/summary&gt;
++  &lt;description&gt;libvirt was updated to fix one security issue and several non-security issues.
++
++This security issue was fixed:
++
++- CVE-2015-0236: libvirt allowed remote authenticated users to obtain the VNC
++  password by using the VIR_DOMAIN_XML_SECURE flag with a crafted (1) snapshot
++  to the virDomainSnapshotGetXMLDesc interface or (2) image to the
++  virDomainSaveImageGetXMLDesc interface. (bsc#914693)
++- CVE-2015-5313: path traversal vulnerability allowed libvirtd process to write arbitrary files into file system using root permissions (bsc#953110)
++
++Theses non-security issues were fixed:
++
++- bsc#948686: Use PAUSED state for domains that are starting up.
++- bsc#903757: Provide nodeGetSecurityModel implementation in libxl.
++- bsc#938228: Set disk type to BLOCK when driver is not tap or file.
++- bsc#948516: Fix profile_status to distinguish between errors and unconfined domains.
++- bsc#936524: Fix error starting lxc containers with direct interfaces.
++- bsc#921555: Fixed apparmor generated profile for PCI hostdevs.
++- bsc#899334: Include additional upstream fixes for systemd TerminateMachine.
++- bsc#921586: Fix security driver default settings in /etc/libvirt/qemu.conf.
++- bsc#921355: Fixed a number of QEMU apparmor abstraction problems.
++- bsc#911737: Additional fix for the case where security labels aren't automatically set.
++- bsc#914297: Allow setting the URL of an SMT server to use in place of SCC.
++- bsc#904432: Backported route definition changes.
++&lt;/description&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1263" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-DESKTOP:12:x86_64" package="patchinfo.1263"/>
+<sourcediff key="24840408313b7486f981fc1490627107">
+  <old project="SUSE:Maintenance:1263" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1263" package="patchinfo" rev="6" srcmd5="2dc8c54c151e86a710b17712fb3b88ae"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="d14da707c3af50fa7c159a93e92e9fe8" size="3246"/>
+      <diff lines="48">@@ -0,0 +1,47 @@
++&lt;patchinfo incident="1263"&gt;
++  &lt;packager&gt;jfehlig&lt;/packager&gt;
++  &lt;issue tracker="bnc" id="948686"&gt;Cluster fenced node and started 2 instances of VirtualDomain resources&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="903757"&gt;Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="938228"&gt;SLES11 SP4:  "virsh dumpxml domain" and "virsh migrate" fail when configuration contains DRBD block device&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="911737"&gt;Starting a libvirt container depending on a stopped network problem&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914693"&gt;VUL-0: CVE-2015-0236: libvirt:  access control bypass&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921586"&gt;default /etc/libvirt/qemu.conf settings prohibit Apparmor confinement of domains&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="948516"&gt;virsh dominfo - error "failed to get security label"&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="899334"&gt;libvirt claiming Machine already exists&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="936524"&gt;libvirt-lxc crashes when interface type='direct' is used in domain&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="904432"&gt;SLE12: Cannot get networking to work in LXC containers&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921355"&gt;libvirt-tck qemu apparmor problems&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914297"&gt;virt-create-rootfs can't connect to SMT server&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921555"&gt;libvirt qemu domain with hostdev can't start apparmor-enforced&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-0236"&gt;&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="953110"&gt;VUL-1: CVE-2015-5313: libvirtd: Directory traversal&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-5313"&gt;&lt;/issue&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;summary&gt;Security update for libvirt&lt;/summary&gt;
++  &lt;description&gt;libvirt was updated to fix one security issue and several non-security issues.
++
++This security issue was fixed:
++
++- CVE-2015-0236: libvirt allowed remote authenticated users to obtain the VNC
++  password by using the VIR_DOMAIN_XML_SECURE flag with a crafted (1) snapshot
++  to the virDomainSnapshotGetXMLDesc interface or (2) image to the
++  virDomainSaveImageGetXMLDesc interface. (bsc#914693)
++- CVE-2015-5313: path traversal vulnerability allowed libvirtd process to write arbitrary files into file system using root permissions (bsc#953110)
++
++Theses non-security issues were fixed:
++
++- bsc#948686: Use PAUSED state for domains that are starting up.
++- bsc#903757: Provide nodeGetSecurityModel implementation in libxl.
++- bsc#938228: Set disk type to BLOCK when driver is not tap or file.
++- bsc#948516: Fix profile_status to distinguish between errors and unconfined domains.
++- bsc#936524: Fix error starting lxc containers with direct interfaces.
++- bsc#921555: Fixed apparmor generated profile for PCI hostdevs.
++- bsc#899334: Include additional upstream fixes for systemd TerminateMachine.
++- bsc#921586: Fix security driver default settings in /etc/libvirt/qemu.conf.
++- bsc#921355: Fixed a number of QEMU apparmor abstraction problems.
++- bsc#911737: Additional fix for the case where security labels aren't automatically set.
++- bsc#914297: Allow setting the URL of an SMT server to use in place of SCC.
++- bsc#904432: Backported route definition changes.
++&lt;/description&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1263" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SAP:12:x86_64" package="patchinfo.1263"/>
+<sourcediff key="24840408313b7486f981fc1490627107">
+  <old project="SUSE:Maintenance:1263" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1263" package="patchinfo" rev="6" srcmd5="2dc8c54c151e86a710b17712fb3b88ae"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="d14da707c3af50fa7c159a93e92e9fe8" size="3246"/>
+      <diff lines="48">@@ -0,0 +1,47 @@
++&lt;patchinfo incident="1263"&gt;
++  &lt;packager&gt;jfehlig&lt;/packager&gt;
++  &lt;issue tracker="bnc" id="948686"&gt;Cluster fenced node and started 2 instances of VirtualDomain resources&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="903757"&gt;Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="938228"&gt;SLES11 SP4:  "virsh dumpxml domain" and "virsh migrate" fail when configuration contains DRBD block device&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="911737"&gt;Starting a libvirt container depending on a stopped network problem&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914693"&gt;VUL-0: CVE-2015-0236: libvirt:  access control bypass&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921586"&gt;default /etc/libvirt/qemu.conf settings prohibit Apparmor confinement of domains&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="948516"&gt;virsh dominfo - error "failed to get security label"&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="899334"&gt;libvirt claiming Machine already exists&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="936524"&gt;libvirt-lxc crashes when interface type='direct' is used in domain&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="904432"&gt;SLE12: Cannot get networking to work in LXC containers&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921355"&gt;libvirt-tck qemu apparmor problems&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914297"&gt;virt-create-rootfs can't connect to SMT server&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921555"&gt;libvirt qemu domain with hostdev can't start apparmor-enforced&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-0236"&gt;&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="953110"&gt;VUL-1: CVE-2015-5313: libvirtd: Directory traversal&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-5313"&gt;&lt;/issue&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;summary&gt;Security update for libvirt&lt;/summary&gt;
++  &lt;description&gt;libvirt was updated to fix one security issue and several non-security issues.
++
++This security issue was fixed:
++
++- CVE-2015-0236: libvirt allowed remote authenticated users to obtain the VNC
++  password by using the VIR_DOMAIN_XML_SECURE flag with a crafted (1) snapshot
++  to the virDomainSnapshotGetXMLDesc interface or (2) image to the
++  virDomainSaveImageGetXMLDesc interface. (bsc#914693)
++- CVE-2015-5313: path traversal vulnerability allowed libvirtd process to write arbitrary files into file system using root permissions (bsc#953110)
++
++Theses non-security issues were fixed:
++
++- bsc#948686: Use PAUSED state for domains that are starting up.
++- bsc#903757: Provide nodeGetSecurityModel implementation in libxl.
++- bsc#938228: Set disk type to BLOCK when driver is not tap or file.
++- bsc#948516: Fix profile_status to distinguish between errors and unconfined domains.
++- bsc#936524: Fix error starting lxc containers with direct interfaces.
++- bsc#921555: Fixed apparmor generated profile for PCI hostdevs.
++- bsc#899334: Include additional upstream fixes for systemd TerminateMachine.
++- bsc#921586: Fix security driver default settings in /etc/libvirt/qemu.conf.
++- bsc#921355: Fixed a number of QEMU apparmor abstraction problems.
++- bsc#911737: Additional fix for the case where security labels aren't automatically set.
++- bsc#914297: Allow setting the URL of an SMT server to use in place of SCC.
++- bsc#904432: Backported route definition changes.
++&lt;/description&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1263" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:12:ppc64le" package="patchinfo.1263"/>
+<sourcediff key="24840408313b7486f981fc1490627107">
+  <old project="SUSE:Maintenance:1263" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1263" package="patchinfo" rev="6" srcmd5="2dc8c54c151e86a710b17712fb3b88ae"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="d14da707c3af50fa7c159a93e92e9fe8" size="3246"/>
+      <diff lines="48">@@ -0,0 +1,47 @@
++&lt;patchinfo incident="1263"&gt;
++  &lt;packager&gt;jfehlig&lt;/packager&gt;
++  &lt;issue tracker="bnc" id="948686"&gt;Cluster fenced node and started 2 instances of VirtualDomain resources&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="903757"&gt;Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="938228"&gt;SLES11 SP4:  "virsh dumpxml domain" and "virsh migrate" fail when configuration contains DRBD block device&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="911737"&gt;Starting a libvirt container depending on a stopped network problem&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914693"&gt;VUL-0: CVE-2015-0236: libvirt:  access control bypass&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921586"&gt;default /etc/libvirt/qemu.conf settings prohibit Apparmor confinement of domains&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="948516"&gt;virsh dominfo - error "failed to get security label"&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="899334"&gt;libvirt claiming Machine already exists&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="936524"&gt;libvirt-lxc crashes when interface type='direct' is used in domain&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="904432"&gt;SLE12: Cannot get networking to work in LXC containers&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921355"&gt;libvirt-tck qemu apparmor problems&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914297"&gt;virt-create-rootfs can't connect to SMT server&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921555"&gt;libvirt qemu domain with hostdev can't start apparmor-enforced&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-0236"&gt;&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="953110"&gt;VUL-1: CVE-2015-5313: libvirtd: Directory traversal&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-5313"&gt;&lt;/issue&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;summary&gt;Security update for libvirt&lt;/summary&gt;
++  &lt;description&gt;libvirt was updated to fix one security issue and several non-security issues.
++
++This security issue was fixed:
++
++- CVE-2015-0236: libvirt allowed remote authenticated users to obtain the VNC
++  password by using the VIR_DOMAIN_XML_SECURE flag with a crafted (1) snapshot
++  to the virDomainSnapshotGetXMLDesc interface or (2) image to the
++  virDomainSaveImageGetXMLDesc interface. (bsc#914693)
++- CVE-2015-5313: path traversal vulnerability allowed libvirtd process to write arbitrary files into file system using root permissions (bsc#953110)
++
++Theses non-security issues were fixed:
++
++- bsc#948686: Use PAUSED state for domains that are starting up.
++- bsc#903757: Provide nodeGetSecurityModel implementation in libxl.
++- bsc#938228: Set disk type to BLOCK when driver is not tap or file.
++- bsc#948516: Fix profile_status to distinguish between errors and unconfined domains.
++- bsc#936524: Fix error starting lxc containers with direct interfaces.
++- bsc#921555: Fixed apparmor generated profile for PCI hostdevs.
++- bsc#899334: Include additional upstream fixes for systemd TerminateMachine.
++- bsc#921586: Fix security driver default settings in /etc/libvirt/qemu.conf.
++- bsc#921355: Fixed a number of QEMU apparmor abstraction problems.
++- bsc#911737: Additional fix for the case where security labels aren't automatically set.
++- bsc#914297: Allow setting the URL of an SMT server to use in place of SCC.
++- bsc#904432: Backported route definition changes.
++&lt;/description&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1263" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:12:s390x" package="patchinfo.1263"/>
+<sourcediff key="24840408313b7486f981fc1490627107">
+  <old project="SUSE:Maintenance:1263" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1263" package="patchinfo" rev="6" srcmd5="2dc8c54c151e86a710b17712fb3b88ae"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="d14da707c3af50fa7c159a93e92e9fe8" size="3246"/>
+      <diff lines="48">@@ -0,0 +1,47 @@
++&lt;patchinfo incident="1263"&gt;
++  &lt;packager&gt;jfehlig&lt;/packager&gt;
++  &lt;issue tracker="bnc" id="948686"&gt;Cluster fenced node and started 2 instances of VirtualDomain resources&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="903757"&gt;Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="938228"&gt;SLES11 SP4:  "virsh dumpxml domain" and "virsh migrate" fail when configuration contains DRBD block device&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="911737"&gt;Starting a libvirt container depending on a stopped network problem&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914693"&gt;VUL-0: CVE-2015-0236: libvirt:  access control bypass&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921586"&gt;default /etc/libvirt/qemu.conf settings prohibit Apparmor confinement of domains&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="948516"&gt;virsh dominfo - error "failed to get security label"&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="899334"&gt;libvirt claiming Machine already exists&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="936524"&gt;libvirt-lxc crashes when interface type='direct' is used in domain&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="904432"&gt;SLE12: Cannot get networking to work in LXC containers&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921355"&gt;libvirt-tck qemu apparmor problems&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914297"&gt;virt-create-rootfs can't connect to SMT server&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921555"&gt;libvirt qemu domain with hostdev can't start apparmor-enforced&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-0236"&gt;&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="953110"&gt;VUL-1: CVE-2015-5313: libvirtd: Directory traversal&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-5313"&gt;&lt;/issue&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;summary&gt;Security update for libvirt&lt;/summary&gt;
++  &lt;description&gt;libvirt was updated to fix one security issue and several non-security issues.
++
++This security issue was fixed:
++
++- CVE-2015-0236: libvirt allowed remote authenticated users to obtain the VNC
++  password by using the VIR_DOMAIN_XML_SECURE flag with a crafted (1) snapshot
++  to the virDomainSnapshotGetXMLDesc interface or (2) image to the
++  virDomainSaveImageGetXMLDesc interface. (bsc#914693)
++- CVE-2015-5313: path traversal vulnerability allowed libvirtd process to write arbitrary files into file system using root permissions (bsc#953110)
++
++Theses non-security issues were fixed:
++
++- bsc#948686: Use PAUSED state for domains that are starting up.
++- bsc#903757: Provide nodeGetSecurityModel implementation in libxl.
++- bsc#938228: Set disk type to BLOCK when driver is not tap or file.
++- bsc#948516: Fix profile_status to distinguish between errors and unconfined domains.
++- bsc#936524: Fix error starting lxc containers with direct interfaces.
++- bsc#921555: Fixed apparmor generated profile for PCI hostdevs.
++- bsc#899334: Include additional upstream fixes for systemd TerminateMachine.
++- bsc#921586: Fix security driver default settings in /etc/libvirt/qemu.conf.
++- bsc#921355: Fixed a number of QEMU apparmor abstraction problems.
++- bsc#911737: Additional fix for the case where security labels aren't automatically set.
++- bsc#914297: Allow setting the URL of an SMT server to use in place of SCC.
++- bsc#904432: Backported route definition changes.
++&lt;/description&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1263" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SDK:12:x86_64" package="patchinfo.1263"/>
+<sourcediff key="24840408313b7486f981fc1490627107">
+  <old project="SUSE:Maintenance:1263" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1263" package="patchinfo" rev="6" srcmd5="2dc8c54c151e86a710b17712fb3b88ae"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="d14da707c3af50fa7c159a93e92e9fe8" size="3246"/>
+      <diff lines="48">@@ -0,0 +1,47 @@
++&lt;patchinfo incident="1263"&gt;
++  &lt;packager&gt;jfehlig&lt;/packager&gt;
++  &lt;issue tracker="bnc" id="948686"&gt;Cluster fenced node and started 2 instances of VirtualDomain resources&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="903757"&gt;Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="938228"&gt;SLES11 SP4:  "virsh dumpxml domain" and "virsh migrate" fail when configuration contains DRBD block device&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="911737"&gt;Starting a libvirt container depending on a stopped network problem&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914693"&gt;VUL-0: CVE-2015-0236: libvirt:  access control bypass&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921586"&gt;default /etc/libvirt/qemu.conf settings prohibit Apparmor confinement of domains&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="948516"&gt;virsh dominfo - error "failed to get security label"&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="899334"&gt;libvirt claiming Machine already exists&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="936524"&gt;libvirt-lxc crashes when interface type='direct' is used in domain&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="904432"&gt;SLE12: Cannot get networking to work in LXC containers&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921355"&gt;libvirt-tck qemu apparmor problems&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914297"&gt;virt-create-rootfs can't connect to SMT server&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921555"&gt;libvirt qemu domain with hostdev can't start apparmor-enforced&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-0236"&gt;&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="953110"&gt;VUL-1: CVE-2015-5313: libvirtd: Directory traversal&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-5313"&gt;&lt;/issue&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;summary&gt;Security update for libvirt&lt;/summary&gt;
++  &lt;description&gt;libvirt was updated to fix one security issue and several non-security issues.
++
++This security issue was fixed:
++
++- CVE-2015-0236: libvirt allowed remote authenticated users to obtain the VNC
++  password by using the VIR_DOMAIN_XML_SECURE flag with a crafted (1) snapshot
++  to the virDomainSnapshotGetXMLDesc interface or (2) image to the
++  virDomainSaveImageGetXMLDesc interface. (bsc#914693)
++- CVE-2015-5313: path traversal vulnerability allowed libvirtd process to write arbitrary files into file system using root permissions (bsc#953110)
++
++Theses non-security issues were fixed:
++
++- bsc#948686: Use PAUSED state for domains that are starting up.
++- bsc#903757: Provide nodeGetSecurityModel implementation in libxl.
++- bsc#938228: Set disk type to BLOCK when driver is not tap or file.
++- bsc#948516: Fix profile_status to distinguish between errors and unconfined domains.
++- bsc#936524: Fix error starting lxc containers with direct interfaces.
++- bsc#921555: Fixed apparmor generated profile for PCI hostdevs.
++- bsc#899334: Include additional upstream fixes for systemd TerminateMachine.
++- bsc#921586: Fix security driver default settings in /etc/libvirt/qemu.conf.
++- bsc#921355: Fixed a number of QEMU apparmor abstraction problems.
++- bsc#911737: Additional fix for the case where security labels aren't automatically set.
++- bsc#914297: Allow setting the URL of an SMT server to use in place of SCC.
++- bsc#904432: Backported route definition changes.
++&lt;/description&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1263" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:12:ppc64le" package="patchinfo.1263"/>
+<sourcediff key="24840408313b7486f981fc1490627107">
+  <old project="SUSE:Maintenance:1263" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1263" package="patchinfo" rev="6" srcmd5="2dc8c54c151e86a710b17712fb3b88ae"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="d14da707c3af50fa7c159a93e92e9fe8" size="3246"/>
+      <diff lines="48">@@ -0,0 +1,47 @@
++&lt;patchinfo incident="1263"&gt;
++  &lt;packager&gt;jfehlig&lt;/packager&gt;
++  &lt;issue tracker="bnc" id="948686"&gt;Cluster fenced node and started 2 instances of VirtualDomain resources&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="903757"&gt;Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="938228"&gt;SLES11 SP4:  "virsh dumpxml domain" and "virsh migrate" fail when configuration contains DRBD block device&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="911737"&gt;Starting a libvirt container depending on a stopped network problem&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914693"&gt;VUL-0: CVE-2015-0236: libvirt:  access control bypass&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921586"&gt;default /etc/libvirt/qemu.conf settings prohibit Apparmor confinement of domains&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="948516"&gt;virsh dominfo - error "failed to get security label"&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="899334"&gt;libvirt claiming Machine already exists&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="936524"&gt;libvirt-lxc crashes when interface type='direct' is used in domain&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="904432"&gt;SLE12: Cannot get networking to work in LXC containers&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921355"&gt;libvirt-tck qemu apparmor problems&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914297"&gt;virt-create-rootfs can't connect to SMT server&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921555"&gt;libvirt qemu domain with hostdev can't start apparmor-enforced&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-0236"&gt;&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="953110"&gt;VUL-1: CVE-2015-5313: libvirtd: Directory traversal&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-5313"&gt;&lt;/issue&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;summary&gt;Security update for libvirt&lt;/summary&gt;
++  &lt;description&gt;libvirt was updated to fix one security issue and several non-security issues.
++
++This security issue was fixed:
++
++- CVE-2015-0236: libvirt allowed remote authenticated users to obtain the VNC
++  password by using the VIR_DOMAIN_XML_SECURE flag with a crafted (1) snapshot
++  to the virDomainSnapshotGetXMLDesc interface or (2) image to the
++  virDomainSaveImageGetXMLDesc interface. (bsc#914693)
++- CVE-2015-5313: path traversal vulnerability allowed libvirtd process to write arbitrary files into file system using root permissions (bsc#953110)
++
++Theses non-security issues were fixed:
++
++- bsc#948686: Use PAUSED state for domains that are starting up.
++- bsc#903757: Provide nodeGetSecurityModel implementation in libxl.
++- bsc#938228: Set disk type to BLOCK when driver is not tap or file.
++- bsc#948516: Fix profile_status to distinguish between errors and unconfined domains.
++- bsc#936524: Fix error starting lxc containers with direct interfaces.
++- bsc#921555: Fixed apparmor generated profile for PCI hostdevs.
++- bsc#899334: Include additional upstream fixes for systemd TerminateMachine.
++- bsc#921586: Fix security driver default settings in /etc/libvirt/qemu.conf.
++- bsc#921355: Fixed a number of QEMU apparmor abstraction problems.
++- bsc#911737: Additional fix for the case where security labels aren't automatically set.
++- bsc#914297: Allow setting the URL of an SMT server to use in place of SCC.
++- bsc#904432: Backported route definition changes.
++&lt;/description&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1263" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:12:s390x" package="patchinfo.1263"/>
+<sourcediff key="24840408313b7486f981fc1490627107">
+  <old project="SUSE:Maintenance:1263" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1263" package="patchinfo" rev="6" srcmd5="2dc8c54c151e86a710b17712fb3b88ae"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="d14da707c3af50fa7c159a93e92e9fe8" size="3246"/>
+      <diff lines="48">@@ -0,0 +1,47 @@
++&lt;patchinfo incident="1263"&gt;
++  &lt;packager&gt;jfehlig&lt;/packager&gt;
++  &lt;issue tracker="bnc" id="948686"&gt;Cluster fenced node and started 2 instances of VirtualDomain resources&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="903757"&gt;Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="938228"&gt;SLES11 SP4:  "virsh dumpxml domain" and "virsh migrate" fail when configuration contains DRBD block device&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="911737"&gt;Starting a libvirt container depending on a stopped network problem&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914693"&gt;VUL-0: CVE-2015-0236: libvirt:  access control bypass&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921586"&gt;default /etc/libvirt/qemu.conf settings prohibit Apparmor confinement of domains&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="948516"&gt;virsh dominfo - error "failed to get security label"&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="899334"&gt;libvirt claiming Machine already exists&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="936524"&gt;libvirt-lxc crashes when interface type='direct' is used in domain&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="904432"&gt;SLE12: Cannot get networking to work in LXC containers&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921355"&gt;libvirt-tck qemu apparmor problems&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914297"&gt;virt-create-rootfs can't connect to SMT server&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921555"&gt;libvirt qemu domain with hostdev can't start apparmor-enforced&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-0236"&gt;&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="953110"&gt;VUL-1: CVE-2015-5313: libvirtd: Directory traversal&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-5313"&gt;&lt;/issue&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;summary&gt;Security update for libvirt&lt;/summary&gt;
++  &lt;description&gt;libvirt was updated to fix one security issue and several non-security issues.
++
++This security issue was fixed:
++
++- CVE-2015-0236: libvirt allowed remote authenticated users to obtain the VNC
++  password by using the VIR_DOMAIN_XML_SECURE flag with a crafted (1) snapshot
++  to the virDomainSnapshotGetXMLDesc interface or (2) image to the
++  virDomainSaveImageGetXMLDesc interface. (bsc#914693)
++- CVE-2015-5313: path traversal vulnerability allowed libvirtd process to write arbitrary files into file system using root permissions (bsc#953110)
++
++Theses non-security issues were fixed:
++
++- bsc#948686: Use PAUSED state for domains that are starting up.
++- bsc#903757: Provide nodeGetSecurityModel implementation in libxl.
++- bsc#938228: Set disk type to BLOCK when driver is not tap or file.
++- bsc#948516: Fix profile_status to distinguish between errors and unconfined domains.
++- bsc#936524: Fix error starting lxc containers with direct interfaces.
++- bsc#921555: Fixed apparmor generated profile for PCI hostdevs.
++- bsc#899334: Include additional upstream fixes for systemd TerminateMachine.
++- bsc#921586: Fix security driver default settings in /etc/libvirt/qemu.conf.
++- bsc#921355: Fixed a number of QEMU apparmor abstraction problems.
++- bsc#911737: Additional fix for the case where security labels aren't automatically set.
++- bsc#914297: Allow setting the URL of an SMT server to use in place of SCC.
++- bsc#904432: Backported route definition changes.
++&lt;/description&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1263" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-SERVER:12:x86_64" package="patchinfo.1263"/>
+<sourcediff key="24840408313b7486f981fc1490627107">
+  <old project="SUSE:Maintenance:1263" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1263" package="patchinfo" rev="6" srcmd5="2dc8c54c151e86a710b17712fb3b88ae"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="d14da707c3af50fa7c159a93e92e9fe8" size="3246"/>
+      <diff lines="48">@@ -0,0 +1,47 @@
++&lt;patchinfo incident="1263"&gt;
++  &lt;packager&gt;jfehlig&lt;/packager&gt;
++  &lt;issue tracker="bnc" id="948686"&gt;Cluster fenced node and started 2 instances of VirtualDomain resources&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="903757"&gt;Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="938228"&gt;SLES11 SP4:  "virsh dumpxml domain" and "virsh migrate" fail when configuration contains DRBD block device&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="911737"&gt;Starting a libvirt container depending on a stopped network problem&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914693"&gt;VUL-0: CVE-2015-0236: libvirt:  access control bypass&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921586"&gt;default /etc/libvirt/qemu.conf settings prohibit Apparmor confinement of domains&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="948516"&gt;virsh dominfo - error "failed to get security label"&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="899334"&gt;libvirt claiming Machine already exists&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="936524"&gt;libvirt-lxc crashes when interface type='direct' is used in domain&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="904432"&gt;SLE12: Cannot get networking to work in LXC containers&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921355"&gt;libvirt-tck qemu apparmor problems&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914297"&gt;virt-create-rootfs can't connect to SMT server&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921555"&gt;libvirt qemu domain with hostdev can't start apparmor-enforced&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-0236"&gt;&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="953110"&gt;VUL-1: CVE-2015-5313: libvirtd: Directory traversal&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-5313"&gt;&lt;/issue&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;summary&gt;Security update for libvirt&lt;/summary&gt;
++  &lt;description&gt;libvirt was updated to fix one security issue and several non-security issues.
++
++This security issue was fixed:
++
++- CVE-2015-0236: libvirt allowed remote authenticated users to obtain the VNC
++  password by using the VIR_DOMAIN_XML_SECURE flag with a crafted (1) snapshot
++  to the virDomainSnapshotGetXMLDesc interface or (2) image to the
++  virDomainSaveImageGetXMLDesc interface. (bsc#914693)
++- CVE-2015-5313: path traversal vulnerability allowed libvirtd process to write arbitrary files into file system using root permissions (bsc#953110)
++
++Theses non-security issues were fixed:
++
++- bsc#948686: Use PAUSED state for domains that are starting up.
++- bsc#903757: Provide nodeGetSecurityModel implementation in libxl.
++- bsc#938228: Set disk type to BLOCK when driver is not tap or file.
++- bsc#948516: Fix profile_status to distinguish between errors and unconfined domains.
++- bsc#936524: Fix error starting lxc containers with direct interfaces.
++- bsc#921555: Fixed apparmor generated profile for PCI hostdevs.
++- bsc#899334: Include additional upstream fixes for systemd TerminateMachine.
++- bsc#921586: Fix security driver default settings in /etc/libvirt/qemu.conf.
++- bsc#921355: Fixed a number of QEMU apparmor abstraction problems.
++- bsc#911737: Additional fix for the case where security labels aren't automatically set.
++- bsc#914297: Allow setting the URL of an SMT server to use in place of SCC.
++- bsc#904432: Backported route definition changes.
++&lt;/description&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+  <action type="maintenance_release">
+  <source project="SUSE:Maintenance:1263" package="patchinfo"/>
+  <target project="SUSE:Updates:SLE-WE:12:x86_64" package="patchinfo.1263"/>
+<sourcediff key="24840408313b7486f981fc1490627107">
+  <old project="SUSE:Maintenance:1263" package="patchinfo" rev="0" srcmd5="d41d8cd98f00b204e9800998ecf8427e"/>
+  <new project="SUSE:Maintenance:1263" package="patchinfo" rev="6" srcmd5="2dc8c54c151e86a710b17712fb3b88ae"/>
+  <files>
+    <file state="added">
+      <new name="_patchinfo" md5="d14da707c3af50fa7c159a93e92e9fe8" size="3246"/>
+      <diff lines="48">@@ -0,0 +1,47 @@
++&lt;patchinfo incident="1263"&gt;
++  &lt;packager&gt;jfehlig&lt;/packager&gt;
++  &lt;issue tracker="bnc" id="948686"&gt;Cluster fenced node and started 2 instances of VirtualDomain resources&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="903757"&gt;Under Xen, virsh dominfo [DOMAIN] reports virNodeGetSecurityModel function not supported&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="938228"&gt;SLES11 SP4:  "virsh dumpxml domain" and "virsh migrate" fail when configuration contains DRBD block device&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="911737"&gt;Starting a libvirt container depending on a stopped network problem&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914693"&gt;VUL-0: CVE-2015-0236: libvirt:  access control bypass&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921586"&gt;default /etc/libvirt/qemu.conf settings prohibit Apparmor confinement of domains&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="948516"&gt;virsh dominfo - error "failed to get security label"&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="899334"&gt;libvirt claiming Machine already exists&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="936524"&gt;libvirt-lxc crashes when interface type='direct' is used in domain&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="904432"&gt;SLE12: Cannot get networking to work in LXC containers&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921355"&gt;libvirt-tck qemu apparmor problems&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="914297"&gt;virt-create-rootfs can't connect to SMT server&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="921555"&gt;libvirt qemu domain with hostdev can't start apparmor-enforced&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-0236"&gt;&lt;/issue&gt;
++  &lt;issue tracker="bnc" id="953110"&gt;VUL-1: CVE-2015-5313: libvirtd: Directory traversal&lt;/issue&gt;
++  &lt;issue tracker="cve" id="CVE-2015-5313"&gt;&lt;/issue&gt;
++  &lt;category&gt;security&lt;/category&gt;
++  &lt;rating&gt;moderate&lt;/rating&gt;
++  &lt;summary&gt;Security update for libvirt&lt;/summary&gt;
++  &lt;description&gt;libvirt was updated to fix one security issue and several non-security issues.
++
++This security issue was fixed:
++
++- CVE-2015-0236: libvirt allowed remote authenticated users to obtain the VNC
++  password by using the VIR_DOMAIN_XML_SECURE flag with a crafted (1) snapshot
++  to the virDomainSnapshotGetXMLDesc interface or (2) image to the
++  virDomainSaveImageGetXMLDesc interface. (bsc#914693)
++- CVE-2015-5313: path traversal vulnerability allowed libvirtd process to write arbitrary files into file system using root permissions (bsc#953110)
++
++Theses non-security issues were fixed:
++
++- bsc#948686: Use PAUSED state for domains that are starting up.
++- bsc#903757: Provide nodeGetSecurityModel implementation in libxl.
++- bsc#938228: Set disk type to BLOCK when driver is not tap or file.
++- bsc#948516: Fix profile_status to distinguish between errors and unconfined domains.
++- bsc#936524: Fix error starting lxc containers with direct interfaces.
++- bsc#921555: Fixed apparmor generated profile for PCI hostdevs.
++- bsc#899334: Include additional upstream fixes for systemd TerminateMachine.
++- bsc#921586: Fix security driver default settings in /etc/libvirt/qemu.conf.
++- bsc#921355: Fixed a number of QEMU apparmor abstraction problems.
++- bsc#911737: Additional fix for the case where security labels aren't automatically set.
++- bsc#914297: Allow setting the URL of an SMT server to use in place of SCC.
++- bsc#904432: Backported route definition changes.
++&lt;/description&gt;
++&lt;/patchinfo&gt;
+</diff>
+    </file>
+  </files>
+</sourcediff></action>
+</request>

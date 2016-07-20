@@ -1,0 +1,7 @@
+assumed_issuer = FOO
+issuer_apiurls = FOO:https://api.foo.example.org BAR:https://api.bar.example.org
+bugzilla_url = https://bugzilla.example.org
+testreport_repository = svn+ssh://svn@qa.example.com/testreports
+l3db_creds = smrt:beeff00ddeadfeed
+l3db_url = https://l3.example.org/?incident__bug_id__in=
+metadata_url = https://qa.example.com/metadata

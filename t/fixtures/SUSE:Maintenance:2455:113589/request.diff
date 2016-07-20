@@ -1,0 +1,284 @@
+diff --bs curl-openssl1.2213/_link curl-openssl1.SUSE_SLE-11-SP3_Update/_link
+--- curl-openssl1.2213/_link
++++ curl-openssl1.SUSE_SLE-11-SP3_Update/_link
+@@ -1 +1 @@
+-&lt;link package="curl.2213" cicount="copy"/&gt;
+\ No newline at end of file
++&lt;link package="curl.SUSE_SLE-11-SP3_Update" cicount="copy"/&gt;
+\ No newline at end of file
+diff --bs curl.2213/curl-openssl1.changes curl.SUSE_SLE-11-SP3_Update/curl-openssl1.changes
+--- curl.2213/curl-openssl1.changes
++++ curl.SUSE_SLE-11-SP3_Update/curl-openssl1.changes
+@@ -1,4 +1,10 @@
+ -------------------------------------------------------------------
++Tue Apr 26 15:07:57 UTC 2016 - meissner@suse.com
++
++- curl-enforce-tls12.patch: allow enforcing tls 1.0, 1.1 or 1.2.
++  also report TLSv1.x correctly during debugging. (bsc#977409)
++
++-------------------------------------------------------------------
+ Sun Mar 13 17:37:28 UTC 2016 - meissner@suse.com
+ 
+ - build a curl enabled openssl1 binary, put in /usr/bin/curl.openssl1
+diff --bs curl.2213/curl-openssl1.spec curl.SUSE_SLE-11-SP3_Update/curl-openssl1.spec
+--- curl.2213/curl-openssl1.spec
++++ curl.SUSE_SLE-11-SP3_Update/curl-openssl1.spec
+@@ -112,6 +112,7 @@
+ Patch45:        curl-check_ctrl_connection_on_transfer.patch
+ Patch46:        0001-test46-update-cookie-expire-time.patch
+ Patch47:        curl-CVE-2016-0755.patch
++Patch48:        curl-enforce-tls12.patch
+ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+ 
+ %description
+@@ -231,6 +232,7 @@
+ %patch45 -p1
+ %patch46 -p1
+ %patch47 -p1
++%patch48 -p1
+ 
+ %build
+ autoreconf -fi
+diff --bs curl.2213/curl.changes curl.SUSE_SLE-11-SP3_Update/curl.changes
+--- curl.2213/curl.changes
++++ curl.SUSE_SLE-11-SP3_Update/curl.changes
+@@ -1,4 +1,10 @@
+ -------------------------------------------------------------------
++Tue Apr 26 15:07:57 UTC 2016 - meissner@suse.com
++
++- curl-enforce-tls12.patch: allow enforcing tls 1.0, 1.1 or 1.2.
++  also report TLSv1.x correctly during debugging. (bsc#977409)
++
++-------------------------------------------------------------------
+ Sun Mar 13 17:37:28 UTC 2016 - meissner@suse.com
+ 
+ - build a curl enabled openssl1 binary, put in /usr/bin/curl.openssl1
+diff --bs curl.2213/curl.spec curl.SUSE_SLE-11-SP3_Update/curl.spec
+--- curl.2213/curl.spec
++++ curl.SUSE_SLE-11-SP3_Update/curl.spec
+@@ -112,6 +112,7 @@
+ Patch45:        curl-check_ctrl_connection_on_transfer.patch
+ Patch46:        0001-test46-update-cookie-expire-time.patch
+ Patch47:        curl-CVE-2016-0755.patch
++Patch48:        curl-enforce-tls12.patch
+ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+ 
+ %description
+@@ -231,6 +232,7 @@
+ %patch45 -p1
+ %patch46 -p1
+ %patch47 -p1
++%patch48 -p1
+ 
+ %build
+ autoreconf -fi
+diff --bs curl.2213/curl-enforce-tls12.patch curl.SUSE_SLE-11-SP3_Update/curl-enforce-tls12.patch
+--- /dev/null
++++ curl.SUSE_SLE-11-SP3_Update/curl-enforce-tls12.patch
+@@ -0,0 +1,206 @@
++Index: curl-7.19.7/include/curl/curl.h
++===================================================================
++--- curl-7.19.7.orig/include/curl/curl.h
+++++ curl-7.19.7/include/curl/curl.h
++@@ -1383,6 +1383,9 @@ enum {
++   CURL_SSLVERSION_TLSv1,
++   CURL_SSLVERSION_SSLv2,
++   CURL_SSLVERSION_SSLv3,
+++  CURL_SSLVERSION_TLSv1_0,
+++  CURL_SSLVERSION_TLSv1_1,
+++  CURL_SSLVERSION_TLSv1_2,
++ 
++   CURL_SSLVERSION_LAST /* never use, keep last */
++ };
++Index: curl-7.19.7/src/main.c
++===================================================================
++--- curl-7.19.7.orig/src/main.c
+++++ curl-7.19.7/src/main.c
++@@ -884,6 +884,9 @@ static void help(void)
++     " -t/--telnet-option &lt;OPT=val&gt; Set telnet option",
++     " -z/--time-cond &lt;time&gt; Transfer based on a time condition",
++     " -1/--tlsv1         Use TLSv1 (SSL)",
+++    "    --tlsv1.0       Use TLSv1.0 (SSL)",
+++    "    --tlsv1.1       Use TLSv1.1 (SSL)",
+++    "    --tlsv1.2       Use TLSv1.2 (SSL)",
++     "    --trace &lt;file&gt;  Write a debug trace to the given file",
++     "    --trace-ascii &lt;file&gt; Like --trace but without the hex output",
++     "    --trace-time    Add time stamps to trace/verbose output",
++@@ -1758,6 +1761,9 @@ static ParameterError getparameter(char
++ 
++     {"0", "http1.0",     FALSE},
++     {"1", "tlsv1",       FALSE},
+++    {"10","tlsv1.0",     FALSE},
+++    {"11","tlsv1.1",     FALSE},
+++    {"12","tlsv1.2",     FALSE},
++     {"2", "sslv2",       FALSE},
++     {"3", "sslv3",       FALSE},
++     {"4", "ipv4",       FALSE},
++@@ -2296,9 +2302,25 @@ static ParameterError getparameter(char
++       /* HTTP version 1.0 */
++       config-&gt;httpversion = CURL_HTTP_VERSION_1_0;
++       break;
++-    case '1':
++-      /* TLS version 1 */
++-      config-&gt;ssl_version = CURL_SSLVERSION_TLSv1;
+++    case '1': /* --tlsv1* options */
+++      switch(subletter) {
+++      case '\0':
+++        /* TLS version 1.x */
+++        config-&gt;ssl_version = CURL_SSLVERSION_TLSv1;
+++        break;
+++      case '0':
+++        /* TLS version 1.0 */
+++        config-&gt;ssl_version = CURL_SSLVERSION_TLSv1_0;
+++        break;
+++      case '1':
+++        /* TLS version 1.1 */
+++        config-&gt;ssl_version = CURL_SSLVERSION_TLSv1_1;
+++        break;
+++      case '2':
+++        /* TLS version 1.2 */
+++        config-&gt;ssl_version = CURL_SSLVERSION_TLSv1_2;
+++        break;
+++      }
++       break;
++     case '2':
++       /* SSL version 2 */
++Index: curl-7.19.7/lib/ssluse.c
++===================================================================
++--- curl-7.19.7.orig/lib/ssluse.c
+++++ curl-7.19.7/lib/ssluse.c
++@@ -1330,30 +1330,34 @@ static void ssl_tls_trace(int direction,
++   const char *msg_name, *tls_rt_name;
++   char ssl_buf[1024];
++   int  ver, msg_type, txt_len;
+++  int ssl_ver_major = ssl_ver &gt;&gt; 8;
++ 
++   if(!conn || !conn-&gt;data || !conn-&gt;data-&gt;set.fdebug ||
++       (direction != 0 &amp;&amp; direction != 1))
++     return;
++ 
++   data = conn-&gt;data;
++-  ssl_ver &gt;&gt;= 8;
++-  ver = (ssl_ver == SSL2_VERSION_MAJOR ? '2' :
++-         ssl_ver == SSL3_VERSION_MAJOR ? '3' : '?');
+++  ver = (ssl_ver_major == SSL2_VERSION_MAJOR ? '2' :
+++         ssl_ver_major == SSL3_VERSION_MAJOR ? '3' : '?');
++ 
++   /* SSLv2 doesn't seem to have TLS record-type headers, so OpenSSL
++    * always pass-up content-type as 0. But the interesting message-type
++    * is at 'buf[0]'.
++    */
++-  if(ssl_ver == SSL3_VERSION_MAJOR &amp;&amp; content_type != 0)
+++  if(ssl_ver_major == SSL3_VERSION_MAJOR &amp;&amp; content_type != 0)
++     tls_rt_name = tls_rt_type(content_type);
++   else
++     tls_rt_name = "";
++ 
++   msg_type = *(char*)buf;
++-  msg_name = ssl_msg_type(ssl_ver, msg_type);
+++  msg_name = ssl_msg_type(ssl_ver_major, msg_type);
++ 
++-  txt_len = snprintf(ssl_buf, sizeof(ssl_buf), "SSLv%c, %s%s (%d):\n",
++-                     ver, tls_rt_name, msg_name, msg_type);
+++  if ((ssl_ver_major == 3) &amp;&amp; (ssl_ver &amp; 0xff))
+++     txt_len = snprintf(ssl_buf, sizeof(ssl_buf), "TLSv1.%d, %s%s (%d):\n",
+++                        (ssl_ver &amp; 0xff)-1, tls_rt_name, msg_name, msg_type);
+++  else
+++     txt_len = snprintf(ssl_buf, sizeof(ssl_buf), "SSLv%c, %s%s (%d):\n",
+++                        ver, tls_rt_name, msg_name, msg_type);
++   Curl_debug(data, CURLINFO_TEXT, ssl_buf, (size_t)txt_len, NULL);
++ 
++   Curl_debug(data, (direction == 1) ? CURLINFO_SSL_DATA_OUT :
++@@ -1402,14 +1406,14 @@ ossl_connect_step1(struct connectdata *c
++   switch(data-&gt;set.ssl.version) {
++   default:
++   case CURL_SSLVERSION_DEFAULT:
+++  case CURL_SSLVERSION_TLSv1:
+++  case CURL_SSLVERSION_TLSv1_0:
+++  case CURL_SSLVERSION_TLSv1_1:
+++  case CURL_SSLVERSION_TLSv1_2:
++     /* we try to figure out version */
++     req_method = SSLv23_client_method();
++     use_sni(TRUE);
++     break;
++-  case CURL_SSLVERSION_TLSv1:
++-    req_method = TLSv1_client_method();
++-    use_sni(TRUE);
++-    break;
++   case CURL_SSLVERSION_SSLv2:
++     req_method = SSLv2_client_method();
++     use_sni(FALSE);
++@@ -1499,9 +1503,71 @@ ossl_connect_step1(struct connectdata *c
++     ctx_options &amp;= ~SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS;
++ #endif
++ 
++-  /* disable SSLv2 in the default case (i.e. allow SSLv3 and TLSv1) */
++-  if(data-&gt;set.ssl.version == CURL_SSLVERSION_DEFAULT)
+++  switch(data-&gt;set.ssl.version) {
+++  case CURL_SSLVERSION_DEFAULT:
+++    ctx_options |= SSL_OP_NO_SSLv2;
+++#ifdef USE_TLS_SRP
+++    if(data-&gt;set.ssl.authtype == CURL_TLSAUTH_SRP) {
+++      infof(data, "Set version TLSv1.x for SRP authorisation\n");
+++      ctx_options |= SSL_OP_NO_SSLv3;
+++    }
+++#endif
+++    break;
+++
+++  case CURL_SSLVERSION_SSLv3:
+++    ctx_options |= SSL_OP_NO_SSLv2;
+++    ctx_options |= SSL_OP_NO_TLSv1;
+++#if OPENSSL_VERSION_NUMBER &gt;= 0x1000100FL
+++    ctx_options |= SSL_OP_NO_TLSv1_1;
+++    ctx_options |= SSL_OP_NO_TLSv1_2;
+++#endif
+++    break;
+++
+++  case CURL_SSLVERSION_TLSv1:
+++    ctx_options |= SSL_OP_NO_SSLv2;
+++    ctx_options |= SSL_OP_NO_SSLv3;
+++    break;
+++
+++  case CURL_SSLVERSION_TLSv1_0:
+++    ctx_options |= SSL_OP_NO_SSLv2;
+++    ctx_options |= SSL_OP_NO_SSLv3;
+++#if OPENSSL_VERSION_NUMBER &gt;= 0x1000100FL
+++    ctx_options |= SSL_OP_NO_TLSv1_1;
+++    ctx_options |= SSL_OP_NO_TLSv1_2;
+++#endif
+++    break;
+++
+++#if OPENSSL_VERSION_NUMBER &gt;= 0x1000100FL
+++  case CURL_SSLVERSION_TLSv1_1:
++     ctx_options |= SSL_OP_NO_SSLv2;
+++    ctx_options |= SSL_OP_NO_SSLv3;
+++    ctx_options |= SSL_OP_NO_TLSv1;
+++    ctx_options |= SSL_OP_NO_TLSv1_2;
+++    break;
+++
+++  case CURL_SSLVERSION_TLSv1_2:
+++    ctx_options |= SSL_OP_NO_SSLv2;
+++    ctx_options |= SSL_OP_NO_SSLv3;
+++    ctx_options |= SSL_OP_NO_TLSv1;
+++    ctx_options |= SSL_OP_NO_TLSv1_1;
+++    break;
+++#endif
+++
+++#ifndef OPENSSL_NO_SSL2
+++  case CURL_SSLVERSION_SSLv2:
+++    ctx_options |= SSL_OP_NO_SSLv3;
+++    ctx_options |= SSL_OP_NO_TLSv1;
+++#if OPENSSL_VERSION_NUMBER &gt;= 0x1000100FL
+++    ctx_options |= SSL_OP_NO_TLSv1_1;
+++    ctx_options |= SSL_OP_NO_TLSv1_2;
+++#endif
+++    break;
+++#endif
+++
+++  default:
+++    failf(data, "Unsupported SSL protocol version");
+++    return CURLE_SSL_CONNECT_ERROR;
+++  }
++ 
++   SSL_CTX_set_options(connssl-&gt;ctx, ctx_options);
++ 

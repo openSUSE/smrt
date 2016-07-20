@@ -1,0 +1,99 @@
+ImageMagick: nurse
+apparmor-profiles: nurse
+at: farmer
+atk: greedy
+augeas: pushover
+autofs: pushover smooth
+autofs5: pushover smooth
+bash: nurse
+bind: smooth
+btrfsprogs: natural
+clamav: pushover
+cluster-network: doctor
+collectd: pushover
+coreutils: nurse
+cpio: farmer
+crash: pushover nurse
+cron: farmer nurse
+cvs: nurse smooth
+cyrus-imapd: smooth
+dhcp6: nurse
+dhcpcd: nurse
+dhcpv6: nurse
+dmraid: smooth
+duperemove: natural
+ethereal: nurse
+fetchmail: nurse
+file: pushover smooth
+findutils: nurse
+gfs2: doctor
+glibc: pushover
+icedtea-web: pushover
+installation-images: doctor
+iotop: nurse
+ivman: nurse
+java-1_6_0-openjdk: pushover
+kdump: pushover
+kernel-default: doctor
+kernel-ec2: doctor
+kernel-pae: doctor
+kernel-source: doctor
+kernel-syms: doctor
+kernel-trace: doctor
+kernel-xen: doctor
+kernel-xenpae: doctor
+kexec-tools: pushover nurse
+kvm: pushover
+libapparmor1: nurse
+libvirt: grandpa
+libxml2: farmer nurse
+libzypp: pushover
+libzypp-zmd-backend: pushover
+logrotate: farmer
+lvm2: pushover
+mailman: smooth
+multipath-tools: hackus
+net-snmp: pushover
+netcat-openbsd: nurse
+nmap: nurse
+ntp: pushover
+openldap2: smooth
+openldap2-client: smooth
+openssh: pushover nurse
+openssl: pushover
+pam-modules: nurse
+perl: pushover
+php53: pushover
+postfix: pushover smooth
+postgresql: smooth
+postgresql-pl: smooth
+procps: nurse
+pure-ftpd: pushover nurse
+pwdutils: nurse
+python: pushover
+qemu: pushover
+quota: hunter
+release-notes-sled: papa
+rpm: nurse
+rsync: farmer nurse smooth
+sled-manuals_en: papa
+sled-release: papa
+sles-release: pushover
+smt: pushover
+spamassassin: smooth
+squid: doctor
+squid3: doctor
+star: nurse
+suseRegister: pushover
+susestudio: timid
+sysconfig: nurse
+tftp: farmer nurse
+tiff: nurse
+vm-install: tailor
+wireshark: nurse
+xen: tailor
+xntp: pushover
+xorg-x11: pushover clockwork
+yasm: doctor
+yast2-http-server: pushover
+yast2-network: nurse

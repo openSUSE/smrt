@@ -1,0 +1,15 @@
+<patchinfo incident="2513">
+  <issue id="977012" tracker="bnc">VUL-0: quagga: Missing size check in bgp_dump_routes_func in bgpd/bgp_dump.c allowing DoS</issue>
+  <issue id="CVE-2016-4049" tracker="cve" />
+  <category>security</category>
+  <rating>moderate</rating>
+  <packager>enamored</packager>
+  <name>quagga</name>
+  <description>
+This update for quagga fixes the following issue:
+
+Security issue fixed:
+- CVE-2016-4049: Fix for a buffer overflow error in bgp_dump_routes_func. (bsc#977012)
+</description>
+  <summary>Security update for quagga</summary>
+</patchinfo>

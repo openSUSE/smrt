@@ -1,0 +1,10 @@
+incident=45371
+summary=After patching to samba-client-4.2.4-16.1.x86_64.rpm it is not possible to connect to a NetApp Filer (NetApp's  network attached storage using CIFS).
+probability=medium
+impact=medium
+patch=correct
+reproducer=smbclient "//<NETAPP DFS SHARE" -W ADB -U "ADB\\<username>%<password>"
+reproducer=smb: \> cd <\allowed directory\>
+reproducer=
+reproducer=It now fails with errors, see bug #description.
+requires_3dparty=yes

@@ -1,0 +1,43 @@
+<request id="102014">
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2141" package="sles12sp1-docker-image.SUSE_SLE-12-SP1_Docker_Update"/>
+    <target project="SUSE:SLE-12-SP1:Docker:Update" package="sles12sp1-docker-image.2141"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2141" package="patchinfo"/>
+    <target project="SUSE:SLE-12-SP1:Docker:Update" package="patchinfo.2141"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2141" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-Module-Containers:12:ppc64le" package="patchinfo.2141"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2141" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-Module-Containers:12:s390x" package="patchinfo.2141"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2141" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-Module-Containers:12:x86_64" package="patchinfo.2141"/>
+  </action>
+  <priority>important</priority>
+  <state name="review" who="leonardocf" when="2016-03-09T16:48:22">
+    <comment/>
+  </state>
+  <review state="accepted" when="2016-03-09T16:44:50" who="leonardocf" by_group="qam-auto">
+    <comment>reviewers added: docker-team qam-sle</comment>
+    <history who="leonardocf" when="2016-03-09T16:48:23">
+      <description>Review got accepted</description>
+      <comment>reviewers added: docker-team qam-sle</comment>
+    </history>
+  </review>
+  <review state="accepted" when="2016-03-09T16:48:22" who="timid" by_group="docker-team">
+    <comment/>
+    <history who="timid" when="2016-03-09T17:40:02">
+      <description>Review got accepted</description>
+    </history>
+  </review>
+  <review state="new" by_group="qam-sle">
+    <comment/>
+  </review>
+  <description>requesting release</description>
+</request>

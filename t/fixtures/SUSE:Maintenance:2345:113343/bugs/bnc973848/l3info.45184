@@ -1,0 +1,9 @@
+incident=45184
+summary=Log files kept by journald have: a) excutable bits set, b) are readable for all. This is seen only after reboot, manual restart of systemd-journald.service fixes the permissions.
+probability=high
+impact=low
+patch=not_isolated
+reproducer=- use default configuration of systemd-journald (so that it logs to /run/log)
+reproducer=- reboot
+reproducer=- file /run/log/journal/*/system.journal has the reported 755 mode
+requires_3dparty=no

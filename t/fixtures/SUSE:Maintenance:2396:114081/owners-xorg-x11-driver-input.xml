@@ -1,0 +1,5 @@
+<collection>
+  <owner rootproject="SUSE" project="SUSE:SLE-12:GA" package="xorg-x11-driver-input">
+    <person name="clockwork" role="bugowner"/>
+  </owner>
+</collection>

@@ -1,0 +1,7 @@
+incident=44467
+summary=System booting with 'emergency' cmdline option didn't show a proper shell. The problem was the working directory of the emergency shell was changed so that default utilities couldn't be found resulting into the reported misbehavior.
+probability=low
+impact=high
+patch=correct
+reproducer=Unfortunately, no local reproducer is available.
+requires_3dparty=no

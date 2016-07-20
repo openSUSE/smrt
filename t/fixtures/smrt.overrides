@@ -1,0 +1,112 @@
+# vim: ft=zsh sw=2 sts=2 et fdm=marker cms=\ #\ %s
+
+function curl # {{{
+{
+  setopt local_options errexit
+
+  local fixdir=$FIXTURES
+  local -a opts
+
+  local OPTARG OPTIND opt
+  while getopts H:Sd:fno:s opt; do
+    :
+  done
+  opts=("${(@)@[1,$((OPTIND - 1))]}")
+  shift $((OPTIND - 1))
+
+  local -r issuer=${SMRT_ISSUER:-SUSE}
+  local -r apiurl=${${=config_issuer_apiurls}[(r)$~issuer:*]#$~issuer:}
+
+  case $1 in
+  (file://*)
+    =curl "${(@)opts}" "$@"
+  ;;
+  ($config_l3db_url*)
+    cat $fixdir/$PWD:t/l3s.xml
+  ;;
+  ($apiurl*)
+    fake-curl "${1#${apiurl-}}"
+  ;;
+  (*)
+    print -u 2 fake-curl OMG "$*" OMG
+    exit 22
+  ;;
+  esac
+} # }}}
+
+function fake-curl # {{{
+{
+  setopt local_options no_nomatch
+
+  local urlpath=$1
+  local -a fspath
+
+  case "$urlpath" in
+  (/build/*:Maintenance:<->/_result)
+    local prj=$urlpath:h:t
+    fspath=($fixdir/$prj:<->/repositories.xml)
+  ;;
+  (/group/*)
+    fspath=($fixdir/$mprj:$mrid/group-${urlpath#/group/}.xml)
+  ;;
+  (/person/*)
+    fspath=($fixdir/$mprj:$mrid/person-${urlpath#/person/}.xml)
+  ;;
+  (/request/<->)
+    local mrid=${urlpath#/request/}
+    if (( ${opts[(i)cmd=diff&view=xml]} <= $#opts )); then
+      fspath=($fixdir/SUSE:Maintenance:<->:$mrid/request.diff.xml)
+    else
+      fspath=($fixdir/SUSE:Maintenance:<->:$mrid/request.xml)
+    fi
+  ;;
+  (/search/owner)
+    local pkg=${opts[(r)filter=bugowner&binary=*]#*&binary=}
+    fspath=($fixdir/$mprj:$mrid/owners-${pkg}.xml)
+  ;;
+  (/search/published/binary/id)
+    local prj=${${opts[(r)match=project=*]#*\'}%\'*}
+    fspath=($fixdir/$prj:<->/packages.xml)
+  ;;
+  (/source/*:Maintenance:<->/_meta)
+    local prj=$urlpath:h:t
+    fspath=($fixdir/$prj:<->/project.xml)
+  ;;
+  (/source/*:Maintenance:<->/patchinfo/_patchinfo)
+    local prj=$urlpath:h:h:t
+    fspath=($fixdir/$prj:<->/patchinfo.xml)
+  ;;
+  esac
+
+  [[ -e $fspath ]] || {
+    print -u 2 "curl: (22) The requested URL returned error: 404 Not Found"
+    return 22
+  }
+  cat $fspath
+} # }}}
+
+function osc # {{{
+{
+  local fixdir=$FIXTURES
+
+  [[ $1 != --apiurl=* ]] || shift
+
+  case "$*" in
+  (qam assign --skip-template *)
+    # eat it
+  ;;
+  (*)
+    print -u 2 fake-osc OMG "$*" OMG
+    exit 22
+  ;;
+  esac
+} # }}}
+
+function ssh # {{{
+{
+} # }}}
+
+function svn # {{{
+{
+  command svn "$@"
+} # }}}

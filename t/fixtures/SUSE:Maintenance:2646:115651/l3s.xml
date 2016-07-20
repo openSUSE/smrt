@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<response>
+  <meta type="hash">
+    <limit type="integer">20</limit>
+    <next type="null"/>
+    <offset type="integer">0</offset>
+    <previous type="null"/>
+    <total_count type="integer">2</total_count>
+  </meta>
+  <objects type="list">
+    <object>
+      <bug_id type="integer">973010</bug_id>
+      <incident>/api/1/incident/45323/</incident>
+      <outcome>medium</outcome>
+      <patch>correct</patch>
+      <probability>medium</probability>
+      <reproducer>Please see Description.&#13;
+&#13;
+This is a bug fixed in upstream (https://sourceware.org/git/?p=glibc.git;a=commit;h=ab7ac0f)</reproducer>
+      <requires_thirdparty type="boolean">False</requires_thirdparty>
+      <resource_uri>/api/1/raederwerk/45323/</resource_uri>
+      <summary>Memory leak in glibc-2.11.3-17.95.2 when resolving a non-existing DNSBL entry using getaddrinfo()</summary>
+    </object>
+    <object>
+      <bug_id type="integer">975930</bug_id>
+      <incident>/api/1/incident/45293/</incident>
+      <outcome>low</outcome>
+      <patch>major_change</patch>
+      <probability>medium</probability>
+      <reproducer>Simple reproducing program is in [1]. Note that performance drop was not possible to observe on systems with "too many" CPUs [2] (and [3]). 4 CPUs (physical or virtual) were recommended.&#13;
+&#13;
+[1] https://bugzilla.suse.com/show_bug.cgi?id=975930#c0&#13;
+[2] https://bugzilla.suse.com/show_bug.cgi?id=975930#c37&#13;
+[3] https://bugzilla.suse.com/show_bug.cgi?id=975930#c26</reproducer>
+      <requires_thirdparty type="boolean">False</requires_thirdparty>
+      <resource_uri>/api/1/raederwerk/45293/</resource_uri>
+      <summary>Customer reports performance drop between SLE11 SP4 and SLE12 SP0 in multithreaded application -- it was demonstrated by simple multithreaded test (and partially affected by MALLOC_ARENA_MAX environment settings). They pointed that upstream glibc version doesn't have such degradation.&#13;
+</summary>
+    </object>
+  </objects>
+</response>

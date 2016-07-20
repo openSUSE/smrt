@@ -1,0 +1,15 @@
+<patchinfo incident="2396">
+  <name>xorg-x11-driver-input</name>
+  <issue id="967836" tracker="bnc">Add an absolute Placement Mode for Touchscreens to the evdev-dr</issue>
+  <issue id="319647" tracker="fate"/>
+  <category>recommended</category>
+  <rating>low</rating>
+  <packager>sneezy</packager>
+  <description>
+This update for xorg-x11-driver-input provides the following enhancements:
+
+- Add Kiosk mode: Implement a filter for the evdev driver which provides
+  click-on-touch and click-on-release. (fate#319647, bsc#967836)
+</description>
+  <summary>Recommended update for xorg-x11-driver-input</summary>
+</patchinfo>

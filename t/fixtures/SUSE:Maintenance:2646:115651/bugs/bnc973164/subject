@@ -1,0 +1,1 @@
+VUL-0: CVE-2016-3075: glibc: Stack overflow in nss_dns_getnetbyname_r

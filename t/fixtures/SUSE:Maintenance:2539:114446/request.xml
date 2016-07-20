@@ -1,0 +1,83 @@
+<request id="114446">
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="kernel-default.SUSE_SLE-11-SP2_Update"/>
+    <target project="SUSE:SLE-11-SP2:Update" package="kernel-default.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="kernel-ec2.SUSE_SLE-11-SP2_Update"/>
+    <target project="SUSE:SLE-11-SP2:Update" package="kernel-ec2.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="kernel-pae.SUSE_SLE-11-SP2_Update"/>
+    <target project="SUSE:SLE-11-SP2:Update" package="kernel-pae.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="kernel-source.SUSE_SLE-11-SP2_Update"/>
+    <target project="SUSE:SLE-11-SP2:Update" package="kernel-source.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="kernel-syms.SUSE_SLE-11-SP2_Update"/>
+    <target project="SUSE:SLE-11-SP2:Update" package="kernel-syms.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="kernel-trace.SUSE_SLE-11-SP2_Update"/>
+    <target project="SUSE:SLE-11-SP2:Update" package="kernel-trace.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="kernel-xen.SUSE_SLE-11-SP2_Update"/>
+    <target project="SUSE:SLE-11-SP2:Update" package="kernel-xen.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="patchinfo"/>
+    <target project="SUSE:SLE-11-SP2:Update" package="patchinfo.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP2:i586" package="patchinfo.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP2:s390x" package="patchinfo.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-DEBUGINFO:11-SP2:x86_64" package="patchinfo.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP2-LTSS:i586" package="patchinfo.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP2-LTSS:s390x" package="patchinfo.2539"/>
+  </action>
+  <action type="maintenance_release">
+    <source project="SUSE:Maintenance:2539" package="patchinfo"/>
+    <target project="SUSE:Updates:SLE-SERVER:11-SP2-LTSS:x86_64" package="patchinfo.2539"/>
+  </action>
+  <priority>important</priority>
+  <state name="review" who="maintenance-robot" when="2016-05-12T07:25:06">
+    <comment/>
+  </state>
+  <review state="accepted" when="2016-05-12T07:23:39" who="maintenance-robot" by_group="qam-auto">
+    <comment>reviewers added: autobuild-team oes-team qam-sle</comment>
+    <history who="maintenance-robot" when="2016-05-12T07:25:08">
+      <description>Review got accepted</description>
+      <comment>reviewers added: autobuild-team oes-team qam-sle</comment>
+    </history>
+  </review>
+  <review state="accepted" when="2016-05-12T07:25:06" who="oertel" by_group="autobuild-team">
+    <comment>reviewed_okay</comment>
+    <history who="oertel" when="2016-05-12T08:11:08">
+      <description>Review got accepted</description>
+      <comment>reviewed_okay</comment>
+    </history>
+  </review>
+  <review state="new" by_group="oes-team">
+    <comment/>
+  </review>
+  <review state="new" by_group="qam-sle">
+    <comment/>
+  </review>
+  <description>requesting release</description>
+</request>

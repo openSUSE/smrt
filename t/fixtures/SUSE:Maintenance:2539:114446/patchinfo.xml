@@ -1,0 +1,186 @@
+<patchinfo incident="2539">
+  <issue id="816446" tracker="bnc">Paravirtualized xen DomU time not following Dom0 time</issue>
+  <issue id="861093" tracker="bnc">POD: soft lockups in dom0 kernel</issue>
+  <issue id="928130" tracker="bnc">VUL-0: CVE-2015-3339: kernel: race condition between chown() and execve()</issue>
+  <issue id="935757" tracker="bnc">Kernel crash in lpfc driver</issue>
+  <issue id="939826" tracker="bnc">processes hang while trying to mount snapshot</issue>
+  <issue id="942367" tracker="bnc">VUL-0: CVE-2015-6252: kernel: vhost fd leak in ioctl VHOST_SET_LOG_FD</issue>
+  <issue id="945825" tracker="bnc">VUL-1:  CVE-2015-6937: kernel-source:  NULL pointer dereference in net/rds/connection.c</issue>
+  <issue id="946117" tracker="bnc">L3-Question: modprobe: page allocation failure: order:4, mode:0xd0</issue>
+  <issue id="946309" tracker="bnc">nfs client mounts hang, stop sending out packets</issue>
+  <issue id="948562" tracker="bnc">L3: XEN:  Panic : kernel BUG at /usr/src/packages/BUILD/kernel-xen-3.0.101/linux-3.0/arch/x86/mm/fault-xen.c:407!</issue>
+  <issue id="949744" tracker="bnc">SLES 11 SP3: XFS overwritten / zeroed page</issue>
+  <issue id="949936" tracker="bnc">VUL-0: CVE-2015-7799: kernel: Using the PPP character device driver caused the system to restart</issue>
+  <issue id="951440" tracker="bnc">VUL-0: CVE-2015-7872: kernel: Keyrings crash triggerable by unprivileged user</issue>
+  <issue id="952384" tracker="bnc">VUL-1: CVE-2015-7990: kernel: Incomplete fix for CVE-2015-6937, RDS socket handling</issue>
+  <issue id="953527" tracker="bnc">VUL-0: CVE-2015-5307: kernel: kvm: x86: avoid guest-&gt;host DOS by intercepting #AC</issue>
+  <issue id="954404" tracker="bnc">VUL-0: CVE-2015-8104: kernel: kvm: virt: guest to host DoS by triggering an infinite loop in microcode via #DB exception</issue>
+  <issue id="955354" tracker="bnc">VUL-1: CVE-2015-8215: kernel: net/ipv6/addrconf.c in the IPv6 stack in the Linux kernel before 4.0 does notvalidate attempted cha...</issue>
+  <issue id="955654" tracker="bnc">VUL-0: CVE-2013-7446: kernel: Unix sockets use after free - peer_wait_queue prematurely freed</issue>
+  <issue id="956708" tracker="bnc">VUL-0: CVE-2015-7515: kernel: aiptek: crash on invalid USB device descriptors</issue>
+  <issue id="956709" tracker="bnc">VUL-0: CVE-2015-7509: kernel: Mounting ext2 fs e2fsprogs/tests/f_orphan as ext4 crashes system</issue>
+  <issue id="958463" tracker="bnc">VUL-0: CVE-2015-8539: kernel: Fix handling of stored error in a negatively instantiated user key</issue>
+  <issue id="958886" tracker="bnc">VUL-1: CVE-2015-8543: kernel-source: connect IPv6/SOCK_RAW connect causes a denial of service</issue>
+  <issue id="958951" tracker="bnc">VUL-0: CVE-2015-7550: kernel: User triggerable crash from race between key read and rey revoke</issue>
+  <issue id="959190" tracker="bnc">VUL-1: CVE-2015-8569: kernel: information leak using getsockname</issue>
+  <issue id="959399" tracker="bnc">VUL-1: CVE-2015-8575: kernel-source: information leak from getsockname in bluetooth/sco</issue>
+  <issue id="961500" tracker="bnc">VUL-0: CVE-2016-0723: kernel: Use-after-free in TIOCGETD ioctl</issue>
+  <issue id="961509" tracker="bnc">VUL-0: CVE-2015-8767: kernel: SCTP denial of service during heartbeat timeout functions</issue>
+  <issue id="961512" tracker="bnc">VUL-1: CVE-2015-7566: kernel: Crash on invalid USB device descriptors in visor driver</issue>
+  <issue id="963765" tracker="bnc">VUL-0: CVE-2015-8785: kernel: fuse: possible denial of service in fuse_fill_write_pages()</issue>
+  <issue id="963767" tracker="bnc">VUL-0: CVE-2016-2069: kernel: race condition in the TLB flush logic</issue>
+  <issue id="964201" tracker="bnc">kernel BUG at /usr/src/packages/BUILD/kernel-default-3.0.101/linux-3.0/fs/nfs/write.c:318</issue>
+  <issue id="966437" tracker="bnc">VUL-0: CVE-2015-8812: kernel: CXGB3: Logic bug in return code handling prematurely frees key structures causing Use after free or kernel panic.</issue>
+  <issue id="966460" tracker="bnc">SLES 11 SP2 -  s390/cio: update measurement characteristics (L3:)</issue>
+  <issue id="966662" tracker="bnc">SLES11SP2 LTSS s390x Kernel PTF release request with the patches in bsc#966460</issue>
+  <issue id="966693" tracker="bnc">VUL-0: CVE-2016-2384: kernel: ALSA: usb-audio: double-free triggered by invalid USB descriptor</issue>
+  <issue id="967972" tracker="bnc">VUL-0: CVE-2016-2543: kernel: ALSA: seq: Fix missing NULL check at remove_events ioctl</issue>
+  <issue id="967973" tracker="bnc">VUL-0: CVE-2016-2544: kernel: ALSA: seq: Fix race at timer setup and close</issue>
+  <issue id="967974" tracker="bnc">VUL-0: CVE-2016-2545: kernel: ALSA: timer: Fix double unlink of active_list</issue>
+  <issue id="967975" tracker="bnc">VUL-0: CVE-2016-2546: kernel: ALSA: timer: Fix race among timer ioctls</issue>
+  <issue id="968010" tracker="bnc">VUL-0: CVE-2015-8816: kernel: USB: fix invalid memory access in hub_activate()</issue>
+  <issue id="968011" tracker="bnc">VUL-0: CVE-2016-2547: kernel: ALSA: timer: Harden slave timer list handling</issue>
+  <issue id="968012" tracker="bnc">VUL-0: CVE-2016-2548: kernel: ALSA: timer: Harden slave timer list handling (2nd CVE)</issue>
+  <issue id="968013" tracker="bnc">VUL-0: CVE-2016-2549: kernel: ALSA: hrtimer: Fix stall by hrtimer_cancel()</issue>
+  <issue id="968670" tracker="bnc">VUL-0: CVE-2016-2782: kernel: visor: crash on invalid USB device descriptors in treo_attach() in visor driver</issue>
+  <issue id="970504" tracker="bnc">VUL-0: CVE-2016-2143: kernel-source: s390x memory corruption on fork with large page tables</issue>
+  <issue id="970892" tracker="bnc">VUL-0: CVE-2016-3140: kernel-source: crash on invalid USB device descriptors (digi_acceleport driver)</issue>
+  <issue id="970909" tracker="bnc">VUL-0: CVE-2016-3139:  kernel-source: crash on invalid USB device descriptors (wacom driver)</issue>
+  <issue id="970911" tracker="bnc">VUL-0: CVE-2016-3138: kernel-source: crash on invalid USB device descriptors (cdc_acm driver)</issue>
+  <issue id="970948" tracker="bnc">VUL-0: CVE-2016-2847: kernel-source: limit the per-user amount of pages allocated in pipes</issue>
+  <issue id="970956" tracker="bnc">VUL-0: CVE-2016-2188: kernel-source: Kernel panic on invalid USB device descriptor (iowarrior driver)</issue>
+  <issue id="970958" tracker="bnc">VUL-0: CVE-2016-2186: kernel-source: Kernel panic on invalid USB device descriptor (powermate driver)</issue>
+  <issue id="970970" tracker="bnc">VUL-1: CVE-2016-3137: kernel-source: Crash on invalid USB device descriptors (cypress_m8 driver)</issue>
+  <issue id="971124" tracker="bnc">VUL-1: CVE-2016-2185: kernel: Kernel panic on invalid USB device descriptor (ati_remote2 driver)</issue>
+  <issue id="971125" tracker="bnc">VUL-1: CVE-2016-2184: kernel: Kernel panic on invalid USB device descriptor (snd_usb_audio driver)</issue>
+  <issue id="971126" tracker="bnc">VUL-0: CVE-2016-3134: kernel: netfilter: missing bounds check in ipt_entry structure</issue>
+  <issue id="971360" tracker="bnc">VUL-0: CVE-2016-3156: kernel-source: ipv4: denial of service when destroying a network interface</issue>
+  <issue id="972510" tracker="bnc">L3: System panic in bfa_cb_ioim_done()-&gt;memcpy()</issue>
+  <issue id="973570" tracker="bnc">smbd locks up the kernel</issue>
+  <issue id="975945" tracker="bnc">VUL-0: CVE-2016-3955: kernel: buffer overflow in usbip by trusting length of incoming packets</issue>
+  <issue id="977847" tracker="bnc">L3: Bug fix request for SLES 11 SP2 LTSS: kernel-default, bsc#929143</issue>
+  <issue id="978822" tracker="bnc">VUL-0: CVE-2016-4486: kernel: Information leak in rtnetlink</issue>
+  <issue id="CVE-2013-2015" tracker="cve" />
+  <issue id="CVE-2013-7446" tracker="cve" />
+  <issue id="CVE-2015-0272" tracker="cve" />
+  <issue id="CVE-2015-3339" tracker="cve" />
+  <issue id="CVE-2015-5307" tracker="cve" />
+  <issue id="CVE-2015-6252" tracker="cve" />
+  <issue id="CVE-2015-6937" tracker="cve" />
+  <issue id="CVE-2015-7509" tracker="cve" />
+  <issue id="CVE-2015-7515" tracker="cve" />
+  <issue id="CVE-2015-7550" tracker="cve" />
+  <issue id="CVE-2015-7566" tracker="cve" />
+  <issue id="CVE-2015-7799" tracker="cve" />
+  <issue id="CVE-2015-7872" tracker="cve" />
+  <issue id="CVE-2015-7990" tracker="cve" />
+  <issue id="CVE-2015-8104" tracker="cve" />
+  <issue id="CVE-2015-8215" tracker="cve" />
+  <issue id="CVE-2015-8539" tracker="cve" />
+  <issue id="CVE-2015-8543" tracker="cve" />
+  <issue id="CVE-2015-8569" tracker="cve" />
+  <issue id="CVE-2015-8575" tracker="cve" />
+  <issue id="CVE-2015-8767" tracker="cve" />
+  <issue id="CVE-2015-8785" tracker="cve" />
+  <issue id="CVE-2015-8812" tracker="cve" />
+  <issue id="CVE-2015-8816" tracker="cve" />
+  <issue id="CVE-2016-0723" tracker="cve" />
+  <issue id="CVE-2016-2069" tracker="cve" />
+  <issue id="CVE-2016-2143" tracker="cve" />
+  <issue id="CVE-2016-2184" tracker="cve" />
+  <issue id="CVE-2016-2185" tracker="cve" />
+  <issue id="CVE-2016-2186" tracker="cve" />
+  <issue id="CVE-2016-2188" tracker="cve" />
+  <issue id="CVE-2016-2384" tracker="cve" />
+  <issue id="CVE-2016-2543" tracker="cve" />
+  <issue id="CVE-2016-2544" tracker="cve" />
+  <issue id="CVE-2016-2545" tracker="cve" />
+  <issue id="CVE-2016-2546" tracker="cve" />
+  <issue id="CVE-2016-2547" tracker="cve" />
+  <issue id="CVE-2016-2548" tracker="cve" />
+  <issue id="CVE-2016-2549" tracker="cve" />
+  <issue id="CVE-2016-2782" tracker="cve" />
+  <issue id="CVE-2016-2847" tracker="cve" />
+  <issue id="CVE-2016-3134" tracker="cve" />
+  <issue id="CVE-2016-3137" tracker="cve" />
+  <issue id="CVE-2016-3138" tracker="cve" />
+  <issue id="CVE-2016-3139" tracker="cve" />
+  <issue id="CVE-2016-3140" tracker="cve" />
+  <issue id="CVE-2016-3156" tracker="cve" />
+  <issue id="CVE-2016-4486" tracker="cve" />
+  <category>security</category>
+  <rating>important</rating>
+  <packager>editor</packager>
+  <reboot_needed/>
+  <name>kernel-source</name>
+  <description>The SUSE Linux Enterprise 11 SP2 kernel was updated to receive various security and bug fixes.
+
+The following security bugs were fixed:
+- CVE-2016-4486: Fixed 4 byte information leak in net/core/rtnetlink.c (bsc#978822).
+- CVE-2016-3134: The netfilter subsystem in the Linux kernel did not validate certain offset fields, which allowed local users to gain privileges or cause a denial of service (heap memory corruption) via an IPT_SO_SET_REPLACE setsockopt call (bnc#971126).
+- CVE-2016-2847: fs/pipe.c in the Linux kernel did not limit the amount of unread data in pipes, which allowed local users to cause a denial of service (memory consumption) by creating many pipes with non-default sizes (bnc#970948).
+- CVE-2016-2188: The iowarrior_probe function in drivers/usb/misc/iowarrior.c in the Linux kernel allowed physically proximate attackers to cause a denial of service (NULL pointer dereference and system crash) via a crafted endpoints value in a USB device descriptor (bnc#970956).
+- CVE-2016-3138: The acm_probe function in drivers/usb/class/cdc-acm.c in the Linux kernel allowed physically proximate attackers to cause a denial of service (NULL pointer dereference and system crash) via a USB device without both a control and a data endpoint descriptor (bnc#970911).
+- CVE-2016-3137: drivers/usb/serial/cypress_m8.c in the Linux kernel allowed physically proximate attackers to cause a denial of service (NULL pointer dereference and system crash) via a USB device without both an interrupt-in and an interrupt-out endpoint descriptor, related to the cypress_generic_port_probe and cypress_open functions (bnc#970970).
+- CVE-2016-3140: The digi_port_init function in drivers/usb/serial/digi_acceleport.c in the Linux kernel allowed physically proximate attackers to cause a denial of service (NULL pointer dereference and system crash) via a crafted endpoints value in a USB device descriptor (bnc#970892).
+- CVE-2016-2186: The powermate_probe function in drivers/input/misc/powermate.c in the Linux kernel allowed physically proximate attackers to cause a denial of service (NULL pointer dereference and system crash) via a crafted endpoints value in a USB device descriptor (bnc#970958).
+- CVE-2016-2185: The ati_remote2_probe function in drivers/input/misc/ati_remote2.c in the Linux kernel allowed physically proximate attackers to cause a denial of service (NULL pointer dereference and system crash) via a crafted endpoints value in a USB device descriptor (bnc#971124).
+- CVE-2016-3156: The IPv4 implementation in the Linux kernel mishandles destruction of device objects, which allowed guest OS users to cause a denial of service (host OS networking outage) by arranging for a large number of IP addresses (bnc#971360).
+- CVE-2016-2184: The create_fixed_stream_quirk function in sound/usb/quirks.c in the snd-usb-audio driver in the Linux kernel allowed physically proximate attackers to cause a denial of service (NULL pointer dereference or double free, and system crash) via a crafted endpoints value in a USB device descriptor (bnc#971125).
+- CVE-2016-3139: The wacom_probe function in drivers/input/tablet/wacom_sys.c in the Linux kernel allowed physically proximate attackers to cause a denial of service (NULL pointer dereference and system crash) via a crafted endpoints value in a USB device descriptor (bnc#970909).
+- CVE-2016-2143: The fork implementation in the Linux kernel on s390 platforms mishandled the case of four page-table levels, which allowed local users to cause a denial of service (system crash) or possibly have unspecified other impact via a crafted application, related to arch/s390/include/asm/mmu_context.h and arch/s390/include/asm/pgalloc.h (bnc#970504).
+- CVE-2016-2782: The treo_attach function in drivers/usb/serial/visor.c in the Linux kernel allowed physically proximate attackers to cause a denial of service (NULL pointer dereference and system crash) or possibly have unspecified other impact by inserting a USB device that lacks a (1) bulk-in or (2) interrupt-in endpoint (bnc#968670).
+- CVE-2015-8816: The hub_activate function in drivers/usb/core/hub.c in the Linux kernel did not properly maintain a hub-interface data structure, which allowed physically proximate attackers to cause a denial of service (invalid memory access and system crash) or possibly have unspecified other impact by unplugging a USB hub device (bnc#968010).
+- CVE-2015-7566: The clie_5_attach function in drivers/usb/serial/visor.c in the Linux kernel allowed physically proximate attackers to cause a denial of service (NULL pointer dereference and system crash) or possibly have unspecified other impact by inserting a USB device that lacks a bulk-out endpoint (bnc#961512).
+- CVE-2016-2549: sound/core/hrtimer.c in the Linux kernel did not prevent recursive callback access, which allowed local users to cause a denial of service (deadlock) via a crafted ioctl call (bnc#968013).
+- CVE-2016-2547: sound/core/timer.c in the Linux kernel employed a locking approach that did not consider slave timer instances, which allowed local users to cause a denial of service (race condition, use-after-free, and system crash) via a crafted ioctl call (bnc#968011).
+- CVE-2016-2548: sound/core/timer.c in the Linux kernel retained certain linked lists after a close or stop action, which allowed local users to cause a denial of service (system crash) via a crafted ioctl call, related to the (1) snd_timer_close and (2) _snd_timer_stop functions (bnc#968012).
+- CVE-2016-2546: sound/core/timer.c in the Linux kernel used an incorrect type of mutex, which allowed local users to cause a denial of service (race condition, use-after-free, and system crash) via a crafted ioctl call (bnc#967975).
+- CVE-2016-2545: The snd_timer_interrupt function in sound/core/timer.c in the Linux kernel did not properly maintain a certain linked list, which allowed local users to cause a denial of service (race condition and system crash) via a crafted ioctl call (bnc#967974).
+- CVE-2016-2544: Race condition in the queue_delete function in sound/core/seq/seq_queue.c in the Linux kernel allowed local users to cause a denial of service (use-after-free and system crash) by making an ioctl call at a certain time (bnc#967973).
+- CVE-2016-2543: The snd_seq_ioctl_remove_events function in sound/core/seq/seq_clientmgr.c in the Linux kernel did not verify FIFO assignment before proceeding with FIFO clearing, which allowed local users to cause a denial of service (NULL pointer dereference and OOPS) via a crafted ioctl call (bnc#967972).
+- CVE-2016-2384: Double free vulnerability in the snd_usbmidi_create function in sound/usb/midi.c in the Linux kernel allowed physically proximate attackers to cause a denial of service (panic) or possibly have unspecified other impact via vectors involving an invalid USB descriptor (bnc#966693).
+- CVE-2015-8812: drivers/infiniband/hw/cxgb3/iwch_cm.c in the Linux kernel did not properly identify error conditions, which allowed remote attackers to execute arbitrary code or cause a denial of service (use-after-free) via crafted packets (bnc#966437).
+- CVE-2015-8785: The fuse_fill_write_pages function in fs/fuse/file.c in the Linux kernel allowed local users to cause a denial of service (infinite loop) via a writev system call that triggers a zero length for the first segment of an iov (bnc#963765).
+- CVE-2016-2069: Race condition in arch/x86/mm/tlb.c in the Linux kernel .4.1 allowed local users to gain privileges by triggering access to a paging structure by a different CPU (bnc#963767).
+- CVE-2016-0723: Race condition in the tty_ioctl function in drivers/tty/tty_io.c in the Linux kernel allowed local users to obtain sensitive information from kernel memory or cause a denial of service (use-after-free and system crash) by making a TIOCGETD ioctl call during processing of a TIOCSETD ioctl call (bnc#961500).
+- CVE-2013-7446: Use-after-free vulnerability in net/unix/af_unix.c in the Linux kernel allowed local users to bypass intended AF_UNIX socket permissions or cause a denial of service (panic) via crafted epoll_ctl calls (bnc#955654).
+- CVE-2015-8767: net/sctp/sm_sideeffect.c in the Linux kernel did not properly manage the relationship between a lock and a socket, which allowed local users to cause a denial of service (deadlock) via a crafted sctp_accept call (bnc#961509).
+- CVE-2015-7515: The aiptek_probe function in drivers/input/tablet/aiptek.c in the Linux kernel allowed physically proximate attackers to cause a denial of service (NULL pointer dereference and system crash) via a crafted USB device that lacks endpoints (bnc#956708).
+- CVE-2015-8215: net/ipv6/addrconf.c in the IPv6 stack in the Linux kernel did not validate attempted changes to the MTU value, which allowed context-dependent attackers to cause a denial of service (packet loss) via a value that is (1) smaller than the minimum compliant value or (2) larger than the MTU of an interface, as demonstrated by a Router Advertisement (RA) message that is not validated by a daemon, a different vulnerability than CVE-2015-0272 (bnc#955354).
+- CVE-2015-7550: The keyctl_read_key function in security/keys/keyctl.c in the Linux kernel did not properly use a semaphore, which allowed local users to cause a denial of service (NULL pointer dereference and system crash) or possibly have unspecified other impact via a crafted application that leverages a race condition between keyctl_revoke and keyctl_read calls (bnc#958951).
+- CVE-2015-8569: The (1) pptp_bind and (2) pptp_connect functions in drivers/net/ppp/pptp.c in the Linux kernel did not verify an address length, which allowed local users to obtain sensitive information from kernel memory and bypass the KASLR protection mechanism via a crafted application (bnc#959190).
+- CVE-2015-8575: The sco_sock_bind function in net/bluetooth/sco.c in the Linux kernel did not verify an address length, which allowed local users to obtain sensitive information from kernel memory and bypass the KASLR protection mechanism via a crafted application (bnc#959399).
+- CVE-2015-8543: The networking implementation in the Linux kernel did not validate protocol identifiers for certain protocol families, which allowed local users to cause a denial of service (NULL function pointer dereference and system crash) or possibly gain privileges by leveraging CLONE_NEWUSER support to execute a crafted SOCK_RAW application (bnc#958886).
+- CVE-2015-8539: The KEYS subsystem in the Linux kernel allowed local users to gain privileges or cause a denial of service (BUG) via crafted keyctl commands that negatively instantiate a key, related to security/keys/encrypted-keys/encrypted.c, security/keys/trusted.c, and security/keys/user_defined.c (bnc#958463).
+- CVE-2015-7509: fs/ext4/namei.c in the Linux kernel allowed physically proximate attackers to cause a denial of service (system crash) via a crafted no-journal filesystem, a related issue to CVE-2013-2015 (bnc#956709).
+- CVE-2015-7799: The slhc_init function in drivers/net/slip/slhc.c in the Linux kernel did not ensure that certain slot numbers are valid, which allowed local users to cause a denial of service (NULL pointer dereference and system crash) via a crafted PPPIOCSMAXCID ioctl call (bnc#949936).
+- CVE-2015-8104: The KVM subsystem in the Linux kernel allowed guest OS users to cause a denial of service (host OS panic or hang) by triggering many #DB (aka Debug) exceptions, related to svm.c (bnc#954404).
+- CVE-2015-5307: The KVM subsystem in the Linux kernel allowed guest OS users to cause a denial of service (host OS panic or hang) by triggering many #AC (aka Alignment Check) exceptions, related to svm.c and vmx.c (bnc#953527).
+- CVE-2015-7990: Race condition in the rds_sendmsg function in net/rds/sendmsg.c in the Linux kernel allowed local users to cause a denial of service (NULL pointer dereference and system crash) or possibly have unspecified other impact by using a socket that was not properly bound (bnc#952384).
+- CVE-2015-7872: The key_gc_unused_keys function in security/keys/gc.c in the Linux kernel allowed local users to cause a denial of service (OOPS) via crafted keyctl commands (bnc#951440).
+- CVE-2015-6937: The __rds_conn_create function in net/rds/connection.c in the Linux kernel allowed local users to cause a denial of service (NULL pointer dereference and system crash) or possibly have unspecified other impact by using a socket that was not properly bound (bnc#945825).
+- CVE-2015-6252: The vhost_dev_ioctl function in drivers/vhost/vhost.c in the Linux kernel allowed local users to cause a denial of service (memory consumption) via a VHOST_SET_LOG_FD ioctl call that triggers permanent file-descriptor allocation (bnc#942367).
+- CVE-2015-3339: Race condition in the prepare_binprm function in fs/exec.c in the Linux kernel allowed local users to gain privileges by executing a setuid program at a time instant when a chown to root is in progress, and the ownership is changed but the setuid bit is not yet stripped (bnc#928130).
+
+The following non-security bugs were fixed:
+- Fix handling of re-write-before-commit for mmapped NFS pages (bsc#964201).
+- Fix lpfc_send_rscn_event allocation size claims bnc#935757
+- Fix ntpd clock synchronization in Xen PV domains (bnc#816446).
+- Fix vmalloc_fault oops during lazy MMU updates (bsc#948562).
+- Make sure XPRT_CONNECTING gets cleared when needed (bsc#946309).
+- SCSI: bfa: Fix to handle firmware tskim abort request response (bsc#972510).
+- USB: usbip: fix potential out-of-bounds write (bnc#975945).
+- af_unix: Guard against other == sk in unix_dgram_sendmsg (bsc#973570).
+- dm-snap: avoid deadock on s->lock when a read is split (bsc#939826).
+- mm/hugetlb: check for pte NULL pointer in __page_check_address() (bsc#977847).
+- nf_conntrack: fix bsc#758540 kabi fix (bsc#946117).
+- privcmd: allow preempting long running user-mode originating hypercalls (bnc#861093).
+- s390/cio: collect format 1 channel-path description data (bsc#966460, bsc#966662).
+- s390/cio: ensure consistent measurement state (bsc#966460, bsc#966662).
+- s390/cio: fix measurement characteristics memleak (bsc#966460, bsc#966662).
+- s390/cio: update measurement characteristics (bsc#966460, bsc#966662).
+- xfs: Fix lost direct IO write in the last block (bsc#949744).
+</description>
+<summary>Security update for the Linux Kernel</summary>
+</patchinfo>

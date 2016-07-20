@@ -1,0 +1,61 @@
+bnc816446 Paravirtualized xen DomU time not following Dom0 time
+bnc861093 POD: soft lockups in dom0 kernel
+bnc928130 VUL-0: CVE-2015-3339: kernel: race condition between chown() and execve()
+bnc935757 Kernel crash in lpfc driver
+bnc939826 processes hang while trying to mount snapshot
+bnc942367 VUL-0: CVE-2015-6252: kernel: vhost fd leak in ioctl VHOST_SET_LOG_FD
+bnc945825 VUL-1:  CVE-2015-6937: kernel-source:  NULL pointer dereference in net/rds/connection.c
+bnc946117 L3-Question: modprobe: page allocation failure: order:4, mode:0xd0
+bnc946309 nfs client mounts hang, stop sending out packets
+bnc948562 L3: XEN:  Panic : kernel BUG at /usr/src/packages/BUILD/kernel-xen-3.0.101/linux-3.0/arch/x86/mm/fault-xen.c:407!
+bnc949744 SLES 11 SP3: XFS overwritten / zeroed page
+bnc949936 VUL-0: CVE-2015-7799: kernel: Using the PPP character device driver caused the system to restart
+bnc951440 VUL-0: CVE-2015-7872: kernel: Keyrings crash triggerable by unprivileged user
+bnc952384 VUL-1: CVE-2015-7990: kernel: Incomplete fix for CVE-2015-6937, RDS socket handling
+bnc953527 VUL-0: CVE-2015-5307: kernel: kvm: x86: avoid guest->host DOS by intercepting #AC
+bnc954404 VUL-0: CVE-2015-8104: kernel: kvm: virt: guest to host DoS by triggering an infinite loop in microcode via #DB exception
+bnc955354 VUL-1: CVE-2015-8215: kernel: net/ipv6/addrconf.c in the IPv6 stack in the Linux kernel before 4.0 does notvalidate attempted cha...
+bnc955654 VUL-0: CVE-2013-7446: kernel: Unix sockets use after free - peer_wait_queue prematurely freed
+bnc956708 VUL-0: CVE-2015-7515: kernel: aiptek: crash on invalid USB device descriptors
+bnc956709 VUL-0: CVE-2015-7509: kernel: Mounting ext2 fs e2fsprogs/tests/f_orphan as ext4 crashes system
+bnc958463 VUL-0: CVE-2015-8539: kernel: Fix handling of stored error in a negatively instantiated user key
+bnc958886 VUL-1: CVE-2015-8543: kernel-source: connect IPv6/SOCK_RAW connect causes a denial of service
+bnc958951 VUL-0: CVE-2015-7550: kernel: User triggerable crash from race between key read and rey revoke
+bnc959190 VUL-1: CVE-2015-8569: kernel: information leak using getsockname
+bnc959399 VUL-1: CVE-2015-8575: kernel-source: information leak from getsockname in bluetooth/sco
+bnc961500 VUL-0: CVE-2016-0723: kernel: Use-after-free in TIOCGETD ioctl
+bnc961509 VUL-0: CVE-2015-8767: kernel: SCTP denial of service during heartbeat timeout functions
+bnc961512 VUL-1: CVE-2015-7566: kernel: Crash on invalid USB device descriptors in visor driver
+bnc963765 VUL-0: CVE-2015-8785: kernel: fuse: possible denial of service in fuse_fill_write_pages()
+bnc963767 VUL-0: CVE-2016-2069: kernel: race condition in the TLB flush logic
+bnc964201 kernel BUG at /usr/src/packages/BUILD/kernel-default-3.0.101/linux-3.0/fs/nfs/write.c:318
+bnc966437 VUL-0: CVE-2015-8812: kernel: CXGB3: Logic bug in return code handling prematurely frees key structures causing Use after free or kernel panic.
+bnc966460 SLES 11 SP2 -  s390/cio: update measurement characteristics (L3:)
+bnc966662 SLES11SP2 LTSS s390x Kernel PTF release request with the patches in bsc#966460
+bnc966693 VUL-0: CVE-2016-2384: kernel: ALSA: usb-audio: double-free triggered by invalid USB descriptor
+bnc967972 VUL-0: CVE-2016-2543: kernel: ALSA: seq: Fix missing NULL check at remove_events ioctl
+bnc967973 VUL-0: CVE-2016-2544: kernel: ALSA: seq: Fix race at timer setup and close
+bnc967974 VUL-0: CVE-2016-2545: kernel: ALSA: timer: Fix double unlink of active_list
+bnc967975 VUL-0: CVE-2016-2546: kernel: ALSA: timer: Fix race among timer ioctls
+bnc968010 VUL-0: CVE-2015-8816: kernel: USB: fix invalid memory access in hub_activate()
+bnc968011 VUL-0: CVE-2016-2547: kernel: ALSA: timer: Harden slave timer list handling
+bnc968012 VUL-0: CVE-2016-2548: kernel: ALSA: timer: Harden slave timer list handling (2nd CVE)
+bnc968013 VUL-0: CVE-2016-2549: kernel: ALSA: hrtimer: Fix stall by hrtimer_cancel()
+bnc968670 VUL-0: CVE-2016-2782: kernel: visor: crash on invalid USB device descriptors in treo_attach() in visor driver
+bnc970504 VUL-0: CVE-2016-2143: kernel-source: s390x memory corruption on fork with large page tables
+bnc970892 VUL-0: CVE-2016-3140: kernel-source: crash on invalid USB device descriptors (digi_acceleport driver)
+bnc970909 VUL-0: CVE-2016-3139:  kernel-source: crash on invalid USB device descriptors (wacom driver)
+bnc970911 VUL-0: CVE-2016-3138: kernel-source: crash on invalid USB device descriptors (cdc_acm driver)
+bnc970948 VUL-0: CVE-2016-2847: kernel-source: limit the per-user amount of pages allocated in pipes
+bnc970956 VUL-0: CVE-2016-2188: kernel-source: Kernel panic on invalid USB device descriptor (iowarrior driver)
+bnc970958 VUL-0: CVE-2016-2186: kernel-source: Kernel panic on invalid USB device descriptor (powermate driver)
+bnc970970 VUL-1: CVE-2016-3137: kernel-source: Crash on invalid USB device descriptors (cypress_m8 driver)
+bnc971124 VUL-1: CVE-2016-2185: kernel: Kernel panic on invalid USB device descriptor (ati_remote2 driver)
+bnc971125 VUL-1: CVE-2016-2184: kernel: Kernel panic on invalid USB device descriptor (snd_usb_audio driver)
+bnc971126 VUL-0: CVE-2016-3134: kernel: netfilter: missing bounds check in ipt_entry structure
+bnc971360 VUL-0: CVE-2016-3156: kernel-source: ipv4: denial of service when destroying a network interface
+bnc972510 L3: System panic in bfa_cb_ioim_done()->memcpy()
+bnc973570 smbd locks up the kernel
+bnc975945 VUL-0: CVE-2016-3955: kernel: buffer overflow in usbip by trusting length of incoming packets
+bnc977847 L3: Bug fix request for SLES 11 SP2 LTSS: kernel-default, bsc#929143
+bnc978822 VUL-0: CVE-2016-4486: kernel: Information leak in rtnetlink

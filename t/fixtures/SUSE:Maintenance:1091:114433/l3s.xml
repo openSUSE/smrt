@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<response>
+  <meta type="hash">
+    <limit type="integer">20</limit>
+    <next type="null"/>
+    <offset type="integer">0</offset>
+    <previous type="null"/>
+    <total_count type="integer">2</total_count>
+  </meta>
+  <objects type="list">
+    <object>
+      <bug_id type="integer">846912</bug_id>
+      <incident>/api/1/incident/39883/</incident>
+      <outcome>medium</outcome>
+      <patch>obvious</patch>
+      <probability>medium</probability>
+      <reproducer>Please check bug.</reproducer>
+      <requires_thirdparty type="boolean">False</requires_thirdparty>
+      <resource_uri>/api/1/raederwerk/39883/</resource_uri>
+      <summary>Customer reported that while running a java app, it fails with error:&#13;
+'GThread-ERROR **: GThread system may only be initialized once.&#13;
+aborting...'&#13;
+&#13;
+It looks like glib2 doesn't allow calling multiple times g_thread_init().</summary>
+    </object>
+    <object>
+      <bug_id type="integer">931445</bug_id>
+      <incident>/api/1/incident/43085/</incident>
+      <outcome>medium</outcome>
+      <patch>correct</patch>
+      <probability>medium</probability>
+      <reproducer>It can be reproduced with the file ProbeContentTypeCrashes.java supplied by the customer:&#13;
+&#13;
+1) /usr/lib64/jvm/java-1.7.0-ibm-1.7.0/bin/javac ProbeContentTypeCrashes.java &#13;
+2) /usr/lib64/jvm/jre-1.7.0-ibm/bin/java -classpath /tmp ProbeContentTypeCrashes 2</reproducer>
+      <requires_thirdparty type="boolean">False</requires_thirdparty>
+      <resource_uri>/api/1/raederwerk/43085/</resource_uri>
+      <summary>With multiple threads, a Java program calling the glib2 library crashes.</summary>
+    </object>
+  </objects>
+</response>

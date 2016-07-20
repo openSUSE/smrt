@@ -1,0 +1,747 @@
+diff --bs gdk-pixbuf.1133/gdk-pixbuf.changes gdk-pixbuf.SUSE_SLE-12_Update/gdk-pixbuf.changes
+--- gdk-pixbuf.1133/gdk-pixbuf.changes
++++ gdk-pixbuf.SUSE_SLE-12_Update/gdk-pixbuf.changes
+@@ -1,4 +1,15 @@
+ -------------------------------------------------------------------
++Mon Jan  4 16:00:35 UTC 2016 - mgorse@suse.com
++
++- Add gdk-pixbuf-bsc960155-divide-by-zero.patch -- fix a possible
++  divide by zero (bsc#960155).
++
++- Add gdk-pixbuf-2-32-overflow-fixes.patch,
++  0001-ico-Protect-against-overflow.patch,
++  gdk-pixbuf-bgo747605.patch, and gdk-pixbuf-bgo758991.patch:
++  fix various overflows (bsc#958963 CVE-2015-7552).
++
++-------------------------------------------------------------------
+ Wed Nov 25 21:54:00 UTC 2015 - mgorse@suse.com
+ 
+ - Add
+diff --bs gdk-pixbuf.1133/gdk-pixbuf.spec gdk-pixbuf.SUSE_SLE-12_Update/gdk-pixbuf.spec
+--- gdk-pixbuf.1133/gdk-pixbuf.spec
++++ gdk-pixbuf.SUSE_SLE-12_Update/gdk-pixbuf.spec
+@@ -1,7 +1,7 @@
+ #
+ # spec file for package gdk-pixbuf
+ #
+-# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
++# Copyright (c) 2016 SUSE LINUX GmbH, Nuernberg, Germany.
+ #
+ # All modifications and additions to the file contributed by third parties
+ # remain the property of their copyright owners, unless otherwise agreed
+@@ -37,6 +37,17 @@
+ Patch2:         0001-pixops-Don-t-overflow-variables-when-shifting-them.patch
+ # PATCH-FIX-UPSTREAM 0001-pixops-use-gint64-in-more-places-to-avoid-overflow-w.patch bsc#948791 mgorse@suse.com -- fix more overflows scaling a gif (CVE-2015-7674).
+ Patch3:         0001-pixops-use-gint64-in-more-places-to-avoid-overflow-w.patch
++# PATCH-FIX-UPSTREAM gdk-pixbuf-bsc960155-divide-by-zero.patch bsc#960155 mgorse@suse.com -- fix a possible divide by zero.
++Patch4:         gdk-pixbuf-bsc960155-divide-by-zero.patch
++# PATCH-FIX-UPSTREAM gdk-pixbuf-2-32-overflow-fixes.patch bsc#958963 mgorse@suse.com -- fix an overflow when rotating a large image, and a few others
++Patch5:         gdk-pixbuf-2-32-overflow-fixes.patch
++# PATCH-FIX-UPSTREAM 0001-ico-Protect-against-overflow.patch bsc#958963 mgorse@suse.com -- ico overflow fix.
++Patch6:         0001-ico-Protect-against-overflow.patch
++# PATCH-FIX-UPSTREAM gdk-pixbuf-bgo747605.patch bsc#958963 mgorse@suse.com -- fix an overflow processing a bitmap image.
++Patch7:         gdk-pixbuf-bgo747605.patch
++# PATCH-FIX-UPSTREAM gdk-pixbuf-bgo758991.patch bsc#958963 mgorse@suse.com -- Fix another out-of-bounds memory error when processing .bmp files.
++Patch8:         gdk-pixbuf-bgo758991.patch
++
+ BuildRequires:  libjasper-devel
+ BuildRequires:  libjpeg-devel
+ BuildRequires:  libtiff-devel
+@@ -109,6 +120,11 @@
+ %patch1 -p1
+ %patch2 -p1
+ %patch3 -p1
++%patch4 -p1
++%patch5 -p1
++%patch6 -p1
++%patch7 -p1
++%patch8 -p1
+ %if "%_lib" == "lib64"
+ cp -a %{S:2} .
+ %endif
+diff --bs gdk-pixbuf.1133/0001-ico-Protect-against-overflow.patch gdk-pixbuf.SUSE_SLE-12_Update/0001-ico-Protect-against-overflow.patch
+--- /dev/null
++++ gdk-pixbuf.SUSE_SLE-12_Update/0001-ico-Protect-against-overflow.patch
+@@ -0,0 +1,124 @@
++From 7b10db13ff370bf2500688054249101ff175a942 Mon Sep 17 00:00:00 2001
++From: Benjamin Otte &lt;otte@redhat.com&gt;
++Date: Mon, 12 Oct 2015 14:46:59 +0200
++Subject: [PATCH] ico: Protect against overflow
++
++---
++ gdk-pixbuf/io-ico.c | 32 +++++++++++++++++---------------
++ 1 file changed, 17 insertions(+), 15 deletions(-)
++
++diff --git a/gdk-pixbuf/io-ico.c b/gdk-pixbuf/io-ico.c
++index e4faef5..c60dec2 100644
++--- a/gdk-pixbuf/io-ico.c
+++++ b/gdk-pixbuf/io-ico.c
++@@ -579,11 +579,11 @@ OneLine32 (struct ico_progressive_state *context)
++         X = 0;
++         if (context-&gt;Header.Negative == 0)
++                 Pixels = (context-&gt;pixbuf-&gt;pixels +
++-                          context-&gt;pixbuf-&gt;rowstride *
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
++                           (context-&gt;Header.height - context-&gt;Lines - 1));
++         else
++                 Pixels = (context-&gt;pixbuf-&gt;pixels +
++-                          context-&gt;pixbuf-&gt;rowstride *
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
++                           context-&gt;Lines);
++         while (X &lt; context-&gt;Header.width) {
++                 Pixels[X * 4 + 0] = context-&gt;LineBuf[X * 4 + 2];
++@@ -602,11 +602,11 @@ static void OneLine24(struct ico_progressive_state *context)
++ 	X = 0;
++ 	if (context-&gt;Header.Negative == 0)
++ 		Pixels = (context-&gt;pixbuf-&gt;pixels +
++-			  context-&gt;pixbuf-&gt;rowstride *
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
++ 			  (context-&gt;Header.height - context-&gt;Lines - 1));
++ 	else
++ 		Pixels = (context-&gt;pixbuf-&gt;pixels +
++-			  context-&gt;pixbuf-&gt;rowstride *
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
++ 			  context-&gt;Lines);
++ 	while (X &lt; context-&gt;Header.width) {
++ 		Pixels[X * 4 + 0] = context-&gt;LineBuf[X * 3 + 2];
++@@ -626,10 +626,12 @@ OneLine16 (struct ico_progressive_state *context)
++ 
++         if (context-&gt;Header.Negative == 0)
++                 pixels = (context-&gt;pixbuf-&gt;pixels +
++-                          context-&gt;pixbuf-&gt;rowstride * (context-&gt;Header.height - context-&gt;Lines - 1));
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
+++                          (context-&gt;Header.height - context-&gt;Lines - 1));
++         else
++                 pixels = (context-&gt;pixbuf-&gt;pixels +
++-                          context-&gt;pixbuf-&gt;rowstride * context-&gt;Lines);
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
+++                          context-&gt;Lines);
++ 
++         src = context-&gt;LineBuf;
++ 
++@@ -663,11 +665,11 @@ static void OneLine8(struct ico_progressive_state *context)
++ 	X = 0;
++ 	if (context-&gt;Header.Negative == 0)
++ 		Pixels = (context-&gt;pixbuf-&gt;pixels +
++-			  context-&gt;pixbuf-&gt;rowstride *
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
++ 			  (context-&gt;Header.height - context-&gt;Lines - 1));
++ 	else
++ 		Pixels = (context-&gt;pixbuf-&gt;pixels +
++-			  context-&gt;pixbuf-&gt;rowstride *
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
++ 			  context-&gt;Lines);
++ 	while (X &lt; context-&gt;Header.width) {
++ 		/* The joys of having a BGR byteorder */
++@@ -688,11 +690,11 @@ static void OneLine4(struct ico_progressive_state *context)
++ 	X = 0;
++ 	if (context-&gt;Header.Negative == 0)
++ 		Pixels = (context-&gt;pixbuf-&gt;pixels +
++-			  context-&gt;pixbuf-&gt;rowstride *
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
++ 			  (context-&gt;Header.height - context-&gt;Lines - 1));
++ 	else
++ 		Pixels = (context-&gt;pixbuf-&gt;pixels +
++-			  context-&gt;pixbuf-&gt;rowstride *
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
++ 			  context-&gt;Lines);
++ 	
++ 	while (X &lt; context-&gt;Header.width) {
++@@ -729,11 +731,11 @@ static void OneLine1(struct ico_progressive_state *context)
++ 	X = 0;
++ 	if (context-&gt;Header.Negative == 0)
++ 		Pixels = (context-&gt;pixbuf-&gt;pixels +
++-			  context-&gt;pixbuf-&gt;rowstride *
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
++ 			  (context-&gt;Header.height - context-&gt;Lines - 1));
++ 	else
++ 		Pixels = (context-&gt;pixbuf-&gt;pixels +
++-			  context-&gt;pixbuf-&gt;rowstride *
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
++ 			  context-&gt;Lines);
++ 	while (X &lt; context-&gt;Header.width) {
++ 		int Bit;
++@@ -760,11 +762,11 @@ static void OneLineTransp(struct ico_progressive_state *context)
++ 	X = 0;
++ 	if (context-&gt;Header.Negative == 0)
++ 		Pixels = (context-&gt;pixbuf-&gt;pixels +
++-			  context-&gt;pixbuf-&gt;rowstride *
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
++ 			  (2*context-&gt;Header.height - context-&gt;Lines - 1));
++ 	else
++ 		Pixels = (context-&gt;pixbuf-&gt;pixels +
++-			  context-&gt;pixbuf-&gt;rowstride *
+++			  (gsize) context-&gt;pixbuf-&gt;rowstride *
++ 			  (context-&gt;Lines-context-&gt;Header.height));
++ 	while (X &lt; context-&gt;Header.width) {
++ 		int Bit;
++@@ -1040,7 +1042,7 @@ fill_entry (IconEntry *icon,
++ 	pixels = gdk_pixbuf_get_pixels (pixbuf);
++ 	n_channels = gdk_pixbuf_get_n_channels (pixbuf);
++ 	for (y = 0; y &lt; icon-&gt;height; y++) {
++-		p = pixels + gdk_pixbuf_get_rowstride (pixbuf) * (icon-&gt;height - 1 - y);
+++		p = pixels + (gsize) gdk_pixbuf_get_rowstride (pixbuf) * (icon-&gt;height - 1 - y);
++ 		and = icon-&gt;and + icon-&gt;and_rowstride * y;
++ 		xor = icon-&gt;xor + icon-&gt;xor_rowstride * y;
++ 		for (x = 0; x &lt; icon-&gt;width; x++) {
++-- 
++2.6.2
++
+diff --bs gdk-pixbuf.1133/gdk-pixbuf-2-32-overflow-fixes.patch gdk-pixbuf.SUSE_SLE-12_Update/gdk-pixbuf-2-32-overflow-fixes.patch
+--- /dev/null
++++ gdk-pixbuf.SUSE_SLE-12_Update/gdk-pixbuf-2-32-overflow-fixes.patch
+@@ -0,0 +1,430 @@
++From 3df91dc6c6f8d1421e9c8756959280de792af77a Mon Sep 17 00:00:00 2001
++From: Benjamin Otte &lt;otte@redhat.com&gt;
++Date: Sat, 22 Aug 2015 17:57:23 +0200
++Subject: [PATCH] pixops: Chane variable type
++
++n_weights is used to do overflow checks. So by reducing the size to 32
++bits signed we overflow earlier. This is necessary because further down
++the code lots of code uses int variables to iterate over this variable
++and we don't want those to overflow.
++
++The correct fix would be to make all those variables gsize too, but
++that's way more invasive and requires different checks in different
++places so I'm not gonna do that now.
++And as long as scale factors are not expected to reach G_MAXINT it's not
++really necessary to do this change anyway.
++
++https://bugzilla.gnome.org/show_bug.cgi?id=753908
++---
++ gdk-pixbuf/pixops/pixops.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdk-pixbuf/pixops/pixops.c b/gdk-pixbuf/pixops/pixops.c
++index 7f2cbff..b7951c7 100644
++--- a/gdk-pixbuf/pixops/pixops.c
+++++ b/gdk-pixbuf/pixops/pixops.c
++@@ -1272,7 +1272,7 @@ make_filter_table (PixopsFilter *filter)
++   int i_offset, j_offset;
++   int n_x = filter-&gt;x.n;
++   int n_y = filter-&gt;y.n;
++-  gsize n_weights;
+++  int n_weights;
++   int *weights;
++ 
++   n_weights = SUBSAMPLE * SUBSAMPLE * n_x;
++-- 
++2.6.2
++
++From dd4b061c27dc0865c8f8987d294de6e04b321c18 Mon Sep 17 00:00:00 2001
++From: Benjamin Otte &lt;otte@redhat.com&gt;
++Date: Sat, 22 Aug 2015 23:06:23 +0200
++Subject: [PATCH] pixops: Be smarter than gcc's optimizer
++
++gcc realizes that the overflow checks aren't necessary. Why not?
++
++Well, if an int overflows, the behavior is undefined. And turning on
++-fomit-instructions is valid behavior in an undefined situation.
++---
++ gdk-pixbuf/pixops/pixops.c | 15 +++++++--------
++ 1 file changed, 7 insertions(+), 8 deletions(-)
++
++diff --git a/gdk-pixbuf/pixops/pixops.c b/gdk-pixbuf/pixops/pixops.c
++index b7951c7..5564a40 100644
++--- a/gdk-pixbuf/pixops/pixops.c
+++++ b/gdk-pixbuf/pixops/pixops.c
++@@ -1272,18 +1272,17 @@ make_filter_table (PixopsFilter *filter)
++   int i_offset, j_offset;
++   int n_x = filter-&gt;x.n;
++   int n_y = filter-&gt;y.n;
++-  int n_weights;
++   int *weights;
++ 
++-  n_weights = SUBSAMPLE * SUBSAMPLE * n_x;
++-  if (n_weights / (SUBSAMPLE * SUBSAMPLE) != n_x)
++-    return NULL; /* overflow, bail */
+++  /* check n_x doesn't overflow */
+++  if (G_MAXINT / (SUBSAMPLE * SUBSAMPLE) &lt; n_x)
+++    return NULL;
++ 
++-  n_weights *= n_y;
++-  if (n_weights / (SUBSAMPLE * SUBSAMPLE * n_x) != n_y)
++-    return NULL; /* overflow, bail */
+++  /* check n_y doesn't overflow */
+++  if (G_MAXINT / (SUBSAMPLE * SUBSAMPLE * n_x) &lt; n_y)
+++    return NULL;
++ 
++-  weights = g_try_new (int, n_weights);
+++  weights = g_try_new (int, SUBSAMPLE * SUBSAMPLE * n_x * n_y);
++   if (!weights)
++     return NULL; /* overflow, bail */
++ 
++-- 
++2.6.2
++
++From 8714ab407c54d5989d15a78eb15550c2d52d95b8 Mon Sep 17 00:00:00 2001
++From: Matthias Clasen &lt;mclasen@redhat.com&gt;
++Date: Mon, 24 Aug 2015 14:13:37 -0400
++Subject: [PATCH] png: Fix some integer overflows
++
++The png loader was not careful enough in some places. Width * height
++can overflow an integer.
++
++This should fix http://bugzilla.gnome.org/734556.
++
++Rebased by Mike Gorse &lt;mgorse@suse.com&gt;
++---
++ gdk-pixbuf/io-png.c | 15 ++++++++-------
++ 1 file changed, 8 insertions(+), 7 deletions(-)
++
++diff --git a/gdk-pixbuf/io-png.c b/gdk-pixbuf/io-png.c
++index 3336b1e..5690875 100644
++--- a/gdk-pixbuf/io-png.c
+++++ b/gdk-pixbuf/io-png.c
++@@ -262,6 +262,7 @@ gdk_pixbuf__png_image_load (FILE *f, GEr
++         png_uint_32 icc_profile_size;
++         guint32 retval;
++         gint compression_type;
+++        gpointer ptr;
++ 
++ #ifdef PNG_USER_MEM_SUPPORTED
++ 	png_ptr = png_create_read_struct_2 (PNG_LIBPNG_VER_STRING,
++@@ -321,8 +322,8 @@ gdk_pixbuf__png_image_load (FILE *f, GEr
++ 
++ 	rows = g_new (png_bytep, h);
++ 
++-	for (i = 0; i &lt; h; i++)
++-		rows[i] = pixbuf-&gt;pixels + i * pixbuf-&gt;rowstride;
+++        for (i = 0, ptr = pixbuf-&gt;pixels; i &lt; h; i++, ptr += pixbuf-&gt;rowstride)
+++		rows[i] = ptr;
++ 
++ 	png_read_image (png_ptr, rows);
++         png_read_end (png_ptr, info_ptr);
++@@ -703,6 +704,7 @@ png_row_callback   (png_structp png_read
++ {
++         LoadContext* lc;
++         guchar* old_row = NULL;
+++        gsize rowstride;
++ 
++         lc = png_get_progressive_ptr(png_read_ptr);
++ 
++@@ -728,8 +730,9 @@ png_row_callback   (png_structp png_read
++         lc-&gt;max_row_seen_in_chunk = MAX(lc-&gt;max_row_seen_in_chunk, ((gint)row_num));
++         lc-&gt;last_row_seen_in_chunk = row_num;
++         lc-&gt;last_pass_seen_in_chunk = pass_num;
++-        
++-        old_row = lc-&gt;pixbuf-&gt;pixels + (row_num * lc-&gt;pixbuf-&gt;rowstride);
+++
+++        rowstride = lc-&gt;pixbuf-&gt;rowstride;
+++        old_row = lc-&gt;pixbuf-&gt;pixels + (row_num * rowstride);
++ 
++         png_progressive_combine_row(lc-&gt;png_read_ptr, old_row, new_row);
++ }
++@@ -1034,11 +1037,9 @@ static gboolean real_save_png (GdkPixbuf
++        png_set_shift (png_ptr, &amp;sig_bit);
++        png_set_packing (png_ptr);
++ 
++-       ptr = pixels;
++-       for (y = 0; y &lt; h; y++) {
+++       for (y = 0, ptr = pixels; y &lt; h; y++, ptr += rowstride) {
++                row_ptr = (png_bytep)ptr;
++                png_write_rows (png_ptr, &amp;row_ptr, 1);
++-               ptr += rowstride;
++        }
++ 
++        png_write_end (png_ptr, info_ptr);
++From fde8d1d12a32740770253e97ddc9602654e16865 Mon Sep 17 00:00:00 2001
++From: Matthias Clasen &lt;mclasen@redhat.com&gt;
++Date: Mon, 24 Aug 2015 15:48:51 -0400
++Subject: [PATCH] jpeg: Fix some integer overflows
++
++Similar to the previous commit.
++---
++ gdk-pixbuf/io-jpeg.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gdk-pixbuf/io-jpeg.c b/gdk-pixbuf/io-jpeg.c
++index fa6bec1..eb48aed 100644
++--- a/gdk-pixbuf/io-jpeg.c
+++++ b/gdk-pixbuf/io-jpeg.c
++@@ -886,7 +886,7 @@ gdk_pixbuf__jpeg_image_load_lines (JpegProgContext  *context,
++                         return FALSE;
++                 }
++ 
++-                context-&gt;dptr += nlines * context-&gt;pixbuf-&gt;rowstride;
+++                context-&gt;dptr += (gsize)nlines * context-&gt;pixbuf-&gt;rowstride;
++ 
++                 /* send updated signal */
++ 		if (context-&gt;updated_func)
++@@ -1494,7 +1494,7 @@ real_save_jpeg (GdkPixbuf          *pixbuf,
++        while (cinfo.next_scanline &lt; cinfo.image_height) {
++                /* convert scanline from ARGB to RGB packed */
++                for (j = 0; j &lt; w; j++)
++-                       memcpy (&amp;(buf[j*3]), &amp;(ptr[i*rowstride + j*n_channels]), 3);
+++                       memcpy (&amp;(buf[j*3]), &amp;(ptr[(gsize)i*rowstride + j*n_channels]), 3);
++ 
++                /* write scanline */
++                jbuf = (JSAMPROW *)(&amp;buf);
++-- 
++2.6.2
++
++From 7012b9a0b6263310fc7d57f0b06583c8404599af Mon Sep 17 00:00:00 2001
++From: Matthias Clasen &lt;mclasen@redhat.com&gt;
++Date: Mon, 24 Aug 2015 14:44:50 -0400
++Subject: [PATCH] Fix some more integer overflows
++
++The scaling code had a similar problem to the one fixed in the
++previous commit: Expressions like ptr = base + y * rowstride are
++prone to overflow if y and rowstride are (possibly large) integers.
++
++Rebased by Mike Gorse &lt;mgorse@suse.com&gt;
++---
++ gdk-pixbuf/pixops/pixops.c | 48 +++++++++++++++++++++++-----------------------
++ 1 file changed, 24 insertions(+), 24 deletions(-)
++
++diff --git a/gdk-pixbuf/pixops/pixops.c b/gdk-pixbuf/pixops/pixops.c
++index 5564a40..e41b286 100644
++--- a/gdk-pixbuf/pixops/pixops.c
+++++ b/gdk-pixbuf/pixops/pixops.c
++@@ -304,8 +304,8 @@ pixops_scale_nearest (guchar        *dest_buf,
++       guchar       *dest;
++       y_pos = ((i + render_y0) * y_step + y_step / 2) &gt;&gt; SCALE_SHIFT;
++       y_pos = CLAMP (y_pos, 0, src_height - 1);
++-      src  = src_buf + y_pos * src_rowstride;
++-      dest = dest_buf + i * dest_rowstride;
+++      src  = src_buf + (gsize)y_pos * src_rowstride;
+++      dest = dest_buf + (gsize)i * dest_rowstride;
++ 
++       x = render_x0 * x_step + x_step / 2;
++ 
++@@ -368,8 +368,8 @@ pixops_composite_nearest (guchar        *dest_buf,
++       guchar       *dest;
++       y_pos = ((i + render_y0) * y_step + y_step / 2) &gt;&gt; SCALE_SHIFT;
++       y_pos = CLAMP (y_pos, 0, src_height - 1);
++-      src  = src_buf + y_pos * src_rowstride;
++-      dest = dest_buf + i * dest_rowstride;
+++      src  = src_buf + (gsize)y_pos * src_rowstride;
+++      dest = dest_buf + (gsize)i * dest_rowstride;
++ 
++       x = render_x0 * x_step + x_step / 2;
++       
++@@ -540,8 +540,8 @@ pixops_composite_color_nearest (guchar        *dest_buf,
++       guchar       *dest;
++       y_pos = ((i + render_y0) * y_step + y_step / 2) &gt;&gt; SCALE_SHIFT;
++       y_pos = CLAMP (y_pos, 0, src_height - 1);
++-      src  = src_buf + y_pos * src_rowstride;
++-      dest = dest_buf + i * dest_rowstride;
+++      src  = src_buf + (gsize)y_pos * src_rowstride;
+++      dest = dest_buf + (gsize)i * dest_rowstride;
++ 
++       x = render_x0 * x_step + x_step / 2;
++       
++@@ -1398,7 +1398,7 @@ pixops_process (guchar         *dest_buf,
++       guchar *new_outbuf;
++       guint32 tcolor1, tcolor2;
++ 
++-      guchar *outbuf = dest_buf + dest_rowstride * i;
+++      guchar *outbuf = dest_buf + (gsize)dest_rowstride * i;
++       guchar *outbuf_end = outbuf + dest_channels * (render_x1 - render_x0);
++ 
++       if (((i + check_y) &gt;&gt; check_shift) &amp; 1)
++@@ -1417,9 +1417,9 @@ pixops_process (guchar         *dest_buf,
++ 	  if (y_start &lt;  0)
++ 	    line_bufs[j] = (guchar *)src_buf;
++ 	  else if (y_start &lt; src_height)
++-	    line_bufs[j] = (guchar *)src_buf + src_rowstride * y_start;
+++	    line_bufs[j] = (guchar *)src_buf + (gsize)src_rowstride * y_start;
++ 	  else
++-	    line_bufs[j] = (guchar *)src_buf + src_rowstride * (src_height - 1);
+++	    line_bufs[j] = (guchar *)src_buf + (gsize)src_rowstride * (src_height - 1);
++ 
++ 	  y_start++;
++ 	}
++@@ -1443,7 +1443,7 @@ pixops_process (guchar         *dest_buf,
++ 	}
++ 
++       new_outbuf = (*line_func) (run_weights, filter-&gt;x.n, filter-&gt;y.n,
++-				 outbuf, dest_x, dest_buf + dest_rowstride *
+++				 outbuf, dest_x, dest_buf + (gsize)dest_rowstride *
++ 				 i + run_end_index * dest_channels,
++ 				 dest_channels, dest_has_alpha,
++ 				 line_bufs, src_channels, src_has_alpha,
++@@ -1966,7 +1966,7 @@ _pixops_composite (guchar          *dest_buf,
++   return;
++ #endif
++ 
++-  new_dest_buf = dest_buf + dest_y * dest_rowstride + dest_x * dest_channels;
+++  new_dest_buf = dest_buf + (gsize)dest_y * dest_rowstride + (gsize)dest_x * dest_channels;
++   render_x0 = dest_x - offset_x;
++   render_y0 = dest_y - offset_y;
++   render_x1 = dest_x + dest_region_width  - offset_x;
++@@ -2126,7 +2126,7 @@ pixops_medialib_composite (guchar          *dest_buf,
++   if (!use_medialib)
++     {
++       /* Use non-mediaLib version */
++-      _pixops_composite_real (dest_buf + dest_y * dest_rowstride + dest_x *
+++      _pixops_composite_real (dest_buf + (gsize)dest_y * dest_rowstride + (gsize)dest_x *
++ 			      dest_channels, dest_x - offset_x, dest_y -
++ 			      offset_y, dest_x + dest_region_width - offset_x,
++ 			      dest_y + dest_region_height - offset_y,
++@@ -2168,8 +2168,8 @@ pixops_medialib_composite (guchar          *dest_buf,
++         }
++       else
++         {
++-	  mlib_u8 *data = dest_buf + (dest_y * dest_rowstride) + 
++-				     (dest_x * dest_channels);
+++	  mlib_u8 *data = dest_buf + (gsize)dest_y * dest_rowstride +
+++				     (gsize)dest_x * dest_channels;
++ 
++           mlib_ImageSetStruct (&amp;img_dest, MLIB_BYTE, dest_channels,
++ 			       dest_region_width, dest_region_height,
++@@ -2236,8 +2236,8 @@ pixops_medialib_composite (guchar          *dest_buf,
++               else
++                 {
++                   /* Should not happen - Use non-mediaLib version */
++-                  _pixops_composite_real (dest_buf + dest_y * dest_rowstride +
++-                                          dest_x * dest_channels,
+++                  _pixops_composite_real (dest_buf + (gsize)dest_y * dest_rowstride +
+++                                          (gsize)dest_x * dest_channels,
++                                           dest_x - offset_x, dest_y - offset_y,
++                                           dest_x + dest_region_width - offset_x,
++                                           dest_y + dest_region_height - offset_y,
++@@ -2360,7 +2360,7 @@ _pixops_scale (guchar          *dest_buf,
++   return;
++ #endif
++ 
++-  new_dest_buf = dest_buf + dest_y * dest_rowstride + dest_x * dest_channels;
+++  new_dest_buf = dest_buf + (gsize)dest_y * dest_rowstride + (gsize)dest_x * dest_channels;
++   render_x0    = dest_x - offset_x;
++   render_y0    = dest_y - offset_y;
++   render_x1    = dest_x + dest_region_width  - offset_x;
++@@ -2414,8 +2414,8 @@ pixops_medialib_scale     (guchar          *dest_buf,
++    */
++   if (!use_medialib)
++     {
++-      _pixops_scale_real (dest_buf + dest_y * dest_rowstride + dest_x *
++-			  dest_channels, dest_x - offset_x, dest_y - offset_y, 
+++      _pixops_scale_real (dest_buf + (gsize)dest_y * dest_rowstride + (gsize)dest_x *
+++			  dest_channels, dest_x - offset_x, dest_y - offset_y,
++ 			  dest_x + dest_region_width - offset_x,
++ 			  dest_y + dest_region_height - offset_y,
++ 			  dest_rowstride, dest_channels, dest_has_alpha,
++@@ -2443,8 +2443,8 @@ pixops_medialib_scale     (guchar          *dest_buf,
++         }
++       else
++         {
++-	  mlib_u8 *data = dest_buf + (dest_y * dest_rowstride) + 
++-				     (dest_x * dest_channels);
+++	  mlib_u8 *data = dest_buf + (gsize)dest_y * dest_rowstride +
+++				     (gsize)dest_x * dest_channels;
++ 
++           mlib_ImageSetStruct (&amp;img_dest, MLIB_BYTE, dest_channels,
++ 			       dest_region_width, dest_region_height,
++@@ -2479,7 +2479,7 @@ pixops_medialib_scale     (guchar          *dest_buf,
++               int channels  = 3;
++               int rowstride = (channels * src_width + 3) &amp; ~3;
++         
++-              tmp_buf = g_malloc (src_rowstride * src_height);
+++              tmp_buf = g_malloc_n (src_rowstride, src_height);
++ 
++               if (src_buf != NULL)
++                 {
++-- 
++2.6.2
++
++From ca3c56421c075e729750cf80c3438b283232cce8 Mon Sep 17 00:00:00 2001
++From: Matthias Clasen &lt;mclasen@redhat.com&gt;
++Date: Mon, 24 Aug 2015 15:20:08 -0400
++Subject: [PATCH] Avoid integer overflow in gdk_pixbuf_add_alpha
++
++Same as before: don't do ptr = base + y * rowstride if y and
++rowstride are integers.
++
++This should fix http://bugzilla.gnome/org/753569
++
++Rebased by Mike Gorse @mgorse@suse.com&gt;
++---
++ gdk-pixbuf/gdk-pixbuf-util.c | 18 +++++++++---------
++ 1 file changed, 9 insertions(+), 9 deletions(-)
++
++diff --git a/gdk-pixbuf/gdk-pixbuf-util.c b/gdk-pixbuf/gdk-pixbuf-util.c
++index 6abe9b9..3600450 100644
++--- a/gdk-pixbuf/gdk-pixbuf-util.c
+++++ b/gdk-pixbuf/gdk-pixbuf-util.c
++@@ -65,6 +65,10 @@ gdk_pixbuf_add_alpha (const GdkPixbuf *p
++ {
++ 	GdkPixbuf *new_pixbuf;
++ 	int x, y;
+++	const guint8 *src_pixels;
+++	guint8 *ret_pixels;
+++	const guchar *src;
+++	guchar *dest;
++ 
++ 	g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
++ 	g_return_val_if_fail (pixbuf-&gt;colorspace == GDK_COLORSPACE_RGB, NULL);
++@@ -85,13 +89,14 @@ gdk_pixbuf_add_alpha (const GdkPixbuf *p
++ 	if (!new_pixbuf)
++ 		return NULL;
++ 
++-	for (y = 0; y &lt; pixbuf-&gt;height; y++) {
++-		guchar *src, *dest;
+++	src_pixels = pixbuf-&gt;pixels;
+++	ret_pixels = new_pixbuf-&gt;pixels;
+++	for (y = 0; y &lt; pixbuf-&gt;height; y++, src_pixels += pixbuf-&gt;rowstride, ret_pixels += new_pixbuf-&gt;rowstride) {
++ 		guchar tr, tg, tb;
++ 
++-		src = pixbuf-&gt;pixels + y * pixbuf-&gt;rowstride;
++-		dest = new_pixbuf-&gt;pixels + y * new_pixbuf-&gt;rowstride;
++-                
+++                src = src_pixels;
+++                dest = ret_pixels;
+++
++                 if (pixbuf-&gt;has_alpha) {
++                         /* Just subst color, we already copied everything else */
++                         for (x = 0; x &lt; pixbuf-&gt;width; x++) {
++From 4f68cb78a5277f169b9531e6998c00c7976594e4 Mon Sep 17 00:00:00 2001
++From: Matthias Clasen &lt;mclasen@redhat.com&gt;
++Date: Mon, 24 Aug 2015 15:29:36 -0400
++Subject: [PATCH] Avoid integer overflow in gdk_pixbuf_rotate_simple
++
++Same as before: don't do ptr = base + y * rowstride if y and
++rowstride are integers.
++---
++ gdk-pixbuf/gdk-pixbuf-scale.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdk-pixbuf/gdk-pixbuf-scale.c b/gdk-pixbuf/gdk-pixbuf-scale.c
++index 4288c65..475126a 100644
++--- a/gdk-pixbuf/gdk-pixbuf-scale.c
+++++ b/gdk-pixbuf/gdk-pixbuf-scale.c
++@@ -396,7 +396,7 @@ gdk_pixbuf_composite_color_simple (const GdkPixbuf *src,
++   return dest;
++ }
++ 
++-#define OFFSET(pb, x, y) ((x) * (pb)-&gt;n_channels + (y) * (pb)-&gt;rowstride)
+++#define OFFSET(pb, x, y) ((x) * (pb)-&gt;n_channels + (gsize)(y) * (pb)-&gt;rowstride)
++ 
++ /**
++  * gdk_pixbuf_rotate_simple:
++-- 
++2.6.2
++
+diff --bs gdk-pixbuf.1133/gdk-pixbuf-bgo747605.patch gdk-pixbuf.SUSE_SLE-12_Update/gdk-pixbuf-bgo747605.patch
+--- /dev/null
++++ gdk-pixbuf.SUSE_SLE-12_Update/gdk-pixbuf-bgo747605.patch
+@@ -0,0 +1,37 @@
++From ca74893a8e06e99b4adc682ee1550bfd020687c7 Mon Sep 17 00:00:00 2001
++From: Matthias Clasen &lt;mclasen@redhat.com&gt;
++Date: Sat, 5 Dec 2015 15:49:32 -0500
++Subject: [PATCH] bmp: Reject bogus depth
++
++Erroring out early if we find a bogus image depth is
++the right thing to do, and avoids possible memory
++overruns later on.
++
++https://bugzilla.gnome.org/show_bug.cgi?id=747605
++---
++ gdk-pixbuf/io-bmp.c | 9 +++++++++
++ 1 file changed, 9 insertions(+)
++
++diff --git a/gdk-pixbuf/io-bmp.c b/gdk-pixbuf/io-bmp.c
++index 1f197e8..5c30bfb 100644
++--- a/gdk-pixbuf/io-bmp.c
+++++ b/gdk-pixbuf/io-bmp.c
++@@ -318,6 +318,15 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
++ 		return FALSE;
++ 	}
++ 
+++        if (State-&gt;Header.depth &gt; 32)
+++          {
+++		g_set_error_literal (error,
+++                                     GDK_PIXBUF_ERROR,
+++                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+++                                     _("BMP image has unsupported depth"));
+++		State-&gt;read_state = READ_STATE_ERROR;
+++          }
+++
++ 	if (State-&gt;Header.size == 12)
++ 		clrUsed = 1 &lt;&lt; State-&gt;Header.depth;
++ 	else
++-- 
++2.6.2
++
+diff --bs gdk-pixbuf.1133/gdk-pixbuf-bgo758991.patch gdk-pixbuf.SUSE_SLE-12_Update/gdk-pixbuf-bgo758991.patch
+--- /dev/null
++++ gdk-pixbuf.SUSE_SLE-12_Update/gdk-pixbuf-bgo758991.patch
+@@ -0,0 +1,47 @@
++From b7bf6fbfb310fceba2d35d4de143b8d5ffdad990 Mon Sep 17 00:00:00 2001
++From: Matthias Clasen &lt;mclasen@redhat.com&gt;
++Date: Sat, 5 Dec 2015 16:35:30 -0500
++Subject: [PATCH] bmp: Reject impossible palette size
++
++bmp headers contain separate fields for the number of colors,
++and the bit depth. Catch the impossible n_colors &gt; 1 &lt;&lt; depth
++and error early, before it causes a out-of-bounds memory
++access when decoding the colormap.
++
++https://bugzilla.gnome.org/show_bug.cgi?id=758991
++---
++ gdk-pixbuf/io-bmp.c | 11 +++++++++++
++ 1 file changed, 11 insertions(+)
++
++diff --git a/gdk-pixbuf/io-bmp.c b/gdk-pixbuf/io-bmp.c
++index 5c30bfb..f412997 100644
++--- a/gdk-pixbuf/io-bmp.c
+++++ b/gdk-pixbuf/io-bmp.c
++@@ -325,6 +325,7 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
++                                      GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
++                                      _("BMP image has unsupported depth"));
++ 		State-&gt;read_state = READ_STATE_ERROR;
+++		return FALSE;
++           }
++ 
++ 	if (State-&gt;Header.size == 12)
++@@ -332,6 +333,16 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
++ 	else
++ 		clrUsed = (int) (BIH[35] &lt;&lt; 24) + (BIH[34] &lt;&lt; 16) + (BIH[33] &lt;&lt; 8) + (BIH[32]);
++ 
+++        if (clrUsed &gt; (1 &lt;&lt; State-&gt;Header.depth))
+++          {
+++		g_set_error_literal (error,
+++                                     GDK_PIXBUF_ERROR,
+++                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+++                                     _("BMP image has oversize palette"));
+++		State-&gt;read_state = READ_STATE_ERROR;
+++		return FALSE;
+++          }
+++
++ 	if (clrUsed != 0)
++ 		State-&gt;Header.n_colors = clrUsed;
++ 	else
++-- 
++2.6.2
++
+diff --bs gdk-pixbuf.1133/gdk-pixbuf-bsc960155-divide-by-zero.patch gdk-pixbuf.SUSE_SLE-12_Update/gdk-pixbuf-bsc960155-divide-by-zero.patch
+--- /dev/null
++++ gdk-pixbuf.SUSE_SLE-12_Update/gdk-pixbuf-bsc960155-divide-by-zero.patch
+@@ -0,0 +1,28 @@
++From 74c418ba2e41ab9e2287420378a6192788b1fab6 Mon Sep 17 00:00:00 2001
++From: Sarita Rawat &lt;sarita.rawat@samsung.com&gt;
++Date: Fri, 5 Jun 2015 06:56:00 +0000
++Subject: [PATCH] Avoid a possible divide-by-zero
++
++Pointed out in
++
++https://bugzilla.gnome.org/show_bug.cgi?id=750440
++---
++ gdk-pixbuf/gdk-pixbuf-loader.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdk-pixbuf/gdk-pixbuf-loader.c b/gdk-pixbuf/gdk-pixbuf-loader.c
++index 65845ed..668b703 100644
++--- a/gdk-pixbuf/gdk-pixbuf-loader.c
+++++ b/gdk-pixbuf/gdk-pixbuf-loader.c
++@@ -330,7 +330,7 @@ gdk_pixbuf_loader_prepare (GdkPixbuf          *pixbuf,
++         else
++                 anim = gdk_pixbuf_non_anim_new (pixbuf);
++   
++-	if (priv-&gt;needs_scale) {
+++	if (priv-&gt;needs_scale &amp;&amp; width != 0 &amp;&amp; height != 0) {
++ 		priv-&gt;animation  = GDK_PIXBUF_ANIMATION (_gdk_pixbuf_scaled_anim_new (anim,
++                                          (double) priv-&gt;width / width,
++                                          (double) priv-&gt;height / height,
++-- 
++2.6.2
++
