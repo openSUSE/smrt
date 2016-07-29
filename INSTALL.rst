@@ -5,29 +5,15 @@
 =======================================================================
 
 
-SUSE Linux Enterprise
-=====================
-
-::
-
-  zypper ar -f http://download.suse.de/ibs/home:/rneuhauser/SLE_12/home:rneuhauser.repo
-
-
-openSUSE Tumbleweed
-===================
-
-::
-
-  zypper ar -f http://download.suse.de/ibs/home:/rneuhauser/openSUSE_Tumbleweed/home:rneuhauser.repo
-
-
-Common Steps
-============
+SUSE, openSUSE
+==============
 
 ::
 
   zypper in cram curl haveopt make openssh osc subversion xmlstarlet zsh
-  git clone gitlab@gitlab.suse.de:rneuhauser/smrt.git
-  cd smrt
+  git clone https://github.com/openSUSE/smrt.git
+  mkdir smrt-build
+  cd smrt-build
+  ../smrt/configure
   make check
   sudo make install

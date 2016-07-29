@@ -4,28 +4,31 @@ pkgver=__VERSION__
 pkgrel=1
 pkgdesc="SUSE Maintenance Reject Tool"
 arch=(any)
-url="https://gitlab.suse.de/rneuhauser/$pkgname"
+url="https://github.com/openSUSE/$pkgname"
 license=(MIT)
 depends=(curl haveopt openssh osc repose svn xmlstarlet zsh)
 checkdepends=(cram make haveopt repose svn xmlstarlet zsh)
 source=($pkgname-$pkgver.tar.gz)
 sha1sums=(SKIP)
 
-build() {
-  ./configure --prefix=/usr
-  _make
+build()
+{
+  _in_src ./configure --prefix=/usr
+  _in_src make
 }
 
-check() {
-  _make check
+check()
+{
+  _in_src make check
 }
 
-package() {
-  _make install DESTDIR="$pkgdir/"
+package()
+{
+  _in_src make install DESTDIR="$pkgdir/"
 }
 
-_make() {
+_in_src()
+(
   cd "$srcdir/$pkgname-$pkgver"
-  make "$@"
-}
-
+  "$@"
+)

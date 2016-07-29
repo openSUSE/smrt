@@ -20,7 +20,7 @@ Version:        __VERSION__
 Release:        0
 License:        MIT
 Summary:        SUSE Maintenance Reject Tool
-Url:            https://gitlab.suse.de/rneuhauser/smrt
+Url:            https://github.com/openSUSE/smrt
 Group:          Productivity/Other
 Source:         %{name}-%{version}.tar.gz
 BuildRequires:  filesystem

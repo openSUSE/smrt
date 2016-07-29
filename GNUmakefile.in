@@ -15,12 +15,14 @@ LN = ln
 RST2HTML = rst2html5
 RST2HTMLFLAGS = --strict
 
-rootdir = $(dir $(firstword $(MAKEFILE_LIST)))
-cfgdir  = $(rootdir)c
-docdir  = $(rootdir)d
-srcdir  = $(rootdir)s
-testdir = $(rootdir)t
-testroot = $(abspath $(testdir))
+VPATH = $(rootdir)
+
+rootdir = @rootdir@
+cfgdir  = c
+docdir  = d
+srcdir  = s
+testdir = t
+testroot = $(rootdir)/$(testdir)
 
 commands  = smrt
 commands += smrt-adopt
@@ -86,8 +88,8 @@ $(htmlfiles): %.html: %.rst
 
 
 .PHONY: check
-check: all
-	env -i PATH="$$PATH" TESTROOT=$(testroot) BUILDDIR="$$PWD" $(CRAM) --shell=zsh $(CRAMFLAGS) $(tests)
+check: $(tests) | all
+	env -i PATH="$$PATH" TESTROOT=$(testroot) BUILDDIR="$$PWD" $(CRAM) --shell=zsh $(CRAMFLAGS) $^
 
 
 .PHONY: clean
@@ -98,7 +100,7 @@ clean:
 .PHONY: install
 install: all installdirs
 	$(INSTALL) -m 0755 -t $(DESTDIR)$(bindir) $(commands)
-	$(INSTALL) -m 0644 -t $(DESTDIR)$(sysconfdir) $(addprefix $(cfgdir)/,$(cfgfiles))
+	$(INSTALL) -m 0644 -t $(DESTDIR)$(sysconfdir) $(addprefix $(rootdir)/$(cfgdir)/,$(cfgfiles))
 	$(INSTALL) -m 0644 -t $(DESTDIR)$(preludedir) $(auxfiles)
 
 
@@ -115,10 +117,12 @@ pkgname = smrt
 
 .PHONY: tarball
 tarball: .git
+	wd=$$(pwd) && \
+	cd $(rootdir) && \
 	git archive \
 	  --format tar.gz \
 	  --prefix $(pkgname)-$(fix_version)/ \
-	  --output $(pkgname)-$(fix_version).tar.gz \
+	  --output $$wd/$(pkgname)-$(fix_version).tar.gz \
 	  HEAD
 
 $(pkgname).spec: p/$(pkgname).spec.in
