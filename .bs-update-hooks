@@ -1,0 +1,10 @@
+# use: bs-update -Cb HEAD 999
+bsu_bs_project=QA:Maintenance
+bsu_bs_package=smrt
+bsu_dloadurl='https://github.com/openSUSE/$bsu_bs_package/archive/$bsu_tag.tar.gz'
+bsu_specfiles=(p/$bsu_bs_package.spec)
+function bsu_specfile_hook
+{
+  extract $@[3,-1]
+  osc vc -m "Update to version $1"
+}
