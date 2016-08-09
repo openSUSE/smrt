@@ -100,8 +100,12 @@ clean:
 .PHONY: install
 install: all installdirs
 	$(INSTALL) -m 0755 -t $(DESTDIR)$(bindir) $(commands)
-	$(INSTALL) -m 0644 -t $(DESTDIR)$(sysconfdir) $(addprefix $(rootdir)/$(cfgdir)/,$(cfgfiles))
 	$(INSTALL) -m 0644 -t $(DESTDIR)$(preludedir) $(auxfiles)
+	for f in $(cfgfiles); do \
+	  sfx=; \
+	  if test -e $(DESTDIR)$(sysconfdir)/$$f; then sfx=.new; fi; \
+	  $(INSTALL) -m 0644 -T $(rootdir)/$(cfgdir)/$$f $(DESTDIR)$(sysconfdir)/$$f$$sfx; \
+	done
 
 
 .PHONY: installdirs
