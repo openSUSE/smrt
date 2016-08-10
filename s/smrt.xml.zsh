@@ -168,5 +168,5 @@ function xml-ls-bugs # {{{
     -v . \
     --nl \
     $pinfo \
-  | LC_ALL=C sort -k 1b,1
+  | LC_ALL=C sort
 } # }}}
