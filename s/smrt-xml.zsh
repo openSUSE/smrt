@@ -130,6 +130,16 @@ function do-bugs # {{{
 
 function do-channels do-codestreams # {{{
 {
+  if [[ $# -eq 0 ]]; then
+    :; [[ -f project.xml ]] \
+    || reject-misuse
+    set -- project.xml
+  elif [[ $# -gt 1 ]]; then
+    reject-misuse $2
+  elif [[ ! -f $1 ]]; then
+    reject-misuse $1
+  fi
+
   local inf=$1 kind
   case $0 in
   do-channels)    kind=update   ;;
