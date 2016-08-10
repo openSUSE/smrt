@@ -137,7 +137,7 @@ function do-repos # {{{
   o redir -0 $inf xml-ls-repos $kind
 } # }}}
 
-function do-sources # {{{
+function do-binaries do-sources # {{{
 {
   if [[ $# -eq 0 ]]; then
     :; [[ -f packages.xml ]] \
@@ -149,23 +149,7 @@ function do-sources # {{{
     reject-misuse $1
   fi
 
-  local inf=$1 kind=sources
-  o xml-ls-released-$kind $inf ${inf:h}/repos-$kind
-} # }}}
-
-function do-binaries # {{{
-{
-  if [[ $# -eq 0 ]]; then
-    :; [[ -f packages.xml ]] \
-    || reject-misuse
-    set -- packages.xml
-  elif [[ $# -gt 1 ]]; then
-    reject-misuse $2
-  elif [[ ! -f $1 ]]; then
-    reject-misuse $1
-  fi
-
-  local inf=$1 kind=binaries
+  local inf=$1 kind=${0#do-}
   o xml-ls-released-$kind $inf ${inf:h}/repos-$kind
 } # }}}
 
