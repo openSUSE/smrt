@@ -84,8 +84,13 @@ function do-email # {{{
 
 function do-maintainers # {{{
 {
+  :; [[ $# -eq 1 ]] \
+  || reject-misuse ${2-}
+  :; [[ -f $1 ]] \
+  || reject-misuse $1
+
   local -a reply
-  o xml-get-maintainers "$@"
+  o xml-get-maintainers $1
   o print -rf '%s %s\n' -- $reply
 } # }}}
 

@@ -12,9 +12,6 @@ setup::
 
 bugowner::
 
-  $ smrt xml maintainers $slug/owners-rsync.xml # --names
-  person farmer
-
   $ smrt xml email $slug/person-farmer.xml # --email
   farmer@example.com
 
