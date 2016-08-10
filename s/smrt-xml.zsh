@@ -20,18 +20,19 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c -h|bugs|email|maintainers|release|repos
+usage: #c -h|binaries|bugs|email|maintainers|repos|sources
 Display information gleaned from BuildService XML data
   Options:
     -h                Display this message
 
   Operands:
+    binaries          List released packages
     bugs              List referenced bugs
     diff              Display unified diff
     email             Display email address of a maintainer
     maintainers       List maintainer usernames
-    release           List released packages
     repos             List targeted repositories
+    sources           List released packages
 '
 
 declare -gr preludedir="${SMRT_PRELUDEDIR:-@preludedir@}"
@@ -53,12 +54,13 @@ function $0:t # {{{
 
   arg=${1-}
   case $arg in
-    bugs        \
+    binaries    \
+  | bugs        \
   | diff        \
   | email       \
   | maintainers \
-  | release     \
-  | repos       )
+  | repos       \
+  | sources     )
     :
   ;;
   *) reject-misuse $arg ;;
@@ -135,14 +137,15 @@ function do-repos # {{{
   o redir -0 $inf xml-ls-repos $kind
 } # }}}
 
-function do-release # {{{
+function do-sources # {{{
 {
-  local arg=$1 inf=$2 kind
-  case $arg in
-  -b) kind=binaries ;;
-  -s) kind=sources ;;
-  *) reject-misuse $arg ;;
-  esac
+  local inf=$1 kind=sources
+  o xml-ls-released-$kind $inf ${inf:h}/repos-$kind
+} # }}}
+
+function do-binaries # {{{
+{
+  local inf=$1 kind=binaries
   o xml-ls-released-$kind $inf ${inf:h}/repos-$kind
 } # }}}
 
