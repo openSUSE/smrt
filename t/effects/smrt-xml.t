@@ -10,11 +10,6 @@ setup::
   $ reify-fixture $slug
 
 
-diff::
-
-  $ rm $slug/request.diff
-  $ diff -u $FIXTURES/$slug/request.diff =(smrt xml diff $slug/request.diff.xml)
-
 repos::
 
   $ smrt xml repos -s $slug/project.xml # --standard

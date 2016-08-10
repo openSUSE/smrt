@@ -72,7 +72,17 @@ function $0:t # {{{
 
 function do-diff # {{{
 {
-  o xml-xform-request-diff "$@"
+  if [[ $# -eq 0 ]]; then
+    :; [[ -f request.diff.xml ]] \
+    || reject-misuse
+    set -- request.diff.xml
+  elif [[ $# -gt 1 ]]; then
+    reject-misuse $2
+  elif [[ ! -f $1 ]]; then
+    reject-misuse $1
+  fi
+
+  o xml-xform-request-diff $1
 } # }}}
 
 function do-email # {{{
