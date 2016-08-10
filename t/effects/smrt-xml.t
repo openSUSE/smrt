@@ -24,9 +24,3 @@ repos::
   SUSE_Updates_SLE-SERVER_12_ppc64le SUSE:Updates:SLE-SERVER:12:ppc64le
   SUSE_Updates_SLE-SERVER_12_s390x SUSE:Updates:SLE-SERVER:12:s390x
   SUSE_Updates_SLE-SERVER_12_x86_64 SUSE:Updates:SLE-SERVER:12:x86_64
-
-
-packages::
-
-  $ smrt xml sources $slug/packages.xml # --sources
-  SUSE_SLE-12_Update rsync 3.1.0 6.1

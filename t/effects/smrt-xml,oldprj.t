@@ -23,9 +23,3 @@ repos::
   SUSE_Updates_SLE-SERVER_11-SP4_ia64 SUSE:Updates:SLE-SERVER:11-SP4:ia64
   SUSE_Updates_SLE-SERVER_11-SP4_ppc64 SUSE:Updates:SLE-SERVER:11-SP4:ppc64
   SUSE_Updates_SLE-SERVER_11-SP4_x86_64 SUSE:Updates:SLE-SERVER:11-SP4:x86_64
-
-
-packages::
-
-  $ smrt xml sources $slug/packages.xml
-  SUSE_SLE-11-SP2_Update xorg-x11-driver-input 7.4 13.64.1
