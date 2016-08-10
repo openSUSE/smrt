@@ -20,7 +20,7 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c -h|binaries|bugs|email|maintainers|repos|sources
+usage: #c -h|binaries|bugs|channels|codestreams|email|maintainers|sources
 Display information gleaned from BuildService XML data
   Options:
     -h                Display this message
@@ -28,10 +28,11 @@ Display information gleaned from BuildService XML data
   Operands:
     binaries          List released packages
     bugs              List referenced bugs
+    channels          List update channels
+    codestreams       List codestreams
     diff              Display unified diff
     email             Display email address of a maintainer
     maintainers       List maintainer usernames
-    repos             List targeted repositories
     sources           List released packages
 '
 
@@ -56,10 +57,11 @@ function $0:t # {{{
   case $arg in
     binaries    \
   | bugs        \
+  | channels    \
+  | codestreams \
   | diff        \
   | email       \
   | maintainers \
-  | repos       \
   | sources     )
     :
   ;;
@@ -126,13 +128,12 @@ function do-bugs # {{{
   o xml-ls-bugs $1
 } # }}}
 
-function do-repos # {{{
+function do-channels do-codestreams # {{{
 {
-  local arg=$1 inf=$2 kind
-  case $arg in
-  -s) kind=standard ;;
-  -u) kind=update ;;
-  *) reject-misuse $arg ;;
+  local inf=$1 kind
+  case $0 in
+  do-channels)    kind=update   ;;
+  do-codestreams) kind=standard ;;
   esac
   o redir -0 $inf xml-ls-repos $kind
 } # }}}

@@ -12,10 +12,10 @@ setup::
 
 repos::
 
-  $ smrt xml repos -s $slug/project.xml # --standard
+  $ smrt xml codestreams $slug/project.xml
   SUSE_SLE-11-SP2_Update SUSE:SLE-11-SP2:Update
 
-  $ smrt xml repos -u $slug/project.xml # --update
+  $ smrt xml channels $slug/project.xml
   SUSE_Updates_SLE-POS_11-SP3_i586 SUSE:Updates:SLE-POS:11-SP3:i586
   SUSE_Updates_SLE-POS_11-SP3_x86_64 SUSE:Updates:SLE-POS:11-SP3:x86_64
   SUSE_Updates_SLE-SERVER_11-SP3-TERADATA_x86_64 SUSE:Updates:SLE-SERVER:11-SP3-TERADATA:x86_64
