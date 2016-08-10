@@ -332,7 +332,7 @@ function fetch-request-xml # {{{
   local mrid=$1 _mprj rxml=$(mktemp)
   trap "o rm -f $rxml" EXIT
   o redir -1 $rxml bs-fetch-request $mrid
-  o xml sel -t \
+  o xml sel -T -t \
       -m //action/source \
       -v @project \
       --nl \

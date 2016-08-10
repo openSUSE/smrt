@@ -63,19 +63,19 @@ diff --bs rsync/rsync.spec rsync.SUSE_SLE-12_Update/rsync.spec
 +%patch7 -p1
 +%patch8 -p1
 +%patch9 -p1
- patch -p1 &lt; patches/acls.diff
- patch -p1 &lt; patches/xattrs.diff
- patch -p1 &lt; patches/slp.diff
+ patch -p1 < patches/acls.diff
+ patch -p1 < patches/xattrs.diff
+ patch -p1 < patches/slp.diff
 +%patch6 -p1
  # fate#312479
- patch -p1 &lt; patches/time-limit.diff
+ patch -p1 < patches/time-limit.diff
  
 diff --bs rsync/0001-Complain-if-an-inc-recursive-path-is-not-right-for-i.patch rsync.SUSE_SLE-12_Update/0001-Complain-if-an-inc-recursive-path-is-not-right-for-i.patch
 --- /dev/null
 +++ rsync.SUSE_SLE-12_Update/0001-Complain-if-an-inc-recursive-path-is-not-right-for-i.patch
 @@ -0,0 +1,111 @@
 +From 962f8b90045ab331fc04c9e65f80f1a53e68243b Mon Sep 17 00:00:00 2001
-+From: Wayne Davison &lt;wayned@samba.org&gt;
++From: Wayne Davison <wayned@samba.org>
 +Date: Wed, 31 Dec 2014 12:41:03 -0800
 +Subject: [PATCH] Complain if an inc-recursive path is not right for its dir.
 + This ensures that a malicious sender can't use a just-sent symlink as a
@@ -110,11 +110,11 @@ diff --bs rsync/0001-Complain-if-an-inc-recursive-path-is-not-right-for-i.patch 
 + 
 ++		if (inc_recurse) {
 ++			static const char empty_dir[] = "\0";
-++			const char *cur_dir = file-&gt;dirname ? file-&gt;dirname : empty_dir;
-++			if (relative_paths &amp;&amp; *cur_dir == '/')
+++			const char *cur_dir = file->dirname ? file->dirname : empty_dir;
+++			if (relative_paths && *cur_dir == '/')
 ++				cur_dir++;
 ++			if (cur_dir != good_dirname) {
-++				const char *d = dir_ndx &gt;= 0 ? f_name(dir_flist-&gt;files[dir_ndx], NULL) : empty_dir;
+++				const char *d = dir_ndx >= 0 ? f_name(dir_flist->files[dir_ndx], NULL) : empty_dir;
 ++				if (strcmp(cur_dir, d) != 0) {
 ++					rprintf(FERROR,
 ++						"ABORTING due to invalid dir prefix from sender: %s (should be: %s)\n",
@@ -125,16 +125,16 @@ diff --bs rsync/0001-Complain-if-an-inc-recursive-path-is-not-right-for-i.patch 
 ++			}
 ++		}
 ++
-+ 		if (S_ISREG(file-&gt;mode)) {
++ 		if (S_ISREG(file->mode)) {
 + 			/* Already counted */
-+ 		} else if (S_ISDIR(file-&gt;mode)) {
++ 		} else if (S_ISDIR(file->mode)) {
 +@@ -2602,7 +2620,7 @@ void recv_additional_file_list(int f)
 + 			rprintf(FINFO, "[%s] receiving flist for dir %d\n",
 + 				who_am_i(), ndx);
 + 		}
 +-		flist = recv_file_list(f);
 ++		flist = recv_file_list(f, ndx);
-+ 		flist-&gt;parent_ndx = ndx;
++ 		flist->parent_ndx = ndx;
 + 	}
 + }
 +Index: rsync-3.1.0/io.c
@@ -147,7 +147,7 @@ diff --bs rsync/0001-Complain-if-an-inc-recursive-path-is-not-right-for-i.patch 
 + 			}
 +-			flist = recv_file_list(iobuf.in_fd);
 ++			flist = recv_file_list(iobuf.in_fd, ndx);
-+ 			flist-&gt;parent_ndx = ndx;
++ 			flist->parent_ndx = ndx;
 + #ifdef SUPPORT_HARD_LINKS
 + 			if (preserve_hard_links)
 +Index: rsync-3.1.0/main.c
@@ -165,11 +165,11 @@ diff --bs rsync/0001-Complain-if-an-inc-recursive-path-is-not-right-for-i.patch 
 + 		exit_cleanup(RERR_FILESELECT);
 +@@ -1183,7 +1183,7 @@ int client_run(int f_in, int f_out, pid_
 + 
-+ 	if (write_batch &amp;&amp; !am_server)
++ 	if (write_batch && !am_server)
 + 		start_write_batch(f_in);
 +-	flist = recv_file_list(f_in);
 ++	flist = recv_file_list(f_in, -1);
-+ 	if (inc_recurse &amp;&amp; file_total == 1)
++ 	if (inc_recurse && file_total == 1)
 + 		recv_additional_file_list(f_in);
 + 
 +Index: rsync-3.1.0/rsync.c
@@ -182,7 +182,7 @@ diff --bs rsync/0001-Complain-if-an-inc-recursive-path-is-not-right-for-i.patch 
 + 		start_flist_forward(ndx);
 +-		flist = recv_file_list(f_in);
 ++		flist = recv_file_list(f_in, ndx);
-+ 		flist-&gt;parent_ndx = ndx;
++ 		flist->parent_ndx = ndx;
 + 		stop_flist_forward();
 + 	}
 diff --bs rsync/0001-Receiver-now-rejects-invalid-filenames-in-filelist.patch rsync.SUSE_SLE-12_Update/0001-Receiver-now-rejects-invalid-filenames-in-filelist.patch
@@ -190,7 +190,7 @@ diff --bs rsync/0001-Receiver-now-rejects-invalid-filenames-in-filelist.patch rs
 +++ rsync.SUSE_SLE-12_Update/0001-Receiver-now-rejects-invalid-filenames-in-filelist.patch
 @@ -0,0 +1,109 @@
 +From 4cad402ea8a91031f86c53961d78bb7f4f174790 Mon Sep 17 00:00:00 2001
-+From: Wayne Davison &lt;wayned@samba.org&gt;
++From: Wayne Davison <wayned@samba.org>
 +Date: Sun, 13 Apr 2014 10:36:59 -0700
 +Subject: [PATCH] Receiver now rejects invalid filenames in filelist.
 +
@@ -215,7 +215,7 @@ diff --bs rsync/0001-Receiver-now-rejects-invalid-filenames-in-filelist.patch rs
 +-	if (*thisname)
 +-		clean_fname(thisname, 0);
 ++	if (*thisname
-++	 &amp;&amp; (clean_fname(thisname, CFN_REFUSE_DOT_DOT_DIRS) &lt; 0 || (!relative_paths &amp;&amp; *thisname == '/'))) {
+++	 && (clean_fname(thisname, CFN_REFUSE_DOT_DOT_DIRS) < 0 || (!relative_paths && *thisname == '/'))) {
 ++		rprintf(FERROR, "ABORTING due to unsafe pathname from sender: %s\n", thisname);
 ++		exit_cleanup(RERR_PROTOCOL);
 ++	}
@@ -231,19 +231,19 @@ diff --bs rsync/0001-Receiver-now-rejects-invalid-filenames-in-filelist.patch rs
 +++	 * for a non-relative transfer in recv_file_entry(). */
 + 	flist_sort_and_clean(flist, relative_paths);
 + 
-+ 	if (protocol_version &lt; 30) {
++ 	if (protocol_version < 30) {
 +Index: rsync-3.1.0/rsync.h
 +===================================================================
 +--- rsync-3.1.0.orig/rsync.h	2016-01-07 13:10:13.396073949 +0100
 ++++ rsync-3.1.0/rsync.h	2016-01-07 13:10:14.189086604 +0100
 +@@ -208,6 +208,7 @@
-+ #define CFN_KEEP_TRAILING_SLASH (1&lt;&lt;1)
-+ #define CFN_DROP_TRAILING_DOT_DIR (1&lt;&lt;2)
-+ #define CFN_COLLAPSE_DOT_DOT_DIRS (1&lt;&lt;3)
-++#define CFN_REFUSE_DOT_DOT_DIRS (1&lt;&lt;4)
++ #define CFN_KEEP_TRAILING_SLASH (1<<1)
++ #define CFN_DROP_TRAILING_DOT_DIR (1<<2)
++ #define CFN_COLLAPSE_DOT_DOT_DIRS (1<<3)
+++#define CFN_REFUSE_DOT_DOT_DIRS (1<<4)
 + 
 + #define SP_DEFAULT 0
-+ #define SP_KEEP_DOT_DIRS (1&lt;&lt;0)
++ #define SP_KEEP_DOT_DIRS (1<<0)
 +Index: rsync-3.1.0/util.c
 +===================================================================
 +--- rsync-3.1.0.orig/util.c	2016-01-07 13:10:13.397073965 +0100
@@ -261,32 +261,32 @@ diff --bs rsync/0001-Receiver-now-rejects-invalid-filenames-in-filelist.patch rs
 + 	if (!name)
 + 		return 0;
 + 
-++#define DOT_IS_DOT_DOT_DIR(bp) (bp[1] == '.' &amp;&amp; (bp[2] == '/' || !bp[2]))
+++#define DOT_IS_DOT_DOT_DIR(bp) (bp[1] == '.' && (bp[2] == '/' || !bp[2]))
 ++
 + 	if ((anchored = *f == '/') != 0) {
 + 		*t++ = *f++;
 + #ifdef __CYGWIN__
 +@@ -878,7 +880,8 @@ unsigned int clean_fname(char *name, int
-+ 	} else if (flags &amp; CFN_KEEP_DOT_DIRS &amp;&amp; *f == '.' &amp;&amp; f[1] == '/') {
++ 	} else if (flags & CFN_KEEP_DOT_DIRS && *f == '.' && f[1] == '/') {
 + 		*t++ = *f++;
 + 		*t++ = *f++;
 +-	}
-++	} else if (flags &amp; CFN_REFUSE_DOT_DOT_DIRS &amp;&amp; *f == '.' &amp;&amp; DOT_IS_DOT_DOT_DIR(f))
+++	} else if (flags & CFN_REFUSE_DOT_DOT_DIRS && *f == '.' && DOT_IS_DOT_DOT_DIR(f))
 ++		return -1;
 + 	while (*f) {
 + 		/* discard extra slashes */
 + 		if (*f == '/') {
 +@@ -894,9 +897,10 @@ unsigned int clean_fname(char *name, int
-+ 			if (f[1] == '\0' &amp;&amp; flags &amp; CFN_DROP_TRAILING_DOT_DIR)
++ 			if (f[1] == '\0' && flags & CFN_DROP_TRAILING_DOT_DIR)
 + 				break;
 + 			/* collapse ".." dirs */
-+-			if (flags &amp; CFN_COLLAPSE_DOT_DOT_DIRS
-+-			 &amp;&amp; f[1] == '.' &amp;&amp; (f[2] == '/' || !f[2])) {
-++			if (flags &amp; (CFN_COLLAPSE_DOT_DOT_DIRS|CFN_REFUSE_DOT_DOT_DIRS) &amp;&amp; DOT_IS_DOT_DOT_DIR(f)) {
++-			if (flags & CFN_COLLAPSE_DOT_DOT_DIRS
++-			 && f[1] == '.' && (f[2] == '/' || !f[2])) {
+++			if (flags & (CFN_COLLAPSE_DOT_DOT_DIRS|CFN_REFUSE_DOT_DOT_DIRS) && DOT_IS_DOT_DOT_DIR(f)) {
 + 				char *s = t - 1;
-++				if (flags &amp; CFN_REFUSE_DOT_DOT_DIRS)
+++				if (flags & CFN_REFUSE_DOT_DOT_DIRS)
 ++					return -1;
-+ 				if (s == name &amp;&amp; anchored) {
++ 				if (s == name && anchored) {
 + 					f += 2;
 + 					continue;
 +@@ -919,6 +923,8 @@ unsigned int clean_fname(char *name, int
@@ -311,7 +311,7 @@ diff --bs rsync/rsync-add_back_use_slp_directive.patch rsync.SUSE_SLE-12_Update/
 + 
 + #ifdef HAVE_LIBSLP
 +-	if (register_services()) {
-++	if (lp_use_slp() &amp;&amp; register_services()) {
+++	if (lp_use_slp() && register_services()) {
 + 		rprintf(FINFO,
 + 		    "Couldn't register with service discovery protocol, continuing anyway\n");
 + 	}
@@ -339,18 +339,18 @@ diff --bs rsync/rsync-add_back_use_slp_directive.patch rsync.SUSE_SLE-12_Update/
 + 
 +  /* ==== local_vars ==== */
 +@@ -322,6 +327,7 @@ static struct parm_struct parm_table[] =
-+  {"port",              P_INTEGER,P_GLOBAL,&amp;Vars.g.rsync_port,          NULL,0},
++  {"port",              P_INTEGER,P_GLOBAL,&Vars.g.rsync_port,          NULL,0},
 + #ifdef HAVE_LIBSLP
-+  {"slp refresh",       P_INTEGER,P_GLOBAL,&amp;Vars.g.slp_refresh,         NULL,0},
-++ {"use slp",           P_BOOL,   P_GLOBAL,&amp;Vars.g.use_slp,             NULL,0},
++  {"slp refresh",       P_INTEGER,P_GLOBAL,&Vars.g.slp_refresh,         NULL,0},
+++ {"use slp",           P_BOOL,   P_GLOBAL,&Vars.g.use_slp,             NULL,0},
 + #endif
-+  {"socket options",    P_STRING, P_GLOBAL,&amp;Vars.g.socket_options,      NULL,0},
++  {"socket options",    P_STRING, P_GLOBAL,&Vars.g.socket_options,      NULL,0},
 + 
-+@@ -458,6 +464,7 @@ FN_GLOBAL_INTEGER(lp_listen_backlog, &amp;Va
-+ FN_GLOBAL_INTEGER(lp_rsync_port, &amp;Vars.g.rsync_port)
++@@ -458,6 +464,7 @@ FN_GLOBAL_INTEGER(lp_listen_backlog, &Va
++ FN_GLOBAL_INTEGER(lp_rsync_port, &Vars.g.rsync_port)
 + #ifdef HAVE_LIBSLP
-+ FN_GLOBAL_INTEGER(lp_slp_refresh, &amp;Vars.g.slp_refresh)
-++FN_GLOBAL_BOOL(lp_use_slp, &amp;Vars.g.use_slp)
++ FN_GLOBAL_INTEGER(lp_slp_refresh, &Vars.g.slp_refresh)
+++FN_GLOBAL_BOOL(lp_use_slp, &Vars.g.use_slp)
 + #endif
 + 
 + FN_LOCAL_STRING(lp_auth_users, auth_users)
@@ -380,14 +380,14 @@ diff --bs rsync/rsync-add_back_use_slp_directive.patch rsync.SUSE_SLE-12_Update/
 +-	short slp_timeout = lp_slp_refresh();
 ++	short slp_timeout = lp_use_slp() ? lp_slp_refresh() : 0;
 + 	if (slp_timeout) {
-+ 		if (slp_timeout &lt; SLP_MIN_TIMEOUT)
++ 		if (slp_timeout < SLP_MIN_TIMEOUT)
 + 			slp_timeout = SLP_MIN_TIMEOUT;
 +Index: rsync-3.1.1/main.c
 +===================================================================
 +--- rsync-3.1.1.orig/main.c	2015-10-07 14:58:43.767379915 +0200
 ++++ rsync-3.1.1/main.c	2015-10-07 14:59:24.516920767 +0200
 +@@ -1250,11 +1250,14 @@ static int start_client(int argc, char *
-+ 		if (shell_machine &amp;&amp; !shell_machine[0]) {
++ 		if (shell_machine && !shell_machine[0]) {
 + #ifdef HAVE_LIBSLP
 + 			/* User entered just rsync:// URI */
 +-			print_service_list();
@@ -426,7 +426,7 @@ diff --bs rsync/rsync-equivalent_of_CVE-2014-8242.patch rsync.SUSE_SLE-12_Update
 +++ rsync.SUSE_SLE-12_Update/rsync-equivalent_of_CVE-2014-8242.patch
 @@ -0,0 +1,94 @@
 +From eac858085e3ac94ec0ab5061d11f52652c90a869 Mon Sep 17 00:00:00 2001
-+From: Wayne Davison &lt;wayned@samba.org&gt;
++From: Wayne Davison <wayned@samba.org>
 +Date: Mon, 11 May 2015 12:36:20 -0700
 +Subject: [PATCH] Add compat flag to allow proper seed checksum order. Fixes
 + the equivalent of librsync's CVE-2014-8242 issue.
@@ -450,27 +450,27 @@ diff --bs rsync/rsync-equivalent_of_CVE-2014-8242.patch rsync.SUSE_SLE-12_Update
 + /*
 +   a simple 32 bit checksum that can be upadted from either end
 +@@ -54,10 +55,18 @@ void get_checksum2(char *buf, int32 len,
-+ 	if (protocol_version &gt;= 30) {
++ 	if (protocol_version >= 30) {
 + 		uchar seedbuf[4];
-+ 		md5_begin(&amp;m);
-+-		md5_update(&amp;m, (uchar *)buf, len);
++ 		md5_begin(&m);
++-		md5_update(&m, (uchar *)buf, len);
 +-		if (checksum_seed) {
 +-			SIVALu(seedbuf, 0, checksum_seed);
-+-			md5_update(&amp;m, seedbuf, 4);
++-			md5_update(&m, seedbuf, 4);
 ++		if (proper_seed_order) {
 ++			if (checksum_seed) {
 ++				SIVALu(seedbuf, 0, checksum_seed);
-++				md5_update(&amp;m, seedbuf, 4);
+++				md5_update(&m, seedbuf, 4);
 ++			}
-++			md5_update(&amp;m, (uchar *)buf, len);
+++			md5_update(&m, (uchar *)buf, len);
 ++		} else {
-++			md5_update(&amp;m, (uchar *)buf, len);
+++			md5_update(&m, (uchar *)buf, len);
 ++			if (checksum_seed) {
 ++				SIVALu(seedbuf, 0, checksum_seed);
-++				md5_update(&amp;m, seedbuf, 4);
+++				md5_update(&m, seedbuf, 4);
 ++			}
 + 		}
-+ 		md5_result(&amp;m, (uchar *)sum);
++ 		md5_result(&m, (uchar *)sum);
 + 	} else {
 +Index: rsync-3.1.0/compat.c
 +===================================================================
@@ -485,10 +485,10 @@ diff --bs rsync/rsync-equivalent_of_CVE-2014-8242.patch rsync.SUSE_SLE-12_Update
 + extern int am_server;
 + extern int am_sender;
 +@@ -76,6 +77,7 @@ int filesfrom_convert = 0;
-+ #define CF_SYMLINK_TIMES (1&lt;&lt;1)
-+ #define CF_SYMLINK_ICONV (1&lt;&lt;2)
-+ #define CF_SAFE_FLIST	 (1&lt;&lt;3)
-++#define CF_CHKSUM_SEED_FIX (1&lt;&lt;5)
++ #define CF_SYMLINK_TIMES (1<<1)
++ #define CF_SYMLINK_ICONV (1<<2)
++ #define CF_SAFE_FLIST	 (1<<3)
+++#define CF_CHKSUM_SEED_FIX (1<<5)
 + 
 + static const char *client_info;
 + 
@@ -502,8 +502,8 @@ diff --bs rsync/rsync-equivalent_of_CVE-2014-8242.patch rsync.SUSE_SLE-12_Update
 + 		} else
 + 			compat_flags = read_byte(f_in);
 + 		/* The inc_recurse var MUST be set to 0 or 1. */
-+ 		inc_recurse = compat_flags &amp; CF_INC_RECURSE ? 1 : 0;
-++		proper_seed_order = compat_flags &amp; CF_CHKSUM_SEED_FIX ? 1 : 0;
++ 		inc_recurse = compat_flags & CF_INC_RECURSE ? 1 : 0;
+++		proper_seed_order = compat_flags & CF_CHKSUM_SEED_FIX ? 1 : 0;
 + 		if (am_sender) {
 + 			receiver_symlink_times = am_server
 + 			    ? strchr(client_info, 'L') != NULL
@@ -518,4 +518,4 @@ diff --bs rsync/rsync-equivalent_of_CVE-2014-8242.patch rsync.SUSE_SLE-12_Update
 ++		argstr[x++] = 'C'; /* support checksum seed order fix */
 + 	}
 + 
-+ 	if (x &gt;= (int)sizeof argstr) { /* Not possible... */
++ 	if (x >= (int)sizeof argstr) { /* Not possible... */

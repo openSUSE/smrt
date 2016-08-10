@@ -25,7 +25,7 @@ ReviewRequestID::
   o redir -1 * bs-fetch-request 87808 (glob)
   o bsc /request/87808
   o curl -Sfns https://api.example.com/request/87808
-  o xml sel -t -m //action/source -v @project --nl /?*/?* (glob)
+  o xml sel -T -t -m //action/source -v @project --nl /?*/?* (glob)
   o mkdir SUSE:Maintenance:1302:87808
   o cd SUSE:Maintenance:1302:87808
   Downloading SUSE:Maintenance:1302:87808 metadata
@@ -62,26 +62,26 @@ ReviewRequestID::
   o redir -1 person-farmer.xml bs-fetch-info person farmer
   o bsc /person/farmer
   o curl -Sfns https://api.example.com/person/farmer
-  o xml sel -t -v /person/email --nl person-farmer.xml
+  o xml sel -T -t -v /person/email --nl person-farmer.xml
   o redir -1 patchinfo print -f '%s %s\n' category security packager farmer@example.com rating moderate
   o redir -0 project.xml -1 repos-sources xml-ls-repos standard
   o redir -0 project.xml -1 repos-binaries xml-ls-repos update
   o redir -1 sources xml-ls-released-sources packages.xml repos-binaries
-  o xml sel -t -m '//binary[@arch="src" or @arch="nosrc"]' -v @repository -o ' ' -v @name -o ' ' -v @version -o ' ' -v @release --nl packages.xml
+  o xml sel -T -t -m '//binary[@arch="src" or @arch="nosrc"]' -v @repository -o ' ' -v @name -o ' ' -v @version -o ' ' -v @release --nl packages.xml
   o redir -1 binaries xml-ls-released-binaries packages.xml repos-binaries
-  o xml sel -t -m '//binary[@arch!="src" and @arch!="nosrc"]' -v @repository -o ' ' -v @arch -o ' ' -v @name -o ' ' -v @version -o ' ' -v @release -o ' ' -v @filepath --nl packages.xml
+  o xml sel -T -t -m '//binary[@arch!="src" and @arch!="nosrc"]' -v @repository -o ' ' -v @arch -o ' ' -v @name -o ' ' -v @version -o ' ' -v @release -o ' ' -v @filepath --nl packages.xml
   o redir -1 maintainers fetch-package-maintainers sources
   o fetch-package-maintainers sources
   o redir -1 owners-rsync.xml bs-fetch-maintainers rsync
   o bsc -d 'filter=bugowner&binary=rsync' /search/owner
   o curl -Sfns -d 'filter=bugowner&binary=rsync' https://api.example.com/search/owner
-  o xml sel -t -m '//owner/*[name() = "group" or name() = "person"]' -v 'name()' -o ' ' -v @name --nl owners-rsync.xml
+  o xml sel -T -t -m '//owner/*[name() = "group" or name() = "person"]' -v 'name()' -o ' ' -v @name --nl owners-rsync.xml
   o fetch-info person farmer
-  o xml sel -t -v /person/email --nl person-farmer.xml
+  o xml sel -T -t -v /person/email --nl person-farmer.xml
   o redir -1 request.diff xml-xform-request-diff request.diff.xml
-  o xml sel -t --if '0 = count(/request/action[source/@package != "patchinfo"]/sourcediff/files/file[diff])' -o empty -n --else -m '/request/action[source/@package != "patchinfo"]/sourcediff/files/file[diff]' -o 'diff --bs ' -v ../../old/@package -o / --if '@state="added"' -v new/@name --else -v old/@name --break -o ' ' -v ../../new/@package -o / --if '@state="deleted"' -v old/@name --else -v new/@name --break --nl -o '--- ' --if '@state="added"' -o /dev/null --else -v ../../old/@package -o / -v old/@name --break --nl -o '+++ ' --if '@state="deleted"' -o /dev/null --else -v ../../new/@package -o / -v new/@name --break --nl -v diff --break --break request.diff.xml
+  o xml sel -T -t --if '0 = count(/request/action[source/@package != "patchinfo"]/sourcediff/files/file[diff])' -o empty -n --else -m '/request/action[source/@package != "patchinfo"]/sourcediff/files/file[diff]' -o 'diff --bs ' -v ../../old/@package -o / --if '@state="added"' -v new/@name --else -v old/@name --break -o ' ' -v ../../new/@package -o / --if '@state="deleted"' -v old/@name --else -v new/@name --break --nl -o '--- ' --if '@state="added"' -o /dev/null --else -v ../../old/@package -o / -v old/@name --break --nl -o '+++ ' --if '@state="deleted"' -o /dev/null --else -v ../../new/@package -o / -v new/@name --break --nl -v diff --break --break request.diff.xml
   o redir -1 issues xml-ls-bugs patchinfo.xml
-  o xml sel -t -m '/patchinfo/issue[@tracker="bnc"]' -v @tracker -v @id -o ' ' -v . --nl patchinfo.xml
+  o xml sel -T -t -m '/patchinfo/issue[@tracker="bnc"]' -v @tracker -v @id -o ' ' -v . --nl patchinfo.xml
   o redir -1 l3s.xml sg-fetch-l3s 898513 900914 915410 922710
   o redir -1 l3s.xml.tmp curl -Sfs -H 'Accept: application/xml' -H 'Authorization: ApiKey smrt:mtui' 'http://l3db.example.org/api/1/raederwerk/?incident__bug_id__in=898513,900914,915410,922710'
   o curl -Sfs -H 'Accept: application/xml' -H 'Authorization: ApiKey smrt:mtui' 'http://l3db.example.org/api/1/raederwerk/?incident__bug_id__in=898513,900914,915410,922710'

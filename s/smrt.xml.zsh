@@ -22,7 +22,7 @@ function xml-xform-request-diff # {{{
   # it's easy to read but wasn't pleasant to write
   local -r diffs='/request/action[source/@package != "patchinfo"]/sourcediff/files/file[diff]'
   o xml sel \
-    -t                                                                                  \
+    -T -t                                                                               \
     --if "0 = count($diffs)"                                                            \
       -o 'empty' -n                                                                     \
     --else                                                                              \
@@ -52,7 +52,7 @@ function xml-xform-request-diff # {{{
 
 function xml-ls-patchinfo # {{{
 {
-  xml sel -t \
+  xml sel -T -t \
     -m '/patchinfo/*[name() = "category" or name() = "rating" or name() = "packager"]' \
     -v 'name()' -o ' ' -v . --nl \
   | LC_ALL=C sort
@@ -61,7 +61,7 @@ function xml-ls-patchinfo # {{{
 function xml-ls-repos # {{{
 {
   local kind=$1
-  xml sel -t \
+  xml sel -T -t \
     -m '/project/repository/releasetarget[@repository="'$kind'"]' \
     -v ../@name -o ' ' -v @project \
     --nl \
@@ -71,7 +71,7 @@ function xml-ls-repos # {{{
 function xml-ls-released-binaries # {{{
 {
   local pkgxml=$1 prjrepos=$2
-  o xml sel -t \
+  o xml sel -T -t \
     -m '//binary[@arch!="src" and @arch!="nosrc"]' \
     -v @repository \
     -o ' ' -v @arch \
@@ -100,7 +100,7 @@ function xml-ls-released-binaries # {{{
 function xml-ls-released-sources # {{{
 {
   local pkgxml=$1 prjrepos=$2
-  o xml sel -t \
+  o xml sel -T -t \
     -m '//binary[@arch="src" or @arch="nosrc"]' \
     -v @repository \
     -o ' ' -v @name \
@@ -118,7 +118,7 @@ function xml-get-maintainers # {{{
   local -a line
   reply=()
 
-  o xml sel -t \
+  o xml sel -T -t \
     -m '//owner/*[name() = "group" or name() = "person"]' \
     -v 'name()' -o ' ' -v @name \
     --nl \
@@ -133,7 +133,7 @@ function xml-get-group-members # {{{
   local file=$1 REPLY
   reply=()
 
-  o xml sel -t \
+  o xml sel -T -t \
     -m /group/person/person \
     -v @userid \
     --nl \
@@ -148,7 +148,7 @@ function xml-get-email # {{{
   local file=$1 kind=${${1:t}%%-*} REPLY
   reply=()
 
-  o xml sel -t \
+  o xml sel -T -t \
     -v /$kind/email \
     --nl \
     $file \
@@ -160,7 +160,7 @@ function xml-get-email # {{{
 function xml-ls-bugs # {{{
 {
   local pinfo=$1
-  o xml sel -t \
+  o xml sel -T -t \
     -m '/patchinfo/issue[@tracker="bnc"]' \
     -v @tracker \
     -v @id \
@@ -168,8 +168,5 @@ function xml-ls-bugs # {{{
     -v . \
     --nl \
     $pinfo \
-  | xml unesc \
   | LC_ALL=C sort -k 1b,1
-  # `xml unesc` because `xml sel` leaves even the predefined
-  # entities such as &gt;, &lt; or &amp; unexpanded
 } # }}}

@@ -2,9 +2,9 @@ diff --bs systemd-mini.1524/_link systemd-mini.SUSE_SLE-12_Update/_link
 --- systemd-mini.1524/_link
 +++ systemd-mini.SUSE_SLE-12_Update/_link
 @@ -1 +1 @@
--&lt;link package="systemd.1524" cicount="copy"/&gt;
+-<link package="systemd.1524" cicount="copy"/>
 \ No newline at end of file
-+&lt;link package="systemd.SUSE_SLE-12_Update" cicount="copy"/&gt;
++<link package="systemd.SUSE_SLE-12_Update" cicount="copy"/>
 \ No newline at end of file
 diff --bs systemd.1524/pre_checkin.sh systemd.SUSE_SLE-12_Update/pre_checkin.sh
 --- systemd.1524/pre_checkin.sh
@@ -15,57 +15,57 @@ diff --bs systemd.1524/pre_checkin.sh systemd.SUSE_SLE-12_Update/pre_checkin.sh
  sed "s/^%define bootstrap.*$/${EDIT_WARNING}%define bootstrap 1/;
 -     s/^%define udevpkgname.*$/${EDIT_WARNING}%define udevpkgname udev-mini/;
 -     s/^\(Name:.*\)$/\1-mini/;
--          s/^BuildRoot.*/&amp;\n\nProvides:    %{real} = %{version}-%{release}\n/
+-          s/^BuildRoot.*/&\n\nProvides:    %{real} = %{version}-%{release}\n/
 +     s/^%define mini .*$/${EDIT_WARNING}%define mini -mini/;
 +     s/^\(Name:.*\)$/\1-mini/
- 	      " &lt; ${ORIG_SPEC}.spec &gt; ${ORIG_SPEC}-mini.spec
+ 	      " < ${ORIG_SPEC}.spec > ${ORIG_SPEC}-mini.spec
  cp ${ORIG_SPEC}.changes ${ORIG_SPEC}-mini.changes
  cp ${ORIG_SPEC}-rpmlintrc ${ORIG_SPEC}-mini-rpmlintrc
 diff --bs systemd.1524/systemd-210.tar.xz/man/tmpfiles.d.xml systemd.SUSE_SLE-12_Update/systemd-210.tar.xz/man/tmpfiles.d.xml
 --- systemd.1524/systemd-210.tar.xz/man/tmpfiles.d.xml
 +++ systemd.SUSE_SLE-12_Update/systemd-210.tar.xz/man/tmpfiles.d.xml
 @@ -173,17 +173,6 @@
-                                 &lt;/varlistentry&gt;
+                                 </varlistentry>
  
-                                 &lt;varlistentry&gt;
--                                        &lt;term&gt;&lt;varname&gt;m&lt;/varname&gt;&lt;/term&gt;
--                                        &lt;listitem&gt;&lt;para&gt;If the
+                                 <varlistentry>
+-                                        <term><varname>m</varname></term>
+-                                        <listitem><para>If the
 -                                        specified file path exists,
 -                                        adjust its access mode, group
 -                                        and user to the specified
 -                                        values and reset the SELinux
 -                                        security context. If it does not exist, do
--                                        nothing.&lt;/para&gt;&lt;/listitem&gt;
--                                &lt;/varlistentry&gt;
+-                                        nothing.</para></listitem>
+-                                </varlistentry>
 -
--                                &lt;varlistentry&gt;
-                                         &lt;term&gt;&lt;varname&gt;x&lt;/varname&gt;&lt;/term&gt;
-                                         &lt;listitem&gt;&lt;para&gt;Ignore a path
+-                                <varlistentry>
+                                         <term><varname>x</varname></term>
+                                         <listitem><para>Ignore a path
                                          during cleaning. Use this type
 @@ -246,27 +235,29 @@
  
-                                 &lt;varlistentry&gt;
-                                         &lt;term&gt;&lt;varname&gt;z&lt;/varname&gt;&lt;/term&gt;
--                                        &lt;listitem&gt;&lt;para&gt;Restore
+                                 <varlistentry>
+                                         <term><varname>z</varname></term>
+-                                        <listitem><para>Restore
 -                                        SELinux security context
 -                                        and set ownership and access
 -                                        mode of a file or directory if
 -                                        it exists.  Lines of this type
 -                                        accept shell-style globs in
 -                                        place of normal path names.
-+                                        &lt;listitem&gt;&lt;para&gt;Adjust the
++                                        <listitem><para>Adjust the
 +                                        access mode, group and user,
 +                                        and restore the SELinux security
 +                                        context of a file or directory,
 +                                        if it exists. Lines of this
 +                                        type accept shell-style globs
 +                                        in place of normal path names.
-                                         &lt;/para&gt;&lt;/listitem&gt;
-                                 &lt;/varlistentry&gt;
+                                         </para></listitem>
+                                 </varlistentry>
  
-                                 &lt;varlistentry&gt;
-                                         &lt;term&gt;&lt;varname&gt;Z&lt;/varname&gt;&lt;/term&gt;
-                                         &lt;listitem&gt;&lt;para&gt;Recursively
+                                 <varlistentry>
+                                         <term><varname>Z</varname></term>
+                                         <listitem><para>Recursively
 -                                        restore SELinux security
 -                                        context and set
 -                                        ownership and access mode of a
@@ -84,16 +84,16 @@ diff --bs systemd.1524/systemd-210.tar.xz/man/tmpfiles.d.xml systemd.SUSE_SLE-12
 +                                        of this type accept
 +                                        shell-style globs in place of
 +                                        normal path
-                                         names.&lt;/para&gt;&lt;/listitem&gt;
-                                 &lt;/varlistentry&gt;
-                         &lt;/variablelist&gt;
+                                         names.</para></listitem>
+                                 </varlistentry>
+                         </variablelist>
 @@ -357,6 +348,22 @@
-                         ignored for &lt;varname&gt;x&lt;/varname&gt;,
-                         &lt;varname&gt;r&lt;/varname&gt;, &lt;varname&gt;R&lt;/varname&gt;,
-                         &lt;varname&gt;L&lt;/varname&gt; lines.&lt;/para&gt;
+                         ignored for <varname>x</varname>,
+                         <varname>r</varname>, <varname>R</varname>,
+                         <varname>L</varname> lines.</para>
 +
-+                        &lt;para&gt;Optionally, if prefixed with
-+                        &lt;literal&gt;~&lt;/literal&gt; the access mode is masked
++                        <para>Optionally, if prefixed with
++                        <literal>~</literal> the access mode is masked
 +                        based on the already set access bits for
 +                        existing file or directories: if the existing
 +                        file has all executable bits unset then all
@@ -106,49 +106,49 @@ diff --bs systemd.1524/systemd-210.tar.xz/man/tmpfiles.d.xml systemd.SUSE_SLE-12
 +                        addition the sticky/suid/gid bit is removed unless
 +                        applied to a directory. This
 +                        functionality is particularly useful in
-+                        conjunction with &lt;varname&gt;Z&lt;/varname&gt;.&lt;/para&gt;
-                 &lt;/refsect2&gt;
++                        conjunction with <varname>Z</varname>.</para>
+                 </refsect2>
  
-                 &lt;refsect2&gt;
+                 <refsect2>
 diff --bs systemd.1524/systemd-210.tar.xz/src/core/mount.c systemd.SUSE_SLE-12_Update/systemd-210.tar.xz/src/core/mount.c
 --- systemd.1524/systemd-210.tar.xz/src/core/mount.c
 +++ systemd.SUSE_SLE-12_Update/systemd-210.tar.xz/src/core/mount.c
 @@ -113,6 +113,13 @@
-         return !mount_test_option(p-&gt;options, "noauto");
+         return !mount_test_option(p->options, "noauto");
  }
  
 +static bool mount_is_automount(const MountParameters *p) {
 +        assert(p);
 +
-+        return mount_test_option(p-&gt;options, "comment=systemd.automount") ||
-+                mount_test_option(p-&gt;options, "x-systemd.automount");
++        return mount_test_option(p->options, "comment=systemd.automount") ||
++                mount_test_option(p->options, "x-systemd.automount");
 +}
 +
  static bool needs_quota(MountParameters *p) {
          assert(p);
  
 @@ -329,7 +336,8 @@
-         if (path_equal(m-&gt;where, "/"))
+         if (path_equal(m->where, "/"))
                  return 0;
  
--        if (mount_is_auto(p) &amp;&amp; UNIT(m)-&gt;manager-&gt;running_as == SYSTEMD_SYSTEM)
-+        if (mount_is_auto(p) &amp;&amp; !mount_is_automount(p) &amp;&amp;
-+            UNIT(m)-&gt;manager-&gt;running_as == SYSTEMD_SYSTEM)
+-        if (mount_is_auto(p) && UNIT(m)->manager->running_as == SYSTEMD_SYSTEM)
++        if (mount_is_auto(p) && !mount_is_automount(p) &&
++            UNIT(m)->manager->running_as == SYSTEMD_SYSTEM)
                  device_wants_mount = true;
  
-         r = unit_add_node_link(UNIT(m), p-&gt;what, device_wants_mount);
+         r = unit_add_node_link(UNIT(m), p->what, device_wants_mount);
 diff --bs systemd.1524/systemd-210.tar.xz/src/core/transaction.c systemd.SUSE_SLE-12_Update/systemd-210.tar.xz/src/core/transaction.c
 --- systemd.1524/systemd-210.tar.xz/src/core/transaction.c
 +++ systemd.SUSE_SLE-12_Update/systemd-210.tar.xz/src/core/transaction.c
 @@ -975,7 +975,8 @@
-                         SET_FOREACH(dep, ret-&gt;unit-&gt;dependencies[UNIT_WANTS], i) {
+                         SET_FOREACH(dep, ret->unit->dependencies[UNIT_WANTS], i) {
                                  r = transaction_add_job_and_dependencies(tr, JOB_START, dep, ret, false, false, false, false, ignore_order, e);
-                                 if (r &lt; 0) {
--                                        log_full_unit(r == -EADDRNOTAVAIL ? LOG_DEBUG : LOG_WARNING, dep-&gt;id,
+                                 if (r < 0) {
+-                                        log_full_unit(r == -EADDRNOTAVAIL ? LOG_DEBUG : LOG_WARNING, dep->id,
 +                                        /* unit masked and unit not found are not considered as errors. */
-+                                        log_full_unit(r ==  -EADDRNOTAVAIL || r == -ENOENT ? LOG_DEBUG : LOG_WARNING, dep-&gt;id,
++                                        log_full_unit(r ==  -EADDRNOTAVAIL || r == -ENOENT ? LOG_DEBUG : LOG_WARNING, dep->id,
                                                        "Cannot add dependency job for unit %s, ignoring: %s",
-                                                       dep-&gt;id, bus_error_message(e, r));
+                                                       dep->id, bus_error_message(e, r));
  
 diff --bs systemd.1524/systemd-210.tar.xz/src/fstab-generator/fstab-generator.c systemd.SUSE_SLE-12_Update/systemd-210.tar.xz/src/fstab-generator/fstab-generator.c
 --- systemd.1524/systemd-210.tar.xz/src/fstab-generator/fstab-generator.c
@@ -157,8 +157,8 @@ diff --bs systemd.1524/systemd-210.tar.xz/src/fstab-generator/fstab-generator.c 
          }
  
          c = check_crypttab(what);
--        if (!noauto &amp;&amp; (c != 0)) {
-+        if (!automount &amp;&amp; !noauto &amp;&amp; (c != 0)) {
+-        if (!noauto && (c != 0)) {
++        if (!automount && !noauto && (c != 0)) {
                  if (post) {
 -                        lnk = strjoin(arg_dest, "/", post, nofail || automount ? ".wants/" : ".requires/", name, NULL);
 +                        lnk = strjoin(arg_dest, "/", post, nofail ? ".wants/" : ".requires/", name, NULL);
@@ -185,20 +185,20 @@ diff --bs systemd.1524/systemd-210.tar.xz/src/journal/journald-kmsg.c systemd.SU
          assert(s);
  
 -        if (parse_proc_cmdline(parse_proc_cmdline_word) == -115) {
--                s-&gt;dev_kmsg_fd = open("/dev/null", O_RDWR|O_CLOEXEC|O_NONBLOCK|O_NOCTTY);
+-                s->dev_kmsg_fd = open("/dev/null", O_RDWR|O_CLOEXEC|O_NONBLOCK|O_NOCTTY);
 -        } else {
--                s-&gt;dev_kmsg_fd = open("/dev/kmsg", O_RDWR|O_CLOEXEC|O_NONBLOCK|O_NOCTTY);
+-                s->dev_kmsg_fd = open("/dev/kmsg", O_RDWR|O_CLOEXEC|O_NONBLOCK|O_NOCTTY);
 -        }
 -
-+        s-&gt;dev_kmsg_fd = open("/dev/kmsg", O_RDWR|O_CLOEXEC|O_NONBLOCK|O_NOCTTY);
-         if (s-&gt;dev_kmsg_fd &lt; 0) {
++        s->dev_kmsg_fd = open("/dev/kmsg", O_RDWR|O_CLOEXEC|O_NONBLOCK|O_NOCTTY);
+         if (s->dev_kmsg_fd < 0) {
                  log_full(errno == ENOENT ? LOG_DEBUG : LOG_WARNING,
                           "Failed to open /dev/kmsg, ignoring: %m");
 diff --bs systemd.1524/systemd-210.tar.xz/src/libudev/libudev-util.c systemd.SUSE_SLE-12_Update/systemd-210.tar.xz/src/libudev/libudev-util.c
 --- systemd.1524/systemd-210.tar.xz/src/libudev/libudev-util.c
 +++ systemd.SUSE_SLE-12_Update/systemd-210.tar.xz/src/libudev/libudev-util.c
 @@ -419,10 +419,3 @@
-         bits |= 1LLU &lt;&lt; ((hash &gt;&gt; 18) &amp; 63);
+         bits |= 1LLU << ((hash >> 18) & 63);
          return bits;
  }
 -
@@ -235,7 +235,7 @@ diff --bs systemd.1524/systemd-210.tar.xz/src/shared/log.c systemd.SUSE_SLE-12_U
 -
  static int log_open_kmsg(void) {
  
-         if (kmsg_fd &gt;= 0)
+         if (kmsg_fd >= 0)
                  return 0;
  
 -        if (parse_proc_cmdline(parse_proc_cmdline_word) == -115) {
@@ -245,14 +245,14 @@ diff --bs systemd.1524/systemd-210.tar.xz/src/shared/log.c systemd.SUSE_SLE-12_U
 -        }
 -
 +        kmsg_fd = open("/dev/kmsg", O_WRONLY|O_NOCTTY|O_CLOEXEC);
-         if (kmsg_fd &lt; 0)
+         if (kmsg_fd < 0)
                  return -errno;
  
 @@ -905,9 +893,6 @@
-                         if (l == 5 &amp;&amp; startswith(w, "debug")) {
+                         if (l == 5 && startswith(w, "debug")) {
                                  log_set_max_level(LOG_DEBUG);
                                  break;
--                        } else if (l == 5 &amp;&amp; startswith(w, "quiet")) {
+-                        } else if (l == 5 && startswith(w, "quiet")) {
 -                                log_set_max_level(LOG_WARNING);
 -                                break;
                          }
@@ -282,7 +282,7 @@ diff --bs systemd.1524/systemd-210.tar.xz/src/shared/util.c systemd.SUSE_SLE-12_
 @@ -6281,11 +6281,7 @@
  
                  r = parse_word(word);
-                 if (r &lt; 0) {
+                 if (r < 0) {
 -                        if (r == -115) {
 -                                log_error("Warning: %s set, redirecting messages to /dev/null.", word);
 -                        } else {
@@ -304,7 +304,7 @@ diff --bs systemd.1524/systemd-210.tar.xz/src/systemctl/systemctl.c systemd.SUSE
 +
 +        /* By default show all units except the ones in inactive
 +         * state and with no pending job */
-         if (u-&gt;job_id &gt; 0)
+         if (u->job_id > 0)
                  return true;
  
 diff --bs systemd.1524/systemd-210.tar.xz/src/tmpfiles/tmpfiles.c systemd.SUSE_SLE-12_Update/systemd-210.tar.xz/src/tmpfiles/tmpfiles.c
@@ -364,11 +364,11 @@ diff --bs systemd.1524/systemd-210.tar.xz/src/tmpfiles/tmpfiles.c systemd.SUSE_S
          int r_p, r;
  
 @@ -301,7 +313,8 @@
-                 if (s.st_uid == 0 &amp;&amp; !(s.st_mode &amp; S_IWUSR))
+                 if (s.st_uid == 0 && !(s.st_mode & S_IWUSR))
                          continue;
  
--                if (asprintf(&amp;sub_path, "%s/%s", p, dent-&gt;d_name) &lt; 0) {
-+                sub_path = strjoin(p, "/", dent-&gt;d_name, NULL);
+-                if (asprintf(&sub_path, "%s/%s", p, dent->d_name) < 0) {
++                sub_path = strjoin(p, "/", dent->d_name, NULL);
 +                if (!sub_path) {
                          r = log_oom();
                          goto finish;
@@ -376,18 +376,18 @@ diff --bs systemd.1524/systemd-210.tar.xz/src/tmpfiles/tmpfiles.c systemd.SUSE_S
 @@ -359,7 +372,7 @@
                                  int q;
  
-                                 sub_dir = xopendirat(dirfd(d), dent-&gt;d_name, O_NOFOLLOW|O_NOATIME);
+                                 sub_dir = xopendirat(dirfd(d), dent->d_name, O_NOFOLLOW|O_NOATIME);
 -                                if (sub_dir == NULL) {
 +                                if (!sub_dir) {
                                          if (errno != ENOENT) {
-                                                 log_error("opendir(%s/%s) failed: %m", p, dent-&gt;d_name);
+                                                 log_error("opendir(%s/%s) failed: %m", p, dent->d_name);
                                                  r = -errno;
 @@ -369,7 +382,6 @@
                                  }
  
-                                 q = dir_cleanup(i, sub_path, sub_dir, &amp;s, cutoff, rootdev, false, maxdepth-1, false);
+                                 q = dir_cleanup(i, sub_path, sub_dir, &s, cutoff, rootdev, false, maxdepth-1, false);
 -
-                                 if (q &lt; 0)
+                                 if (q < 0)
                                          r = q;
                          }
 @@ -466,15 +478,34 @@
@@ -397,49 +397,49 @@ diff --bs systemd.1524/systemd-210.tar.xz/src/tmpfiles/tmpfiles.c systemd.SUSE_S
 +        assert(i);
 +        assert(path);
 +
-         /* not using i-&gt;path directly because it may be a glob */
--        if (i-&gt;mode_set)
--                if (chmod(path, i-&gt;mode) &lt; 0) {
+         /* not using i->path directly because it may be a glob */
+-        if (i->mode_set)
+-                if (chmod(path, i->mode) < 0) {
 -                        if (errno != ENOENT || !ignore_enoent) {
 -                                log_error("chmod(%s) failed: %m", path);
 -                                return -errno;
-+        if (i-&gt;mode_set) {
-+                mode_t m = i-&gt;mode;
++        if (i->mode_set) {
++                mode_t m = i->mode;
 +
-+                if (i-&gt;mask_perms) {
++                if (i->mask_perms) {
 +                        struct stat st;
 +
-+                        if (stat(path, &amp;st) &gt;= 0) {
-+                                if (!(st.st_mode &amp; 0111))
-+                                        m &amp;= ~0111;
-+                                if (!(st.st_mode &amp; 0222))
-+                                        m &amp;= ~0222;
-+                                if (!(st.st_mode &amp; 0444))
-+                                        m &amp;= ~0444;
++                        if (stat(path, &st) >= 0) {
++                                if (!(st.st_mode & 0111))
++                                        m &= ~0111;
++                                if (!(st.st_mode & 0222))
++                                        m &= ~0222;
++                                if (!(st.st_mode & 0444))
++                                        m &= ~0444;
 +                                if (!S_ISDIR(st.st_mode))
-+                                        m &amp;= ~07000; /* remove sticky/sgid/suid bit, unless directory */
++                                        m &= ~07000; /* remove sticky/sgid/suid bit, unless directory */
                          }
                  }
  
-+                if (chmod(path, m) &lt; 0) {
++                if (chmod(path, m) < 0) {
 +                        log_error("chmod(%s) failed: %m", path);
 +                        return -errno;
 +                }
 +        }
 +
-         if (i-&gt;uid_set || i-&gt;gid_set)
+         if (i->uid_set || i->gid_set)
                  if (chown(path,
-                           i-&gt;uid_set ? i-&gt;uid : (uid_t) -1,
+                           i->uid_set ? i->uid : (uid_t) -1,
 @@ -519,9 +550,9 @@
          }
  
-         if (i-&gt;argument) {
+         if (i->argument) {
 +                _cleanup_free_ char *unescaped;
                  ssize_t n;
                  size_t l;
 -                _cleanup_free_ char *unescaped;
  
-                 unescaped = cunescape(i-&gt;argument);
+                 unescaped = cunescape(i->argument);
                  if (unescaped == NULL) {
 @@ -1029,7 +1060,6 @@
  }
@@ -491,17 +491,17 @@ diff --bs systemd.1524/systemd-210.tar.xz/src/tmpfiles/tmpfiles.c systemd.SUSE_S
 @@ -1243,9 +1271,15 @@
          }
  
-         if (mode &amp;&amp; !streq(mode, "-")) {
+         if (mode && !streq(mode, "-")) {
 +                const char *mm = mode;
                  unsigned m;
  
--                if (sscanf(mode, "%o", &amp;m) != 1) {
+-                if (sscanf(mode, "%o", &m) != 1) {
 +                if (*mm == '~') {
-+                        i-&gt;mask_perms = true;
++                        i->mask_perms = true;
 +                        mm++;
 +                }
 +
-+                if (sscanf(mm, "%o", &amp;m) != 1) {
++                if (sscanf(mm, "%o", &m) != 1) {
                          log_error("[%s:%u] Invalid mode '%s'.", fname, line, mode);
                          return -ENOENT;
                  }
@@ -509,7 +509,7 @@ diff --bs systemd.1524/systemd-210.tar.xz/src/udev/udevd.c systemd.SUSE_SLE-12_U
 --- systemd.1524/systemd-210.tar.xz/src/udev/udevd.c
 +++ systemd.SUSE_SLE-12_Update/systemd-210.tar.xz/src/udev/udevd.c
 @@ -291,14 +291,17 @@
-                                 udev_event-&gt;exec_delay = exec_delay;
+                                 udev_event->exec_delay = exec_delay;
  
                          /*
 -                         * Take a "read lock" on the device node; this establishes
@@ -523,9 +523,9 @@ diff --bs systemd.1524/systemd-210.tar.xz/src/udev/udevd.c systemd.SUSE_SLE-12_U
                           * udev has finished its event handling.
                           */
 -                        if (streq_ptr("block", udev_device_get_subsystem(dev))) {
-+                        if (!streq_ptr(udev_device_get_action(dev), "remove") &amp;&amp;
-+                            streq_ptr("block", udev_device_get_subsystem(dev)) &amp;&amp;
-+                            !startswith(udev_device_get_sysname(dev), "dm-") &amp;&amp;
++                        if (!streq_ptr(udev_device_get_action(dev), "remove") &&
++                            streq_ptr("block", udev_device_get_subsystem(dev)) &&
++                            !startswith(udev_device_get_sysname(dev), "dm-") &&
 +                            !startswith(udev_device_get_sysname(dev), "md")) {
                                  struct udev_device *d = dev;
  
@@ -649,7 +649,7 @@ diff --bs systemd.1524/systemd-mini.changes systemd.SUSE_SLE-12_Update/systemd-m
 +  18afa5c2a7a6c215.
 +
 +  For the same reasons we also have to fix the permissions of
-+  /run/log/journal/&lt;machine-id&gt; directory to make sure that regular
++  /run/log/journal/<machine-id> directory to make sure that regular
 +  user won't access to its content.
 +
 +-------------------------------------------------------------------
@@ -781,7 +781,7 @@ diff --bs systemd.1524/systemd-mini.spec systemd.SUSE_SLE-12_Update/systemd-mini
 -%else
 -%define has_efi 0
 -%endif
- %if 0%{?suse_version} &gt; 1315
+ %if 0%{?suse_version} > 1315
  %bcond_without  permission
  %bcond_without  blkrrpart
 @@ -59,19 +52,8 @@
@@ -794,7 +794,7 @@ diff --bs systemd.1524/systemd-mini.spec systemd.SUSE_SLE-12_Update/systemd-mini
  BuildRequires:  acl
  BuildRequires:  audit-devel
 -%if %{with compat_libs}
--%if 0%{?suse_version} &lt;= 1320
+-%if 0%{?suse_version} <= 1320
 -# See gold_archs in binutils.spec
 -%ifarch %ix86 %arm x86_64 ppc ppc64 ppc64le %sparc
 -BuildRequires:  binutils-gold
@@ -816,9 +816,9 @@ diff --bs systemd.1524/systemd-mini.spec systemd.SUSE_SLE-12_Update/systemd-mini
  BuildRequires:  pkgconfig(libpcre)
  %if ! 0%{?bootstrap}
  BuildRequires:  pkgconfig(libqrencode)
--BuildRequires:  pkgconfig(usbutils) &gt;= 0.82
+-BuildRequires:  pkgconfig(usbutils) >= 0.82
  %endif
- %if 0%{?suse_version} &gt;= 1315
+ %if 0%{?suse_version} >= 1315
  %ifarch %ix86 x86_64 x32 %arm ppc64le s390x
 @@ -148,6 +128,7 @@
  %if 0%{?bootstrap}
@@ -829,7 +829,7 @@ diff --bs systemd.1524/systemd-mini.spec systemd.SUSE_SLE-12_Update/systemd-mini
  Conflicts:      kiwi
  %else
 @@ -184,21 +165,15 @@
- Obsoletes:      systemd-analyze &lt; 201
+ Obsoletes:      systemd-analyze < 201
  Provides:       systemd-analyze = %{version}
  Source0:        systemd-%{version}.tar.xz
 -%if ! 0%{?bootstrap}
@@ -920,7 +920,7 @@ diff --bs systemd.1524/systemd-mini.spec systemd.SUSE_SLE-12_Update/systemd-mini
  Summary:        Dynamic library to access udev device information
  License:        LGPL-2.1+
  Group:          System/Libraries
--Requires:       %{udevpkgname} &gt;= %{version}-%{release}
+-Requires:       %{udevpkgname} >= %{version}-%{release}
  %if 0%{?bootstrap}
 -Conflicts:      libudev%{udev_major}
 +Conflicts:      libudev1
@@ -1047,34 +1047,34 @@ diff --bs systemd.1524/systemd-mini.spec systemd.SUSE_SLE-12_Update/systemd-mini
 -    test -e "$f" || break
 -    grep -q _init_completion "$f" || continue
 -    echo "%exclude %{_datadir}/bash-completion/completions/${f##*/}"
--done &gt; files.completion
+-done > files.completion
 -%else
--&gt; files.completion
+-> files.completion
 -%endif
 -
- %if 0%{suse_version} &gt;= 1310
+ %if 0%{suse_version} >= 1310
  # packaged in systemd-rpm-macros
  rm -f %{buildroot}/%{_prefix}/lib/rpm/macros.d/macros.systemd
 @@ -758,6 +704,13 @@
- getent group adm   &amp;&amp; setfacl -Rnm g:adm:rx,d:g:adm:rx     %{_localstatedir}/log/journal/ &gt; /dev/null 2&gt;&amp;1 || :
+ getent group adm   && setfacl -Rnm g:adm:rx,d:g:adm:rx     %{_localstatedir}/log/journal/ > /dev/null 2>&1 || :
  %endif
  
 +# Make sure the journals have the right permissions (boo#972612).
 +# Note that the journals might no be present yet.
 +MID=$(cat /etc/machine-id)
-+chmod 0640 %{_localstatedir}/log/journal/$MID/*.journal  2&gt;/dev/null || :
-+chmod 0640 %{_localstatedir}/log/journal/$MID/*.journal~ 2&gt;/dev/null || :
-+chmod o-rx %{_rundir}/log/journal/$MID                   2&gt;/dev/null || :
++chmod 0640 %{_localstatedir}/log/journal/$MID/*.journal  2>/dev/null || :
++chmod 0640 %{_localstatedir}/log/journal/$MID/*.journal~ 2>/dev/null || :
++chmod o-rx %{_rundir}/log/journal/$MID                   2>/dev/null || :
 +
  # Try to read default runlevel from the old inittab if it exists
  if [ ! -e /etc/systemd/system/default.target -a -e /etc/inittab ]; then
-   runlevel=$(awk -F ':' '$3 == "initdefault" &amp;&amp; $1 !~ "^#" { print $2 }' /etc/inittab 2&gt; /dev/null)
+   runlevel=$(awk -F ':' '$3 == "initdefault" && $1 !~ "^#" { print $2 }' /etc/inittab 2> /dev/null)
 @@ -811,12 +764,12 @@
-   rm -f /etc/systemd/system/default.target 2&gt;&amp;1 || :
+   rm -f /etc/systemd/system/default.target 2>&1 || :
  fi
  
--%pretrans -n %{udevpkgname} -p &lt;lua&gt;
-+%pretrans -n udev%{?mini} -p &lt;lua&gt;
+-%pretrans -n %{udevpkgname} -p <lua>
++%pretrans -n udev%{?mini} -p <lua>
  if posix.stat("/lib/udev") and not posix.stat("/usr/lib/udev") then
    posix.symlink("/lib/udev", "/usr/lib/udev")
  end
@@ -1088,19 +1088,19 @@ diff --bs systemd.1524/systemd-mini.spec systemd.SUSE_SLE-12_Update/systemd-mini
  # kill daemon if we are not in a chroot
  if test -f /proc/1/exe -a -d /proc/1/root ; then
          if test "$(stat -Lc '%%D-%%i' /)" = "$(stat -Lc '%%D-%%i' /proc/1/root)"; then
--                systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket systemd-udevd.service udev.service udev-control.socket udev-kernel.socket &gt;/dev/null 2&gt;&amp;1 || :
-+                systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket systemd-udevd.service udev-control.socket udev-kernel.socket &gt;/dev/null 2&gt;&amp;1 || :
-                 udevadm control --exit 2&gt;&amp;1 || :
+-                systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket systemd-udevd.service udev.service udev-control.socket udev-kernel.socket >/dev/null 2>&1 || :
++                systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket systemd-udevd.service udev-control.socket udev-kernel.socket >/dev/null 2>&1 || :
+                 udevadm control --exit 2>&1 || :
          fi
  fi
  
 -%post -n %{udevpkgname}
 +%post -n udev%{?mini}
- /usr/bin/udevadm hwdb --update &gt;/dev/null 2&gt;&amp;1 || :
+ /usr/bin/udevadm hwdb --update >/dev/null 2>&1 || :
 -%{fillup_and_insserv -Y boot.udev}
  # add KERNEL name match to existing persistent net rules
  sed -ri '/KERNEL/ ! { s/NAME="(eth|wlan|ath)([0-9]+)"/KERNEL=="\1*", NAME="\1\2"/}' \
-     /etc/udev/rules.d/70-persistent-net.rules &gt;/dev/null 2&gt;&amp;1 || :
+     /etc/udev/rules.d/70-persistent-net.rules >/dev/null 2>&1 || :
 @@ -870,7 +822,7 @@
   fi
  fi
@@ -1108,7 +1108,7 @@ diff --bs systemd.1524/systemd-mini.spec systemd.SUSE_SLE-12_Update/systemd-mini
 -%postun -n %{udevpkgname}
 +%postun -n udev%{?mini}
  %insserv_cleanup
- systemctl daemon-reload &gt;/dev/null 2&gt;&amp;1 || :
+ systemctl daemon-reload >/dev/null 2>&1 || :
  
 @@ -890,13 +842,13 @@
  fi
@@ -1257,7 +1257,7 @@ diff --bs systemd.1524/systemd.changes systemd.SUSE_SLE-12_Update/systemd.change
 +  18afa5c2a7a6c215.
 +
 +  For the same reasons we also have to fix the permissions of
-+  /run/log/journal/&lt;machine-id&gt; directory to make sure that regular
++  /run/log/journal/<machine-id> directory to make sure that regular
 +  user won't access to its content.
 +
 +-------------------------------------------------------------------
@@ -1388,7 +1388,7 @@ diff --bs systemd.1524/systemd.spec systemd.SUSE_SLE-12_Update/systemd.spec
 -%else
 -%define has_efi 0
 -%endif
- %if 0%{?suse_version} &gt; 1315
+ %if 0%{?suse_version} > 1315
  %bcond_without  permission
  %bcond_without  blkrrpart
 @@ -59,14 +52,6 @@
@@ -1396,7 +1396,7 @@ diff --bs systemd.1524/systemd.spec systemd.SUSE_SLE-12_Update/systemd.spec
  BuildRequires:  acl
  BuildRequires:  audit-devel
 -%if %{with compat_libs}
--%if 0%{?suse_version} &lt;= 1320
+-%if 0%{?suse_version} <= 1320
 -# See gold_archs in binutils.spec
 -%ifarch %ix86 %arm x86_64 ppc ppc64 ppc64le %sparc
 -BuildRequires:  binutils-gold
@@ -1418,9 +1418,9 @@ diff --bs systemd.1524/systemd.spec systemd.SUSE_SLE-12_Update/systemd.spec
  BuildRequires:  pkgconfig(libpcre)
  %if ! 0%{?bootstrap}
  BuildRequires:  pkgconfig(libqrencode)
--BuildRequires:  pkgconfig(usbutils) &gt;= 0.82
+-BuildRequires:  pkgconfig(usbutils) >= 0.82
  %endif
- %if 0%{?suse_version} &gt;= 1315
+ %if 0%{?suse_version} >= 1315
  %ifarch %ix86 x86_64 x32 %arm ppc64le s390x
 @@ -143,6 +126,7 @@
  %if 0%{?bootstrap}
@@ -1431,7 +1431,7 @@ diff --bs systemd.1524/systemd.spec systemd.SUSE_SLE-12_Update/systemd.spec
  Conflicts:      kiwi
  %else
 @@ -179,21 +163,15 @@
- Obsoletes:      systemd-analyze &lt; 201
+ Obsoletes:      systemd-analyze < 201
  Provides:       systemd-analyze = %{version}
  Source0:        systemd-%{version}.tar.xz
 -%if ! 0%{?bootstrap}
@@ -1522,7 +1522,7 @@ diff --bs systemd.1524/systemd.spec systemd.SUSE_SLE-12_Update/systemd.spec
  Summary:        Dynamic library to access udev device information
  License:        LGPL-2.1+
  Group:          System/Libraries
--Requires:       %{udevpkgname} &gt;= %{version}-%{release}
+-Requires:       %{udevpkgname} >= %{version}-%{release}
  %if 0%{?bootstrap}
 -Conflicts:      libudev%{udev_major}
 +Conflicts:      libudev1
@@ -1649,34 +1649,34 @@ diff --bs systemd.1524/systemd.spec systemd.SUSE_SLE-12_Update/systemd.spec
 -    test -e "$f" || break
 -    grep -q _init_completion "$f" || continue
 -    echo "%exclude %{_datadir}/bash-completion/completions/${f##*/}"
--done &gt; files.completion
+-done > files.completion
 -%else
--&gt; files.completion
+-> files.completion
 -%endif
 -
- %if 0%{suse_version} &gt;= 1310
+ %if 0%{suse_version} >= 1310
  # packaged in systemd-rpm-macros
  rm -f %{buildroot}/%{_prefix}/lib/rpm/macros.d/macros.systemd
 @@ -753,6 +702,13 @@
- getent group adm   &amp;&amp; setfacl -Rnm g:adm:rx,d:g:adm:rx     %{_localstatedir}/log/journal/ &gt; /dev/null 2&gt;&amp;1 || :
+ getent group adm   && setfacl -Rnm g:adm:rx,d:g:adm:rx     %{_localstatedir}/log/journal/ > /dev/null 2>&1 || :
  %endif
  
 +# Make sure the journals have the right permissions (boo#972612).
 +# Note that the journals might no be present yet.
 +MID=$(cat /etc/machine-id)
-+chmod 0640 %{_localstatedir}/log/journal/$MID/*.journal  2&gt;/dev/null || :
-+chmod 0640 %{_localstatedir}/log/journal/$MID/*.journal~ 2&gt;/dev/null || :
-+chmod o-rx %{_rundir}/log/journal/$MID                   2&gt;/dev/null || :
++chmod 0640 %{_localstatedir}/log/journal/$MID/*.journal  2>/dev/null || :
++chmod 0640 %{_localstatedir}/log/journal/$MID/*.journal~ 2>/dev/null || :
++chmod o-rx %{_rundir}/log/journal/$MID                   2>/dev/null || :
 +
  # Try to read default runlevel from the old inittab if it exists
  if [ ! -e /etc/systemd/system/default.target -a -e /etc/inittab ]; then
-   runlevel=$(awk -F ':' '$3 == "initdefault" &amp;&amp; $1 !~ "^#" { print $2 }' /etc/inittab 2&gt; /dev/null)
+   runlevel=$(awk -F ':' '$3 == "initdefault" && $1 !~ "^#" { print $2 }' /etc/inittab 2> /dev/null)
 @@ -806,12 +762,12 @@
-   rm -f /etc/systemd/system/default.target 2&gt;&amp;1 || :
+   rm -f /etc/systemd/system/default.target 2>&1 || :
  fi
  
--%pretrans -n %{udevpkgname} -p &lt;lua&gt;
-+%pretrans -n udev%{?mini} -p &lt;lua&gt;
+-%pretrans -n %{udevpkgname} -p <lua>
++%pretrans -n udev%{?mini} -p <lua>
  if posix.stat("/lib/udev") and not posix.stat("/usr/lib/udev") then
    posix.symlink("/lib/udev", "/usr/lib/udev")
  end
@@ -1690,19 +1690,19 @@ diff --bs systemd.1524/systemd.spec systemd.SUSE_SLE-12_Update/systemd.spec
  # kill daemon if we are not in a chroot
  if test -f /proc/1/exe -a -d /proc/1/root ; then
          if test "$(stat -Lc '%%D-%%i' /)" = "$(stat -Lc '%%D-%%i' /proc/1/root)"; then
--                systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket systemd-udevd.service udev.service udev-control.socket udev-kernel.socket &gt;/dev/null 2&gt;&amp;1 || :
-+                systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket systemd-udevd.service udev-control.socket udev-kernel.socket &gt;/dev/null 2&gt;&amp;1 || :
-                 udevadm control --exit 2&gt;&amp;1 || :
+-                systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket systemd-udevd.service udev.service udev-control.socket udev-kernel.socket >/dev/null 2>&1 || :
++                systemctl stop systemd-udevd-control.socket systemd-udevd-kernel.socket systemd-udevd.service udev-control.socket udev-kernel.socket >/dev/null 2>&1 || :
+                 udevadm control --exit 2>&1 || :
          fi
  fi
  
 -%post -n %{udevpkgname}
 +%post -n udev%{?mini}
- /usr/bin/udevadm hwdb --update &gt;/dev/null 2&gt;&amp;1 || :
+ /usr/bin/udevadm hwdb --update >/dev/null 2>&1 || :
 -%{fillup_and_insserv -Y boot.udev}
  # add KERNEL name match to existing persistent net rules
  sed -ri '/KERNEL/ ! { s/NAME="(eth|wlan|ath)([0-9]+)"/KERNEL=="\1*", NAME="\1\2"/}' \
-     /etc/udev/rules.d/70-persistent-net.rules &gt;/dev/null 2&gt;&amp;1 || :
+     /etc/udev/rules.d/70-persistent-net.rules >/dev/null 2>&1 || :
 @@ -865,7 +820,7 @@
   fi
  fi
@@ -1710,7 +1710,7 @@ diff --bs systemd.1524/systemd.spec systemd.SUSE_SLE-12_Update/systemd.spec
 -%postun -n %{udevpkgname}
 +%postun -n udev%{?mini}
  %insserv_cleanup
- systemctl daemon-reload &gt;/dev/null 2&gt;&amp;1 || :
+ systemctl daemon-reload >/dev/null 2>&1 || :
  
 @@ -885,13 +840,13 @@
  fi
@@ -1843,7 +1843,7 @@ diff --bs systemd.1524/boot.udev systemd.SUSE_SLE-12_Update/boot.udev
 -	start)
 -		# create /dev/root symlink with dynamic rule
 -		if [ -x ${WRITERULE} ]; then
--		    ${WRITERULE} &gt;/dev/null 2&gt;&amp;1 || true
+-		    ${WRITERULE} >/dev/null 2>&1 || true
 -		fi
 -
 -		# start udevd
