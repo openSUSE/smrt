@@ -77,8 +77,13 @@ function do-diff # {{{
 
 function do-email # {{{
 {
+  :; [[ $# -eq 1 ]] \
+  || reject-misuse ${2-}
+  :; [[ -f $1 ]] \
+  || reject-misuse $1
+
   local -a reply
-  o xml-get-email "$@"
+  o xml-get-email $1
   o print -rf '%s\n' -- $reply
 } # }}}
 

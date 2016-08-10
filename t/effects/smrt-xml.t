@@ -10,12 +10,6 @@ setup::
   $ reify-fixture $slug
 
 
-bugowner::
-
-  $ smrt xml email $slug/person-farmer.xml # --email
-  farmer@example.com
-
-
 diff::
 
   $ rm $slug/request.diff
