@@ -91,7 +91,17 @@ function do-maintainers # {{{
 
 function do-bugs # {{{
 {
-  o xml-ls-bugs "$@"
+  if [[ $# -eq 0 ]]; then
+    :; [[ -f patchinfo.xml ]] \
+    || reject-misuse
+    set -- patchinfo.xml
+  elif [[ $# -gt 1 ]]; then
+    reject-misuse $2
+  elif [[ ! -f $1 ]]; then
+    reject-misuse $1
+  fi
+
+  o xml-ls-bugs $1
 } # }}}
 
 function do-repos # {{{
