@@ -47,13 +47,13 @@ function fake-curl # {{{
     fspath=($fixdir/$prj:<->/repositories.xml)
   ;;
   (/group/*)
-    fspath=($fixdir/$mprj:$mrid/group-${urlpath#/group/}.xml)
+    fspath=($fixdir/groups/group-${urlpath#/group/}.xml)
   ;;
   (/person/*)
-    fspath=($fixdir/$mprj:$mrid/person-${urlpath#/person/}.xml)
+    fspath=($fixdir/people/person-${urlpath#/person/}.xml)
   ;;
   (/request/<->)
-    local mrid=${urlpath#/request/}
+    local mrid=$urlpath:t
     if (( ${opts[(i)cmd=diff&view=xml]} <= $#opts )); then
       fspath=($fixdir/SUSE:Maintenance:<->:$mrid/request.diff.xml)
     else
