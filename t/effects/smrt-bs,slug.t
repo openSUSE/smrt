@@ -24,3 +24,6 @@ test the happy path::
 
   $ smrt bs request $slug > xml
   $ diff -u $fixd/request.xml xml
+
+  $ smrt bs request-diff $slug > xml
+  $ diff -u $fixd/request.diff.xml xml

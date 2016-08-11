@@ -20,12 +20,13 @@ help::
       project           Download project.xml data
       repos             Download repositories.xml data
       request           Download request.xml data
+      request-diff      Download request.diff.xml data
       <MPRJ>            <ISSUER>:Maintenance:<ISSUE>
       <MRID>            Maintenance request <MRID>
       <SLUG>            <MPRJ>:<MRID>
   
     Most subcommands accept either <SLUG> or <MPRJ>.
-    `request` accepts <SLUG> or <MRID>.
+    `request`, `request-diff` accept <SLUG> or <MRID>.
 
   $ diff -u =(smrt bs -h) =(smrt bs --help)
 

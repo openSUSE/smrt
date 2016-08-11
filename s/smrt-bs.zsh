@@ -31,12 +31,13 @@ Download XML data for a maintenance request from the BuildService
     project           Download project.xml data
     repos             Download repositories.xml data
     request           Download request.xml data
+    request-diff      Download request.diff.xml data
     <MPRJ>            <ISSUER>:Maintenance:<ISSUE>
     <MRID>            Maintenance request <MRID>
     <SLUG>            <MPRJ>:<MRID>
 
   Most subcommands accept either <SLUG> or <MPRJ>.
-  `request` accepts <SLUG> or <MRID>.
+  `request`, `request-diff` accept <SLUG> or <MRID>.
 '
 
 declare -gr preludedir="${SMRT_PRELUDEDIR:-@preludedir@}"
@@ -69,7 +70,7 @@ function $0:t # {{{
     *) reject-misuse $arg ;;
     esac
   ;;
-  request)
+  request|request-diff)
     case $arg in
     $~PATTERN_SLUG)
       : ${SMRT_ISSUER:=${arg%%:*}}
