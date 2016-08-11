@@ -14,8 +14,8 @@ function curl # {{{
   opts=("${(@)@[1,$((OPTIND - 1))]}")
   shift $((OPTIND - 1))
 
-  local -r issuer=${SMRT_ISSUER:-SUSE}
-  local -r apiurl=${${=config_issuer_apiurls}[(r)$~issuer:*]#$~issuer:}
+  local -r issuer=${SMRT_ISSUER:?}
+  local -r apiurl=${${config_issuer_apiurls}[(rw)$issuer:*]#$issuer:}
 
   case $1 in
   (file://*)
