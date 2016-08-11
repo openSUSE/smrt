@@ -102,7 +102,7 @@ function bsc # {{{
   || o complain 1 'no issuer given'
 
   local -r issuer=${SMRT_ISSUER:-SUSE}
-  local -r apiurl=${${=config_issuer_apiurls}[(r)$~issuer:*]#$~issuer:}
+  local -r apiurl=${config_issuer_apiurls[(rw)$issuer:*]#$issuer:}
 
   :; o curl -Sfns "${(@)opts}" "$apiurl$1" \
   || o complain $? "failed bsc ${(j: :)${(q-)@}}"
@@ -111,7 +111,7 @@ function bsc # {{{
 function oscqam # {{{
 {
   local -r issuer=${SMRT_ISSUER:-SUSE}
-  local -r apiurl=${${=config_issuer_apiurls}[(r)$~issuer:*]#$~issuer:}
+  local -r apiurl=${config_issuer_apiurls[(rw)$issuer:*]#$issuer:}
 
   set -- --apiurl=$apiurl qam "$@"
   :; o osc "$@" \

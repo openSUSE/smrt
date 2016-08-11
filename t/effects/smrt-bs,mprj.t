@@ -1,15 +1,14 @@
-smrt bs: effects
-================
+smrt bs <cmd> <mprj>
+====================
 
 setup::
 
   $ . $TESTROOT/setup
 
   $ mprj=SUSE:Maintenance:1302
-  $ mrid=87808
-  $ fixd=$FIXTURES/$mprj:$mrid
+  $ fixd=$FIXTURES/$mprj:87808
 
-test::
+test the happy path::
 
   $ smrt bs packages $mprj > xml
   $ diff -u $fixd/packages.xml xml

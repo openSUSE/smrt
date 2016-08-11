@@ -20,7 +20,7 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c -h|<CMD> <MPRJ>
+usage: #c -h|<CMD> <ID>
 Download XML data for a maintenance request from the BuildService
   Options:
     -h                Display this message
@@ -30,8 +30,13 @@ Download XML data for a maintenance request from the BuildService
     patchinfo         Download patchinfo.xml data
     project           Download project.xml data
     repos             Download repositories.xml data
+    request           Download request.xml data
     <MPRJ>            <ISSUER>:Maintenance:<ISSUE>
+    <MRID>            Maintenance request <MRID>
+    <SLUG>            <MPRJ>:<MRID>
 
+  Most subcommands accept either <SLUG> or <MPRJ>.
+  `request` accepts <SLUG> or <MRID>.
 '
 
 declare -gr preludedir="${SMRT_PRELUDEDIR:-@preludedir@}"
@@ -55,8 +60,23 @@ function $0:t # {{{
   case $cmd in
   packages|patchinfo|project|repos)
     case $arg in
+    $~PATTERN_SLUG)
+      arg=${arg%:*}
+    ;&
     $~PATTERN_MPRJ)
       : ${SMRT_ISSUER:=${arg%%:*}}
+    ;;
+    *) reject-misuse $arg ;;
+    esac
+  ;;
+  request)
+    case $arg in
+    $~PATTERN_SLUG)
+      : ${SMRT_ISSUER:=${arg%%:*}}
+      arg=${arg##*:}
+    ;;
+    $~PATTERN_MRID)
+      : ${SMRT_ISSUER:=$config_assumed_issuer}
     ;;
     *) reject-misuse $arg ;;
     esac

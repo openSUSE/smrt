@@ -9,7 +9,7 @@ setup::
 help::
 
   $ smrt bs -h
-  usage: smrt bs -h|<CMD> <MPRJ>
+  usage: smrt bs -h|<CMD> <ID>
   Download XML data for a maintenance request from the BuildService
     Options:
       -h                Display this message
@@ -19,7 +19,13 @@ help::
       patchinfo         Download patchinfo.xml data
       project           Download project.xml data
       repos             Download repositories.xml data
+      request           Download request.xml data
       <MPRJ>            <ISSUER>:Maintenance:<ISSUE>
+      <MRID>            Maintenance request <MRID>
+      <SLUG>            <MPRJ>:<MRID>
+  
+    Most subcommands accept either <SLUG> or <MPRJ>.
+    `request` accepts <SLUG> or <MRID>.
 
   $ diff -u =(smrt bs -h) =(smrt bs --help)
 
