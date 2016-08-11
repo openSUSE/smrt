@@ -15,6 +15,7 @@ help::
       -h                Display this message
   
     Operands:
+      maintainers       Download maintainer data for a package
       packages          Download packages.xml data
       patchinfo         Download patchinfo.xml data
       project           Download project.xml data
@@ -23,10 +24,12 @@ help::
       request-diff      Download request.diff.xml data
       <MPRJ>            <ISSUER>:Maintenance:<ISSUE>
       <MRID>            Maintenance request <MRID>
+      <PKG>             Package name
       <SLUG>            <MPRJ>:<MRID>
   
     Most subcommands accept either <SLUG> or <MPRJ>.
     `request`, `request-diff` accept <SLUG> or <MRID>.
+    `maintainers` accepts <PKG>.
 
   $ diff -u =(smrt bs -h) =(smrt bs --help)
 

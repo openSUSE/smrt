@@ -62,7 +62,7 @@ function fake-curl # {{{
   ;;
   (/search/owner)
     local pkg=${opts[(r)filter=bugowner&binary=*]#*&binary=}
-    fspath=($fixdir/$mprj:$mrid/owners-${pkg}.xml)
+    fspath=($fixdir/owners/owners-${pkg}.xml)
   ;;
   (/search/published/binary/id)
     local prj=${${opts[(r)match=project=*]#*\'}%\'*}

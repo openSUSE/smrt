@@ -26,6 +26,7 @@ Download XML data for a maintenance request from the BuildService
     -h                Display this message
 
   Operands:
+    maintainers       Download maintainer data for a package
     packages          Download packages.xml data
     patchinfo         Download patchinfo.xml data
     project           Download project.xml data
@@ -34,10 +35,12 @@ Download XML data for a maintenance request from the BuildService
     request-diff      Download request.diff.xml data
     <MPRJ>            <ISSUER>:Maintenance:<ISSUE>
     <MRID>            Maintenance request <MRID>
+    <PKG>             Package name
     <SLUG>            <MPRJ>:<MRID>
 
   Most subcommands accept either <SLUG> or <MPRJ>.
   `request`, `request-diff` accept <SLUG> or <MRID>.
+  `maintainers` accepts <PKG>.
 '
 
 declare -gr preludedir="${SMRT_PRELUDEDIR:-@preludedir@}"
@@ -59,6 +62,9 @@ function $0:t # {{{
 
   local cmd=${1-} arg=${2-}
   case $cmd in
+  maintainers)
+    : # $arg is (supposed to be) a (source) package name
+  ;;
   packages|patchinfo|project|repos)
     case $arg in
     $~PATTERN_SLUG)
