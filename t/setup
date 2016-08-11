@@ -44,7 +44,7 @@ function compare-with-fixture # {{{
     orig=$FIXTURES/$mine
     result=good
     cmp -s $orig $mine || result=DIFF!
-    print -rf '%s: %s\n' -- $result $mine
+    print -f '%s: %s\n' -- $result $mine
   done
 } # }}}
 

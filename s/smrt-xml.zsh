@@ -98,7 +98,7 @@ function do-email # {{{
 
   local -a reply
   o xml-get-email $1
-  o print -rf '%s\n' -- $reply
+  o print -f '%s\n' -- $reply
 } # }}}
 
 function do-maintainers # {{{
@@ -110,7 +110,7 @@ function do-maintainers # {{{
 
   local -a reply
   o xml-get-maintainers $1
-  o print -rf '%s %s\n' -- $reply
+  o print -f '%s %s\n' -- $reply
 } # }}}
 
 function do-bugs # {{{

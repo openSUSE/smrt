@@ -257,11 +257,11 @@ function format-l3info # {{{
     firstline=${#this:#$prev}
     prev=$this
     if (( multiline && firstline )); then
-      rv+=("$(print -rf "\t%s\n\t\t%s\n" "$labels[$label]:" "$value")")
+      rv+=("$(print -f "\t%s\n\t\t%s\n" "$labels[$label]:" "$value")")
     elif (( multiline )); then
-      rv+=("$(print -rf "\t\t%s\n" -- "$value")")
+      rv+=("$(print -f "\t\t%s\n" -- "$value")")
     else
-      rv+=("$(print -rf "\t%-20s%s\n" -- "$labels[$label]:" "$value")")
+      rv+=("$(print -f "\t%-20s%s\n" -- "$labels[$label]:" "$value")")
     fi
   done < $1
   REPLY=("${(@F)rv}")

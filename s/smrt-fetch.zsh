@@ -391,7 +391,7 @@ function fetch-package-maintainers # {{{
         o xml-get-email person-$name.xml
         emails+=($reply)
       done
-      o print -rf ' %s\n' -- ${(j: :)${(u)emails}}
+      o print -f ' %s\n' -- ${(j: :)${(u)emails}}
     done
 } # }}}
 
