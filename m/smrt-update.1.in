@@ -1,0 +1,47 @@
+.\" vim: tw=72 fdm=marker cms=.\\"\ %s
+.
+.\" FRONT MATTER {{{
+.Dd Aug 15, 2016
+.Os
+.Dt SMRT-UPDATE 1
+.
+.Sh NAME
+.Nm smrt\ update
+.Nd Install current maintenance update
+.\" FRONT MATTER }}}
+.
+.\" SYNOPSIS {{{
+.Sh SYNOPSIS
+.Nm
+. Fl h | \-help
+.Nm
+. Op Ar HOST Ns ...
+.\" SYNOPSIS }}}
+.
+.\" DESCRIPTION {{{
+.Sh DESCRIPTION
+.Nm
+installs all relevant packages on given
+(or all attached)
+.Ar HOST Ns s.
+.Bl -tag -width "xxx"
+. It Ar HOST
+.  Oo Ar user Ns Li @ Oc Ns Ar hostname
+.El
+.\" }}}
+.
+.\" SEE ALSO {{{
+.Sh SEE ALSO
+.Xr smrt-attach 1 ,
+.Xr smrt-hosts 1 ,
+.Xr smrt-revert 1 ,
+.Xr smrt-update 1 ,
+.Xr ssh 1 .
+.\" }}}
+.
+.\" SMRT {{{
+.Sh SMRT
+.Nm
+is part of
+.Xr smrt 1 .
+.\" }}}

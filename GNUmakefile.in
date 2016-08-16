@@ -20,6 +20,7 @@ VPATH = $(rootdir)
 rootdir = @rootdir@
 cfgdir  = c
 docdir  = d
+smandir = m
 srcdir  = s
 testdir = t
 testroot = $(rootdir)/$(testdir)
@@ -52,6 +53,10 @@ auxfiles += smrt.xml.zsh
 cfgfiles  =
 cfgfiles += smrt
 
+manpages   = $(man1pages) $(man5pages)
+man1pages  = $(addsuffix .1,$(commands))
+man5pages  = smrt.5
+
 htmlfiles  =
 htmlfiles += MTUI.html
 htmlfiles += README.html
@@ -65,12 +70,15 @@ tests += $(testdir)/traces
 revname = $(shell git describe --always --first-parent)
 
 .PHONY: all
-all: $(commands) $(auxfiles)
+all: $(commands) $(auxfiles) $(manpages)
 
 $(commands): %: $(srcdir)/%.zsh
 	$(call subst_vars)
 
 $(auxfiles): %: $(srcdir)/%
+	$(call subst_vars)
+
+$(manpages): %: $(smandir)/%.in
 	$(call subst_vars)
 
 define subst_vars
@@ -103,6 +111,8 @@ clean:
 install: all installdirs
 	$(INSTALL) -m 0755 -t $(DESTDIR)$(bindir) $(commands)
 	$(INSTALL) -m 0644 -t $(DESTDIR)$(preludedir) $(auxfiles)
+	$(INSTALL) -m 0644 -t $(DESTDIR)$(man1dir) $(man1pages)
+	$(INSTALL) -m 0644 -t $(DESTDIR)$(man5dir) $(man5pages)
 	for f in $(cfgfiles); do \
 	  sfx=; \
 	  if test -e $(DESTDIR)$(sysconfdir)/$$f; then sfx=.new; fi; \
