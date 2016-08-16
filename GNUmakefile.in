@@ -36,7 +36,6 @@ commands += smrt-hosts
 commands += smrt-mklog
 commands += smrt-packages
 commands += smrt-push
-commands += smrt-store
 commands += smrt-xml
 
 auxfiles  =
