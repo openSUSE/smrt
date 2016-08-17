@@ -27,7 +27,7 @@ Ssh into a refhost and earmark it for testing given products
     --help            Display manual page
   Operands:
     <HOST>            [<USER>@]<HOSTSPEC>
-    <PRODUCT>         Lorem ipsum
+    <PRODUCT>         <PRODNAME>:<PRODVER>
 
 '
 

@@ -16,7 +16,7 @@ help::
       --help            Display manual page
     Operands:
       <HOST>            [<USER>@]<HOSTSPEC>
-      <PRODUCT>         Lorem ipsum
+      <PRODUCT>         <PRODNAME>:<PRODVER>
   
   This command should be run from inside a testreport directory
 
