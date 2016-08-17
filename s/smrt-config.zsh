@@ -20,10 +20,11 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c -h|edit|get <KEY>|set <KEY> <VAL>
+usage: #c -h|--help|edit|get <KEY>|set <KEY> <VAL>
 Manipulate smrt configuration file
   Options:
     -h                Display this message
+    --help            Display manual page
   Operands:
     <KEY>             Configuration key
     <VAL>             Configuration value

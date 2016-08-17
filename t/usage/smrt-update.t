@@ -9,10 +9,11 @@ setup::
 help::
 
   $ smrt update -h
-  usage: smrt update -h|[HOST...]
+  usage: smrt update -h|--help|[HOST...]
   Install current maintenance update
     Options:
       -h                Display this message
+      --help            Display manual page
     Operands:
       <HOST>            [<USER>@]<HOSTSPEC>
   

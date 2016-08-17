@@ -20,10 +20,11 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c -h|<HOST> <PRODUCT>...
+usage: #c -h|--help|<HOST> <PRODUCT>...
 Ssh into a refhost and earmark it for testing given products
   Options:
     -h                Display this message
+    --help            Display manual page
   Operands:
     <HOST>            [<USER>@]<HOSTSPEC>
     <PRODUCT>         Lorem ipsum

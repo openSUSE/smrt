@@ -20,10 +20,11 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c [-h|browse|urls|<BUG>...]
+usage: #c [-h|--help|browse|urls|<BUG>...]
 List or browse bugs related to a maintenance request
   Options:
     -h                Display this message
+    --help            Display manual page
   Operands:
     <BUG>             Open a bug in a browser
     browse            Open all bugs in a browser

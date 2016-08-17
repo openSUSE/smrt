@@ -9,10 +9,11 @@ setup::
 help::
 
   $ smrt attach -h
-  usage: smrt attach -h|<HOST> <PRODUCT>...
+  usage: smrt attach -h|--help|<HOST> <PRODUCT>...
   Ssh into a refhost and earmark it for testing given products
     Options:
       -h                Display this message
+      --help            Display manual page
     Operands:
       <HOST>            [<USER>@]<HOSTSPEC>
       <PRODUCT>         Lorem ipsum

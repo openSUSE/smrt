@@ -20,10 +20,11 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c [-h]
+usage: #c [-h|--help]
 Create MTUI-compatible testreport
   Options:
     -h                Display this message
+    --help            Display manual page
 '
 
 declare -gr needs_workdir=1

@@ -21,9 +21,10 @@ declare -gr cmdname=$0:t
 # FIXME: the duplicated summaries == PITA
 declare -gr cmdhelp="
 
-usage: #c -h|[--issuer=<ISSUER>] <COMMAND> [<option>]... [<argument>]...
+usage: #c -h|--help|[--issuer=<ISSUER>] <COMMAND> [<option>]... [<argument>]...
   Options:
     -h                Display this message
+    --help            Display manual page
     -I, --issuer      Assume <ISSUER> for commands which take
                       maintenance request ids
   Operands:

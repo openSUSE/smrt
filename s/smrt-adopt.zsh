@@ -20,10 +20,11 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c -h|<MRID>|<MPRJ>
+usage: #c -h|--help|<MRID>|<MPRJ>
 Adopt a maintenance request for testing
   Options:
     -h                Display this message
+    --help            Display manual page
   Operands:
     <MRID>            Maintenance request <MRID>
     <MPRJ>            Maintenance request currently linked into

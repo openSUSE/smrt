@@ -20,10 +20,11 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c -h|binaries|bugs|channels|codestreams|email|maintainers|sources
+usage: #c -h|--help|binaries|bugs|channels|codestreams|email|maintainers|sources
 Display information gleaned from BuildService XML data
   Options:
     -h                Display this message
+    --help            Display manual page
 
   Operands:
     binaries          List released packages

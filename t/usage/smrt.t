@@ -9,9 +9,10 @@ setup::
 help::
 
   $ smrt -h
-  usage: smrt -h|[--issuer=<ISSUER>] <COMMAND> [<option>]... [<argument>]...
+  usage: smrt -h|--help|[--issuer=<ISSUER>] <COMMAND> [<option>]... [<argument>]...
     Options:
       -h                Display this message
+      --help            Display manual page
       -I, --issuer      Assume <ISSUER> for commands which take
                         maintenance request ids
     Operands:
@@ -54,9 +55,10 @@ unknown option::
 outside a testreport::
 
   $ smrt
-  usage: smrt -h|[--issuer=<ISSUER>] <COMMAND> [<option>]... [<argument>]...
+  usage: smrt -h|--help|[--issuer=<ISSUER>] <COMMAND> [<option>]... [<argument>]...
     Options:
       -h                Display this message
+      --help            Display manual page
       -I, --issuer      Assume <ISSUER> for commands which take
                         maintenance request ids
     Operands:
@@ -88,9 +90,10 @@ inside a testreport::
   $ echo $slug > slug
 
   $ smrt
-  usage: smrt -h|[--issuer=<ISSUER>] <COMMAND> [<option>]... [<argument>]...
+  usage: smrt -h|--help|[--issuer=<ISSUER>] <COMMAND> [<option>]... [<argument>]...
     Options:
       -h                Display this message
+      --help            Display manual page
       -I, --issuer      Assume <ISSUER> for commands which take
                         maintenance request ids
     Operands:

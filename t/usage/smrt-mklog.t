@@ -9,10 +9,11 @@ setup::
 help::
 
   $ smrt mklog -h
-  usage: smrt mklog [-h]
+  usage: smrt mklog [-h|--help]
   Create MTUI-compatible testreport
     Options:
       -h                Display this message
+      --help            Display manual page
   
   This command should be run from inside a testreport directory
 

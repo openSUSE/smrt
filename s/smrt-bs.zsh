@@ -20,10 +20,11 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c -h|<CMD> <ID>
+usage: #c -h|--help|<CMD> <ID>
 Download XML data for a maintenance request from the BuildService
   Options:
     -h                Display this message
+    --help            Display manual page
 
   Operands:
     maintainers       Download maintainer data for a package

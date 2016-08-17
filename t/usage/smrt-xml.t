@@ -9,10 +9,11 @@ setup::
 help::
 
   $ smrt xml -h
-  usage: smrt xml -h|binaries|bugs|channels|codestreams|email|maintainers|sources
+  usage: smrt xml -h|--help|binaries|bugs|channels|codestreams|email|maintainers|sources
   Display information gleaned from BuildService XML data
     Options:
       -h                Display this message
+      --help            Display manual page
   
     Operands:
       binaries          List released packages

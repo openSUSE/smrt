@@ -4,10 +4,11 @@
 declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
-usage: #c -h|[HOST...]
+usage: #c -h|--help|[HOST...]
 Downgrade relevant packages to latest released versions
   Options:
     -h                Display this message
+    --help            Display manual page
   Operands:
     <HOST>            [<USER>@]<HOSTSPEC>
 '

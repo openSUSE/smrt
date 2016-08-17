@@ -20,10 +20,11 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c [-h]
+usage: #c [-h|--help]
 Publish metadata for a maintenance request
   Options:
     -h                Display this message
+    --help            Display manual page
 
 '
 

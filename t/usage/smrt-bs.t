@@ -9,10 +9,11 @@ setup::
 help::
 
   $ smrt bs -h
-  usage: smrt bs -h|<CMD> <ID>
+  usage: smrt bs -h|--help|<CMD> <ID>
   Download XML data for a maintenance request from the BuildService
     Options:
       -h                Display this message
+      --help            Display manual page
   
     Operands:
       maintainers       Download maintainer data for a package

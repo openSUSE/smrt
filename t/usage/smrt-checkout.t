@@ -9,10 +9,11 @@ setup::
 help::
 
   $ smrt checkout -h
-  usage: smrt checkout -h|<ID>
+  usage: smrt checkout -h|--help|<ID>
   Download metadata for a maintenance request
     Options:
       -h                Display this message
+      --help            Display manual page
     Operands:
       <ID>              Checkout a maintenance update <ID>
 

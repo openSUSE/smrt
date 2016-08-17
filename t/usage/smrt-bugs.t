@@ -9,10 +9,11 @@ setup::
 help::
 
   $ smrt bugs -h
-  usage: smrt bugs [-h|browse|urls|<BUG>...]
+  usage: smrt bugs [-h|--help|browse|urls|<BUG>...]
   List or browse bugs related to a maintenance request
     Options:
       -h                Display this message
+      --help            Display manual page
     Operands:
       <BUG>             Open a bug in a browser
       browse            Open all bugs in a browser

@@ -9,10 +9,11 @@ setup::
 help::
 
   $ smrt config -h
-  usage: smrt config -h|edit|get <KEY>|set <KEY> <VAL>
+  usage: smrt config -h|--help|edit|get <KEY>|set <KEY> <VAL>
   Manipulate smrt configuration file
     Options:
       -h                Display this message
+      --help            Display manual page
     Operands:
       <KEY>             Configuration key
       <VAL>             Configuration value
