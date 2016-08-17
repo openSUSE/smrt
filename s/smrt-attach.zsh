@@ -42,7 +42,7 @@ function $0:t # {{{
   local -i i=0
   while haveopt i opt arg h help -- "$@"; do
     case $opt in
-    h|help) display-help ;;
+    h|help) display-help $opt ;;
     ?)      reject-misuse -$arg ;;
     esac
   done; shift $i
@@ -56,11 +56,12 @@ function $0:t # {{{
 
 function impl # {{{
 {
-  local t=$1
+  local h=$1 ctlpath=$PWD/.ssh/%r@%h:%p
   shift
-  print -f 'Connecting to %s for %s\n' $t "$*"
-  o ssh -MNf $t
-  o redir -1 connected.$t print -f '%s\n' -- "$@"
+  mkdir -p $ctlpath:h .connected
+  print -f 'Connecting to %s for %s\n' $h "$*"
+  o ssh -qMNf -o ControlPath=$ctlpath $h
+  o redir -1 .connected/$h print -f '%s\n' -- "$@"
 } # }}}
 
 . $preludedir/smrt.coda.zsh

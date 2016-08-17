@@ -66,3 +66,13 @@ function reify-fixture # {{{
   cp -r $FIXTURES/$slug .
   [[ -e reviewers ]] || cp $FIXTURES/reviewers $slug
 } # }}}
+
+function fake # {{{
+{
+  local cmd=$PWD/.bin/$1
+  shift
+  path=($cmd:h $path)
+  mkdir -p $cmd:h
+  cat > $cmd
+  chmod u+x $cmd
+} # }}}

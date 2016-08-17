@@ -31,11 +31,14 @@ commands += smrt-bs
 commands += smrt-bugs
 commands += smrt-checkout
 commands += smrt-config
+commands += smrt-detach
 commands += smrt-fetch
 commands += smrt-hosts
 commands += smrt-mklog
 commands += smrt-packages
 commands += smrt-push
+commands += smrt-revert
+commands += smrt-update
 commands += smrt-xml
 
 auxfiles  =

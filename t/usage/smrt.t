@@ -24,11 +24,14 @@ help::
       bugs              List or browse bugs related to a maintenance request
       checkout          Download metadata for a maintenance request
       config            Manipulate smrt configuration file
+      detach            Disconnect attached refhost(s)
       fetch             Download metadata for a maintenance request
       hosts             Display information on attached hosts
       mklog             Create MTUI-compatible testreport
       packages          Display version information for packages under test
       push              Publish metadata for a maintenance request
+      revert            Downgrade relevant packages to latest released versions
+      update            Install current maintenance update
       xml               Display information gleaned from BuildService XML data
 
 
@@ -63,11 +66,14 @@ outside a testreport::
       bugs              List or browse bugs related to a maintenance request
       checkout          Download metadata for a maintenance request
       config            Manipulate smrt configuration file
+      detach            Disconnect attached refhost(s)
       fetch             Download metadata for a maintenance request
       hosts             Display information on attached hosts
       mklog             Create MTUI-compatible testreport
       packages          Display version information for packages under test
       push              Publish metadata for a maintenance request
+      revert            Downgrade relevant packages to latest released versions
+      update            Install current maintenance update
       xml               Display information gleaned from BuildService XML data
 
 
@@ -94,9 +100,12 @@ inside a testreport::
       bugs              List or browse bugs related to a maintenance request
       checkout          Download metadata for a maintenance request
       config            Manipulate smrt configuration file
+      detach            Disconnect attached refhost(s)
       fetch             Download metadata for a maintenance request
       hosts             Display information on attached hosts
       mklog             Create MTUI-compatible testreport
       packages          Display version information for packages under test
       push              Publish metadata for a maintenance request
+      revert            Downgrade relevant packages to latest released versions
+      update            Install current maintenance update
       xml               Display information gleaned from BuildService XML data

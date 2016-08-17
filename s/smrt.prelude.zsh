@@ -198,6 +198,45 @@ function load-config # {{{
   done
 } # }}}
 
+function log-output # {{{
+{
+  local -a cmd; cmd=("$@")
+  local t= p=
+  while read t p; do
+    local logfile=log.$t
+    exec 3>&1
+    {
+      print -f '$ ssh %s %s\n' $t "$cmd"
+      cat $p
+      cat $p | sed >&3 "s^$t\t"
+      rm $p
+    } >>| $logfile
+  done
+} # }}}
+
+function run-in-hosts # {{{
+{
+  local -i seppos="$@[(i)--]"
+  local -a hosts; hosts=("$@[1,$((seppos - 1))]")
+  local -a cmd; cmd=("$@[$((seppos + 1)),-1]")
+  local -a popts; popts=(
+    -q
+    --plain
+    --files
+    --tag
+    --joblog joblog
+    --jobs=0
+    --tmpdir=$PWD
+  )
+  local ctlpath=$PWD/.ssh/%r@%h:%p
+
+  o parallel "${(@)popts}" \
+    ssh -qo ControlPath=$ctlpath '{1}' "$cmd" \
+    ::: "${(@)hosts}" \
+  | o log-output "$cmd"
+} # }}}
+
+
 [[ -n ${SMRT_CONFIG:+set} ]] \
 || declare -gx SMRT_CONFIG="@sysconfdir@/smrt"
 

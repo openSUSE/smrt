@@ -20,12 +20,12 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: smrt hosts [-h|<HOST>...]
-Display information on attached hosts
+usage: #c -h|[<HOST>...]
+Disconnect attached refhost(s)
   Options:
     -h                Display this message
   Operands:
-    <HOST>            Display information on <HOST>
+    <HOST>            [<USER>@]<HOSTSPEC>
 
 '
 
@@ -41,10 +41,12 @@ function $0:t # {{{
   local -i i=0
   while haveopt i opt arg h help -- "$@"; do
     case $opt in
-    h|help) display-help ;;
+    h|help) display-help $opt ;;
     ?)      reject-misuse -$arg ;;
     esac
   done; shift $i
+
+  (( $# )) || reject-misuse
 
   check-preconditions $0
 
@@ -53,11 +55,19 @@ function $0:t # {{{
 
 function impl # {{{
 {
-  local f host tags
-  for f in .connected/*(N); do
-    host=${f#*/}
-    tags="${(pj: :)${(f)$(<$f)}}"
-    print -f '%-28s %s\n' $host $tags
+  local h= ctlpath=$PWD/.ssh/%r@%h:%p
+  :; (( $# )) \
+  || set -- .connected/*(:t)
+  for h in "$@"; do
+    :; [[ -e .connected/$h ]] \
+    || complain 1 "No earmark file for $h"
+    :; o ssh -qo ControlPath=$ctlpath -O check $h \
+    || complain 1 "No connection to $h"
+  done
+  for h in "$@"; do
+    print -f 'Disconnecting from %s\n' $h
+    o ssh -qo ControlPath=$ctlpath -O exit $h
+    o rm .connected/$h
   done
 } # }}}
 

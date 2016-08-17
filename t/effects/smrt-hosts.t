@@ -7,6 +7,9 @@ setup::
 
   $ slug=SUSE:Maintenance:1302:87808
   $ reify-fixture $slug
+  $ fake ssh <<\EOF
+  > exit 0
+  > EOF
 
 
 test::

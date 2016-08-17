@@ -102,10 +102,6 @@ function osc # {{{
   esac
 } # }}}
 
-function ssh # {{{
-{
-} # }}}
-
 function svn # {{{
 {
   command svn "$@"

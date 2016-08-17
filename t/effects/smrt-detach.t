@@ -22,3 +22,13 @@ test::
   $ cat .connected/snafubar
   rofl
   lmao
+
+  $ smrt detach snafubar
+  Disconnecting from snafubar
+
+  $ test -e .connected/snafubar
+  [1]
+
+  $ smrt detach snafubar
+  error: No earmark file for snafubar
+  [1]
