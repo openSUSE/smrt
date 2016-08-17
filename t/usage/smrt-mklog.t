@@ -16,7 +16,8 @@ help::
   
   This command should be run from inside a testreport directory
 
-  $ diff -u =(smrt mklog -h) =(smrt mklog --help)
+  $ smrt mklog --help
+  o exec man 1 smrt-mklog
 
 
 unknown option::

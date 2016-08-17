@@ -16,7 +16,8 @@ help::
     Operands:
       <ID>              Checkout a maintenance update <ID>
 
-  $ diff -u =(smrt checkout -h) =(smrt checkout --help)
+  $ smrt checkout --help
+  o exec man 1 smrt-checkout
 
 
 unknown option::

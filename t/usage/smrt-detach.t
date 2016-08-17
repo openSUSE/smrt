@@ -18,7 +18,8 @@ help::
   
   This command should be run from inside a testreport directory
 
-  $ diff -u =(smrt detach -h) =(smrt detach --help)
+  $ smrt detach --help
+  o exec man 1 smrt-detach
 
 
 unknown option::

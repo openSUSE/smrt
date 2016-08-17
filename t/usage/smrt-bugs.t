@@ -20,7 +20,8 @@ help::
   
   This command should be run from inside a testreport directory
 
-  $ diff -u =(smrt bugs -h) =(smrt bugs --help)
+  $ smrt bugs --help
+  o exec man 1 smrt-bugs
 
 
 unknown option::

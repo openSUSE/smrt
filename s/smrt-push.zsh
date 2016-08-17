@@ -40,7 +40,7 @@ function $0:t # {{{
   local -i i=0
   while haveopt i opt arg h help -- "$@"; do
     case $opt in
-    h|help) display-help ;;
+    h|help) display-help $opt ;;
     *)      reject-misuse -$arg ;;
     esac
   done; shift $i

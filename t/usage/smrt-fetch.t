@@ -21,7 +21,8 @@ help::
                         the maintenance project <MPRJ>
       <MPRJ>:<MRID>     Maintenance request <MRID>
 
-  $ diff -u =(smrt fetch -h) =(smrt fetch --help)
+  $ smrt fetch --help
+  o exec man 1 smrt-fetch
 
 
 unknown option::

@@ -10,10 +10,11 @@ export SMRT_PRELUDEDIR=$BUILDDIR
 
 declare -Tgx SMRT_CHATTY smrt_chatty \|
 smrt_chatty=('xdg-open%*' $smrt_chatty)
-
+smrt_chatty+=('exec%man%*')
 
 declare -Tgx SMRT_DRYRUN smrt_dryrun \|
 smrt_dryrun=('xdg-open%*' $smrt_dryrun)
+smrt_dryrun+=('exec%man%*')
 
 declare -gx FIXTURES=$TESTROOT/fixtures
 

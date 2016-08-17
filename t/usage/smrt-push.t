@@ -16,7 +16,8 @@ help::
   
   This command should be run from inside a testreport directory
 
-  $ diff -u =(smrt push -h) =(smrt push --help)
+  $ smrt push --help
+  o exec man 1 smrt-push
 
 
 unknown option::

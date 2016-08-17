@@ -58,13 +58,13 @@ function main # {{{
   local -i i=0
   while haveopt i opt arg h help I= issuer= -- "$@"; do
     case $opt in
-    h|help)   display-help ;;
+    h|help)   display-help $opt ;;
     I|issuer) declare -gx SMRT_ISSUER=$arg ;;
     *)        reject-misuse -$arg ;;
     esac
   done; shift $i
 
-  (( $# )) || display-help
+  (( $# )) || display-help h
 
   local next
   o find-cmd $1 next

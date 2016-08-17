@@ -31,7 +31,8 @@ help::
     `request`, `request-diff` accept <SLUG> or <MRID>.
     `maintainers` accepts <PKG>.
 
-  $ diff -u =(smrt bs -h) =(smrt bs --help)
+  $ smrt bs --help
+  o exec man 1 smrt-bs
 
 
 unknown option::

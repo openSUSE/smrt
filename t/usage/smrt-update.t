@@ -18,7 +18,8 @@ help::
   
   This command should be run from inside a testreport directory
 
-  $ diff -u =(smrt update -h) =(smrt update --help)
+  $ smrt update --help
+  o exec man 1 smrt-update
 
 
 unknown option::

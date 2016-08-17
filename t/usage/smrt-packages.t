@@ -19,7 +19,8 @@ help::
   
   This command should be run from inside a testreport directory
 
-  $ diff -u =(smrt packages -h) =(smrt packages --help)
+  $ smrt packages --help
+  o exec man 1 smrt-packages
 
 unknown option::
 

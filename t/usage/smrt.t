@@ -34,6 +34,9 @@ help::
       update            Install current maintenance update
       xml               Display information gleaned from BuildService XML data
 
+  $ smrt --help
+  o exec man 1 smrt
+
 
 unknown option::
 

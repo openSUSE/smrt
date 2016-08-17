@@ -19,7 +19,8 @@ help::
   
   This command should be run from inside a testreport directory
 
-  $ diff -u =(smrt attach -h) =(smrt attach --help)
+  $ smrt attach --help
+  o exec man 1 smrt-attach
 
 
 unknown option::

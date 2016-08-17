@@ -17,7 +17,8 @@ help::
       <KEY>             Configuration key
       <VAL>             Configuration value
 
-  $ diff -u =(smrt config -h) =(smrt config --help)
+  $ smrt config --help
+  o exec man 1 smrt-config
 
 
 unknown option::

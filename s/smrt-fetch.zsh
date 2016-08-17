@@ -51,7 +51,7 @@ function $0:t # {{{
   local -i i=0
   while haveopt i opt arg adopt push h help -- "$@"; do
     case $opt in
-    h|help) display-help ;;
+    h|help) display-help $opt ;;
     adopt|push)
             : ${(P)opt::=1} ;;
     *)      reject-misuse -$arg ;;

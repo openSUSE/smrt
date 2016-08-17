@@ -18,7 +18,8 @@ help::
   
   This command should be run from inside a testreport directory
 
-  $ diff -u =(smrt revert -h) =(smrt revert --help)
+  $ smrt revert --help
+  o exec man 1 smrt-revert
 
 
 unknown option::

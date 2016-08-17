@@ -19,7 +19,8 @@ help::
                         the maintenance project <MPRJ>
       <MPRJ>:<MRID>     Maintenance request <MRID>
 
-  $ diff -u =(smrt adopt -h) =(smrt adopt --help)
+  $ smrt adopt --help
+  o exec man 1 smrt-adopt
 
 
 unknown option::

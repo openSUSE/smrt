@@ -120,13 +120,17 @@ function oscqam # {{{
 
 function display-help # {{{
 {
-  local self=${cmdname/-/ }
-  print -- ${${${cmdhelp//\#c/$self}//#[[:space:]]#/}//%[[:space:]]#/}
-  if (( needs_workdir )); then
-    print
-    print -f $msg_needs_workdir
+  if [[ $1 == h ]]; then
+    local self=${cmdname/-/ }
+    print -- ${${${cmdhelp//\#c/$self}//#[[:space:]]#/}//%[[:space:]]#/}
+    if (( needs_workdir )); then
+      print
+      print -f $msg_needs_workdir
+    fi
+    exit
   fi
-  exit
+  o exec man 1 $cmdname
+  exit # we get here in tests
 } # }}}
 
 function reject-misuse # {{{

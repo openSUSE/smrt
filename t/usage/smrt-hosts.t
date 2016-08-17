@@ -18,7 +18,8 @@ help::
   
   This command should be run from inside a testreport directory
 
-  $ diff -u =(smrt hosts -h) =(smrt hosts --help)
+  $ smrt hosts --help
+  o exec man 1 smrt-hosts
 
 
 unknown option::
