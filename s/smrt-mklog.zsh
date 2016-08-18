@@ -265,7 +265,7 @@ function format-l3info # {{{
       rv+=("$(print -f "\t%-20s%s\n" -- "$labels[$label]:" "$value")")
     fi
   done < $1
-  REPLY=("${(@F)rv}")
+  REPLY="${(@F)rv}"
 } # }}}
 
 function get-products-archs # {{{
