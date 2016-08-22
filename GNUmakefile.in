@@ -39,6 +39,7 @@ commands += smrt-mklog
 commands += smrt-packages
 commands += smrt-push
 commands += smrt-revert
+commands += smrt-testopia
 commands += smrt-update
 commands += smrt-xml
 
@@ -48,6 +49,7 @@ auxfiles += smrt.bs.zsh
 auxfiles += smrt.coda.zsh
 auxfiles += smrt.hints.zsh
 auxfiles += smrt.prelude.zsh
+auxfiles += smrt.testopia.py
 auxfiles += smrt.xml.zsh
 
 cfgfiles  =

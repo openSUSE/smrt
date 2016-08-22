@@ -4,5 +4,8 @@ issuer_apiurls = SUSE:https://api.example.com openSUSE:https://api.example.org
 l3db_creds = smrt:mtui
 l3db_url = http://l3db.example.org/api/1/raederwerk/?incident__bug_id__in=
 metadata_url = file://$FIXTURES
+testopia_url = https://apibugzilla.suse.com
+testopia_user = testopus
+testopia_pass = testopas
 testplatforms_url = file://$FIXTURES/testplatforms.pm
 testreport_repository = file://$HOME/.svnrepo

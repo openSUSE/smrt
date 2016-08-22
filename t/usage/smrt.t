@@ -33,6 +33,7 @@ help::
       push              Publish metadata for a maintenance request
       revert            Downgrade relevant packages to latest released versions
       update            Install current maintenance update
+      testopia          Manipulate Testopia testcases
       xml               Display information gleaned from BuildService XML data
 
   $ smrt --help
@@ -79,6 +80,7 @@ outside a testreport::
       push              Publish metadata for a maintenance request
       revert            Downgrade relevant packages to latest released versions
       update            Install current maintenance update
+      testopia          Manipulate Testopia testcases
       xml               Display information gleaned from BuildService XML data
 
 
@@ -114,4 +116,5 @@ inside a testreport::
       push              Publish metadata for a maintenance request
       revert            Downgrade relevant packages to latest released versions
       update            Install current maintenance update
+      testopia          Manipulate Testopia testcases
       xml               Display information gleaned from BuildService XML data

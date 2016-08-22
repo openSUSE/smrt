@@ -31,6 +31,7 @@ Requires:       haveopt >= 0.4
 Requires:       openssh
 Requires:       osc
 Requires:       perl
+Requires:       python3
 Requires:       subversion
 Requires:       xmlstarlet >= 1.5
 Requires:       zsh >= 5.0.5
@@ -38,6 +39,7 @@ BuildRequires:  cram >= 0.6
 BuildRequires:  curl >= 7.37
 BuildRequires:  haveopt >= 0.4
 BuildRequires:  perl
+BuildRequires:  python3
 BuildRequires:  subversion
 BuildRequires:  xmlstarlet >= 1.5
 BuildRequires:  zsh >= 5.0.5
@@ -68,8 +70,7 @@ make install DESTDIR=%{buildroot}
 %config %{_sysconfdir}/smrt
 %{_bindir}/smrt
 %{_bindir}/smrt-*
-%{_datadir}/%{name}/smrt.*.zsh
-%{_datadir}/%{name}/smrt.*.pl
+%{_datadir}/%{name}/smrt.*
 %{_mandir}/man1/smrt*.1.gz
 %{_mandir}/man5/smrt.5.gz
 

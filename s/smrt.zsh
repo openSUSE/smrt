@@ -45,6 +45,7 @@ usage: #c -h|--help|[--issuer=<ISSUER>] <COMMAND> [<option>]... [<argument>]...
     push              Publish metadata for a maintenance request
     revert            Downgrade relevant packages to latest released versions
     update            Install current maintenance update
+    testopia          Manipulate Testopia testcases
     xml               Display information gleaned from BuildService XML data
 
 "

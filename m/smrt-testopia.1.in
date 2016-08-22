@@ -1,0 +1,39 @@
+.\" vim: tw=72 fdm=marker cms=.\\"\ %s
+.
+.\" FRONT MATTER {{{
+.Dd Aug 15, 2016
+.Os
+.Dt SMRT-TESTOPIA 1
+.
+.Sh NAME
+.Nm smrt\ testopia
+.Nd Manipulate Testopia testcases
+.\" FRONT MATTER }}}
+.
+.\" SYNOPSIS {{{
+.Sh SYNOPSIS
+.Nm
+. Op Fl h | \-help
+.Nm
+. Cm create
+. Ar PACKAGE
+.Nm
+. Cm list
+. Ar PACKAGE
+.Nm
+. Cm show
+. Ar TCID
+.\" SYNOPSIS }}}
+.
+.\" DESCRIPTION {{{
+.Sh DESCRIPTION
+.Nm
+is used to query and manipulate Testopia testcases.
+.\" }}}
+.
+.\" SMRT {{{
+.Sh SMRT
+.Nm
+is part of
+.Xr smrt 1 .
+.\" }}}
