@@ -67,18 +67,18 @@ function main # {{{
 
   (( $# )) || display-help h
 
-  local next
-  o find-cmd $1 next
-  o run-cmd $next $@[2,-1]
+  local REPLY=
+  O find-cmd $1
+  o run-cmd "$REPLY" $@[2,-1]
 } # }}}
 
 function find-cmd # {{{
 {
-  local name=smrt-$1 reply=$2 impl=
+  local name=smrt-$1 impl=
 
   for impl in $name $bindir/$name; do
     if impl=$(whence $impl); then
-      : ${(P)reply::=$impl}
+      REPLY=$impl
       return
     fi
   done

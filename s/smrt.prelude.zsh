@@ -34,24 +34,26 @@ declare -g PATTERN_MRID='<->'
 declare -g PATTERN_MPRJ='SUSE:Maintenance:<->'
 declare -g PATTERN_SLUG=$PATTERN_MPRJ:$PATTERN_MRID
 
-function o o- # {{{
+function o O # {{{
 {
-  declare -i dryrun=0
+  local chatty=SMRT_CHATTY
+  local dryrun=SMRT_DRYRUN
+  local -i do_dryrun=0
   if [[ $1 == -n ]]; then
     shift
-    dryrun=1
+    do_dryrun=1
   fi
-  if (( $#SMRT_CHATTY )); then
-    if [[ "${(@j,%,)@}" == $~SMRT_CHATTY ]]; then
-      print -ru $logfd -- o "${(q-)@}"
+  if (( ${(P)#chatty} )); then
+    if [[ "${(@j,%,)@}" == ${(P)~chatty} ]]; then
+      print -ru $logfd -- $0 "${(q-)@}"
     fi
   fi
-  if (( $#SMRT_DRYRUN )); then
-    if [[ "${(@j,%,)@}" == $~SMRT_DRYRUN ]]; then
-      dryrun=1
+  if [[ $0 == o ]] && (( ${(P)#dryrun} )); then
+    if [[ "${(@j,%,)@}" == ${(P)~dryrun} ]]; then
+      do_dryrun=1
     fi
   fi
-  if (( dryrun )); then
+  if (( do_dryrun )); then
     return 0
   fi
   "$@"

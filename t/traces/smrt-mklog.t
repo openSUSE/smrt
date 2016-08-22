@@ -21,7 +21,7 @@ test::
   [1]
 
   $ smrt mklog
-  o find-cmd mklog next
+  O find-cmd mklog
   o run-cmd */smrt-mklog (glob)
   o assert-workdir smrt-mklog
   o impl
