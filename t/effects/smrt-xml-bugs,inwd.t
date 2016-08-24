@@ -24,17 +24,27 @@ test with multiple arguments::
   Run 'smrt xml -h' for usage instructions
   [1]
 
-test the happy path, with an explicit argument::
+test the happy path, with no arguments::
 
-  $ smrt xml bugs patchinfo.xml
+  $ smrt xml bugs
   bnc898513 Rsync: slp support breaks rsync usage
   bnc900914 VUL-1: CVE-2014-8242: librsync, rsync: checksum collisions leading to a denial of service
   bnc915410 VUL-0: CVE-2014-9512: rsync: path spoofing attack vulnerability
   bnc922710 rsyncd keeps on spamming my log for trying to register SLP
 
-test the happy path, with no arguments::
+test the happy path, with an explicit pathname argument::
 
-  $ smrt xml bugs
+  $ mv patchinfo.xml other
+
+  $ smrt xml bugs other
+  bnc898513 Rsync: slp support breaks rsync usage
+  bnc900914 VUL-1: CVE-2014-8242: librsync, rsync: checksum collisions leading to a denial of service
+  bnc915410 VUL-0: CVE-2014-9512: rsync: path spoofing attack vulnerability
+  bnc922710 rsyncd keeps on spamming my log for trying to register SLP
+
+test the happy path, with "-" for stdin::
+
+  $ smrt xml bugs - < other
   bnc898513 Rsync: slp support breaks rsync usage
   bnc900914 VUL-1: CVE-2014-8242: librsync, rsync: checksum collisions leading to a denial of service
   bnc915410 VUL-0: CVE-2014-9512: rsync: path spoofing attack vulnerability

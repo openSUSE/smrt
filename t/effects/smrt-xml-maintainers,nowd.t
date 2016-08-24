@@ -30,10 +30,18 @@ test with multiple arguments::
   Run 'smrt xml -h' for usage instructions
   [1]
 
-test the happy path::
+test the happy path, with an explicit pathname argument::
 
   $ smrt xml maintainers $slug/owners-glib2.xml
   group gnome-maintainers
 
   $ smrt xml maintainers $slug/owners-pango.xml
+  group gnome-maintainers
+
+test the happy path, with "-" for stdin::
+
+  $ smrt xml maintainers - < $slug/owners-glib2.xml
+  group gnome-maintainers
+
+  $ smrt xml maintainers - < $slug/owners-pango.xml
   group gnome-maintainers

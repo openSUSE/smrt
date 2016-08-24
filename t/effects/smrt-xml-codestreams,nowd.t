@@ -30,7 +30,12 @@ test with multiple arguments::
   Run 'smrt xml -h' for usage instructions
   [1]
 
-test the happy path::
+test the happy path, with an explicit pathname argument::
 
   $ smrt xml codestreams $slug/project.xml
+  SUSE_SLE-12_Update SUSE:SLE-12:Update
+
+test the happy path, with "-" for stdin::
+
+  $ smrt xml codestreams - < $slug/project.xml
   SUSE_SLE-12_Update SUSE:SLE-12:Update

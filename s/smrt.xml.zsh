@@ -47,7 +47,7 @@ function xml-xform-request-diff # {{{
       -v diff                                                                           \
       --break                                                                           \
     --break                                                                             \
-    $1
+    ${1/#%-//dev/stdin}
 } # }}}
 
 function xml-ls-patchinfo # {{{
@@ -114,7 +114,7 @@ function xml-ls-released-sources # {{{
 
 function xml-get-maintainers # {{{
 {
-  local file=$1
+  local file=${1/#%-//dev/stdin}
   local -a line
   reply=()
 

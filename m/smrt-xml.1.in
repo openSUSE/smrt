@@ -27,6 +27,9 @@
 . Cm codestreams
 . Op Ar PROJECT.XML
 .Nm
+. Cm diff
+. Op Ar REQUEST.DIFF.XML
+.Nm
 . Cm email
 . Ar PERSON.XML
 .Nm
@@ -53,14 +56,26 @@ defaults to
 .  Ar FILE
 defaults to
 .  Pa patchinfo.xml .
+.  Qq Li -
+means standard inputs.
 . It Cm channels Op Ar FILE
 .  Ar FILE
 defaults to
 .  Pa project.xml .
+.  Qq Li -
+means standard inputs.
 . It Cm codestreams Op Ar FILE
 .  Ar FILE
 defaults to
 .  Pa project.xml .
+.  Qq Li -
+means standard inputs.
+. It Cm diff Op Ar FILE
+.  Ar FILE
+defaults to
+.  Pa request.diff.xml
+.  Qq Li -
+means standard inputs.
 . It Cm email Ar PERSON.XML
 .  Ar PERSON.XML
 has no default.

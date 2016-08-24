@@ -30,9 +30,19 @@ test with multiple arguments::
   Run 'smrt xml -h' for usage instructions
   [1]
 
-test the happy path::
+test the happy path, with an explicit pathname argument::
 
   $ smrt xml diff $slug/request.diff.xml > output
+  $ head -5 output
+  diff --bs glib2.1091/glib2.changes glib2.SUSE_SLE-11-SP1_Update/glib2.changes
+  --- glib2.1091/glib2.changes
+  +++ glib2.SUSE_SLE-11-SP1_Update/glib2.changes
+  @@ -1,4 +1,10 @@
+   -------------------------------------------------------------------
+
+test the happy path, with "-" for stdin::
+
+  $ smrt xml diff - < $slug/request.diff.xml > output
   $ head -5 output
   diff --bs glib2.1091/glib2.changes glib2.SUSE_SLE-11-SP1_Update/glib2.changes
   --- glib2.1091/glib2.changes

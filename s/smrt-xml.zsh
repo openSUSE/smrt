@@ -83,7 +83,7 @@ function do-diff # {{{
     set -- request.diff.xml
   elif [[ $# -gt 1 ]]; then
     reject-misuse $2
-  elif [[ ! -f $1 ]]; then
+  elif [[ ! -f $1 && $1 != - ]]; then
     reject-misuse $1
   fi
 
@@ -106,7 +106,7 @@ function do-maintainers # {{{
 {
   :; [[ $# -eq 1 ]] \
   || reject-misuse ${2-}
-  :; [[ -f $1 ]] \
+  :; [[ -f $1 || $1 == - ]] \
   || reject-misuse $1
 
   local -a reply
@@ -122,11 +122,11 @@ function do-bugs # {{{
     set -- patchinfo.xml
   elif [[ $# -gt 1 ]]; then
     reject-misuse $2
-  elif [[ ! -f $1 ]]; then
+  elif [[ ! -f $1 && $1 != - ]]; then
     reject-misuse $1
   fi
 
-  o xml-ls-bugs $1
+  o xml-ls-bugs ${1/#%-//dev/stdin}
 } # }}}
 
 function do-channels do-codestreams # {{{
@@ -137,11 +137,11 @@ function do-channels do-codestreams # {{{
     set -- project.xml
   elif [[ $# -gt 1 ]]; then
     reject-misuse $2
-  elif [[ ! -f $1 ]]; then
+  elif [[ ! -f $1 && $1 != - ]]; then
     reject-misuse $1
   fi
 
-  local inf=$1 kind
+  local inf=${1/#%-//dev/stdin} kind
   case $0 in
   do-channels)    kind=update   ;;
   do-codestreams) kind=standard ;;
@@ -157,7 +157,7 @@ function do-binaries do-sources # {{{
     set -- packages.xml
   elif [[ $# -gt 1 ]]; then
     reject-misuse $2
-  elif [[ ! -f $1 ]]; then
+  elif [[ ! -f $1 && $1 != - ]]; then
     reject-misuse $1
   fi
 

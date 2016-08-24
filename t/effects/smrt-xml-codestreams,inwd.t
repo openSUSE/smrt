@@ -24,11 +24,17 @@ test with multiple arguments::
   Run 'smrt xml -h' for usage instructions
   [1]
 
-test the happy path, with an explicit argument::
-
-  $ smrt xml codestreams packages.xml
-
 test the happy path, with no arguments::
 
   $ smrt xml codestreams
   SUSE_SLE-12_Update SUSE:SLE-12:Update
+
+test the happy path, with an explicit pathname argument::
+
+  $ mv packages.xml other
+
+  $ smrt xml codestreams other
+
+test the happy path, with "-" for stdin::
+
+  $ smrt xml codestreams - < other
