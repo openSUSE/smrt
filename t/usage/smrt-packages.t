@@ -9,8 +9,11 @@ setup::
 help::
 
   $ smrt packages -h
-  usage: smrt packages [-h|--help|<HOST>...]
+  usage: smrt packages -h|--help
+  usage: smrt packages [<HOST>...]
+  
   Display version information for packages under test
+  
     Options:
       -h                Display this message
       --help            Display manual page

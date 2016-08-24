@@ -9,8 +9,17 @@ setup::
 help::
 
   $ smrt bs -h
-  usage: smrt bs -h|--help|<CMD> <ID>
+  usage: smrt bs -h|--help
+  usage: smrt bs maintainers <PKG>
+  usage: smrt bs packages <MPRJ>|<SLUG>
+  usage: smrt bs patchinfo <MPRJ>|<SLUG>
+  usage: smrt bs project <MPRJ>|<SLUG>
+  usage: smrt bs repos <MPRJ>|<SLUG>
+  usage: smrt bs request <MRID>|<SLUG>
+  usage: smrt bs request-diff <MRID>|<SLUG>
+  
   Download XML data for a maintenance request from the BuildService
+  
     Options:
       -h                Display this message
       --help            Display manual page
@@ -27,10 +36,6 @@ help::
       <MRID>            Maintenance request <MRID>
       <PKG>             Package name
       <SLUG>            <MPRJ>:<MRID>
-  
-    Most subcommands accept either <SLUG> or <MPRJ>.
-    `request`, `request-diff` accept <SLUG> or <MRID>.
-    `maintainers` accepts <PKG>.
 
   $ smrt bs --help
   o exec man 1 smrt-bs

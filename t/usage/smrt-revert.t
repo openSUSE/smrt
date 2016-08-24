@@ -9,8 +9,11 @@ setup::
 help::
 
   $ smrt revert -h
-  usage: smrt revert -h|--help|[HOST...]
+  usage: smrt revert -h|--help
+  usage: smrt revert [HOST...]
+  
   Downgrade relevant packages to latest released versions
+  
     Options:
       -h                Display this message
       --help            Display manual page

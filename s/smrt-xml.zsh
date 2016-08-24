@@ -20,8 +20,18 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c -h|--help|binaries|bugs|channels|codestreams|email|maintainers|sources
+usage: #c -h|--help
+usage: #c binaries [PACKAGES.XML]
+usage: #c bugs [PATCHINFO.XML]
+usage: #c channels [PROJECT.XML]
+usage: #c codestreams [PROJECT.XML]
+usage: #c diff [REQUEST.DIFF.XML]
+usage: #c email [PERSON.XML]
+usage: #c maintainers [OWNERS.XML]
+usage: #c sources [PACKAGES.XML]
+
 Display information gleaned from BuildService XML data
+
   Options:
     -h                Display this message
     --help            Display manual page

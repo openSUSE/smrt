@@ -20,8 +20,17 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c -h|--help|<CMD> <ID>
+usage: #c -h|--help
+usage: #c maintainers <PKG>
+usage: #c packages <MPRJ>|<SLUG>
+usage: #c patchinfo <MPRJ>|<SLUG>
+usage: #c project <MPRJ>|<SLUG>
+usage: #c repos <MPRJ>|<SLUG>
+usage: #c request <MRID>|<SLUG>
+usage: #c request-diff <MRID>|<SLUG>
+
 Download XML data for a maintenance request from the BuildService
+
   Options:
     -h                Display this message
     --help            Display manual page
@@ -38,10 +47,6 @@ Download XML data for a maintenance request from the BuildService
     <MRID>            Maintenance request <MRID>
     <PKG>             Package name
     <SLUG>            <MPRJ>:<MRID>
-
-  Most subcommands accept either <SLUG> or <MPRJ>.
-  `request`, `request-diff` accept <SLUG> or <MRID>.
-  `maintainers` accepts <PKG>.
 '
 
 declare -gr preludedir="${SMRT_PRELUDEDIR:-@preludedir@}"

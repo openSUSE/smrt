@@ -9,8 +9,11 @@ setup::
 help::
 
   $ smrt fetch -h
-  usage: smrt fetch -h|--help|[--adopt] <MPRJ>|<MRID>
+  usage: smrt fetch -h|--help
+  usage: smrt fetch [--adopt] [--push] <MPRJ>|<MRID>
+  
   Download metadata for a maintenance request
+  
     Options:
       -h                Display this message
       --help            Display manual page

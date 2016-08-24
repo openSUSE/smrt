@@ -9,8 +9,14 @@ setup::
 help::
 
   $ smrt bugs -h
-  usage: smrt bugs [-h|--help|browse|urls|<BUG>...]
+  usage: smrt bugs -h|--help
+  usage: smrt bugs
+  usage: smrt bugs browse
+  usage: smrt bugs urls
+  usage: smrt bugs <BUG>...
+  
   List or browse bugs related to a maintenance request
+  
     Options:
       -h                Display this message
       --help            Display manual page

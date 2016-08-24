@@ -20,8 +20,11 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: smrt hosts [-h|--help|<HOST>...]
+usage: #c -h|--help
+usage: #c [<HOST>...]
+
 Display information on attached hosts
+
   Options:
     -h                Display this message
     --help            Display manual page

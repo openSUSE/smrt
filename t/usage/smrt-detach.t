@@ -9,8 +9,11 @@ setup::
 help::
 
   $ smrt detach -h
-  usage: smrt detach -h|--help|[<HOST>...]
+  usage: smrt detach -h|--help
+  usage: smrt detach [<HOST>...]
+  
   Disconnect attached refhost(s)
+  
     Options:
       -h                Display this message
       --help            Display manual page

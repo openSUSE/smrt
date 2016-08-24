@@ -9,8 +9,11 @@ setup::
 help::
 
   $ smrt mklog -h
-  usage: smrt mklog [-h|--help]
+  usage: smrt mklog -h|--help
+  usage: smrt mklog
+  
   Create MTUI-compatible testreport
+  
     Options:
       -h                Display this message
       --help            Display manual page

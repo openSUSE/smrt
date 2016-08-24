@@ -9,8 +9,11 @@ setup::
 help::
 
   $ smrt hosts -h
-  usage: smrt hosts [-h|--help|<HOST>...]
+  usage: smrt hosts -h|--help
+  usage: smrt hosts [<HOST>...]
+  
   Display information on attached hosts
+  
     Options:
       -h                Display this message
       --help            Display manual page

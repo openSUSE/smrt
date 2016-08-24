@@ -4,8 +4,11 @@
 declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
-usage: #c -h|--help|[HOST...]
+usage: #c -h|--help
+usage: #c [HOST...]
+
 Install current maintenance update
+
   Options:
     -h                Display this message
     --help            Display manual page

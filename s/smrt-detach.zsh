@@ -20,8 +20,11 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c -h|--help|[<HOST>...]
+usage: #c -h|--help
+usage: #c [<HOST>...]
+
 Disconnect attached refhost(s)
+
   Options:
     -h                Display this message
     --help            Display manual page

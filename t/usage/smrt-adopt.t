@@ -9,8 +9,11 @@ setup::
 help::
 
   $ smrt adopt -h
-  usage: smrt adopt -h|--help|<MRID>|<MPRJ>
+  usage: smrt adopt -h|--help
+  usage: smrt adopt <MRID>|<MPRJ>|<SLUG>
+  
   Adopt a maintenance request for testing
+  
     Options:
       -h                Display this message
       --help            Display manual page

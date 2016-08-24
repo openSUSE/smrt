@@ -20,8 +20,11 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c -h|--help|<MRID>|<MPRJ>
+usage: #c -h|--help
+usage: #c <MRID>|<MPRJ>|<SLUG>
+
 Adopt a maintenance request for testing
+
   Options:
     -h                Display this message
     --help            Display manual page

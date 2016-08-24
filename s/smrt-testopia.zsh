@@ -20,8 +20,13 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 
 declare -gr cmdhelp='
 
-usage: #c [-h|--help|create <PACKAGE>|list <PACKAGE>|show <TCID>]
+usage: #c -h|--help
+usage: #c create <PACKAGE>
+usage: #c list <PACKAGE>
+usage: #c show <TCID>
+
 Manipulate and query Testopia testcases
+
   Options:
     -h                Display this message
     --help            Display manual page

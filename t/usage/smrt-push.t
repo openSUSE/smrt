@@ -9,8 +9,11 @@ setup::
 help::
 
   $ smrt push -h
-  usage: smrt push [-h|--help]
+  usage: smrt push -h|--help
+  usage: smrt push
+  
   Publish metadata for a maintenance request
+  
     Options:
       -h                Display this message
       --help            Display manual page

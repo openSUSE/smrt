@@ -9,8 +9,13 @@ setup::
 help::
 
   $ smrt testopia -h
-  usage: smrt testopia [-h|--help|create <PACKAGE>|list <PACKAGE>|show <TCID>]
+  usage: smrt testopia -h|--help
+  usage: smrt testopia create <PACKAGE>
+  usage: smrt testopia list <PACKAGE>
+  usage: smrt testopia show <TCID>
+  
   Manipulate and query Testopia testcases
+  
     Options:
       -h                Display this message
       --help            Display manual page
