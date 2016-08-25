@@ -73,5 +73,6 @@ make install DESTDIR=%{buildroot}
 %{_datadir}/%{name}/smrt.*
 %{_mandir}/man1/smrt*.1.gz
 %{_mandir}/man5/smrt.5.gz
+%{_mandir}/man7/smrt*.7.gz
 
 %changelog

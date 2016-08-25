@@ -4,6 +4,7 @@ datarootdir = @datarootdir@
 mandir      = @mandir@
 man1dir     = $(mandir)/man1
 man5dir     = $(mandir)/man5
+man7dir     = $(mandir)/man7
 sysconfdir  = @sysconfdir@
 
 preludedir  = @preludedir@
@@ -56,9 +57,10 @@ auxfiles += smrt.xml.zsh
 cfgfiles  =
 cfgfiles += smrt
 
-manpages   = $(man1pages) $(man5pages)
+manpages   = $(man1pages) $(man5pages) $(man7pages)
 man1pages  = $(addsuffix .1,$(commands))
 man5pages  = smrt.5
+man7pages  = smrt-mtui.7
 
 htmlfiles  =
 htmlfiles += MTUI.html
@@ -116,6 +118,7 @@ install: all installdirs
 	$(INSTALL) -m 0644 -t $(DESTDIR)$(preludedir) $(auxfiles)
 	$(INSTALL) -m 0644 -t $(DESTDIR)$(man1dir) $(man1pages)
 	$(INSTALL) -m 0644 -t $(DESTDIR)$(man5dir) $(man5pages)
+	$(INSTALL) -m 0644 -t $(DESTDIR)$(man7dir) $(man7pages)
 	for f in $(cfgfiles); do \
 	  sfx=; \
 	  if test -e $(DESTDIR)$(sysconfdir)/$$f; then sfx=.new; fi; \
@@ -130,6 +133,7 @@ installdirs:
 	$(INSTALL) -m 0755 -d $(DESTDIR)$(preludedir)
 	$(INSTALL) -m 0755 -d $(DESTDIR)$(man1dir)
 	$(INSTALL) -m 0755 -d $(DESTDIR)$(man5dir)
+	$(INSTALL) -m 0755 -d $(DESTDIR)$(man7dir)
 
 
 pkgname = smrt

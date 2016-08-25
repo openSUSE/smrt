@@ -26,6 +26,10 @@
 .Nm
 automates various aspects of testing maintenance updates for
 SUSE and openSUSE products.
+.Pp
+.Nm MTUI
+users may want to consult
+.Xr smrt-mtui 7 .
 .\" }}}
 .
 .\" OPTIONS {{{
@@ -85,7 +89,8 @@ Display information gleaned from BuildService XML data
 .Xr repoq 1 ,
 .Xr repose 1 ,
 .Xr ssh 1 ,
-.Xr sumaxy 1 .
+.Xr sumaxy 1 ,
+.Xr smrt 7 .
 .\" }}}
 .
 .\" AUTHORS {{{

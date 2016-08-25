@@ -1,0 +1,412 @@
+.\" vim: tw=72 fdm=marker cms=.\\"\ %s
+.
+.\" FRONT MATTER {{{
+.Dd Aug 24, 2016
+.Os
+.Dt SMRT-MTUI 7
+.
+.Sh NAME
+.Nm smrt-mtui
+.Nd SMRT for MTUI users
+.\" FRONT MATTER }}}
+.
+.\" COMPARISON {{{
+.Sh COMPARISON
+.
+In a major departure from
+.Nm MTUI
+where you would start a long-running
+.Sy session
+and interact with reference machines and edit the report
+from its limited shell,
+.Nm SMRT
+is a collection of relatively short-lived,
+mostly non-interactive commands.
+.Pp
+Where
+.Nm MTUI
+maintained its state in memory,
+.Nm SMRT
+uses the filesystem.
+The
+.Sy session
+concept is reduced to possible
+.Dv ControlMaster
+sockets
+in
+.Pa $PWD/.ssh
+.Pq see Xr smrt-attach 1 .
+.\" COMPARISON }}}
+.
+.\" COMMANDS {{{
+.Sh COMMANDS
+.
+.Bl -tag -width "xxx"
+.\" add_host {{{
+.It Ic add_host Ar HOST Ns , Ns Ar SYSTEM
+. Bd -literal
+.  Nm smrt Cm attach Ar HOST Ns ... -- Ar SYSTEM Ns ...
+. Ed
+.\" }}}
+.\" autoadd {{{
+.It Ic autoadd Ar ATTRIBUTE Ns ...
+. Bd -literal
+.  Nm smrt Cm attach No $(refdb sles=12 we=y | sed -n '/: name=/s///p') -- sles:12.0 sle-we
+. Ed
+.\" }}}
+.\" checkout {{{
+.It Ic checkout
+. Bd -literal
+.  Nm svn Cm update
+. Ed
+.\" }}}
+.\" commit {{{
+.It Ic commit Op Ar MESSAGE
+. Bd -literal
+.  Nm svn Cm commit Op Fl m Ar MESSAGE
+. Ed
+.\" }}}
+.\" downgrade {{{
+.It Ic downgrade Ar HOST
+. Bd -literal
+.  Nm smrt Cm revert Ar HOST Ns ...
+. Ed
+.\" }}}
+.\" edit {{{
+.It Ic edit No { Cm file, Ns Ar FILE | Cm template | Cm specfile | Cm patch, Ns Ar FILE No }
+. Bd -literal
+.  Nm vim Ar FILE
+.  Nm vim Pa log
+. Ed
+.\" }}}
+.\" exit {{{
+.It Ic exit Op Li reboot No | Li poweroff
+. Bd -literal
+.  Nm smrt Cm detach
+. Ed
+.Pp
+If you want to reboot or shutdown your refhosts run
+.Dl Nm smrt Cm run Li reboot
+or
+.Dl Nm smrt Cm run Li poweroff
+instead.
+.\" }}}
+.\" export {{{
+.It Ic export Oo Ar FILENAME Oc Ns Oo Li , Ns Ar HOSTNAME Oc Ns Oo Li ,force Oc
+. Bd -literal
+.  Nm smrt Cm mklog
+. Ed
+.\" }}}
+.\" get {{{
+.It Ic get Ar PATHNAME
+. Pp
+Not implemented yet.
+.\" }}}
+.\" help {{{
+.It Ic help Op Ar COMMAND
+. Bd -literal
+.  Nm smrt Fl h
+.  Nm smrt Ar COMMAND Fl h
+.  Nm smrt Fl \-help
+.  Nm smrt Ar COMMAND Fl \-help
+.  Nm man Li smrt- Ns Ar COMMAND
+. Ed
+. Pp
+The
+. Fl h
+options display short usage summaries,
+the
+. Fl \-help
+options
+have the same effect as using
+. Nm man
+directly.
+.\" }}}
+.\" install {{{
+.It Ic install Ar HOST Ns Oo Li , Ns No ... Oc Ns Li , Ns Ar PACKAGE Ns ...
+. Bd -literal
+.  Nm smrt Cm run Ar HOST Ns ... -- Nm zypper Fl n Cm install Fl y Ar PACKAGE Ns ...
+. Ed
+.\" }}}
+.\" list_bugs {{{
+.It Ic list_bugs
+. Bd -literal
+.  Nm smrt Cm bugs
+. Ed
+.\" }}}
+.\" list_history {{{
+.It Ic list_history Ar HOST Ns Oo Li , Ns No ... Oc Ns Oo Li , Ns Ar EVENT Oc
+. Bd -literal
+.  Nm grep Ar EVENT Li log. Ns Ar HOST
+. Ed
+.\" }}}
+.\" list_hosts {{{
+.It Ic list_hosts
+. Bd -literal
+.  Nm smrt Cm hosts
+. Ed
+. Pp
+There are no host states in
+.Nm smrt .
+.\" }}}
+.\" list_locks {{{
+.It Ic list_locks
+. Pp
+Not implemented yet.
+.\" }}}
+.\" list_metadata {{{
+.It Ic list_metadata
+. Bd -literal
+.  Nm sed Li '/^###/q' Pa log
+. Ed
+.\" }}}
+.\" list_packages {{{
+.It Ic list_packages Oo Fl p Ar PACKAGE Oc Ns ... Oo Fl w Oc Op Ar HOST Ns ...
+. Bd -literal
+.  Nm smrt Cm packages
+. Ed
+.\" }}}
+.\" list_sessions {{{
+.It Ic list_sessions
+No replacement, irrelevant.
+.\" }}}
+.\" list_timeout {{{
+.It Ic list_timeout
+. Pp
+No replacement.
+.\" }}}
+.\" list_update_commands {{{
+.It Ic list_update_commands
+. Pp
+No replacement (yet).
+.\" }}}
+.\" list_versions {{{
+.It Ic list_versions
+. Pp
+No replacement, deemed not that useful.
+.\" }}}
+.\" load_template {{{
+.It Ic load_template Ar ID
+. Bd -literal
+.  Nm cd Pa .../ Ns Ar ID
+. Ed
+. Pp
+. Nm smrt
+has no "sessions", the closest equivalent is to
+. Nm cd
+into a directory created with
+. Nm smrt Cm fetch .
+There's no state to be lost.
+.\" }}}
+.\" prepare {{{
+.It Ic prepare Ar HOST Ns Oo Li , Ns ... Oc Ns Oo Li ,force Oc Ns Oo Li ,installed Oc Ns Oo Li ,testing Oc
+. Bd -literal
+.  Nm smrt Cm run Ar HOST Ns ... -- Nm zypper Fl n Cm install Fl y Ar PACKAGE Ns ...
+. Ed
+.\" }}}
+.\" put {{{
+.It Ic put Ar PATHNAME
+. Pp
+Not implemented yet.
+.\" }}}
+.\" quit {{{
+.It Ic quit
+. pp
+See
+. Cm exit .
+.\" }}}
+.\" remove_host {{{
+.It Ic remove_host Ar HOST Ns Oo Li , Ns ... Oc
+. Bd -literal
+.  Nm smrt Cm detach Ar HOST Ns ...
+. Ed
+.\" }}}
+.\" report-bug {{{
+.It Ic report-bug
+. Bd -literal
+.  Nm xdg-open Li https://github.com/openSUSE/smrt/issues
+. Ed
+.\" }}}
+.\" run {{{
+.It Ic run Ar HOST Ns Oo Li , Ns ... Oc Ns Li , Ns Ar COMMAND
+. Bd -literal
+.  Nm smrt Cm run Ar HOST Ns ... -- Ar COMMAND
+. Ed
+.\" }}}
+.\" save {{{
+.It Ic save Op Ar FILE
+. pp
+No replacement,
+.Nm smrt Cm update
+and company append everything to logfiles immediately.
+.\" }}}
+.\" search_hosts {{{
+.It Ic search_hosts Ar ATTRIBUTE Ns ...
+. Bd -literal
+.  Nm refdb Ar ATTRIBUTE Ns ...
+. Ed
+.\" }}}
+.\" set_host_lock {{{
+.It Ic set_host_lock
+. Pp
+Not implemented yet.
+.\" }}}
+.\" set_host_state {{{
+.It Ic set_host_state
+. Pp
+No replacement, there are no host states in
+.Nm smrt .
+.\" }}}
+.\" set_location {{{
+.It Ic set_location Ar SITE
+. Pp
+No replacement, there are no "sessions" in
+.  Nm smrt .
+Use 
+.  Nm refdb Li location= Ns Ar SITE No ...
+instead.
+.\" }}}
+.\" set_log_level {{{
+.It Ic set_log_level Ar LEVEL
+. Pp
+No replacement, you can achieve similar functionality by using
+. Ev SMRT_CHATTY , SUMAXY_CHATTY , REPOSE_CHATTY
+variables.
+. Bd -literal
+.  Nm export Ev SMRT_CHATTY Ns = Ns Ar PATTERN
+. Ed
+.\" }}}
+.\" set_repo {{{
+.It Ic set_repo Ar KIND
+. Bd -literal
+.  Nm repose Cm issue-add No .
+.  Nm repose Cm issue-rm No $(< slug)
+. Ed
+.\" }}}
+.\" set_session_name {{{
+.It Ic set_session_name
+. Pp
+No replacement, irrelevant.
+.\" }}}
+.\" set_timeout {{{
+.It Ic set_timeout
+. Pp
+No replacement.
+.\" }}}
+.\" shell {{{
+.It Ic shell Ar HOST
+. Bd -literal
+.  Nm ssh Li root@ Ns Ar HOST
+. Ed
+.\" }}}
+.\" show_log {{{
+.It Ic show_log Ar HOST
+. Bd -literal
+.  Nm cat Li log. Ns Ar HOST
+. Ed
+.\" }}}
+.\" source_diff {{{
+.It Ic source_diff Ar TYPE
+. Bd -literal
+.  Nm smrt Cm fetch
+.  Nm smrt Cm bs request-diff | Nm smrt Cm xml diff - > request.diff
+. Ed
+. Pp
+.Nm smrt
+produces the
+. Sy source
+type variant.
+.\" }}}
+.\" source_extract {{{
+.It Ic source_extract
+. Bd -literal
+.  Nm osc Cm checkout No ...
+. Ed
+.\" }}}
+.\" source_verify {{{
+.It Ic source_verify
+. Pp
+No replacement, superceded by automated checks run in the BuildService.
+.\" }}}
+.\" terms {{{
+.It Ic terms Op Ar TERMNAME
+. Pp
+No replacement.
+.\" }}}
+.\" testopia_create {{{
+.It Ic testopia_create Ar PACKAGE Ns Li , Ns Ar SUMMARY
+. Bd -literal
+.  Nm smrt Cm testopia create Ar PACKAGE
+. Ed
+.\" }}}
+.\" testopia_edit {{{
+.It Ic testopia_edit Ar ID
+. Bd -literal
+.  Nm smrt Cm testopia edit Ar ID
+. Ed
+.\" }}}
+.\" testopia_list {{{
+.It Ic testopia_list Op Ar PACKAGE Ns Op Li , Ns ...
+. Bd -literal
+.  Nm smrt Cm testopia list Ar PACKAGE
+. Ed
+.\" }}}
+.\" testsuite_list {{{
+.It Ic testsuite_list Ar HOST
+. Bd -literal
+.  Nm smrt Cm tcf list Ar HOST Ns ...
+. Ed
+.\" }}}
+.\" testsuite_run {{{
+.It Ic testsuite_run Ar HOST Ns Oo Li , Ns No ... Oc Ns Li , Ns Ar TESTSUITE
+. Bd -literal
+.  Nm smrt Cm tcf run Ar HOST No ... -- Ar TESTSUITE
+. Ed
+.\" }}}
+.\" testsuite_submit {{{
+.It Ic testsuite_submit Ar HOST Ns Oo Li , Ns No ... Oc Ns Li , Ns Ar TESTSUITE
+. Bd -literal
+.  Nm smrt Cm tcf submit Ar HOST Ns ... -- Ar TESTSUITE
+. Ed
+.\" }}}
+.\" uninstall {{{
+.It Ic uninstall Ar HOST Ns Oo Li , Ns No ... Oc Ns Li , Ns Ar PACKAGE Ns ...
+. Bd -literal
+.  Nm smrt Cm run Ar HOST Ns ... -- Nm zypper Fl n Cm remove Fl y Ar PACKAGE Ns ...
+. Ed
+.\" }}}
+.\" unlock {{{
+.It Ic unlock Oo Fl f Oc Op Ar HOST Ns ...
+. Pp
+Not implemented yet.
+.\" }}}
+.\" update {{{
+.It Ic update Ar HOST Ns Oo Li ,newpackage Oc Ns Oo Li ,noprepare Oc Ns Oo Li ,noscript Oc
+. Bd -literal
+.  Nm smrt Cm update Ar HOST Ns ...
+. Ed
+.\" }}}
+.\" whoami {{{
+.It Ic whoami
+. Pp
+No replacement, irrelevant.
+.\" }}}
+.El
+.\" COMMANDS}}}}
+.
+.\" SEE ALSO {{{
+.Sh SEE ALSO
+.Xr smrt 1 ,
+.Xr smrt 7 .
+.\" }}}
+.
+.\" AUTHORS {{{
+.Sh AUTHORS
+.An Roman Neuhauser Aq Mt rneuhauser+smrt@sigpipe.cz
+.\" AUTHORS }}}
+.
+.\" SMRT {{{
+.Sh SMRT
+Part of
+.Xr smrt 1 .
+.\" }}}
