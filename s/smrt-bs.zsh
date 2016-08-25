@@ -49,6 +49,8 @@ Download XML data for a maintenance request from the BuildService
     SLUG              MPRJ:MRID
 '
 
+declare -gr needs_config='assumed_issuer'
+
 declare -gr preludedir="${SMRT_PRELUDEDIR:-@preludedir@}"
 
 . $preludedir/smrt.prelude.zsh || exit 2
@@ -88,9 +90,6 @@ function $0:t # {{{
       : ${SMRT_ISSUER:=${arg%%:*}}
       arg=${arg##*:}
     ;;
-    $~PATTERN_MRID)
-      : ${SMRT_ISSUER:=$config_assumed_issuer}
-    ;;
     *) reject-misuse $arg ;;
     esac
   ;;
@@ -102,6 +101,8 @@ function $0:t # {{{
   (( $# == 2 )) || reject-misuse $3
 
   check-preconditions $0
+
+  : ${SMRT_ISSUER:=$config_assumed_issuer}
 
   bs-fetch-$cmd $arg
 } # }}}
