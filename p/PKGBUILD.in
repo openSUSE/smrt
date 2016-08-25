@@ -19,7 +19,7 @@ build()
 
 check()
 {
-  _in_src make check
+  _in_src make check CRAMFLAGS=-v
 }
 
 package()

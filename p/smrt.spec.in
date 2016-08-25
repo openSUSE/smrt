@@ -59,7 +59,7 @@ to accessing the repository of test results.
 make
 
 %check
-make check
+make check CRAMFLAGS=-v
 
 %install
 make install DESTDIR=%{buildroot}
