@@ -10,7 +10,7 @@ help::
 
   $ smrt adopt -h
   usage: smrt adopt -h|--help
-  usage: smrt adopt <MRID>|<MPRJ>|<SLUG>
+  usage: smrt adopt MRID|MPRJ|SLUG
   
   Adopt a maintenance request for testing
   
@@ -18,10 +18,10 @@ help::
       -h                Display this message
       --help            Display manual page
     Operands:
-      <MRID>            Maintenance request <MRID>
-      <MPRJ>            Maintenance request currently linked into
-                        the maintenance project <MPRJ>
-      <MPRJ>:<MRID>     Maintenance request <MRID>
+      MRID              Maintenance request MRID
+      MPRJ              Maintenance request currently linked into
+                        the maintenance project MPRJ
+      MPRJ:MRID         Maintenance request MRID
 
   $ smrt adopt --help
   o exec man 1 smrt-adopt

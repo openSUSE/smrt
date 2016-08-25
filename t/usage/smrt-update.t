@@ -18,7 +18,7 @@ help::
       -h                Display this message
       --help            Display manual page
     Operands:
-      <HOST>            [<USER>@]<HOSTSPEC>
+      HOST              [USER@]HOSTSPEC
   
   This command should be run from inside a testreport directory
 

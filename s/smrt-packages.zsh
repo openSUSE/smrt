@@ -21,7 +21,7 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c [<HOST>...]
+usage: #c [HOST...]
 
 Display version information for packages under test
 
@@ -29,8 +29,8 @@ Display version information for packages under test
     -h                Display this message
     --help            Display manual page
   Operands:
-    <HOST>            Display version information for packages under test
-                      as currently installed (or not) on <HOST>
+    HOST              Display version information for packages under test
+                      as currently installed (or not) on HOST
 
 '
 

@@ -21,7 +21,7 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c [<HOST>...]
+usage: #c [HOST...]
 
 Disconnect attached refhost(s)
 
@@ -29,7 +29,7 @@ Disconnect attached refhost(s)
     -h                Display this message
     --help            Display manual page
   Operands:
-    <HOST>            [<USER>@]<HOSTSPEC>
+    HOST              [USER@]HOSTSPEC
 
 '
 

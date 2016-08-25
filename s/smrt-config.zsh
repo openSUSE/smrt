@@ -22,8 +22,8 @@ declare -gr cmdhelp='
 
 usage: #c -h|--help
 usage: #c edit
-usage: #c get <KEY>
-usage: #c set <KEY> <VAL>
+usage: #c get KEY
+usage: #c set KEY VAL
 usage: #c show
 
 Manipulate smrt configuration file
@@ -32,8 +32,8 @@ Manipulate smrt configuration file
     -h                Display this message
     --help            Display manual page
   Operands:
-    <KEY>             Configuration key
-    <VAL>             Configuration value
+    KEY               Configuration key
+    VAL               Configuration value
 
 '
 

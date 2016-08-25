@@ -24,7 +24,7 @@ usage: #c -h|--help
 usage: #c
 usage: #c browse
 usage: #c urls
-usage: #c <BUG>...
+usage: #c BUG...
 
 List or browse bugs related to a maintenance request
 
@@ -32,7 +32,7 @@ List or browse bugs related to a maintenance request
     -h                Display this message
     --help            Display manual page
   Operands:
-    <BUG>             Open a bug in a browser
+    BUG               Open a bug in a browser
     browse            Open all bugs in a browser
     urls              List bug URLs, one per line
 

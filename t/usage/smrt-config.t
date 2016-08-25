@@ -11,8 +11,8 @@ help::
   $ smrt config -h
   usage: smrt config -h|--help
   usage: smrt config edit
-  usage: smrt config get <KEY>
-  usage: smrt config set <KEY> <VAL>
+  usage: smrt config get KEY
+  usage: smrt config set KEY VAL
   usage: smrt config show
   
   Manipulate smrt configuration file
@@ -21,8 +21,8 @@ help::
       -h                Display this message
       --help            Display manual page
     Operands:
-      <KEY>             Configuration key
-      <VAL>             Configuration value
+      KEY               Configuration key
+      VAL               Configuration value
 
   $ smrt config --help
   o exec man 1 smrt-config

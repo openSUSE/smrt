@@ -21,7 +21,7 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c <SLUG>
+usage: #c SLUG
 
 Download metadata for a maintenance request
 
@@ -29,7 +29,7 @@ Download metadata for a maintenance request
     -h                Display this message
     --help            Display manual page
   Operands:
-    <SLUG>            Checkout a maintenance update <SLUG>
+    SLUG              Checkout a maintenance update SLUG
 
 '
 

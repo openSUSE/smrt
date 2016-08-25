@@ -21,7 +21,7 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c <MRID>|<MPRJ>|<SLUG>
+usage: #c MRID|MPRJ|SLUG
 
 Adopt a maintenance request for testing
 
@@ -29,10 +29,10 @@ Adopt a maintenance request for testing
     -h                Display this message
     --help            Display manual page
   Operands:
-    <MRID>            Maintenance request <MRID>
-    <MPRJ>            Maintenance request currently linked into
-                      the maintenance project <MPRJ>
-    <MPRJ>:<MRID>     Maintenance request <MRID>
+    MRID              Maintenance request MRID
+    MPRJ              Maintenance request currently linked into
+                      the maintenance project MPRJ
+    MPRJ:MRID         Maintenance request MRID
 
 '
 

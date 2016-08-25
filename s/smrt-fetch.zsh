@@ -21,20 +21,20 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c [--adopt] [--push] <MPRJ>|<MRID>
+usage: #c [--adopt] [--push] MPRJ|MRID
 
 Download metadata for a maintenance request
 
   Options:
     -h                Display this message
     --help            Display manual page
-    --adopt           Adopt <MPRJ>|<MRID> for testing
+    --adopt           Adopt MPRJ|MRID for testing
     --push            Publish metadata in testreport repository
   Operands:
-    <MRID>            Maintenance request <MRID>
-    <MPRJ>            Maintenance request currently linked into
-                      the maintenance project <MPRJ>
-    <MPRJ>:<MRID>     Maintenance request <MRID>
+    MRID              Maintenance request MRID
+    MPRJ              Maintenance request currently linked into
+                      the maintenance project MPRJ
+    MPRJ:MRID         Maintenance request MRID
 
 '
 

@@ -21,13 +21,13 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c maintainers <PKG>
-usage: #c packages <MPRJ>|<SLUG>
-usage: #c patchinfo <MPRJ>|<SLUG>
-usage: #c project <MPRJ>|<SLUG>
-usage: #c repos <MPRJ>|<SLUG>
-usage: #c request <MRID>|<SLUG>
-usage: #c request-diff <MRID>|<SLUG>
+usage: #c maintainers PKG
+usage: #c packages MPRJ|SLUG
+usage: #c patchinfo MPRJ|SLUG
+usage: #c project MPRJ|SLUG
+usage: #c repos MPRJ|SLUG
+usage: #c request MRID|SLUG
+usage: #c request-diff MRID|SLUG
 
 Download XML data for a maintenance request from the BuildService
 
@@ -43,10 +43,10 @@ Download XML data for a maintenance request from the BuildService
     repos             Download repositories.xml data
     request           Download request.xml data
     request-diff      Download request.diff.xml data
-    <MPRJ>            <ISSUER>:Maintenance:<ISSUE>
-    <MRID>            Maintenance request <MRID>
-    <PKG>             Package name
-    <SLUG>            <MPRJ>:<MRID>
+    MPRJ              ISSUER:Maintenance:ISSUE
+    MRID              Maintenance request MRID
+    PKG               Package name
+    SLUG              MPRJ:MRID
 '
 
 declare -gr preludedir="${SMRT_PRELUDEDIR:-@preludedir@}"

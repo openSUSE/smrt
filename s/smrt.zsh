@@ -22,14 +22,14 @@ declare -gr cmdname=$0:t
 declare -gr cmdhelp="
 
 usage: #c -h|--help
-usage: #c [--issuer=<ISSUER>] <COMMAND> [<OPTION>...] [<ARGUMENT>...]
+usage: #c [--issuer=ISSUER] COMMAND [OPTION...] [ARGUMENT...]
   Options:
     -h                Display this message
     --help            Display manual page
-    -I, --issuer      Assume <ISSUER> for commands which take
+    -I, --issuer      Assume ISSUER for commands which take
                       maintenance request ids
   Operands:
-    <COMMAND>         One of the commands listed below
+    COMMAND           One of the commands listed below
 
   Commands:
     adopt             Adopt a maintenance request for testing

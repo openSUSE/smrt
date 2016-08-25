@@ -10,13 +10,13 @@ help::
 
   $ smrt bs -h
   usage: smrt bs -h|--help
-  usage: smrt bs maintainers <PKG>
-  usage: smrt bs packages <MPRJ>|<SLUG>
-  usage: smrt bs patchinfo <MPRJ>|<SLUG>
-  usage: smrt bs project <MPRJ>|<SLUG>
-  usage: smrt bs repos <MPRJ>|<SLUG>
-  usage: smrt bs request <MRID>|<SLUG>
-  usage: smrt bs request-diff <MRID>|<SLUG>
+  usage: smrt bs maintainers PKG
+  usage: smrt bs packages MPRJ|SLUG
+  usage: smrt bs patchinfo MPRJ|SLUG
+  usage: smrt bs project MPRJ|SLUG
+  usage: smrt bs repos MPRJ|SLUG
+  usage: smrt bs request MRID|SLUG
+  usage: smrt bs request-diff MRID|SLUG
   
   Download XML data for a maintenance request from the BuildService
   
@@ -32,10 +32,10 @@ help::
       repos             Download repositories.xml data
       request           Download request.xml data
       request-diff      Download request.diff.xml data
-      <MPRJ>            <ISSUER>:Maintenance:<ISSUE>
-      <MRID>            Maintenance request <MRID>
-      <PKG>             Package name
-      <SLUG>            <MPRJ>:<MRID>
+      MPRJ              ISSUER:Maintenance:ISSUE
+      MRID              Maintenance request MRID
+      PKG               Package name
+      SLUG              MPRJ:MRID
 
   $ smrt bs --help
   o exec man 1 smrt-bs

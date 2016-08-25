@@ -10,7 +10,7 @@ help::
 
   $ smrt checkout -h
   usage: smrt checkout -h|--help
-  usage: smrt checkout <SLUG>
+  usage: smrt checkout SLUG
   
   Download metadata for a maintenance request
   
@@ -18,7 +18,7 @@ help::
       -h                Display this message
       --help            Display manual page
     Operands:
-      <SLUG>            Checkout a maintenance update <SLUG>
+      SLUG              Checkout a maintenance update SLUG
 
   $ smrt checkout --help
   o exec man 1 smrt-checkout

@@ -13,7 +13,7 @@ help::
   usage: smrt bugs
   usage: smrt bugs browse
   usage: smrt bugs urls
-  usage: smrt bugs <BUG>...
+  usage: smrt bugs BUG...
   
   List or browse bugs related to a maintenance request
   
@@ -21,7 +21,7 @@ help::
       -h                Display this message
       --help            Display manual page
     Operands:
-      <BUG>             Open a bug in a browser
+      BUG               Open a bug in a browser
       browse            Open all bugs in a browser
       urls              List bug URLs, one per line
   

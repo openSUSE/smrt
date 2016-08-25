@@ -10,7 +10,7 @@ help::
 
   $ smrt packages -h
   usage: smrt packages -h|--help
-  usage: smrt packages [<HOST>...]
+  usage: smrt packages [HOST...]
   
   Display version information for packages under test
   
@@ -18,8 +18,8 @@ help::
       -h                Display this message
       --help            Display manual page
     Operands:
-      <HOST>            Display version information for packages under test
-                        as currently installed (or not) on <HOST>
+      HOST              Display version information for packages under test
+                        as currently installed (or not) on HOST
   
   This command should be run from inside a testreport directory
 

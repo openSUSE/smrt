@@ -21,9 +21,9 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c create <PACKAGE>
-usage: #c list <PACKAGE>
-usage: #c show <TCID>
+usage: #c create PACKAGE
+usage: #c list PACKAGE
+usage: #c show TCID
 
 Manipulate and query Testopia testcases
 
@@ -32,10 +32,10 @@ Manipulate and query Testopia testcases
     --help            Display manual page
   Operands:
     create            Create new testcase; opens editor
-    list              List testcases for a given <PACKAGE>
+    list              List testcases for a given PACKAGE
     show              Display a testcase
-    <PACKAGE>         Package name
-    <TCID>            Testcase id
+    PACKAGE           Package name
+    TCID              Testcase id
 '
 
 declare -gr needs_config='bugzilla_url testopia_url testopia_user testopia_pass'

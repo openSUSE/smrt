@@ -10,7 +10,7 @@ help::
 
   $ smrt hosts -h
   usage: smrt hosts -h|--help
-  usage: smrt hosts [<HOST>...]
+  usage: smrt hosts [HOST...]
   
   Display information on attached hosts
   
@@ -18,7 +18,7 @@ help::
       -h                Display this message
       --help            Display manual page
     Operands:
-      <HOST>            Display information on <HOST>
+      HOST              Display information on HOST
   
   This command should be run from inside a testreport directory
 

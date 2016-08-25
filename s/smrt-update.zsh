@@ -13,7 +13,7 @@ Install current maintenance update
     -h                Display this message
     --help            Display manual page
   Operands:
-    <HOST>            [<USER>@]<HOSTSPEC>
+    HOST              [USER@]HOSTSPEC
 '
 
 declare -gr needs_workdir=1

@@ -10,7 +10,7 @@ help::
 
   $ smrt attach -h
   usage: smrt attach -h|--help
-  usage: smrt attach <HOST> <PRODUCT>...
+  usage: smrt attach HOST PRODUCT...
   
   Ssh into a refhost and earmark it for testing given products
   
@@ -18,8 +18,8 @@ help::
       -h                Display this message
       --help            Display manual page
     Operands:
-      <HOST>            [<USER>@]<HOSTSPEC>
-      <PRODUCT>         <PRODNAME>:<PRODVER>
+      HOST              [USER@]HOSTSPEC
+      PRODUCT           PRODNAME:PRODVER
   
   This command should be run from inside a testreport directory
 

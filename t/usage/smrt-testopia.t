@@ -10,9 +10,9 @@ help::
 
   $ smrt testopia -h
   usage: smrt testopia -h|--help
-  usage: smrt testopia create <PACKAGE>
-  usage: smrt testopia list <PACKAGE>
-  usage: smrt testopia show <TCID>
+  usage: smrt testopia create PACKAGE
+  usage: smrt testopia list PACKAGE
+  usage: smrt testopia show TCID
   
   Manipulate and query Testopia testcases
   
@@ -21,10 +21,10 @@ help::
       --help            Display manual page
     Operands:
       create            Create new testcase; opens editor
-      list              List testcases for a given <PACKAGE>
+      list              List testcases for a given PACKAGE
       show              Display a testcase
-      <PACKAGE>         Package name
-      <TCID>            Testcase id
+      PACKAGE           Package name
+      TCID              Testcase id
 
   $ smrt testopia --help
   o exec man 1 smrt-testopia

@@ -10,20 +10,20 @@ help::
 
   $ smrt fetch -h
   usage: smrt fetch -h|--help
-  usage: smrt fetch [--adopt] [--push] <MPRJ>|<MRID>
+  usage: smrt fetch [--adopt] [--push] MPRJ|MRID
   
   Download metadata for a maintenance request
   
     Options:
       -h                Display this message
       --help            Display manual page
-      --adopt           Adopt <MPRJ>|<MRID> for testing
+      --adopt           Adopt MPRJ|MRID for testing
       --push            Publish metadata in testreport repository
     Operands:
-      <MRID>            Maintenance request <MRID>
-      <MPRJ>            Maintenance request currently linked into
-                        the maintenance project <MPRJ>
-      <MPRJ>:<MRID>     Maintenance request <MRID>
+      MRID              Maintenance request MRID
+      MPRJ              Maintenance request currently linked into
+                        the maintenance project MPRJ
+      MPRJ:MRID         Maintenance request MRID
 
   $ smrt fetch --help
   o exec man 1 smrt-fetch
