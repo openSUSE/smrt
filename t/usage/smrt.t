@@ -35,7 +35,7 @@ help::
       revert            Downgrade relevant packages to latest released versions
       update            Install current maintenance update
       tcf               Query and manipulate CTCS2 testsuites and results
-      testopia          Manipulate Testopia testcases
+      testopia          Query and anipulate Testopia testcases
       xml               Display information gleaned from BuildService XML data
 
   $ smrt --help
@@ -84,7 +84,7 @@ outside a testreport::
       revert            Downgrade relevant packages to latest released versions
       update            Install current maintenance update
       tcf               Query and manipulate CTCS2 testsuites and results
-      testopia          Manipulate Testopia testcases
+      testopia          Query and anipulate Testopia testcases
       xml               Display information gleaned from BuildService XML data
 
 
@@ -122,5 +122,5 @@ inside a testreport::
       revert            Downgrade relevant packages to latest released versions
       update            Install current maintenance update
       tcf               Query and manipulate CTCS2 testsuites and results
-      testopia          Manipulate Testopia testcases
+      testopia          Query and anipulate Testopia testcases
       xml               Display information gleaned from BuildService XML data

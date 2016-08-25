@@ -14,7 +14,7 @@ help::
   usage: smrt testopia list PACKAGE
   usage: smrt testopia show TCID
   
-  Manipulate and query Testopia testcases
+  Query and manipulate Testopia testcases
   
     Options:
       -h                Display this message

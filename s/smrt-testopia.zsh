@@ -25,7 +25,7 @@ usage: #c create PACKAGE
 usage: #c list PACKAGE
 usage: #c show TCID
 
-Manipulate and query Testopia testcases
+Query and manipulate Testopia testcases
 
   Options:
     -h                Display this message

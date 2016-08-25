@@ -62,7 +62,7 @@ List or browse bugs related to a maintenance request
 . It Xr smrt-checkout 1
 Download metadata for a maintenance request
 . It Xr smrt-config 1
-Manipulate smrt configuration file
+Query and manipulate smrt configuration file
 . It Xr smrt-detach 1
 Disconnect attached refhost(s)
 . It Xr smrt-fetch 1
@@ -79,6 +79,10 @@ Publish metadata for a maintenance request
 Downgrade relevant packages to latest released versions
 . It Xr smrt-update 1
 Install current maintenance update
+. It Xr smrt-tcf 1
+Query and manipulate CTCS2 testsuites and results
+. It Xr smrt-testopia 1
+Query and manipulate Testopia testcases
 . It Xr smrt-xml 1
 Display information gleaned from BuildService XML data
 .El
