@@ -14,9 +14,21 @@ setup::
   $ cd $slug
 
 
-test::
+test default (short) display::
 
   $ smrt packages
+  gdk-pixbuf-devel                 2.30.6-10.1
+  gdk-pixbuf-lang                  2.30.6-10.1
+  gdk-pixbuf-query-loaders         2.30.6-10.1
+  gdk-pixbuf-query-loaders-32bit   2.30.6-10.1
+  libgdk_pixbuf-2_0-0              2.30.6-10.1
+  libgdk_pixbuf-2_0-0-32bit        2.30.6-10.1
+  typelib-1_0-GdkPixbuf-2_0        2.30.6-10.1
+
+
+test full (long) display::
+
+  $ smrt packages --full
   typelib-1_0-GdkPixbuf-2_0        2.30.6-10.1     ppc64le SLE-SERVER:12-SP1
   typelib-1_0-GdkPixbuf-2_0        2.30.6-10.1     s390x   SLE-SERVER:12-SP1
   typelib-1_0-GdkPixbuf-2_0        2.30.6-10.1     x86_64  SLE-SERVER:12-SP1

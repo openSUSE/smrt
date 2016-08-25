@@ -15,6 +15,7 @@
 .Nm
 . Fl h | \-help
 .Nm
+. Op Fl \-full
 . Op Ar PKG Ns ...
 .\" SYNOPSIS }}}
 .
@@ -22,7 +23,23 @@
 .Sh DESCRIPTION
 .Nm
 is used to display information about packages updated in
-a maintenance update.
+a maintenance update.  Its output is a tabular list of all
+binary packages released in a maintenance update,
+each line has two columns: package name and version-dash-release.
+.\" }}}
+.
+.\" OPTIONS {{{
+.Sh OPTIONS
+.
+.Bl -tag -width "xx"
+. It Fl h
+Display usage instructions.
+. It Fl \-help
+Display this manual page.
+. It Fl \-full
+Display also architectures, project names.
+Each line has four columns: package name / version-dash-release,
+architecture and project.
 .\" }}}
 .
 .\" SEE ALSO {{{

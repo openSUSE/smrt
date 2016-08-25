@@ -21,16 +21,16 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c [HOST...]
+usage: #c [--full] [PKG...]
 
 Display version information for packages under test
 
   Options:
     -h                Display this message
     --help            Display manual page
+    --full            Display also architectures, project names
   Operands:
-    HOST              Display version information for packages under test
-                      as currently installed (or not) on HOST
+    PKG               Display information on PKG
 
 '
 
@@ -40,38 +40,54 @@ declare -gr preludedir="${SMRT_PRELUDEDIR:-@preludedir@}"
 
 . $preludedir/smrt.prelude.zsh || exit 2
 
-function $0:t # {{{
+function $cmdname-main # {{{
 {
+  local impl=list-default
   local opt arg
   local -i i=0
-  while haveopt i opt arg h help -- "$@"; do
+  while haveopt i opt arg full h help -- "$@"; do
     case $opt in
     h|help) display-help $opt ;;
+    full)   impl=list-full ;;
     *)      reject-misuse -$arg ;;
     esac
   done; shift $i
 
   check-preconditions $0
 
-  impl "$@"
+  o $impl "$@"
 } # }}}
 
-function impl # {{{
+function list-default # {{{
+{
+  local repo uprj uprjver arch pkg ver rel pth
+  o cat binaries \
+  | while read repo uprj arch pkg ver rel pth; do
+      print -r "$pkg $ver $rel"
+    done \
+  | sort -u \
+  | while read pkg ver rel; do
+      print -f '%-32s %s-%s\n' \
+        -- $pkg $ver $rel
+    done
+} # }}}
+
+function list-full # {{{
 {
   local repo uprj uprjver arch pkg ver rel
   o cat binaries \
   | while read repo uprj arch pkg ver rel; do
       uprj=${${uprj#*:Updates:}%:*}
-      print -r $pkg ${uprj%:*} ${uprj##*:} $arch $ver $rel $repo
+      print -r "$pkg ${uprj%:*} ${uprj##*:} $arch $ver $rel $repo"
     done \
-  | sort -k 1,3r -k 4,7 \
+  | o sort -k 1,3r -k 4,7 \
   | while read pkg uprj uprjver arch ver rel repo; do
       print -f '%-32s %-15s %-7s %s:%s\n' \
-        $pkg $ver-$rel $arch $uprj $uprjver
+        -- $pkg $ver-$rel $arch $uprj $uprjver
     done \
   | uniq
 } # }}}
 
 . $preludedir/smrt.coda.zsh
 
-$0:t "$@"
+$cmdname-main "$@"

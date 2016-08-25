@@ -10,16 +10,16 @@ help::
 
   $ smrt packages -h
   usage: smrt packages -h|--help
-  usage: smrt packages [HOST...]
+  usage: smrt packages [--full] [PKG...]
   
   Display version information for packages under test
   
     Options:
       -h                Display this message
       --help            Display manual page
+      --full            Display also architectures, project names
     Operands:
-      HOST              Display version information for packages under test
-                        as currently installed (or not) on HOST
+      PKG               Display information on PKG
   
   This command should be run from inside a testreport directory
 

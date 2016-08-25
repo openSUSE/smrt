@@ -14,8 +14,14 @@ setup::
   $ cd $slug
 
 
-test::
+test default (short) display::
 
   $ smrt packages
+  clamsap                          0.98.9-0.7.1
+
+
+test full (long) display::
+
+  $ smrt packages --full
   clamsap                          0.98.9-0.7.1    ppc64   SLE-SAP-AIO:11-SP4
   clamsap                          0.98.9-0.7.1    x86_64  SLE-SAP-AIO:11-SP4
