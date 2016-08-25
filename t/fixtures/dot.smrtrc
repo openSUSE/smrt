@@ -7,5 +7,6 @@ metadata_url = file://$FIXTURES
 testopia_url = https://apibugzilla.suse.com
 testopia_user = testopus
 testopia_pass = testopas
+controlpathdir = $(mktemp -d)
 testplatforms_url = file://$FIXTURES/testplatforms.pm
 testreport_repository = file://$HOME/.svnrepo

@@ -234,7 +234,7 @@ function run-in-hosts # {{{
     --jobs=0
     --tmpdir=$PWD
   )
-  local ctlpath=$PWD/.ssh/%r@%h:%p
+  local ctlpath=$config_controlpath
 
   o parallel "${(@)popts}" \
     ssh -qo ControlPath=$ctlpath '{1}' "$cmd" \
@@ -247,6 +247,12 @@ function run-in-hosts # {{{
 || declare -gx SMRT_CONFIG="@sysconfdir@/smrt"
 
 load-config $SMRT_CONFIG
+
+[[ -n ${config_controlpathdir:+set} ]] \
+|| declare -gr config_controlpathdir=${${:-"@controlpathdir@"}//\%u/$UID}
+
+[[ -n ${config_controlpath:+set} ]] \
+|| declare -gr config_controlpath=${config_controlpathdir%/#}/%r@%h:%p
 
 declare -ag config_names; config_names=(
   assumed_issuer

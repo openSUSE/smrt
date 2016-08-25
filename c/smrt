@@ -5,3 +5,4 @@ testreport_repository = svn+ssh://svn@qa.example.com/testreports
 l3db_creds = smrt:beeff00ddeadfeed
 l3db_url = https://l3.example.org/?incident__bug_id__in=
 metadata_url = https://qa.example.com/metadata
+controlpath = /var/run/user/$UID/smrt

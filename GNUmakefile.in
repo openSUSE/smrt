@@ -5,6 +5,8 @@ mandir      = @mandir@
 man1dir     = $(mandir)/man1
 man5dir     = $(mandir)/man5
 man7dir     = $(mandir)/man7
+controlpathdir = @controlpathdir@
+runstatedir  = @runstatedir@
 sysconfdir  = @sysconfdir@
 
 preludedir  = @preludedir@
@@ -90,6 +92,7 @@ define subst_vars
 	sed \
 		-e 's![@]sysconfdir[@]!$(sysconfdir)!g' \
 		-e 's![@]preludedir[@]!$(preludedir)!g' \
+		-e 's![@]controlpathdir[@]!$(controlpathdir)!g' \
 		< $< > $@
 	chmod 0755 $@
 endef
@@ -134,6 +137,7 @@ installdirs:
 	$(INSTALL) -m 0755 -d $(DESTDIR)$(man1dir)
 	$(INSTALL) -m 0755 -d $(DESTDIR)$(man5dir)
 	$(INSTALL) -m 0755 -d $(DESTDIR)$(man7dir)
+	$(INSTALL) -m 0755 -d $(DESTDIR)$(runstatedir)
 
 
 pkgname = smrt

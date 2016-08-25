@@ -6,9 +6,11 @@ populate() # {{{
     -e "s@rootdir@$rootdirg" \
     -e "s@prefix@$prefixg" \
     -e "s@bindir@$bindirg" \
-    -e "s@preludedir@$preludedirg" \
+    -e "s@controlpathdir@$controlpathdirg" \
     -e "s@datarootdir@$datarootdirg" \
     -e "s@mandir@$mandirg" \
+    -e "s@preludedir@$preludedirg" \
+    -e "s@runstatedir@$runstatedirg" \
     -e "s@sysconfdir@$sysconfdirg" \
     $1 \
   > $2
@@ -18,16 +20,22 @@ rootdir=$(dirname $(realpath $0))
 
 prefix=/usr/local
 bindir='${prefix}/bin'
+controlpathdir='${runstatedir}/user/%u/smrt'
 datarootdir='${prefix}/share'
 mandir='${datarootdir}/man'
 mandir_set=0
 preludedir='${datarootdir}/smrt'
+runstatedir='/var/run'
+runstatedir_set=0
 sysconfdir='${prefix}/etc'
 sysconfdir_set=0
 
 for a in "$@"; do
   case $a in
   --bindir=*)       bindir="${a#*=}"      ;;
+  --controlpathdir=*)
+    controlpathdir="${a#*=}"
+  ;;
   --datarootdir=*)  datarootdir="${a#*=}" ;;
   --mandir=*)
     mandir="${a#*=}"
@@ -35,6 +43,10 @@ for a in "$@"; do
   ;;
   --prefix=*)       prefix="${a#*=}"      ;;
   --preludedir=*)   preludedir="${a#*=}"  ;;
+  --runstatedir=*)
+    runstatedir="${a#*=}"
+    runstatedir_set=1
+  ;;
   --sysconfdir=*)
     sysconfdir="${a#*=}"
     sysconfdir_set=1

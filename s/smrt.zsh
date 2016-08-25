@@ -52,7 +52,8 @@ usage: #c [--issuer=ISSUER] COMMAND [OPTION...] [ARGUMENT...]
 
 "
 
-declare -gr preludedir="${SMRT_PRELUDEDIR:-@preludedir@}"
+declare -grx SMRT_PRELUDEDIR="${SMRT_PRELUDEDIR:-@preludedir@}"
+declare -gr preludedir=$SMRT_PRELUDEDIR
 
 . $preludedir/smrt.prelude.zsh || exit 2
 

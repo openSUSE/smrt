@@ -59,7 +59,7 @@ function $0:t # {{{
 
 function impl # {{{
 {
-  local h= ctlpath=$PWD/.ssh/%r@%h:%p
+  local h= ctlpath=$config_controlpath
   :; (( $# )) \
   || set -- .connected/*(:t)
   for h in "$@"; do

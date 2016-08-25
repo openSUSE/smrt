@@ -34,7 +34,7 @@ concept is reduced to possible
 .Dv ControlMaster
 sockets
 in
-.Pa $PWD/.ssh
+.Pa @runstatedir@
 .Pq see Xr smrt-attach 1 .
 .\" COMPARISON }}}
 .

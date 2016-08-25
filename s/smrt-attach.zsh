@@ -60,10 +60,10 @@ function $0:t # {{{
 
 function impl # {{{
 {
-  local h=$1 ctlpath=$PWD/.ssh/%r@%h:%p
+  local h=$1 ctlpath=$config_controlpath
   shift
-  mkdir -p $ctlpath:h .connected
-  print -f 'Connecting to %s for %s\n' $h "$*"
+  o mkdir -p $ctlpath:h .connected
+  o print -f 'Connecting to %s for %s\n' $h "$*"
   o ssh -qMNf -o ControlPath=$ctlpath $h
   o redir -1 .connected/$h print -f '%s\n' -- "$@"
 } # }}}
