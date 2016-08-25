@@ -1,0 +1,55 @@
+.\" vim: tw=72 fdm=marker cms=.\\"\ %s
+.
+.\" FRONT MATTER {{{
+.Dd Aug 15, 2016
+.Os
+.Dt SMRT-TCF 1
+.
+.Sh NAME
+.Nm smrt\ tcf
+.Nd Query and manipulate CTCS2 testsuites and results
+.\" FRONT MATTER }}}
+.
+.\" SYNOPSIS {{{
+.Sh SYNOPSIS
+.Nm
+. Op Fl h | \-help
+.Nm
+. Cm list
+. Op Ar HOST Ns ...
+.Nm
+. Cm run
+. Oo Ar HOST Ns ... Oc Li -- Ar SUITE
+.Nm
+. Cm submit
+. Oo Ar HOST Ns ... Oc Li -- Ar SUITE
+.\" SYNOPSIS }}}
+.
+.\" DESCRIPTION {{{
+.Sh DESCRIPTION
+.Nm
+is used to list and run CTCS2 testsuites, and submit their results
+into a
+.Nm QADB .
+.
+.Bl -tag -width "xxx"
+.It Ar HOST
+. Oo Ar user Ns Li @ Oc Ns Ar hostname
+. Pp
+If called with no
+. Ar HOST
+operands, uses all currently attached hosts.
+.It Ar SUITE
+A
+. Nm CTCS2
+testsuite name, with or without the
+.Qq Li -run
+suffix.
+.\" }}}
+.
+.\" SMRT {{{
+.Sh SMRT
+.Nm
+is part of
+.Xr smrt 1 .
+.\" }}}

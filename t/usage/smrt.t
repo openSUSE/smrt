@@ -34,6 +34,7 @@ help::
       push              Publish metadata for a maintenance request
       revert            Downgrade relevant packages to latest released versions
       update            Install current maintenance update
+      tcf               Query and manipulate CTCS2 testsuites and results
       testopia          Manipulate Testopia testcases
       xml               Display information gleaned from BuildService XML data
 
@@ -82,6 +83,7 @@ outside a testreport::
       push              Publish metadata for a maintenance request
       revert            Downgrade relevant packages to latest released versions
       update            Install current maintenance update
+      tcf               Query and manipulate CTCS2 testsuites and results
       testopia          Manipulate Testopia testcases
       xml               Display information gleaned from BuildService XML data
 
@@ -119,5 +121,6 @@ inside a testreport::
       push              Publish metadata for a maintenance request
       revert            Downgrade relevant packages to latest released versions
       update            Install current maintenance update
+      tcf               Query and manipulate CTCS2 testsuites and results
       testopia          Manipulate Testopia testcases
       xml               Display information gleaned from BuildService XML data
