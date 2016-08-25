@@ -61,6 +61,8 @@ function $cmdname-main # {{{
   *) reject-misuse ${1-} ;;
   esac
 
+  (( $# == 2 )) || reject-misuse ${3-}
+
   check-preconditions $cmdname
 
   o impl "$@"
