@@ -4,8 +4,8 @@ setopt extended_glob
 setopt no_unset
 setopt warn_create_global
 
-PATH="$BUILDDIR:$TESTROOT:$PATH"
-HOME="$PWD"
+export PATH="$PWD/.bin:$BUILDDIR:$TESTROOT:$PATH"
+export HOME="$PWD"
 export SMRT_PRELUDEDIR=$BUILDDIR
 
 declare -Tgx SMRT_CHATTY smrt_chatty \|
@@ -70,9 +70,8 @@ function reify-fixture # {{{
 
 function fake # {{{
 {
-  local cmd=$PWD/.bin/$1
+  local cmd=$HOME/.bin/$1
   shift
-  path=($cmd:h $path)
   mkdir -p $cmd:h
   cat > $cmd
   chmod u+x $cmd

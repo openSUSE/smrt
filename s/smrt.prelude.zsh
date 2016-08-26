@@ -17,6 +17,7 @@
 
 setopt extended_glob
 setopt hist_subst_pattern
+setopt pipe_fail
 setopt err_return
 setopt no_unset
 setopt warn_create_global
@@ -183,7 +184,6 @@ function assert-config-var # {{{
   local cmd=$1
   local name=$2
   local var=config_$name
-  local dflt=default_$name
   (( ${(P)+var} )) && return
   print -u 2 -f $msg_needs_config \
     -- $cmd $name ${(D)SMRT_CONFIG}
@@ -206,16 +206,18 @@ function load-config # {{{
 
 function log-output # {{{
 {
-  local -a cmd; cmd=("$@")
-  local t= p=
-  while read t p; do
+  local -A seen
+  local t= line=
+  "$@" 2>&1 | while read t line; do
     local logfile=log.$t
     exec 3>&1
     {
-      print -f '$ ssh %s %s\n' $t "$cmd"
-      cat $p
-      cat $p | sed >&3 "s^$t\t"
-      rm $p
+      if (( ! ${+seen[$t]} )); then
+        seen[$t]=yes
+        print -f '%% %s\n' "${(j: :)${(@q-)cmd}}"
+      fi
+      print -r -- "$line"
+      print -u 3 -f "%s\t%s\n" -- "$t" "$line"
     } >>| $logfile
   done
 } # }}}
@@ -226,20 +228,17 @@ function run-in-hosts # {{{
   local -a hosts; hosts=("$@[1,$((seppos - 1))]")
   local -a cmd; cmd=("$@[$((seppos + 1)),-1]")
   local -a popts; popts=(
-    -q
+    --quote
     --plain
-    --files
     --tag
     --joblog joblog
     --jobs=0
-    --tmpdir=$PWD
   )
   local ctlpath=$config_controlpath
 
-  o parallel "${(@)popts}" \
-    ssh -qo ControlPath=$ctlpath '{1}' "$cmd" \
-    ::: "${(@)hosts}" \
-  | o log-output "$cmd"
+  o log-output parallel "${(@)popts}" \
+    ssh -o ControlPath=$ctlpath '{1}' "${(@q)cmd}" \
+    ::: "${(@)hosts}"
 } # }}}
 
 
