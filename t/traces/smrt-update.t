@@ -22,7 +22,7 @@ setup::
 inside a testreport::
 
   $ cd $slug
-  $ smrt attach snafubar rofl lmao
+  $ smrt attach snafubar -- rofl lmao
   Connecting to snafubar for rofl lmao
   $ smrt update snafubar
   o log-output parallel --quote --plain --tag --joblog joblog --jobs=0 ssh -o ControlPath=*/%r@%h:%p '{1}' * ::: snafubar (glob)

@@ -1,4 +1,4 @@
-smrt attach: effects
+smrt detach: effects
 ====================
 
 setup::
@@ -16,7 +16,7 @@ test::
 
   $ cd $slug
 
-  $ smrt attach snafubar rofl lmao
+  $ smrt attach snafubar -- rofl lmao
   Connecting to snafubar for rofl lmao
 
   $ cat .connected/snafubar

@@ -7,7 +7,7 @@
 .
 .Sh NAME
 .Nm smrt\ attach
-.Nd Ssh into a refhost and earmark it for testing given products
+.Nd Ssh into refhosts and earmark them for testing given products
 .\" FRONT MATTER }}}
 .
 .\" SYNOPSIS {{{
@@ -15,14 +15,15 @@
 .Nm
 . Fl h | \-help
 .Nm
-. Ar HOST
+. Ar HOST Ns ...
+. Li --
 . Ar PRODUCT Ns ...
 .\" SYNOPSIS }}}
 .
 .\" DESCRIPTION {{{
 .Sh DESCRIPTION
 .Nm
-opens a master ssh connection to a given
+opens a master ssh connection to each given
 .Ar HOST
 and earmarks it for testing given
 .Ar PRODUCT Ns s.

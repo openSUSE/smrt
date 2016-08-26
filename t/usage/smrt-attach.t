@@ -10,7 +10,7 @@ help::
 
   $ smrt attach -h
   usage: smrt attach -h|--help
-  usage: smrt attach HOST PRODUCT...
+  usage: smrt attach HOST... -- PRODUCT...
   
   Ssh into a refhost and earmark it for testing given products
   
@@ -50,7 +50,7 @@ missing argument::
 
 outside a testreport::
 
-  $ smrt attach snafubar rofl lmao
+  $ smrt attach snafubar -- rofl lmao
   smrt attach: * is not a testreport (glob)
   This command should be run from inside a testreport directory
   Run 'smrt attach -h' for usage instructions

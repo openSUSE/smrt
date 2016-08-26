@@ -21,7 +21,7 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c HOST PRODUCT...
+usage: #c HOST... -- PRODUCT...
 
 Ssh into a refhost and earmark it for testing given products
 
@@ -60,12 +60,19 @@ function $0:t # {{{
 
 function impl # {{{
 {
-  local h=$1 ctlpath=$config_controlpath
-  shift
+  local -i seppos="$@[(i)--]"
+  local -a hosts; hosts=("$@[1,$((seppos - 1))]")
+  local -a suite; suite=("$@[$((seppos + 1)),-1]")
+
+  local ctlpath=$config_controlpath
   o mkdir -p $ctlpath:h .connected
-  o print -f 'Connecting to %s for %s\n' $h "$*"
-  o ssh -qMNf -o ControlPath=$ctlpath $h
-  o redir -1 .connected/$h print -f '%s\n' -- "$@"
+
+  local h=
+  for h in $hosts; do
+    o print -f 'Connecting to %s for %s\n' $h "$suite"
+    o ssh -MNf -o ControlPath=$ctlpath $h
+    o redir -1 .connected/$h print -f '%s\n' -- $suite
+  done
 } # }}}
 
 . $preludedir/smrt.coda.zsh
