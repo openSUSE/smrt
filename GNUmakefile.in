@@ -109,7 +109,7 @@ check: $(tests) | all
 
 .PHONY: clean
 clean:
-	$(RM) $(commands) $(auxfiles) $(htmlfiles)
+	$(RM) $(commands) $(auxfiles) $(htmlfiles) $(manpages)
 
 
 .PHONY: install
