@@ -236,6 +236,12 @@ function run-in-hosts # {{{
   )
   local ctlpath=$config_controlpath
 
+  local h=
+  for h in $hosts; do
+    :; [[ -e .connected/$h ]] \
+    || complain 1 "$h is not attached"
+  done
+
   o log-output parallel "${(@)popts}" \
     ssh -o ControlPath=$ctlpath '{1}' "${(@q)cmd}" \
     ::: "${(@)hosts}"

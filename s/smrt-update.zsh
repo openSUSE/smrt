@@ -42,11 +42,6 @@ function impl # {{{
 {
   local -a hosts; hosts=("$@")
   local -r mrid=${${:-$(< slug)}##*:}
-  local h=
-  for h in $hosts; do
-    :; [[ -e .connected/$~h ]] \
-    || complain 1 "$h is not attached"
-  done
   o run-in-hosts \
     $hosts \
     -- \
