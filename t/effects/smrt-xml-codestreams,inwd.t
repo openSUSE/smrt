@@ -31,10 +31,12 @@ test the happy path, with no arguments::
 
 test the happy path, with an explicit pathname argument::
 
-  $ mv packages.xml other
+  $ mv project.xml other
 
   $ smrt xml codestreams other
+  SUSE_SLE-12_Update SUSE:SLE-12:Update
 
 test the happy path, with "-" for stdin::
 
   $ smrt xml codestreams - < other
+  SUSE_SLE-12_Update SUSE:SLE-12:Update
