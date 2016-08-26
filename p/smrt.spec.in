@@ -30,7 +30,9 @@ Requires:       curl >= 7.37
 Requires:       haveopt >= 0.4
 Requires:       openssh
 Requires:       osc
+Requires:       gnu_parallel
 Requires:       perl
+Requires:       procps
 Requires:       python3
 Requires:       subversion
 Requires:       xmlstarlet >= 1.5
@@ -38,8 +40,10 @@ Requires:       zsh >= 5.0.5
 BuildRequires:  cram >= 0.6
 BuildRequires:  curl >= 7.37
 BuildRequires:  haveopt >= 0.4
+BuildRequires:  gnu_parallel
 BuildRequires:  perl
 BuildRequires:  python3
+BuildRequires:  procps
 BuildRequires:  subversion
 BuildRequires:  xmlstarlet >= 1.5
 BuildRequires:  zsh >= 5.0.5

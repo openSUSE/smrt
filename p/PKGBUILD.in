@@ -6,8 +6,8 @@ pkgdesc="SUSE Maintenance Reject Tool"
 arch=(any)
 url="https://github.com/openSUSE/$pkgname"
 license=(MIT)
-depends=(curl haveopt openssh osc repose svn xmlstarlet zsh)
-checkdepends=(cram make haveopt repose svn xmlstarlet zsh)
+depends=(curl haveopt openssh osc parallel repose svn xmlstarlet zsh)
+checkdepends=(cram make haveopt parallel repose svn xmlstarlet zsh)
 source=($pkgname-$pkgver.tar.gz)
 sha1sums=(SKIP)
 
