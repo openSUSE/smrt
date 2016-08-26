@@ -69,7 +69,7 @@ function impl # {{{
 
   local h=
   for h in $hosts; do
-    o print -f 'Connecting to %s for %s\n' $h "$suite"
+    o print -f 'Attaching %s for %s\n' $h "$suite"
     o ssh -MNf -o ControlPath=$ctlpath $h
     o redir -1 .connected/$h print -f '%s\n' -- $suite
   done

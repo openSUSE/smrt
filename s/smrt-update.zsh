@@ -45,7 +45,7 @@ function impl # {{{
   local h=
   for h in $hosts; do
     :; [[ -e .connected/$~h ]] \
-    || complain 1 "No earmark file for $h"
+    || complain 1 "$h is not attached"
   done
   o run-in-hosts \
     $hosts \

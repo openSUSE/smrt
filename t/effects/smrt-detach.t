@@ -16,19 +16,24 @@ test::
 
   $ cd $slug
 
-  $ smrt attach snafubar -- rofl lmao
-  Connecting to snafubar for rofl lmao
+  $ mkdir .connected
+  $ print > .connected/foo -l bar baz
+  $ print > .connected/rofl -l omg wtf
+  $ print > .connected/snafu -l rofl lmao
 
-  $ cat .connected/snafubar
+  $ smrt detach snafubar
+  error: snafubar is not attached
+  [1]
+
+  $ test -e .connected/snafu
+
+  $ smrt detach snafu
+  Detaching from snafu
+
+  $ ls .connected/
+  foo
   rofl
-  lmao
 
-  $ smrt detach snafubar
-  Disconnecting from snafubar
-
-  $ test -e .connected/snafubar
-  [1]
-
-  $ smrt detach snafubar
-  error: No earmark file for snafubar
-  [1]
+  $ smrt detach foo rofl
+  Detaching from foo
+  Detaching from rofl

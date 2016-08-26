@@ -16,5 +16,5 @@ not an attached host::
 
   $ cd $slug
   $ smrt update snafubar
-  error: No earmark file for snafubar
+  error: snafubar is not attached
   [1]

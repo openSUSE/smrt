@@ -64,12 +64,12 @@ function impl # {{{
   || set -- .connected/*(:t)
   for h in "$@"; do
     :; [[ -e .connected/$h ]] \
-    || complain 1 "No earmark file for $h"
+    || complain 1 "$h is not attached"
     :; o ssh -qo ControlPath=$ctlpath -O check $h \
     || complain 1 "No connection to $h"
   done
   for h in "$@"; do
-    print -f 'Disconnecting from %s\n' $h
+    print -f 'Detaching from %s\n' $h
     o ssh -qo ControlPath=$ctlpath -O exit $h
     o rm .connected/$h
   done
