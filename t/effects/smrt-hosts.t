@@ -7,20 +7,27 @@ setup::
 
   $ slug=SUSE:Maintenance:1302:87808
   $ reify-fixture $slug
-  $ fake ssh <<\EOF
-  > exit 0
-  > EOF
-
-
-test::
-
   $ cd $slug
+  $ mkdir .connected
 
-  $ smrt attach rofl omg wtf
-  Connecting to rofl for omg wtf
 
-  $ smrt attach snafu rofl lmao
-  Connecting to snafu for rofl lmao
+no hosts given, no hosts attached::
+
+  $ smrt hosts
+  error: no hosts attached
+  [1]
+
+some hosts given, no hosts attached::
+
+  $ smrt hosts foo
+  smrt hosts: Unknown argument 'foo'
+  Run 'smrt hosts -h' for usage instructions
+  [1]
+
+test default behavior with hosts::
+
+  $ print > .connected/rofl -l omg wtf
+  $ print > .connected/snafu -l rofl lmao
 
   $ smrt hosts
   rofl                         omg wtf

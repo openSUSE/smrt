@@ -10,15 +10,18 @@ help::
 
   $ smrt hosts -h
   usage: smrt hosts -h|--help
-  usage: smrt hosts [HOST...]
+  usage: smrt hosts --packages [HOST...] [-- PACKAGE...]
   
   Display information on attached hosts
   
     Options:
       -h                Display this message
       --help            Display manual page
+      --packages        Display version information for packages under test
+                        as currently installed (or not) on each HOST
     Operands:
       HOST              Display information on HOST
+      PACKAGE           Display information on PACKAGE
   
   This command should be run from inside a testreport directory
 

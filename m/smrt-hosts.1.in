@@ -15,7 +15,7 @@
 .Nm
 . Fl h | \-help
 .Nm
-. Op Ar HOST Ns ...
+. Oo Fl \-packages Oc Oo Ar HOST Ns ... Oc Op Li -- Ar PACKAGE Ns ...
 .\" SYNOPSIS }}}
 .
 .\" DESCRIPTION {{{

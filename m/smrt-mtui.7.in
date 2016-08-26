@@ -161,9 +161,10 @@ Not implemented yet.
 . Ed
 .\" }}}
 .\" list_packages {{{
-.It Ic list_packages Oo Fl p Ar PACKAGE Oc Ns ... Oo Fl w Oc Op Ar HOST Ns ...
+.It Ic list_packages Oo Fl w Oc Oo Fl p Ar PACKAGE Oc Ns ... Op Ar HOST Ns ...
 . Bd -literal
-.  Nm smrt Cm packages
+.  Nm smrt Cm packages Oo Fl \-full Oc Oo Ar PACKAGE Ns ... Oc
+.  Nm smrt Cm hosts Fl \-packages Oo Ar HOST Ns ... Oc Oo -- Ar PACKAGE Ns ... Oc
 . Ed
 .\" }}}
 .\" list_sessions {{{

@@ -21,15 +21,18 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c [HOST...]
+usage: #c --packages [HOST...] [-- PACKAGE...]
 
 Display information on attached hosts
 
   Options:
     -h                Display this message
     --help            Display manual page
+    --packages        Display version information for packages under test
+                      as currently installed (or not) on each HOST
   Operands:
     HOST              Display information on HOST
+    PACKAGE           Display information on PACKAGE
 
 '
 
@@ -39,32 +42,69 @@ declare -gr preludedir="${SMRT_PRELUDEDIR:-@preludedir@}"
 
 . $preludedir/smrt.prelude.zsh || exit 2
 
-function $0:t # {{{
+function $cmdname-main # {{{
 {
+  local impl=list-hosts
   local opt arg
   local -i i=0
-  while haveopt i opt arg h help -- "$@"; do
+  while haveopt i opt arg h help packages -- "$@"; do
     case $opt in
     h|help) display-help $opt ;;
+    packages) impl=list-packages ;;
     ?)      reject-misuse -$arg ;;
     esac
   done; shift $i
 
   check-preconditions $0
 
-  impl "$@"
+  o $impl "$@"
 } # }}}
 
-function impl # {{{
+function list-hosts # {{{
 {
-  local f host tags
-  for f in .connected/*(N); do
-    host=${f#*/}
+  local -i seppos="$@[(i)--]"
+  local -a hosts; hosts=("$@[1,$((seppos - 1))]")
+
+  local host=
+  for host in $hosts; do
+    :; [[ -f .connected/$host ]] \
+    || reject-misuse $host
+  done
+
+  (( $#hosts )) || hosts=(.connected/*(N:t))
+  (( $#hosts )) || complain 1 "no hosts attached"
+
+  local f= host= tags=
+  for host in $hosts; do
+    f=.connected/$host
     tags="${(pj: :)${(f)$(<$f)}}"
     print -f '%-28s %s\n' $host $tags
   done
 } # }}}
 
+function list-packages # {{{
+{
+  local -i seppos="$@[(i)--]"
+  local -a hosts; hosts=("$@[1,$((seppos - 1))]")
+  local -a suite; suite=("$@[$((seppos + 1)),-1]")
+
+  local host=
+  for host in $hosts; do
+    :; [[ -f .connected/$host ]] \
+    || reject-misuse $host
+  done
+
+  (( $#hosts )) || hosts=(.connected/*(N:t))
+  (( $#hosts )) || complain 1 "no hosts attached"
+
+  (( $#suite )) || suite=($(cut -d ' ' -f 2 sources | sort -u))
+
+  o run-in-hosts \
+    $hosts \
+    -- \
+    rpm -q --queryformat '%{NAME} %{VERSION} %{RELEASE}\n' $suite
+} # }}}
+
 . $preludedir/smrt.coda.zsh
 
-$0:t "$@"
+$cmdname-main "$@"
