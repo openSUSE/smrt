@@ -65,13 +65,15 @@ function impl # {{{
   for h in "$@"; do
     :; [[ -e .connected/$h ]] \
     || complain 1 "$h is not attached"
-    :; o ssh -qo ControlPath=$ctlpath -O check $h \
-    || complain 1 "No connection to $h"
   done
   for h in "$@"; do
     print -f 'Detaching from %s\n' $h
-    o ssh -qo ControlPath=$ctlpath -O exit $h
     o rm .connected/$h
+    if o ssh -o ControlPath=$ctlpath -O check $h; then
+      o ssh -o ControlPath=$ctlpath -O exit $h
+    else
+      complain - "No connection to $h"
+    fi
   done
 } # }}}
 
