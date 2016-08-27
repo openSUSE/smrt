@@ -41,11 +41,12 @@ function $0:t # {{{
 function impl # {{{
 {
   local -a hosts; hosts=("$@")
+  (( $#hosts )) || hosts=(.connected/*(N:t))
   local -r mrid=${${:-$(< slug)}##*:}
   o run-in-hosts \
     $hosts \
     -- \
-    "zypper patches | awk -F '|' '/:p=$mrid\>/ { print \$2; }' | while read p; do echo zypper -n install -l -y -t patch \$p; done"
+    "zypper patches | awk -F '|' '/:p=$mrid\>/ { print \$2; }' | while read p; do zypper -n install -l -y -t patch \$p; done"
 } # }}}
 
 $0:t "$@"

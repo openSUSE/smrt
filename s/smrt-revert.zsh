@@ -42,12 +42,13 @@ function impl # {{{
 {
   local -i seppos="$@[(i)--]"
   local -a hosts; hosts=("$@[1,$((seppos - 1))]")
+  (( $#hosts )) || hosts=(.connected/*(N:t))
   local -a pkgs; pkgs=(${(f):-"$(awk '{print $4}' binaries | sort -u)"})
   local -r mrid=${${:-$(< slug)}##*:}
   o run-in-hosts \
     $hosts \
     -- \
-    "pkgs=\$(rpm -q --qf '%{NAME}\n' $pkgs | sed '/is not installed/d'); if test x = \"x\$pkgs\"; then echo nothing to do; else echo zypper -n in --oldpackage --force-resolution -y -l \$pkgs; fi"
+    "pkgs=\$(rpm -q --qf '%{NAME}\n' $pkgs | sed '/is not installed/d'); if test x = \"x\$pkgs\"; then echo nothing to do; else zypper -n in --oldpackage --force-resolution -y -l \$pkgs; fi"
 } # }}}
 
 $0:t "$@"

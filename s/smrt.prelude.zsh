@@ -214,7 +214,9 @@ function log-output # {{{
     {
       if (( ! ${+seen[$t]} )); then
         seen[$t]=yes
-        print -f '%% %s\n' "${(j: :)${(@q-)cmd}}"
+        print -rn '%'
+        print -f ' %s' "${(@q-)cmd}"
+        print
       fi
       print -r -- "$line"
       print -u 3 -f "%s\t%s\n" -- "$t" "$line"
@@ -226,7 +228,11 @@ function run-in-hosts # {{{
 {
   local -i seppos="$@[(i)--]"
   local -a hosts; hosts=("$@[1,$((seppos - 1))]")
+  (( $#hosts )) || complain 1 "no hosts attached"
+
   local -a cmd; cmd=("$@[$((seppos + 1)),-1]")
+  (( $#cmd )) || complain 1 "no command given"
+
   local -a popts; popts=(
     --quote
     --plain

@@ -70,7 +70,10 @@ function impl # {{{
   local h=
   for h in $hosts; do
     o print -f 'Attaching %s for %s\n' $h "$suite"
-    o ssh -MNf -o ControlPath=$ctlpath $h
+    o ssh -MNf -o ControlPath=$ctlpath $h || {
+      complain - "failed to attach $h"
+      continue
+    }
     o redir -1 .connected/$h print -f '%s\n' -- $suite
   done
 } # }}}
