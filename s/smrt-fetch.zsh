@@ -21,20 +21,21 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c [--adopt] [--push] MPRJ|MRID
+usage: #c [--adopt] [--push] {MPRJ|MRID|SLUG} [DEST]
 
 Download metadata for a maintenance request
 
   Options:
     -h                Display this message
     --help            Display manual page
-    --adopt           Adopt MPRJ|MRID for testing
+    --adopt           Assign the maintenance request to yourself for testing
     --push            Publish metadata in testreport repository
   Operands:
     MRID              Maintenance request MRID
     MPRJ              Maintenance request currently linked into
                       the maintenance project MPRJ
-    MPRJ:MRID         Maintenance request MRID
+    SLUG              MPRJ:MRID, Maintenance request MRID
+    DEST              Destination directory, defaults to SLUG
 
 '
 
@@ -109,7 +110,8 @@ function impl # {{{
   local slug=$mprj:$mrid
   local dst=${3-$slug}
 
-  o mkdir $dst
+  o destdir-ok $dst
+
   o cd $dst
 
   print Downloading $slug metadata ${3+into $dst}

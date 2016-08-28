@@ -22,7 +22,7 @@ function curl # {{{
     =curl "${(@)opts}" "$@"
   ;;
   ($config_l3db_url*)
-    cat $fixdir/$PWD:t/l3s.xml
+    cat $fixdir/l3s/${1#$config_l3db_url}/l3s.xml
   ;;
   ($apiurl*)
     fake-curl "${1#${apiurl-}}"

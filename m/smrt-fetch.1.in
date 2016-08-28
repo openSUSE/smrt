@@ -17,7 +17,8 @@
 .Nm
 .Op Fl \-adopt
 .Op Fl \-push
-.Ar SLUG
+.Brq Ar MPRJ | MRID | SLUG
+.Op Ar DEST
 .\" SYNOPSIS }}}
 .
 .\" DESCRIPTION {{{
@@ -25,14 +26,58 @@
 .Nm
 downloads and stores metadata for a maintenance update
 from a BuildService instance API.
-.Ss Options
+.\" }}}
+.
+.\" OPTIONS {{{
+.Sh OPTIONS
 .Bl -tag -width "xxx"
 . It Fl \-adopt
-Implies
-.Nm osc Cm qam Cm assign Ns .
+Assign the maintenance request to yourself for testing.
+Runs
+.Nm osc Cm qam Cm assign Fl \-skip-template Ns .
 . It Fl \-push
-Implies
-.Nm smrt Cm push Ns .
+Run
+.Nm smrt Cm push
+on results of successful metadata acquisition.
+.El
+.\" }}}
+.
+.\" OPERANDS {{{
+.Sh OPERANDS
+.Bl -tag -width "xxx"
+.It Ar MPRJ
+. Sy Maintenance Project ,
+. Ar ISSUER Ns Li :Maintenance: Ns Ar ISSUE Ns .
+. Ar ISSUER
+is queried for the outstanding maintenance request targetting
+. Ar ISSUE
+to derive
+. Ar SLUG Ns .
+.It Ar MRID
+. Sy Maintenance Request ID Ns .
+. Sy Assumed Issuer
+is queried for the
+. Sy Maintenance Project
+targetted by
+. Ar MRID
+to derive
+. Ar SLUG Ns .
+.It Ar SLUG
+. Ar MPRJ Ns Li : Ns Ar MRID Ns .
+Verify in
+. Ar ISSUER
+that
+. Ar MRID
+is the outstanding
+. Sy Maintenance Request
+for the
+. Sy Maintenance Project
+. Ar MPRJ Ns .
+.It Ar DEST
+Destination directory.
+If the path exists it must be an empty directory.
+Defaults to
+. Ar SLUG Ns .
 .El
 .\" }}}
 .

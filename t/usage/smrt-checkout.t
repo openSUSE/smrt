@@ -10,7 +10,7 @@ help::
 
   $ smrt checkout -h
   usage: smrt checkout -h|--help
-  usage: smrt checkout SLUG
+  usage: smrt checkout SLUG [DEST]
   
   Download metadata for a maintenance request
   
@@ -19,6 +19,7 @@ help::
       --help            Display manual page
     Operands:
       SLUG              Checkout a maintenance update SLUG
+      DEST              Destination directory, defaults to SLUG
 
   $ smrt checkout --help
   o exec man 1 smrt-checkout

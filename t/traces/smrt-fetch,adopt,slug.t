@@ -27,7 +27,7 @@ full slug::
   o bsc /request/87808
   o curl -Sfns https://api.example.com/request/87808
   o xml sel -T -t -m //action/source -v @project --nl * (glob)
-  o mkdir SUSE:Maintenance:1302:87808
+  o mkdir -p SUSE:Maintenance:1302:87808
   o cd SUSE:Maintenance:1302:87808
   Downloading SUSE:Maintenance:1302:87808 metadata
   o redir -1 reviewers curl -Sfs *://*/reviewers (glob)

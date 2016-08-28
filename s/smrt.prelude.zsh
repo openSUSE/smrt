@@ -190,6 +190,16 @@ function assert-config-var # {{{
   return 1
 } # }}}
 
+function destdir-ok # {{{
+{
+  local -r dst=$1
+  :; [[ ! -e $dst ]] \
+  || [[ -n $dst(#qN/^F) ]] \
+  || complain 1 "refusing to clobber existing destination $dst"
+
+  o mkdir -p $dst
+} # }}}
+
 function load-config # {{{
 {
   local cfgfile=$1 line name

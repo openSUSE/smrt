@@ -16,18 +16,33 @@
 .Fl h | \-help
 .Nm
 . Ar SLUG
+. Op Ar DEST
 .\" SYNOPSIS }}}
 .
 .\" DESCRIPTION {{{
 .Sh DESCRIPTION
 .Nm
-checks out metadata for the maintenance update given in
+checks out metadata for the
+. Sy Maintenance Update
+given in
 . Ar SLUG
 from the configured
 .Em testreport_repository
 (see
 .Xr smrt 5 Ns ).
+.\" }}}
 .
+.\" OPERANDS {{{
+.Sh OPERANDS
+.Bl -tag -width "xxx"
+.It Ar SLUG
+. Ar ISSUER Ns Li :Maintenance: Ns Ar ISSUE Ns Li : Ns Ar MRID Ns .
+.It Ar DEST
+Destination directory.
+If the path exists it must be an empty directory.
+Defaults to
+. Ar SLUG Ns .
+.El
 .\" }}}
 .
 .\" SEE ALSO {{{

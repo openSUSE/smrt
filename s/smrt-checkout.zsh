@@ -21,7 +21,7 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c SLUG
+usage: #c SLUG [DEST]
 
 Download metadata for a maintenance request
 
@@ -30,6 +30,7 @@ Download metadata for a maintenance request
     --help            Display manual page
   Operands:
     SLUG              Checkout a maintenance update SLUG
+    DEST              Destination directory, defaults to SLUG
 
 '
 
@@ -56,6 +57,8 @@ function $0:t # {{{
   *) reject-misuse $arg ;;
   esac
 
+  (( $# < 3 )) || reject-misuse $3
+
   o check-preconditions $0
 
   o impl "$@"
@@ -63,10 +66,12 @@ function $0:t # {{{
 
 function impl # {{{
 {
-  local name=$1
-  print Checking out $name
-  mkdir -p $name
-  o svn -q checkout $config_testreport_repository/$name $name/
+  local slug=$1 dest=${2:-$1}
+  o destdir-ok $dest
+  local msg="Checking out $slug"
+  [[ $slug == $dest ]] || msg+=" into $dest"
+  print -r $msg
+  o svn -q checkout $config_testreport_repository/$slug $dest/
 } # }}}
 
 . $preludedir/smrt.coda.zsh

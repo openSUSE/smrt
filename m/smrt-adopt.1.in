@@ -15,7 +15,8 @@
 .Nm
 .Fl h | \-help
 .Nm
-. Ar SLUG
+.Brq Ar MPRJ | MRID | SLUG
+.Op Ar DEST
 .\" SYNOPSIS }}}
 .
 .\" DESCRIPTION {{{

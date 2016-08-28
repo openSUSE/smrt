@@ -5,10 +5,30 @@ setup::
 
   $ . $TESTROOT/setup
 
-
-test::
-
   $ slug=SUSE:Maintenance:1302:87808
+
+
+rejects existing non-directory destinations::
+
+  $ touch $slug
+  $ smrt fetch $slug
+  error: refusing to clobber existing destination SUSE:Maintenance:1302:87808
+  [1]
+
+
+rejects existing non-empty directories::
+
+  $ rm $slug
+  $ mkdir -p $slug/.lol
+  $ smrt fetch $slug
+  error: refusing to clobber existing destination SUSE:Maintenance:1302:87808
+  [1]
+
+
+happy path::
+
+  $ rm -rf $slug
+
   $ smrt fetch $slug
   Downloading SUSE:Maintenance:1302:87808 metadata
   $ compare-with-fixture $slug

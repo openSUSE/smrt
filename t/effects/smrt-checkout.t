@@ -9,7 +9,26 @@ setup::
   $ commit-fixture $slug
 
 
+rejects existing non-directory destinations::
+
+  $ touch $slug
+  $ smrt checkout $slug
+  error: refusing to clobber existing destination SUSE:Maintenance:1302:87808
+  [1]
+
+
+rejects existing non-empty directories::
+
+  $ rm $slug
+  $ mkdir -p $slug/.lol
+  $ smrt checkout $slug
+  error: refusing to clobber existing destination SUSE:Maintenance:1302:87808
+  [1]
+
+
 happy path::
+
+  $ rm -rf $slug
 
   $ smrt checkout $slug
   Checking out SUSE:Maintenance:1302:87808

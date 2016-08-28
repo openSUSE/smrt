@@ -37,12 +37,12 @@ function commit-fixture # {{{
 
 function compare-with-fixture # {{{
 {
-  local slug=$1 mine orig result
+  local slug=$1 dir=${2:-$1} mine orig result
   if (( $+UPDATE_FIXTURES )); then
     update-fixture $slug
   fi
-  for mine in $slug/**/*(.); do
-    orig=$FIXTURES/$mine
+  for mine in $dir/**/*(.); do
+    orig=$FIXTURES/$slug/${mine#$dir/}
     result=good
     cmp -s $orig $mine || result=DIFF!
     print -f '%s: %s\n' -- $result $mine
