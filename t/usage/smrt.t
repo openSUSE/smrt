@@ -35,6 +35,7 @@ help::
       revert            Downgrade relevant packages to latest released versions
       run               Run a command in attached hosts
       tcf               Query and manipulate CTCS2 testsuites and results
+      terms             Open terminals for attached hosts
       testopia          Query and anipulate Testopia testcases
       update            Install current maintenance update
       xml               Display information gleaned from BuildService XML data
@@ -85,6 +86,7 @@ outside a testreport::
       revert            Downgrade relevant packages to latest released versions
       run               Run a command in attached hosts
       tcf               Query and manipulate CTCS2 testsuites and results
+      terms             Open terminals for attached hosts
       testopia          Query and anipulate Testopia testcases
       update            Install current maintenance update
       xml               Display information gleaned from BuildService XML data
@@ -124,6 +126,7 @@ inside a testreport::
       revert            Downgrade relevant packages to latest released versions
       run               Run a command in attached hosts
       tcf               Query and manipulate CTCS2 testsuites and results
+      terms             Open terminals for attached hosts
       testopia          Query and anipulate Testopia testcases
       update            Install current maintenance update
       xml               Display information gleaned from BuildService XML data

@@ -44,6 +44,7 @@ commands += smrt-push
 commands += smrt-revert
 commands += smrt-run
 commands += smrt-tcf
+commands += smrt-terms
 commands += smrt-testopia
 commands += smrt-update
 commands += smrt-xml
@@ -54,6 +55,9 @@ auxfiles += smrt.bs.zsh
 auxfiles += smrt.coda.zsh
 auxfiles += smrt.hints.zsh
 auxfiles += smrt.prelude.zsh
+auxfiles += smrt.terms.gnome.zsh
+auxfiles += smrt.terms.kde.zsh
+auxfiles += smrt.terms.xterm.zsh
 auxfiles += smrt.testopia.py
 auxfiles += smrt.xml.zsh
 

@@ -1,0 +1,62 @@
+.\" vim: tw=72 fdm=marker cms=.\\"\ %s
+.
+.\" FRONT MATTER {{{
+.Dd Aug 15, 2016
+.Os
+.Dt SMRT-TERMS 1
+.
+.Sh NAME
+.Nm smrt\ terms
+.Nd Open terminals for attached hosts
+.\" FRONT MATTER }}}
+.
+.\" SYNOPSIS {{{
+.Sh SYNOPSIS
+.Nm
+. Fl h | \-help
+.Nm
+. Cm gnome Oo Ar HOST Ns ... Oc
+.Nm
+. Cm kde Oo Ar HOST Ns ... Oc
+.Nm
+. Cm xterm Oo Ar HOST Ns ... Oc
+.\" SYNOPSIS }}}
+.
+.\" DESCRIPTION {{{
+.Sh DESCRIPTION
+.Nm
+opens new terminals to all or given attached hosts.
+.\" }}}
+.
+.\" MODIFIERS {{{
+.Sh MODIFIERS
+.
+.Bl -tag
+. It Cm gnome
+Use
+.Xr gnome-terminal 1 .
+.
+. It Cm kde
+Use
+.Xr konsole 1 .
+.
+. It Cm xterm
+Use
+.Xr xterm 1 .
+.El
+.\" }}}
+.
+.\" SEE ALSO {{{
+.Sh SEE ALSO
+.Xr smrt-attach 1 ,
+.Xr smrt-detach 1 ,
+.Xr smrt-run 1 ,
+.Xr xterm 1 .
+.\" }}}
+.
+.\" SMRT {{{
+.Sh SMRT
+.Nm
+is part of
+.Xr smrt 1 .
+.\" }}}
