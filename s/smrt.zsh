@@ -45,9 +45,10 @@ usage: #c [--issuer=ISSUER] COMMAND [OPTION...] [ARGUMENT...]
     packages          Display version information for packages under test
     push              Publish metadata for a maintenance request
     revert            Downgrade relevant packages to latest released versions
-    update            Install current maintenance update
+    run               Run a command in attached hosts
     tcf               Query and manipulate CTCS2 testsuites and results
     testopia          Query and anipulate Testopia testcases
+    update            Install current maintenance update
     xml               Display information gleaned from BuildService XML data
 
 "

@@ -42,6 +42,7 @@ commands += smrt-mklog
 commands += smrt-packages
 commands += smrt-push
 commands += smrt-revert
+commands += smrt-run
 commands += smrt-tcf
 commands += smrt-testopia
 commands += smrt-update
