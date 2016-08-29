@@ -10,10 +10,9 @@ help::
 
   $ smrt bugs -h
   usage: smrt bugs -h|--help
-  usage: smrt bugs
-  usage: smrt bugs browse
-  usage: smrt bugs urls
-  usage: smrt bugs BUG...
+  usage: smrt bugs browse [BUG...]
+  usage: smrt bugs [list] [BUG...]
+  usage: smrt bugs urls [BUG...]
   
   List or browse bugs related to a maintenance request
   
@@ -21,9 +20,10 @@ help::
       -h                Display this message
       --help            Display manual page
     Operands:
-      BUG               Open a bug in a browser
-      browse            Open all bugs in a browser
-      urls              List bug URLs, one per line
+      browse            Open bugs in a browser
+      list              Display bug URLs and summaries
+      urls              Display bug URLs, one per line
+      BUG               Bugzilla ticket number
   
   This command should be run from inside a testreport directory
 

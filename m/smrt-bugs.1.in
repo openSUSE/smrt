@@ -29,6 +29,28 @@ is used to display information about bugs attached to
 a maintenance update.
 .\" }}}
 .
+.\" SUBCOMMANDS {{{
+.Sh SUBCOMMANDS
+.
+.Bl -tag -width "xxx"
+.
+.It Nm Cm browse Op Ar BUG Ns ...
+Open all or given
+. Ar BUG Ns s
+using
+. Xr xdg-open 1 .
+.
+.It Nm Oo Cm list Oc Op Ar BUG Ns ...
+Display URLs and summaries of all or given
+. Ar BUG Ns s
+.
+.It Nm Cm urls Op Ar BUG Ns ...
+Display URLs of all or given
+. Ar BUG Ns s
+.
+.El
+.\" }}}
+.
 .\" SEE ALSO {{{
 .Sh SEE ALSO
 .Xr smrt 1 ,

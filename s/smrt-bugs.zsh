@@ -21,10 +21,9 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c
-usage: #c browse
-usage: #c urls
-usage: #c BUG...
+usage: #c browse [BUG...]
+usage: #c [list] [BUG...]
+usage: #c urls [BUG...]
 
 List or browse bugs related to a maintenance request
 
@@ -32,9 +31,10 @@ List or browse bugs related to a maintenance request
     -h                Display this message
     --help            Display manual page
   Operands:
-    BUG               Open a bug in a browser
-    browse            Open all bugs in a browser
-    urls              List bug URLs, one per line
+    browse            Open bugs in a browser
+    list              Display bug URLs and summaries
+    urls              Display bug URLs, one per line
+    BUG               Bugzilla ticket number
 
 '
 
@@ -55,15 +55,20 @@ function $0:t # {{{
     esac
   done; shift $i
 
-  arg=${1-list}
-  case $arg in
+  (( $# )) || set list
+  case $1 in
   browse|list|urls) : ;;
+  [[:digit:]]##) set list "$@" ;;
   *) reject-misuse $1 ;;
   esac
 
+  arg=$1
+  shift
+
   check-preconditions $0
 
-  do-$arg bugs/bnc*(/:t)
+  (( $# )) || set \*
+  o do-$arg bugs/bnc${~^@}(#q/:t)
 } # }}}
 
 function do-browse # {{{
