@@ -88,6 +88,87 @@ Display information gleaned from BuildService XML data
 .El
 .\" }}}
 .
+.\" TRACING {{{
+.Sh TRACING
+.Nm smrt
+has a tracing facility, enabled by setting
+.Ev SMRT_CHATTY
+and/or
+.Ev SMRT_DRYRUN .
+These variables are expected to contain
+. Sy EXTENDED_GLOB
+patterns
+. Po see
+. Xr zshexpn 1 ,
+. Xr zshoptions 1
+. Pc .
+. Nm smrt
+transforms each command it is about to execute to
+a string by joining the command-plus-arguments array
+using
+. Li %
+characters.
+If the result matches
+.Ev SMRT_CHATTY ,
+the command line is printed on
+. Sy stderr .
+If the result matches
+.It Ev SMRT_DRYRUN ,
+the command is inhibited.
+.\" }}}
+.
+.\" ENVIRONMENT {{{
+.Sh ENVIRONMENT
+.Bl -tag -width "xxx"
+.
+.It Ev SMRT_CHATTY, SMRT_DRYRUN
+See
+. Sx TRACING .
+.
+.It Ev SMRT_CONFIG
+Alternative configuration file to use instead of the default
+. Pa @sysconfdir@/smrt .
+.
+.El
+.\" }}}
+.
+.\" FILES {{{
+.Sh FILES
+.Bl -tag -width "xxx"
+.It @sysconfdir@/smrt
+Default configuration file.
+.\" }}}
+.
+.\" EXAMPLES {{{
+.Sh EXAMPLES
+Enable tracing of all commands that mention
+.Nm zypper :
+.
+.Bd -literal -offset "xxx"
+$ SMRT_CHATTY='*zypper*' smrt ...
+.Ed
+.
+.Pp
+.
+Inhibit execution of
+.Nm ssh
+commands which mention
+.Nm zypper :
+.
+.Bd -literal -offset "xxx"
+$ SMRT_DRYRUN='*%ssh%*zypper*' smrt ...
+.Ed
+.Pp
+.
+.Nm
+runs
+.Xr ssh 1
+through
+.Xr parallel 1 ,
+so the above cannot use the simpler
+.Qq Li SMRT_DRYRUN='ssh%*zypper*' .
+.\" }}}
+.
 .\" SEE ALSO {{{
 .Sh SEE ALSO
 .Xr repoq 1 ,
