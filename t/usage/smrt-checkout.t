@@ -50,5 +50,5 @@ no configuration file::
 
   $ smrt checkout SUSE:Maintenance:1234:5678
   smrt-checkout: missing or bungled configuration
-  the 'testreport_repository' directive is missing from your ~/.smrtrc
+  the 'testreport_repository' directive is missing from your configuration files
   [1]

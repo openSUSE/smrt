@@ -96,5 +96,5 @@ no configuration file::
 
   $ smrt fetch SUSE:Maintenance:1234:56789
   smrt-fetch: missing or bungled configuration
-  the 'bugzilla_url' directive is missing from your ~/.smrtrc
+  the 'bugzilla_url' directive is missing from your configuration files
   [1]

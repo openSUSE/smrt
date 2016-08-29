@@ -63,5 +63,5 @@ no configuration file::
 
   $ smrt push
   smrt-push: missing or bungled configuration
-  the 'testreport_repository' directive is missing from your ~/.smrtrc
+  the 'testreport_repository' directive is missing from your configuration files
   [1]

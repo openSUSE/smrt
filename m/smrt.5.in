@@ -13,6 +13,7 @@
 .\" SYNOPSIS {{{
 .Sh SYNOPSIS
 .Pa @sysconfdir@/smrt
+.Ev $HOME Ns /.smrtrc
 .\" SYNOPSIS }}}
 .
 .\" DESCRIPTION {{{
@@ -45,6 +46,8 @@ Configuration values get embedded in files produced by
 . Xr smrt-fetch 1
 and
 . Xr smrt-mklog 1 .
+.
+.\" Properties {{{
 .Ss Properties
 .Bl -tag -width "xxx"
 . It Sy assumed_issuer
@@ -55,6 +58,9 @@ defaults to
 . Qq Li SUSE .
 . It Sy bugzilla_url
 URL through which bug information is retrieved.
+. It Sy controlpath
+See
+. Xr ssh_config 5 .
 . It Sy issuer_apiurls
 Whitespace-separated list of colon-separated
 issuer-url pairs.
@@ -68,9 +74,12 @@ ticket numbers.
 . It Sy metadata_url
 URL prefix used to retrieve testplatforms, product
 definitions and reviewers from.
+. It Sy testopia_url , testopia_user , testopia_pass
+URL, username and password for Testopia access.
 . It Sy testreport_repository
 URL of the Subversion repository with testreports.
 .El
+.\" }}}
 .\" }}}
 .
 .\" SEE ALSO {{{

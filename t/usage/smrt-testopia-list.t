@@ -18,7 +18,7 @@ no configuration file::
 
   $ smrt testopia list bash
   smrt-testopia: missing or bungled configuration
-  the 'bugzilla_url' directive is missing from your ~/.smrtrc
+  the 'bugzilla_url' directive is missing from your configuration files
   [1]
 
 partial configuration file::
@@ -29,5 +29,5 @@ partial configuration file::
 
   $ smrt testopia list bash
   smrt-testopia: missing or bungled configuration
-  the 'testopia_url' directive is missing from your ~/.smrtrc
+  the 'testopia_url' directive is missing from your configuration files
   [1]

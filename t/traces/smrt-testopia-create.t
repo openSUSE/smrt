@@ -6,7 +6,7 @@ setup::
   $ . $TESTROOT/setup
 
   $ smrt_dryrun+=('python3%*')
-  $ smrt_chatty+=('*')
+  $ smrt_chatty+=('*~*load-config%*')
 
   $ cat > ~/.smrtrc <<EOF
   > bugzilla_url = https://bugzilla.example.org

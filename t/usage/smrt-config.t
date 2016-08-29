@@ -10,16 +10,17 @@ help::
 
   $ smrt config -h
   usage: smrt config -h|--help
-  usage: smrt config edit
-  usage: smrt config get KEY
-  usage: smrt config set KEY VAL
-  usage: smrt config show
+  usage: smrt config [--system] edit
+  usage: smrt config [--system] get KEY
+  usage: smrt config [--system] set KEY VAL
+  usage: smrt config [--system] show
   
   Manipulate smrt configuration file
   
     Options:
       -h                Display this message
       --help            Display manual page
+      --system          Manipulate system-wide configuration
     Operands:
       KEY               Configuration key
       VAL               Configuration value

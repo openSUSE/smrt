@@ -15,22 +15,80 @@
 .Nm
 . Fl h | \-help
 .Nm
+. Op Fl \-system | \-user
 . Cm edit
 .Nm
+. Op Fl \-system | \-user
 . Cm get
 . Ar KEY
 .Nm
+. Op Fl \-system | \-user
 . Cm set
 . Ar KEY
 . Ar VAL
+.Nm
+. Cm show
 .\" SYNOPSIS }}}
 .
 .\" DESCRIPTION {{{
 .Sh DESCRIPTION
 .Nm
-is used to query or update the
+is used to query and manipulate configuration files for
+.Xr smrt 1 .
+See
 .Xr smrt 5
-configuration file.
+for syntax description.
+.\" }}}
+.
+.\" OPTIONS {{{
+.Sh OPTIONS
+.
+.Bl -tag -width "xx"
+. It Fl h
+Display usage instructions.
+. It Fl \-help
+Display full help.
+. It Fl \-system
+Manipulate system-wide configuration in
+. Pa @sysconfdir@/smrt .
+. It Fl \-user
+Manipulate user-specific configuration in
+. Pa $HOME/.smrtrc .
+This is default behavior.
+.El
+.\" }}}
+.
+.\" SUBCOMMANDS {{{
+.Sh SUBCOMMANDS
+.
+.Bl -tag -width "xx" -offset "xx"
+. It Cm edit
+Edit a configuration file.
+. It Cm get Ar KEY
+Display the configured value(s) for
+. Ar KEY
+if any.
+. It Cm set Ar KEY VAL
+Set
+. Ar KEY
+to
+. Ar VAL
+in a configuration file.
+. It Cm show
+Display active configuration.
+.El
+.\" }}}
+.
+.\" ENVIRONMENT {{{
+.Sh ENVIRONMENT
+.Bl -tag -width "xx"
+. It Ev SMRT_CONFIG
+If neither
+. Fl \-system
+nor
+. Fl \-user
+is given and this variable is set, its value will be taken as
+pathname for the configuration file used.
 .\" }}}
 .
 .\" SEE ALSO {{{

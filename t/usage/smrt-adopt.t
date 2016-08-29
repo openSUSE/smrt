@@ -85,7 +85,7 @@ no configuration file::
 
   $ smrt adopt SUSE:Maintenance:1234:5678
   smrt-fetch: missing or bungled configuration
-  the 'bugzilla_url' directive is missing from your ~/.smrtrc
+  the 'bugzilla_url' directive is missing from your configuration files
   [1]
 
 partial configuration file::
@@ -96,7 +96,7 @@ partial configuration file::
 
   $ smrt adopt SUSE:Maintenance:1234:5678
   smrt-fetch: missing or bungled configuration
-  the 'issuer_apiurls' directive is missing from your ~/.smrtrc
+  the 'issuer_apiurls' directive is missing from your configuration files
   [1]
 
 bare MRID requires --issuer::

@@ -35,6 +35,18 @@ declare -g PATTERN_MRID='<->'
 declare -g PATTERN_MPRJ='SUSE:Maintenance:<->'
 declare -g PATTERN_SLUG=$PATTERN_MPRJ:$PATTERN_MRID
 
+declare -gr cfgfile_system="@sysconfdir@/smrt"
+declare -gr cfgfile_user=$HOME/.smrtrc
+
+declare -ga cfgfiles; cfgfiles=(
+  $cfgfile_system
+  $cfgfile_user(N)
+  ${SMRT_CONFIG-}
+)
+
+[[ -z ${SMRT_IN_DEVELOPMENT-} ]] || cfgfiles=($cfgfiles[2,-1])
+
+
 function o O # {{{
 {
   local chatty=SMRT_CHATTY
@@ -186,7 +198,7 @@ function assert-config-var # {{{
   local var=config_$name
   (( ${(P)+var} )) && return
   print -u 2 -f $msg_needs_config \
-    -- $cmd $name ${(D)SMRT_CONFIG}
+    -- $cmd $name
   return 1
 } # }}}
 
@@ -202,15 +214,17 @@ function destdir-ok # {{{
 
 function load-config # {{{
 {
-  local cfgfile=$1 line name
+  local cfgfile line name
   local -a tokens
-  for line in "${(@f):-$(cat $cfgfile 2>&-)}"; do
-    tokens=(${(Z:C:)line})
-    (( $#tokens )) || continue
-    [[ $tokens[2] == '=' ]] || complain - 'syntax error'
-    name=config_${tokens[1]}
-    declare -g $name
-    : ${(P)name::="${(e)tokens[3,-1]}"}
+  for cfgfile in "$@"; do
+    for line in "${(@f):-$(cat $cfgfile 2>&-)}"; do
+      tokens=(${(Z:C:)line})
+      (( $#tokens )) || continue
+      [[ $tokens[2] == '=' ]] || complain - 'syntax error'
+      name=config_${tokens[1]}
+      declare -g $name
+      : ${(P)name::="${(e)tokens[3,-1]}"}
+    done
   done
 } # }}}
 
@@ -263,11 +277,7 @@ function run-in-hosts # {{{
     ::: "${(@)hosts}"
 } # }}}
 
-
-[[ -n ${SMRT_CONFIG:+set} ]] \
-|| declare -gx SMRT_CONFIG="@sysconfdir@/smrt"
-
-load-config $SMRT_CONFIG
+o load-config $cfgfiles
 
 [[ -n ${config_controlpathdir:+set} ]] \
 || declare -gr config_controlpathdir=${${:-"@controlpathdir@"}//\%u/$UID}
@@ -278,9 +288,14 @@ load-config $SMRT_CONFIG
 declare -ag config_names; config_names=(
   assumed_issuer
   bugzilla_url
+  controlpath
   issuer_apiurls
+  l3db_creds
   l3db_url
   metadata_url
+  testopia_url
+  testopia_user
+  testopia_pass
   testreport_repository
 )
 
@@ -288,5 +303,5 @@ declare -gr msg_needs_workdir='This command should be run from inside a testrepo
 declare -gr msg_run_for_usage="Run '%s -h' for usage instructions\n"
 declare -gr msg_needs_config="\
 %s: missing or bungled configuration
-the '%s' directive is missing from your %s
+the '%s' directive is missing from your configuration files
 "

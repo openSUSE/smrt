@@ -6,7 +6,7 @@ setup::
   $ . $TESTROOT/setup
 
   $ smrt_dryrun+=('run-in-hosts%*')
-  $ smrt_chatty+=('*')
+  $ smrt_chatty+=('*~*load-config%*')
 
   $ slug=SUSE:Maintenance:1302:87808
   $ reify-fixture $slug

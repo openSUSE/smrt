@@ -134,9 +134,22 @@ Alternative configuration file to use instead of the default
 .
 .\" FILES {{{
 .Sh FILES
+.Nm
+reads up to three configuration files, in order:
+.
 .Bl -tag -width "xxx"
 .It @sysconfdir@/smrt
-Default configuration file.
+System-wide configuration file.  Mandatory.
+.
+.It Ev $HOME/.smrtrc
+User-specific configuration file.  Optional.
+.
+.It Ev $SMRT_CONFIG
+Invocation-specific configuration file.  Optional.
+.El
+.Pp
+Values found in each configuration file override
+values found in earlier files.
 .\" }}}
 .
 .\" EXAMPLES {{{

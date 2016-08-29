@@ -20,7 +20,6 @@ declare -gx FIXTURES=$TESTROOT/fixtures
 
 svnadmin create ~/.svnrepo
 
-declare -gx SMRT_CONFIG=~/.smrtrc
 [[ $TESTDIR:t == usage ]] || cp $FIXTURES/dot.smrtrc ~/.smrtrc
 
 declare -x SMRT_IN_DEVELOPMENT=$FIXTURES/smrt.overrides
