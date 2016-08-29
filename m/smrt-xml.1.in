@@ -45,6 +45,10 @@
 .Nm
 is used to display information contained in XML metadata
 for a maintenance update.
+.Pp
+This is a fairly specialized interface, you probably want to use
+the alternatives referenced below (the files are created by
+.Xr smrt-fetch 1 .
 .
 .Ss Subcommands
 .Bl -tag -width "xxx"
@@ -52,30 +56,65 @@ for a maintenance update.
 .  Ar FILE
 defaults to
 .  Pa packages.xml .
+.  Pp
+High-level alternatives:
+.  Pp
+.  Bl -tag -compact -offset "xxx" -width "xxx"
+.   It Nm cat Li binaries
+.  El
+.
 . It Cm bugs Op Ar FILE
 .  Ar FILE
 defaults to
 .  Pa patchinfo.xml .
 .  Qq Li -
 means standard inputs.
+.  Pp
+High-level alternatives:
+.  Pp
+.  Bl -tag -compact -offset "xxx" -width "xxx"
+.   It Nm smrt Cm bugs
+.  El
+.
 . It Cm channels Op Ar FILE
 .  Ar FILE
 defaults to
 .  Pa project.xml .
 .  Qq Li -
 means standard inputs.
+.  Pp
+High-level alternatives:
+.  Pp
+.  Bl -tag -compact -offset "xxx" -width "xxx"
+.   It Nm cat Li repos-binaries
+.  El
+.
 . It Cm codestreams Op Ar FILE
 .  Ar FILE
 defaults to
 .  Pa project.xml .
 .  Qq Li -
 means standard inputs.
+.  Pp
+High-level alternatives:
+.  Pp
+.  Bl -tag -compact -offset "xxx" -width "xxx"
+.   It Nm cat Li repos-sources
+.  El
+.
 . It Cm diff Op Ar FILE
 .  Ar FILE
 defaults to
 .  Pa request.diff.xml
 .  Qq Li -
 means standard inputs.
+.  Pp
+High-level alternatives:
+.  Pp
+.  Bl -tag -compact -offset "xxx" -width "xxx"
+.   It Nm cat Li request.diff
+.  El
+.
 . It Cm email Ar PERSON.XML
 .  Ar PERSON.XML
 has no default.
@@ -86,13 +125,31 @@ has no default.
 .  Ar FILE
 defaults to
 .  Pa packages.xml .
+.  Pp
+High-level alternatives:
+.  Pp
+.  Bl -tag -compact -offset "xxx" -width "xxx"
+.   It Nm cat Li binaries
+.  El
+.
 .El
+.\" }}}
+.
+.\" EXAMPLES {{{
+.Sh EXAMPLES
+Generate unified diff of the source changes brought about by the
+.Sy Maintenance Request
+.Li 56789 .
+.Bd -literal -offset "xxx"
+$ smrt bs request-diff SUSE:Maintenance:1234:56789 | smrt xml diff -
+.Ed
 .\" }}}
 .
 .\" SEE ALSO {{{
 .Sh SEE ALSO
 .Xr smrt 1 ,
 .Xr smrt-bs 1 ,
+.Xr smrt-bugs 1 ,
 .Xr smrt-fetch 1 .
 .\" }}}
 .
