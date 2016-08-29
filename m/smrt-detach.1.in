@@ -15,6 +15,7 @@
 .Nm
 . Fl h | \-help
 .Nm
+. Op Fl \-dead
 . Op Ar HOST Ns ...
 .\" SYNOPSIS }}}
 .
@@ -24,9 +25,28 @@
 closes the master ssh connection to given
 (or all attached)
 .Ar HOST Ns s.
+.\" }}}
+.
+.\" OPTIONS {{{
+.Sh OPTIONS
+.Bl -tag -width "xxx"
+. It Fl h
+Display usage instructions.
+. It Fl \-help
+Display this manual page.
+. It Fl \-dead
+Detach only
+. Ar HOST Ns s
+without
+.Cm ControlMaster
+processes.
+.El
+.\" }}}
+.
+.\" OPERANDS {{{
 .Bl -tag -width "xxx"
 . It Ar HOST
-.  Oo Ar user Ns Li @ Oc Ns Ar hostname
+Attached host to detach.
 .El
 .\" }}}
 .

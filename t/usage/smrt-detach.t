@@ -10,15 +10,16 @@ help::
 
   $ smrt detach -h
   usage: smrt detach -h|--help
-  usage: smrt detach [HOST...]
+  usage: smrt detach [--dead] [HOST...]
   
   Disconnect attached refhost(s)
   
     Options:
       -h                Display this message
       --help            Display manual page
+      --dead            Detach only disconnected hosts
     Operands:
-      HOST              [USER@]HOSTSPEC
+      HOST              Machine to detach
   
   This command should be run from inside a testreport directory
 

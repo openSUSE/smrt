@@ -28,12 +28,12 @@ test::
   $ test -e .connected/snafu
 
   $ smrt detach snafu
-  Detaching from snafu
+  Detaching snafu
 
   $ ls .connected/
   foo
   rofl
 
   $ smrt detach foo rofl
-  Detaching from foo
-  Detaching from rofl
+  Detaching foo
+  Detaching rofl

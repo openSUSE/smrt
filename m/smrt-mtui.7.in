@@ -62,7 +62,7 @@ Use
 to upload the created files into a
 . Qq Dv testreport_repository
 . Pq Qo Dv svn_path Qc No in Nm MTUI
-right away, or
+immediately, or
 . Nm smrt Cm push
 at any later time.
 . Pp
@@ -140,7 +140,7 @@ If you want to reboot or shutdown your refhosts use
 or
 . Li Nm smrt Cm run Nm poweroff
 followed by
-. Li Nm smrt Cm detach .
+. Li Nm smrt Cm detach Fl \-dead Ns .
 .\" }}}
 .\" export {{{
 .It Ic export Oo Ar FILENAME Oc Ns Oo Li , Ns Ar HOSTNAME Oc Ns Oo Li ,force Oc

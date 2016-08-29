@@ -21,15 +21,16 @@ declare -gr cmdname=${SMRT_CMDNAME-$0:t}
 declare -gr cmdhelp='
 
 usage: #c -h|--help
-usage: #c [HOST...]
+usage: #c [--dead] [HOST...]
 
 Disconnect attached refhost(s)
 
   Options:
     -h                Display this message
     --help            Display manual page
+    --dead            Detach only disconnected hosts
   Operands:
-    HOST              [USER@]HOSTSPEC
+    HOST              Machine to detach
 
 '
 
@@ -41,11 +42,12 @@ declare -gr preludedir="${SMRT_PRELUDEDIR:-@preludedir@}"
 
 function $0:t # {{{
 {
-  local opt arg
+  local opt arg impl=impl-default
   local -i i=0
-  while haveopt i opt arg h help -- "$@"; do
+  while haveopt i opt arg h help dead -- "$@"; do
     case $opt in
     h|help) display-help $opt ;;
+    dead)   impl=impl-dead ;;
     ?)      reject-misuse -$arg ;;
     esac
   done; shift $i
@@ -54,10 +56,10 @@ function $0:t # {{{
 
   check-preconditions $0
 
-  impl "$@"
+  o $impl "$@"
 } # }}}
 
-function impl # {{{
+function impl-default # {{{
 {
   local h= ctlpath=$config_controlpath
   :; (( $# )) \
@@ -67,13 +69,31 @@ function impl # {{{
     || complain 1 "$h is not attached"
   done
   for h in "$@"; do
-    print -f 'Detaching from %s\n' $h
+    print -f 'Detaching %s\n' $h
     o rm .connected/$h
     if o ssh -o ControlPath=$ctlpath -O check $h; then
       o ssh -o ControlPath=$ctlpath -O exit $h
     else
       complain - "No connection to $h"
     fi
+  done
+} # }}}
+
+function impl-dead # {{{
+{
+  local h= ctlpath=$config_controlpath
+  :; (( $# )) \
+  || set -- .connected/*(:t)
+  for h in "$@"; do
+    :; [[ -e .connected/$h ]] \
+    || complain 1 "$h is not attached"
+  done
+  for h in "$@"; do
+    if o ssh -o ControlPath=$ctlpath -O check $h; then
+      continue
+    fi
+    print -f 'Detaching dead %s\n' $h
+    o rm .connected/$h
   done
 } # }}}
 
