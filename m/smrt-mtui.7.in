@@ -31,7 +31,7 @@ uses the filesystem.
 The
 .Sy session
 concept is reduced to possible
-.Dv ControlMaster
+.Cm ControlMaster
 sockets
 in
 .Pa @runstatedir@
@@ -42,6 +42,56 @@ in
 .Sh COMMANDS
 .
 .Bl -tag -width "xxx"
+.\" mtui -r ISSUER:Maintenance:ISSUE:MRID {{{
+.It Nm mtui Fl r Ar ISSUER Ns Li :Maintenance: Ns Ar ISSUE Ns Li : Ns Ar MRID
+. Bd -literal
+.  Nm smrt Cm checkout Ar ISSUER Ns Li :Maintenance: Ns Ar ISSUE Ns Li : Ns Ar MRID
+.  Nm smrt Cm fetch Ar ISSUER Ns Li :Maintenance: Ns Ar ISSUE Ns Li : Ns Ar MRID
+. Ed
+. Pp
+. Nm smrt Cm fetch
+acquires data for a
+. Sy Maintenance Request
+from a BuildService instance and other sources,
+transforms this data into formats which are better
+suited for use on the command line, and persists
+both in files on disk.
+. Pp
+Use
+. Nm smrt Cm fetch Fl \-push
+to upload the created files into a
+. Qq Dv testreport_repository
+. Pq Qo Dv svn_path Qc No in Nm MTUI
+right away, or
+. Nm smrt Cm push
+at any later time.
+. Pp
+. Nm smrt Cm checkout
+retrieves data
+for a
+. Sy Maintenance Request
+previously created by
+. Nm smrt Cm fetch
+and uploaded by
+. Nm smrt Cm push
+or
+. Nm svn Cm commit
+into a
+. Qq Dv testreport_repository
+. Pq Qo Dv svn_path Qc No in Nm MTUI .
+. Pp
+. Nm smrt
+has nothing like the
+. Qq Dv template_dir
+configuration property in
+. Nm MTUI ,
+. Nm smrt Cm checkout
+and
+. Nm smrt Cm fetch
+create files under a directory named
+. Ar ISSUER Ns Li :Maintenance: Ns Ar ISSUE Ns Li : Ns Ar MRID
+in the current directory by default.
+.\" }}}
 .\" add_host {{{
 .It Ic add_host Ar HOST Ns , Ns Ar SYSTEM
 . Bd -literal
@@ -84,12 +134,13 @@ in
 . Bd -literal
 .  Nm smrt Cm detach
 . Ed
-.Pp
-If you want to reboot or shutdown your refhosts run
-.Dl Nm smrt Cm run Li reboot
+. Pp
+If you want to reboot or shutdown your refhosts use
+. Li Nm smrt Cm run Nm reboot
 or
-.Dl Nm smrt Cm run Li poweroff
-instead.
+. Li Nm smrt Cm run Nm poweroff
+followed by
+. Li Nm smrt Cm detach .
 .\" }}}
 .\" export {{{
 .It Ic export Oo Ar FILENAME Oc Ns Oo Li , Ns Ar HOSTNAME Oc Ns Oo Li ,force Oc
@@ -193,11 +244,14 @@ No replacement, deemed not that useful.
 . Ed
 . Pp
 . Nm smrt
-has no "sessions", the closest equivalent is to
-. Nm cd
-into a directory created with
-. Nm smrt Cm fetch .
-There's no state to be lost.
+has no "sessions" beyond attached hosts represented by
+. Dq earmark
+files
+and
+. Nm ssh Ns 's
+. Cm ControlMaster
+sockets
+. Pq specific to a testreport directory .
 .\" }}}
 .\" prepare {{{
 .It Ic prepare Ar HOST Ns Oo Li , Ns ... Oc Ns Oo Li ,force Oc Ns Oo Li ,installed Oc Ns Oo Li ,testing Oc
@@ -276,6 +330,11 @@ variables.
 . Bd -literal
 .  Nm export Ev SMRT_CHATTY Ns = Ns Ar PATTERN
 . Ed
+. Pp
+See
+. Sx TRACKING
+in
+. Xr smrt 1 .
 .\" }}}
 .\" set_repo {{{
 .It Ic set_repo Ar KIND
@@ -308,6 +367,20 @@ No replacement.
 .\" }}}
 .\" source_diff {{{
 .It Ic source_diff Ar TYPE
+. Bd -literal
+.  Nm cat Pa request.diff
+. Ed
+. Pp
+. Nm smrt Cm fetch
+creates
+. Pq among other outputs
+a git-like unified diff of source changes
+. Pq with recursion into tarballs
+in
+. Pa request.diff .
+.
+Ways to create
+. Pa request.diff :
 . Bd -literal
 .  Nm smrt Cm fetch
 .  Nm smrt Cm bs request-diff | Nm smrt Cm xml diff - > request.diff
