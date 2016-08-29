@@ -194,7 +194,7 @@ function destdir-ok # {{{
 {
   local -r dst=$1
   :; [[ ! -e $dst ]] \
-  || [[ -n $dst(#qN/^F) ]] \
+  || [[ -n $dst(#qN/) && -z $dst/*(DN) ]] \
   || complain 1 "refusing to clobber existing destination $dst"
 
   o mkdir -p $dst
