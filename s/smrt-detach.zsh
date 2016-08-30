@@ -52,9 +52,16 @@ function $0:t # {{{
     esac
   done; shift $i
 
-  (( $# )) || reject-misuse
-
   check-preconditions $0
+
+  :; (( $# )) \
+  || set -- .connected/*(:t)
+
+  local h=
+  for h in "$@"; do
+    :; [[ -e .connected/$h ]] \
+    || complain 1 "$h is not attached"
+  done
 
   o $impl "$@"
 } # }}}
@@ -62,12 +69,6 @@ function $0:t # {{{
 function impl-default # {{{
 {
   local h= ctlpath=$config_controlpath
-  :; (( $# )) \
-  || set -- .connected/*(:t)
-  for h in "$@"; do
-    :; [[ -e .connected/$h ]] \
-    || complain 1 "$h is not attached"
-  done
   for h in "$@"; do
     print -f 'Detaching %s\n' $h
     o rm .connected/$h
@@ -82,12 +83,6 @@ function impl-default # {{{
 function impl-dead # {{{
 {
   local h= ctlpath=$config_controlpath
-  :; (( $# )) \
-  || set -- .connected/*(:t)
-  for h in "$@"; do
-    :; [[ -e .connected/$h ]] \
-    || complain 1 "$h is not attached"
-  done
   for h in "$@"; do
     if o ssh -o ControlPath=$ctlpath -O check $h; then
       continue

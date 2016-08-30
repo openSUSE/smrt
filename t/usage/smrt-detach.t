@@ -40,14 +40,6 @@ unknown option::
   [1]
 
 
-missing argument::
-
-  $ smrt detach
-  smrt detach: Missing argument
-  Run 'smrt detach -h' for usage instructions
-  [1]
-
-
 outside a testreport::
 
   $ smrt detach snafubar
