@@ -20,16 +20,29 @@ failure in some hosts::
   > #!/usr/bin/zsh -efu
   > while getopts o: o; do
   >   :
-  > done; shift $((OPTIND - 1))
-  > [[ $1 == snafu ]] && shift
-  > "$@"
-  > exit 0
+  > done; shift $((OPTIND-1))
+  > if [[ $1 == fubar ]]; then
+  >   print -u 2 "command not found: $2"
+  >   exit 1
+  > else
+  >   "$@[2,-1]"
+  >   exit 0
+  > fi
   > EOF
 
   $ smrt run snafu fubar -- echo rofl lmao
   snafu\trofl lmao (esc)
-  fubar* command not found: * (glob)
+  fubar\tcommand not found: echo (esc)
   [1]
+
+  $ tail log.fubar log.snafu
+  ==> log.fubar <==
+  % echo rofl lmao
+  command not found: echo
+  
+  ==> log.snafu <==
+  % echo rofl lmao
+  rofl lmao
 
 
 failure everywhere::
@@ -40,11 +53,23 @@ failure everywhere::
   > exit 1
   > EOF
 
-  $ cmd=${$(mktemp -u):t}
-  $ smrt run snafu fubar -- $cmd rofl lmao
+  $ smrt run snafu fubar -- false rofl lmao
   snafu\thouston, we've got problem! (esc)
   fubar\thouston, we've got problem! (esc)
   [2]
+
+  $ tail log.fubar log.snafu
+  ==> log.fubar <==
+  % echo rofl lmao
+  command not found: echo
+  % false rofl lmao
+  houston, we've got problem!
+  
+  ==> log.snafu <==
+  % echo rofl lmao
+  rofl lmao
+  % false rofl lmao
+  houston, we've got problem!
 
 
 happy path::
@@ -61,3 +86,34 @@ happy path::
   $ smrt run snafu fubar -- echo rofl lmao
   snafu\trofl lmao (esc)
   fubar\trofl lmao (esc)
+
+  $ tail log.fubar log.snafu
+  ==> log.fubar <==
+  % echo rofl lmao
+  command not found: echo
+  % false rofl lmao
+  houston, we've got problem!
+  % echo rofl lmao
+  rofl lmao
+  
+  ==> log.snafu <==
+  % echo rofl lmao
+  rofl lmao
+  % false rofl lmao
+  houston, we've got problem!
+  % echo rofl lmao
+  rofl lmao
+
+
+logs commands with no output::
+
+  $ rm log.fubar log.snafu
+
+  $ smrt run snafu fubar -- true "hello world" program
+
+  $ tail log.fubar log.snafu
+  ==> log.fubar <==
+  % true 'hello world' program
+  
+  ==> log.snafu <==
+  % true 'hello world' program

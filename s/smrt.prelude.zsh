@@ -230,21 +230,19 @@ function load-config # {{{
 
 function log-output # {{{
 {
-  local -A seen
-  local t= line=
-  "$@" 2>&1 | while read t line; do
-    local logfile=log.$t
-    exec 3>&1
+  local h= t= line=
+  for h in $hosts; do
     {
-      if (( ! ${+seen[$t]} )); then
-        seen[$t]=yes
-        print -rn '%'
-        print -f ' %s' "${(@q-)cmd}"
-        print
-      fi
-      print -r -- "$line"
-      print -u 3 -f "%s\t%s\n" -- "$t" "$line"
-    } >>| $logfile
+    print -rn '%'
+    print -f ' %s' "${(@q-)cmd}"
+    print
+    } >>| log.$h
+  done
+
+  "$@" 2>&1 | while IFS=$'\t\n' read t line; do
+    local logfile=log.$t
+    print -r -- "$line" >>| $logfile
+    print -f "%s\t%s\n" -- "$t" "$line"
   done
 } # }}}
 

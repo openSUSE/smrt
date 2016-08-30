@@ -6,7 +6,7 @@ setup::
   $ . $TESTROOT/setup
 
 
-test happy path::
+test::
 
   $ fake ssh <<\EOF
   > echo spam from ssh
