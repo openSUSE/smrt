@@ -72,7 +72,7 @@ function list-hosts # {{{
   done
 
   (( $#hosts )) || hosts=(.connected/*(N:t))
-  (( $#hosts )) || complain 1 "no hosts attached"
+  (( $#hosts )) || return 0
 
   local f= host= tags=
   for host in $hosts; do

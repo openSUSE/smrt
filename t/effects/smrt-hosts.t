@@ -14,8 +14,7 @@ setup::
 no hosts given, no hosts attached::
 
   $ smrt hosts
-  error: no hosts attached
-  [1]
+
 
 some hosts given, no hosts attached::
 
@@ -23,6 +22,7 @@ some hosts given, no hosts attached::
   smrt hosts: Unknown argument 'foo'
   Run 'smrt hosts -h' for usage instructions
   [1]
+
 
 test default behavior with hosts::
 
